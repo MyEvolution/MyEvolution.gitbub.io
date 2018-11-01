@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>图形学——Transformation | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。">
+<meta name="keywords" content="computer graphics,transformation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图形学——Transformation">
+<meta property="og:url" content="http://yoursite.com/2018/10/25/图形学——Transformation/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-31T09:59:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图形学——Transformation">
+<meta name="twitter:description" content="上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-图形学——Transformation" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/25/图形学——Transformation/" class="article-date">
+  <time datetime="2018-10-25T07:13:46.000Z" itemprop="datePublished">2018-10-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/图形学/">图形学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      图形学——Transformation
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。<br><a id="more"></a></p>
+<p>所有的转换我们都是通过矩阵和向量完成的。</p>
+<h3 id="缩放（Scale）"><a href="#缩放（Scale）" class="headerlink" title="缩放（Scale）"></a>缩放（Scale）</h3><p>$$<br>Scale(s_x,s_y,s_z) =<br>\begin{pmatrix}<br>s_x&amp;0&amp;0\<br>0&amp;s_y&amp;0\<br>0&amp;0&amp;s_z<br>\end{pmatrix} \ Scale^{-1}(s_x,s_y,s_z) =<br>\begin{pmatrix}<br>s_x^{-1}&amp;0&amp;0\<br>0&amp;s_y^{-1}&amp;0\<br>0&amp;0&amp;s_z^{-1}<br>\end{pmatrix}<br>$$</p>
+<p>上述中$s_x,s_y,s_z$分别为各个坐标轴的缩放倍数。实际的转换过程如下：</p>
+<p>$$<br>\begin{pmatrix}<br>s_x&amp;0&amp;0\<br>0&amp;s_y&amp;0\<br>0&amp;0&amp;s_z<br>\end{pmatrix} \begin{pmatrix}<br>x\<br>y\<br>z<br>\end{pmatrix} =<br>\begin{pmatrix}<br>s_xx\<br>s_yy\<br>s_zz<br>\end{pmatrix}<br>$$</p>
+<h3 id="错切（Shear）"><a href="#错切（Shear）" class="headerlink" title="错切（Shear）"></a>错切（Shear）</h3><p>错切可以将一个矩形转换成平行四边形。</p>
+<p>$$<br>Shear(s_x,s_y) =<br>\begin{pmatrix}<br>s_x&amp;a\<br>0&amp;s_y<br>\end{pmatrix} \ Shear^{-1}(s_x,s_y) =<br>\begin{pmatrix}<br>s_x&amp;-a\<br>0&amp;s_y<br>\end{pmatrix}<br>$$</p>
+<p>上面式子主要完成的是对于y&gt;0的点前移，y&lt;0的点后移，而各点的y坐标不变。从而产生了错切的感觉。得到的结果：$y’=y,x’=x+ay$.</p>
+<h3 id="旋转（Rotation）"><a href="#旋转（Rotation）" class="headerlink" title="旋转（Rotation）"></a>旋转（Rotation）</h3><p>2维空间的旋转变换次序是没有影响的，但是对于三维空间却可能得到不一样的结果。</p>
+<h4 id="2D-rotation"><a href="#2D-rotation" class="headerlink" title="2D rotation"></a>2D rotation</h4><p>这里说的旋转是绕着原点旋转。<br>$$<br>\begin{bmatrix}<br>x’\<br>y’<br>\end{bmatrix}<br> =<br>\begin{bmatrix}<br>\cos \theta &amp; - \sin \theta\<br>\sin \theta &amp;\cos \theta<br>\end{bmatrix}<br>\begin{bmatrix}<br>x\<br>y<br>\end{bmatrix}<br>$$</p>
+<p>有趣的是：$R^T R = I$</p>
+<h4 id="3D-rotation"><a href="#3D-rotation" class="headerlink" title="3D rotation"></a>3D rotation</h4><p>3D的rotation相比于2D的要复杂很多。但是实际上我们可以这样去理解：二维的旋转，相当于绕着Z轴旋转，因为z坐标不会变。</p>
+<p>因此可以得到绕各个坐标轴旋转的矩阵：</p>
+<p>$$<br>R_z =<br>\begin{pmatrix}<br>\cos \theta &amp; - \sin \theta &amp; 0\<br>\sin \theta &amp;\cos \theta &amp; 0\<br>0&amp;0&amp;1<br>\end{pmatrix}<br>$$</p>
+<p>同样的道理也就可以得到绕x轴与绕y轴的旋转：</p>
+<p>$$<br>R_x =<br>\begin{pmatrix}<br>1&amp;0&amp;0\<br>0&amp;\cos \theta &amp; - \sin \theta \<br>0&amp;\sin \theta &amp;\cos \theta \<br>\end{pmatrix} \ R_y =<br>\begin{pmatrix}<br>\cos \theta &amp; 0&amp;- \sin \theta \<br>0&amp;1&amp;0\<br>\sin \theta &amp;0 &amp;\cos \theta<br>\end{pmatrix}<br>$$</p>
+<p>同样的:$R^TR = I$.</p>
+<p>如果我们仔细观察可以发现，3D中R的各个行（列）向量满足一个三维坐标系的要求：单位向量且正交。因此如果我们将旋转矩阵写成下面的形式：</p>
+<p>$$<br>R =<br>\begin{pmatrix}<br>x_u &amp; y_u &amp; z_u\<br>x_v &amp; y_v &amp; z_v\<br>x_w &amp; y_w &amp; z_w<br>\end{pmatrix}<br>$$</p>
+<p>则</p>
+<p>$$<br>R_p =<br>\begin{pmatrix}<br>x_u &amp; y_u &amp; z_u\<br>x_v &amp; y_v &amp; z_v\<br>x_w &amp; y_w &amp; z_w<br>\end{pmatrix}<br>\begin{pmatrix}<br>x_p\<br>y_p\<br>z_p<br>\end{pmatrix}<br> =<br>\begin{pmatrix}<br>\mathbf{u} \cdot \mathbf{p} \<br>\mathbf{v} \cdot \mathbf{p} \<br>\mathbf{z} \cdot \mathbf{p}<br>\end{pmatrix}<br>$$</p>
+<p>上式最后一项正是$\mathbf{p}$在uvw坐标轴下的坐标值。因此旋转的本质实际上是将它映射到另一个坐标系当中了。</p>
+<p>对于旋转矩阵如何求逆？因为旋转矩阵是正交矩阵，所有$R^{-1} = R^T$.</p>
+<p>3D旋转是不可交换的。</p>
+<p>但是上面的旋转矩阵相对来说比较简单，因为是绕着坐标轴旋转的。那么有没有办法绕着任意一个向量旋转$\theta$的公式？</p>
+<h5 id="罗德里格旋转-Rodrigues-公式"><a href="#罗德里格旋转-Rodrigues-公式" class="headerlink" title="罗德里格旋转(Rodrigues)公式"></a>罗德里格旋转(Rodrigues)公式</h5><p>接下来这个公式就是用来解决上述问题的。假设向量（点）$b$绕着单位向量$\mathbf{a}$旋转$\theta$.</p>
+<p>$\mathbf{b}=\mathbf{b}<em>{∥}+\mathbf{b}</em>{⊥}$，分布表示平行与垂直于$\mathbf{a}$的分量。很容易知道，$\mathbf{b}_{∥}$在旋转过程中是不变的。</p>
+<p>$\mathbf{b}_{∥} = \mathbf{a} \cdot \mathbf{b} \mathbf{a}$</p>
+<p>$\mathbf{b}<em>{⊥} = 1 -\mathbf{b}</em>{∥}$</p>
+<p>然后我们要考虑到$\mathbf{b}_{⊥}$是如何旋转的。实际上它旋转的平面是垂直于$\mathbf{a}$与$\mathbf{b}$的，容易想到利用叉乘来构造：</p>
+<p>$\mathbf{c} = \mathbf{a} \times \mathbf{b}$，而且由于叉乘的性质，$\mathbf{c}$的长度恰好等于$\mathbf{b}_{⊥}$.</p>
+<p>现在旋转角度是$\theta$，则旋转后的向量在$\mathbf{b}<em>{⊥}$与$\mathbf{c}$方向上的投影分别是$\mathbf{b}</em>{⊥} \cos \theta$与$\mathbf{c} \sin \theta$.</p>
+<p>旋转后的向量边上上述向量之和，并且希望写成旋转矩阵的形式（矩阵乘以向量）：<br>$$<br>\begin{align}<br>b’ &amp;= \mathbf{b}<em>{⊥} \cos \theta +\mathbf{c} \sin \theta + \mathbf{b}</em>{∥}\<br>&amp;= (\mathbf{b} -\mathbf{a} \cdot \mathbf{b} \mathbf{a} )\cos \theta +\mathbf{a} \times \mathbf{b} \sin \theta +\mathbf{a} \cdot \mathbf{b} \mathbf{a}\<br>&amp;= \mathbf{a}\mathbf{a}^T \mathbf{b} + (I -\mathbf{a}\mathbf{a}^T)\mathbf{b} \cos \theta + A^* \sin \theta \mathbf{b}<br>\end{align}<br>$$</p>
+<p>所以$R(\mathbf{a},\theta) =\mathbf{a}\mathbf{a}^T+ (I -\mathbf{a}\mathbf{a}^T)\cos \theta + A^* \sin \theta$.</p>
+<p>上式是计算机图形学中很重要的一个基础公式。</p>
+<h3 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h3><p>如果要回到原来的样子，可以对所有的转换求逆。但是要注意的是：$M = M_1M_2M_3,M^{-1} = M_3^{-1}M_2^{-1}M_1^{-1}$.</p>
+<h3 id="齐次坐标转换（Homogeneous-Coordinates）"><a href="#齐次坐标转换（Homogeneous-Coordinates）" class="headerlink" title="齐次坐标转换（Homogeneous Coordinates）"></a>齐次坐标转换（Homogeneous Coordinates）</h3><p>不知道有没有人有这么一个疑问：为什么没有平移？？平移应该是最简单的转换，但是实际起来的实现却没有那么容易。首先做个尝试：</p>
+<p>$$<br>\begin{pmatrix}<br>x’\<br>y’\<br>z’<br>\end{pmatrix} =<br>\begin{pmatrix}<br>?&amp;?&amp;?\<br>?&amp;?&amp;?\<br>?&amp;?&amp;?<br>\end{pmatrix}<br>\begin{pmatrix}<br>x\<br>y\<br>z<br>\end{pmatrix}=<br>\begin{pmatrix}<br>x+5\<br>y\<br>z<br>\end{pmatrix}<br>$$<br>中间的矩阵怎么做？有人会说将第一行第一列写为$\frac 5 z$即可，但是这就失去了转换矩阵的意义。转换矩阵中不应该包含我们要转换的坐标的信息。</p>
+<p>计算机图形学中，解决这个问题的方法就说用齐次坐标，先看一下下面的转换：</p>
+<p>$$<br>\begin{pmatrix}<br>x’\<br>y’\<br>z’\<br>w’<br>\end{pmatrix} =<br>\begin{pmatrix}<br>1&amp;0&amp;0&amp;5\<br>0&amp;1&amp;0&amp;0\<br>0&amp;0&amp;1&amp;0\<br>0&amp;0&amp;0&amp;1</p>
+<p>\end{pmatrix}<br>\begin{pmatrix}<br>x\<br>y\<br>z\<br>1<br>\end{pmatrix}=<br>\begin{pmatrix}<br>x+5\<br>y\<br>z\<br>1<br>\end{pmatrix}<br>$$</p>
+<p>通过加入一个其次坐标w而实现了平移。而加入这个量不会对上面提到的旋转等操作产生影响，而且他有很多的好处，因此被普遍用于图形相关的软件与硬件中。</p>
+<h4 id="平移-Translate"><a href="#平移-Translate" class="headerlink" title="平移(Translate)"></a>平移(Translate)</h4><p>$$<br>\begin{pmatrix}<br>x’\<br>y’\<br>z’\<br>w’<br>\end{pmatrix} =<br>\begin{pmatrix}<br>1&amp;0&amp;0&amp;T_x\<br>0&amp;1&amp;0&amp;T_y\<br>0&amp;0&amp;1&amp;T_z\<br>0&amp;0&amp;0&amp;1</p>
+<p>\end{pmatrix}<br>\begin{pmatrix}<br>\mathbf{p}_x\<br>\mathbf{p}_y\<br>\mathbf{p}_z\<br>1<br>\end{pmatrix}=<br>\begin{pmatrix}<br>\mathbf{p}_x+T_x\<br>\mathbf{p}_y+T_y\<br>\mathbf{p}_z+T_z\<br>1<br>\end{pmatrix} =<br>\mathbf{p}+T<br>$$<br>主要旋转平移矩阵和平移旋转矩阵是不一样的，因为平移矩阵实际上需要的是最右侧的一个向量：</p>
+<p>旋转平移矩阵：<br>$$<br>\begin{bmatrix}<br>R_{3 \times 3}&amp;T_{3 \times 1}\<br>0_{1 \times 3}&amp;1<br>\end{bmatrix}<br>$$</p>
+<p>平移旋转矩阵:<br>$$<br>\begin{bmatrix}<br>R_{3 \times 3}&amp;R_{3 \times 3}T_{3 \times 1}\<br>0_{1\times 3}&amp;1<br>\end{bmatrix}<br>$$</p>
+<p>仔细推导就可以得到上面的结果。</p>
+<h3 id="法向转换（Normal-Transformation）"><a href="#法向转换（Normal-Transformation）" class="headerlink" title="法向转换（Normal Transformation）"></a>法向转换（Normal Transformation）</h3><p>法向的转换并不会按照平面各个点的转换进行。</p>
+<p>假如原来的切线向量为$\mathbf{t}$,原来的法向向量为$\mathbf{n}$，转换矩阵为$M$，则切线向量是会依照原来的转换而改变的：$\mathbf{t}’ = M\mathbf{t}$.</p>
+<p>假设转换完成后的法向向量为$\mathbf{n}’ = Q\mathbf{n}$.</p>
+<p>当然不管什么时候，法向与切向都应该是垂直的：$\mathbf{n}’^T\mathbf{t’} = 0$</p>
+<p>可以得到：<br>$$<br>\mathbf{n}^TQ^TM \mathbf{t} = 0.<br>$$</p>
+<p>因此我们希望$Q^TM = I$,所以得到：$Q = (M^{-1})^T$.</p>
+<p>当然上面的解并不是唯一解，但是计算机图形学是工程学科，我们希望的是能够解决这个问题即可。</p>
+<p>需要注意的是：$M$为3×3矩阵。因为法向和切向是向量，所以平移不会影响法向和切向。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/25/图形学——Transformation/" data-id="cjnyn0h50000s51lt8c661bnw" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/transformation/">transformation</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/26/图形学——Homework1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          图形学——Homework1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/24/图形学——Basic-Math/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">图形学——Basic Math</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

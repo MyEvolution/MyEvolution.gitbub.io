@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>机器学习——PLA | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="对研究生要跟的导师还不确定，暑假打算学习点专业课与英语，也迟迟没有做好。我想不管哪个实验室应该都不会离开机器学习吧。因此开始看这方面的东西。">
+<meta name="keywords" content="machine learning,classification">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习——PLA">
+<meta property="og:url" content="http://yoursite.com/2018/07/28/机器学习——PLA/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="对研究生要跟的导师还不确定，暑假打算学习点专业课与英语，也迟迟没有做好。我想不管哪个实验室应该都不会离开机器学习吧。因此开始看这方面的东西。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=793659404,4189322929&fm=27&gp=0.jpg">
+<meta property="og:image" content="https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike72%2C5%2C5%2C72%2C24/sign=71339aceab773912d02b8d339970ed7d/b3b7d0a20cf431ad4cdf9f4a4936acaf2edd98b0.jpg">
+<meta property="og:updated_time" content="2018-08-28T06:43:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习——PLA">
+<meta name="twitter:description" content="对研究生要跟的导师还不确定，暑假打算学习点专业课与英语，也迟迟没有做好。我想不管哪个实验室应该都不会离开机器学习吧。因此开始看这方面的东西。">
+<meta name="twitter:image" content="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=793659404,4189322929&fm=27&gp=0.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-机器学习——PLA" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/28/机器学习——PLA/" class="article-date">
+  <time datetime="2018-07-28T14:45:17.000Z" itemprop="datePublished">2018-07-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      机器学习——PLA
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对研究生要跟的导师还不确定，暑假打算学习点专业课与英语，也迟迟没有做好。我想不管哪个实验室应该都不会离开机器学习吧。因此开始看这方面的东西。</p>
+<a id="more"></a>
+<p>今天接触了一个算法叫<strong>PLA</strong>（Percetron Learning Algorithm）,用来做线性分类的算法。它应用的前提是样本集是线性可分的。用二维特征值的样本来举例子：</p>
+<p><img src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=793659404,4189322929&amp;fm=27&amp;gp=0.jpg" alt="linear separable"></p>
+<p>我们要的就是通过算法来找到这条线。对于二维的样本（特征分别为$x_1$,$x_2$）,则分类结果为-1，+1，分别表示为negative，positive（这与另一种常用的分类算法不一致）。思想就是每个特征对应一个参数，乘积之后如果大于某个阈值，则设定为分类结果为+1，小于则为-1。若为特征添加一个特征$ x_0 $恒等于一，则用向量化可以将分类过程写成如下形式：<br>$$ result(X) = sign(W{X^T}) $$<br>其中W为特征的参数向量，我们使用$y$来表示样本真实类别。</p>
+<p>整个算法的思想其实很简单，刚开始画出一条线，如果分错了，则往正确的方向旋转这条线。但是如何旋转这条线，旋转多少角度，还是很有意思的。一般的想法都是从图直观上来看，利用代价函数（cost function）来解决，不过对于这个简单的线性分类，用代价函数进行梯度下降还是相对来说计算量还是比较大的。这个算法让我觉得厉害的地方在于它向量化不光是为了提高计算效率，而是从向量的角度来考虑一步步向结果逼近的：遇到的分类错误有两种情况，如果$y$应该是正，但是$W{X^T}$得到的是负的，从向量角度来说，$W$与$X$的夹角太大，因此内积为负，我们要减小两个向量的角度，可以令$W=W+X$,相反，$y$应该是负，结果却为正，那么$W$与$X$的夹角太小，可以令$W=W-X$，这样就增大了夹角，从下图可以很直观的看出来这个道理：</p>
+<p><img src="https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/c0%3Dbaike72%2C5%2C5%2C72%2C24/sign=71339aceab773912d02b8d339970ed7d/b3b7d0a20cf431ad4cdf9f4a4936acaf2edd98b0.jpg" alt="向量加减"></p>
+<p>合并两种情况，则每次遇到被错误分类的样本$X_n$，我们对参数向量$W_t$进行如下更新（其中$t$表示修正的次数）：$$ W_{t+1} = W_t + y_nX_n $$<br>下面主要来证明一下，对于线性可分的样本来说，这个算法一定会停止，找到那条符合的参数向量$W_f$。我们可以知道：</p>
+<p>$$<br>y_n{W_f}^TX_n &gt;= _{min}[ y_nX_nW_f^T]&gt;0<br>$$</p>
+<p>而</p>
+<p>$$<br>W_{t+1}W_f^T = W_tW_f^t + y_nX_nW_f^T &gt;= W_tW_f^T + _{min}[ y_nX_nW_f^T]<br>$$</p>
+<p>因此我们可以得到：</p>
+<p>$$<br>W_{t+1}W_f^T &gt;= W_tW_f^T &gt;= W_0W_f^T +(t+1) *_{min}[ y_nX_nW_f^T]<br>$$</p>
+<p>因为我们每次找到一个出错点才进行修正，出错点为（$X_n,y_n$），可以知道$ y_nW_tX_n^T&lt;0 $，则：</p>
+<p>$$<br>\Vert W_{t+1} \Vert ^2 = \Vert W_t \Vert ^2 + \Vert y_nX_n \Vert ^2+2y_nW_tX_n^T&gt;= \Vert W_t \Vert ^2+_{max}[ \Vert X_n \Vert ^2]<br>$$<br>因此我们可以得到：</p>
+<p>$$<br> \Vert W_{t+1} \Vert ^2 = \Vert W_t \Vert ^2 +  \Vert y_nX_n \Vert ^2+2 \times y_nW_tX_n^T&gt;= \Vert W_0 \Vert ^2+ (t+1) \times _{max}[ \Vert X_n \Vert ^2]<br>$$</p>
+<p>最后，假设最开始$W_0=0$，通过正规化，我们可以算出$W_t$与$W_f$之间的角度是不断逼近的（角度重合时候也就得到了正确的参数，实际上角度相同后我们不在乎向量的模的大小，因为它不会影响$W_t^TX_n$的符号）：</p>
+<p>$$<br>\frac{W_tW_f^T}{ \Vert W_t \Vert  \Vert W_f \Vert } &gt;= \frac{t \times _{min}[y_nW_fX_n]}{\sqrt{t} \times _{max} \Vert X_n \Vert  \Vert W_f \Vert } = \sqrt{t} \frac q R<br>$$</p>
+<p>其中：$q = _{min}[y_nW_fX_n],R^2 = ( _{max} \Vert X_n \Vert  )^2$，而正规化后内积是小于等于1的（此时方向一致），可以得到$ t&lt;=\frac {R^2} {q^2} $，可以得到，最多经过$\frac {R^2} {q^2} $次修正即可得到正确结果。</p>
+<p>到这里就证明结束了,以后会上传相关的代码。</p>
+<p>可以看到虽然算法实现很简单，但其中的推理还是不容易的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/28/机器学习——PLA/" data-id="cjnyn0h5e001v51ltih4k5vas" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/classification/">classification</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/29/markdown-mathjax显示公式，苦逼的找bug过程/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          markdown+mathjax显示公式，苦逼的找bug过程 
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/25/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

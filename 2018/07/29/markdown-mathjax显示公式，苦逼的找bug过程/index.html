@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>markdown+mathjax显示公式，苦逼的找bug过程  | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在记录自己学习过程中，难免会遇到公式，截图的办法不是长久之计。于是我给它加上了渲染公式的过程。 整个过程非常崎岖。">
+<meta name="keywords" content="markdown,LaTex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="markdown+mathjax显示公式，苦逼的找bug过程 ">
+<meta property="og:url" content="http://yoursite.com/2018/07/29/markdown-mathjax显示公式，苦逼的找bug过程/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="在记录自己学习过程中，难免会遇到公式，截图的办法不是长久之计。于是我给它加上了渲染公式的过程。 整个过程非常崎岖。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_8234.PNG">
+<meta property="og:updated_time" content="2018-08-28T06:44:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="markdown+mathjax显示公式，苦逼的找bug过程 ">
+<meta name="twitter:description" content="在记录自己学习过程中，难免会遇到公式，截图的办法不是长久之计。于是我给它加上了渲染公式的过程。 整个过程非常崎岖。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_8234.PNG">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-markdown-mathjax显示公式，苦逼的找bug过程" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/07/29/markdown-mathjax显示公式，苦逼的找bug过程/" class="article-date">
+  <time datetime="2018-07-29T07:45:35.000Z" itemprop="datePublished">2018-07-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/博客建设/">博客建设</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      markdown+mathjax显示公式，苦逼的找bug过程 
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在记录自己学习过程中，难免会遇到公式，截图的办法不是长久之计。于是我给它加上了渲染公式的过程。</p>
+<p>整个过程非常崎岖。<br><a id="more"></a></p>
+<p>其实很简单，在普通的页面上引入一个js文件，就可以将latex代码渲染成公式。为了方便编写，我直接在文章中引入了这个js，在vs code上渲染是非常成功的。但是在博客上怎么弄也没法成功。百度的话有很多相关的博客来介绍怎么去做，主要是因为hexo的渲染器与mathjax中部分语法有冲突。我也天真的相信我的问题就是这些构成的，后来我发现即使是最简单的公式（没有下标）也无法渲染成功，此时我的blog里已经加了很多别的没用包了，也删除了很多可能有用的包，怎么设置也没办法。</p>
+<p>昨晚就纠结了很久，今天没办法了重新装了下blog，先解决最简单公式显示的问题（直接打开next主题中的mathjax开关），成功了，然后我遇到的问题，才是别人遇到的那些问题。慢慢解决，后来发现还是有部分错误，有两处问题：</p>
+<p>1.这次是latex与markdown的冲突：markdown中的*是斜体，因此尽量乘法不要使用它，可以使用{a \times b}（$a \times b$）来代替来代替 a*b,或者就是对*进行转义，或者直接省略。</p>
+<p>2.在使用范式时||a||，似乎直接使用‘|’这个符号也会出错，总之有范式的地方的公式显示是很混乱的，可能也有冲突（在latex是可以直接使用这个符号的），因此使用{\Vert a \Vert}（${\Vert a \Vert}$）来代替。</p>
+<p>最后，浏览器响应github page的速度不快，可能已经deploy了但是依然没有体现出更新的结果。</p>
+<p>哎，折腾了一天，感觉收获远远不够花费的时间，不过我经常遇到这样的问题，找bug的能力还有待提高。</p>
+<h2 id="P-S-Markdown与latex常用语法"><a href="#P-S-Markdown与latex常用语法" class="headerlink" title="P.S. Markdown与latex常用语法"></a>P.S. Markdown与latex常用语法</h2><h3 id="markdown语法"><a href="#markdown语法" class="headerlink" title="markdown语法"></a>markdown语法</h3><ul>
+<li>标题：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 一号字体 #</span><br><span class="line">## 二号字体 ## </span><br><span class="line">### 三号字体 ###</span><br></pre></td></tr></table></figure>
+<h1 id="一号字体"><a href="#一号字体" class="headerlink" title="一号字体"></a>一号字体</h1><h2 id="二号字体"><a href="#二号字体" class="headerlink" title="二号字体"></a>二号字体</h2><h3 id="三号字体"><a href="#三号字体" class="headerlink" title="三号字体"></a>三号字体</h3><ul>
+<li>加粗：</li>
+</ul>
+<p>要加粗的文字左右分别用两个*号包起来</p>
+<ul>
+<li>斜体：</li>
+</ul>
+<p>要倾斜的文字左右分别用一个*号包起来</p>
+<ul>
+<li>斜体加粗：</li>
+</ul>
+<p>要倾斜和加粗的文字左右分别用三个*号包起来</p>
+<ul>
+<li>删除线：</li>
+</ul>
+<p>要加删除线的文字左右分别用两个~~号包起来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">**这是加粗的文字**</span><br><span class="line">*这是倾斜的文字*`</span><br><span class="line">***这是斜体加粗的文字***</span><br><span class="line">~~这是加删除线的文字~~</span><br></pre></td></tr></table></figure>
+<p><strong>这是加粗的文字</strong></p>
+<p><em>这是倾斜的文字</em></p>
+<p><strong><em>这是斜体加粗的文字</em></strong></p>
+<p><del>这是加删除线的文字</del></p>
+<ul>
+<li>引用：</li>
+</ul>
+<p>在引用的文字前加&gt;即可</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; 引用的内容</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>引用的内容</p>
+</blockquote>
+<ul>
+<li>分割线：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">***</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<hr>
+<ul>
+<li>超链接：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[name](url)</span><br></pre></td></tr></table></figure>
+<p><a href="https://www.google.com" target="_blank" rel="noopener">Google</a></p>
+<ul>
+<li>图片：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![name](imgurl)</span><br></pre></td></tr></table></figure>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_8234.PNG" alt="name"></p>
+<ul>
+<li>列表：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">- 列表内容</span><br><span class="line">+ 列表内容</span><br><span class="line">* 列表内容</span><br></pre></td></tr></table></figure>
+<pre><code>注意：- + * 跟内容之间都要有一个空格
+</code></pre><ul>
+<li>列表内容</li>
+</ul>
+<ul>
+<li>列表内容</li>
+</ul>
+<ul>
+<li><p>列表内容</p>
+</li>
+<li><p>表格：</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">表头|表头|表头</span><br><span class="line">---|:--:|---:</span><br><span class="line">内容|内容2|内容</span><br><span class="line">内容|内容100|内容</span><br></pre></td></tr></table></figure>
+<p>第二行分割表头和内容。<br>文字默认居左<br>-两边加：表示文字居中<br>-右边加：表示文字居右<br>注：原生的语法两边都要用 | 包起来。此处省略</p>
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th style="text-align:center">表头</th>
+<th style="text-align:right">表头</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内容</td>
+<td style="text-align:center">内容2</td>
+<td style="text-align:right">内容</td>
+</tr>
+<tr>
+<td>内容</td>
+<td style="text-align:center">内容100</td>
+<td style="text-align:right">内容</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>代码：</li>
+</ul>
+<p><code>单行代码</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">多行代码</span><br></pre></td></tr></table></figure></p>
+<p>vscode中前面加制表符自动为代码格式。<br>可以在标记后标记出代码语言，用来高亮：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"hello,world"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Latex语法"><a href="#Latex语法" class="headerlink" title="Latex语法"></a>Latex语法</h3><ul>
+<li>希腊字母：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>显示</th>
+<th>命令</th>
+<th>显示</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>α</td>
+<td>\alpha</td>
+<td>β</td>
+<td>\beta</td>
+</tr>
+<tr>
+<td>γ</td>
+<td>\gamma</td>
+<td>δ</td>
+<td>\delta</td>
+</tr>
+<tr>
+<td>ε</td>
+<td>\epsilon</td>
+<td>ζ</td>
+<td>\zeta</td>
+</tr>
+<tr>
+<td>η</td>
+<td>\eta</td>
+<td>θ</td>
+<td>\theta</td>
+</tr>
+<tr>
+<td>ι</td>
+<td>\iota</td>
+<td>κ</td>
+<td>\kappa</td>
+</tr>
+<tr>
+<td>λ</td>
+<td>\lambda</td>
+<td>μ</td>
+<td>\mu</td>
+</tr>
+<tr>
+<td>ν</td>
+<td>\nu</td>
+<td>ξ</td>
+<td>\xi</td>
+</tr>
+<tr>
+<td>π</td>
+<td>\pi</td>
+<td>ρ</td>
+<td>\rho</td>
+</tr>
+<tr>
+<td>σ</td>
+<td>\sigma</td>
+<td>τ</td>
+<td>\tau</td>
+</tr>
+<tr>
+<td>υ</td>
+<td>\upsilon</td>
+<td>φ</td>
+<td>\phi</td>
+</tr>
+<tr>
+<td>χ</td>
+<td>\chi</td>
+<td>ψ</td>
+<td>\psi</td>
+</tr>
+<tr>
+<td>ω</td>
+<td>\omega</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>命令首字母大写则为显示为大写。</p>
+<ul>
+<li>字母修饰：</li>
+</ul>
+<p>上标：^</p>
+<p>下标：_</p>
+<p>举例：C_n^2 呈现为 $C_n^2$</p>
+<p>矢量：</p>
+<p>\vec a呈现为 $\vec a$</p>
+<p>\overrightarrow{xy}呈现为$\overrightarrow{xy}$</p>
+<ul>
+<li>分组:</li>
+</ul>
+<p>使用{}将具有相同等级的内容扩入其中，成组处理</p>
+<p> 举例：10^{10}呈现为$10^{10}$，而10^10呈现为$10^10$</p>
+<ul>
+<li>括号：<br>小括号：()呈现为()<br>中括号：[]呈现为[]<br>尖括号：\langle,\rangle呈现为$\langle,\rangle$</li>
+</ul>
+<p>大括号为与分组符号{}相区别，使用转义字符\</p>
+<p>使用\left(或\right)使符号大小与邻近的公式相适应；该语句适用于所有括号类型</p>
+<p>(\frac{x}{y})呈现为$(\frac{x}{y})$</p>
+<p>而\left(\frac{x}{y}\right)呈现为$\left(\frac{x}{y}\right)$</p>
+<ul>
+<li>求和：</li>
+</ul>
+<p>求和符号\sum显示为$∑$</p>
+<p>举例:\sum_{i=0}^n 显示为 $\sum_{i=0}^n$</p>
+<ul>
+<li>极限：</li>
+</ul>
+<p>极限符号\lim显示为$lim$</p>
+<p>举例:\lim_{x\to\infty} </p>
+<p>$<br>\lim_{x\to\infty}<br>$</p>
+<ul>
+<li>积分：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>显示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\int</td>
+<td>∫</td>
+</tr>
+<tr>
+<td>\iint</td>
+<td>∬</td>
+</tr>
+<tr>
+<td>\iiint</td>
+<td>∭</td>
+</tr>
+<tr>
+<td>\iiiint</td>
+<td>∬∬</td>
+</tr>
+<tr>
+<td>\oint</td>
+<td>∮</td>
+</tr>
+</tbody>
+</table>
+<p>举例：\int_0^\infty{fxdx} 显示为$$\int_0^\infty{f(x)dx}$$</p>
+<ul>
+<li>分式：</li>
+</ul>
+<p>\frac{公式1}{公式2}显示为$\frac{公式1}{公式2}$</p>
+<p>举例:\frac a b $\frac a b$</p>
+<ul>
+<li><p>根号：<br>\sqrt[x]{y}显示为$\sqrt[x]{y}$</p>
+</li>
+<li><p>常见函数：</p>
+</li>
+</ul>
+<p>\函数名</p>
+<p>举例:\sin x,\ln x,\log_n^2 5,\max(A,B,C)显示为<br>$$ \sin x,\ln x,\log_n^2,\max(A,B,C) $$</p>
+<p>暂时写这么些，还有很多其他用法，需要平时的积累。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/07/29/markdown-mathjax显示公式，苦逼的找bug过程/" data-id="cjnyn0h4q000951ltbjq5aar6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/markdown/">markdown</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/30/机器学习——PLA算法实现与可视化/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          机器学习——PLA算法实现与可视化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/28/机器学习——PLA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">机器学习——PLA</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

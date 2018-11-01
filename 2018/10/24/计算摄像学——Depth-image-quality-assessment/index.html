@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>计算摄像学——Depth image quality assessment | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最近导师让我调查一下关于深度图像品质评估的方法。">
+<meta name="keywords" content="computational photography,depth image,quality assessment">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算摄像学——Depth image quality assessment">
+<meta property="og:url" content="http://yoursite.com/2018/10/24/计算摄像学——Depth-image-quality-assessment/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="最近导师让我调查一下关于深度图像品质评估的方法。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-25T07:07:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算摄像学——Depth image quality assessment">
+<meta name="twitter:description" content="最近导师让我调查一下关于深度图像品质评估的方法。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-计算摄像学——Depth-image-quality-assessment" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/24/计算摄像学——Depth-image-quality-assessment/" class="article-date">
+  <time datetime="2018-10-24T06:04:34.000Z" itemprop="datePublished">2018-10-24</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/计算摄像学/">计算摄像学</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      计算摄像学——Depth image quality assessment
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近导师让我调查一下关于深度图像品质评估的方法。<br><a id="more"></a></p>
+<p>首先说明一下深度图像。在Quora上一个用户回答得很有意思：Depth-Image给了一个物体的深度信息，或者说它的“z”轴信息。</p>
+<p>简而言之，深度图像就是描述了图像中各个点到相机之间的距离信息。平时拍的照片，将3D的物品投影到了2D的照片上，但仅仅从一张照片想要了解到目标的3D模型是做不到的（多张照片可能做到，如多视图三维重建），因为从3D到2D会缺失很多信息，比如距离信息。投影到2D之后我们不知道哪个前，哪个后。所以说Quora的回答很有趣，深度图像给了我们“z”轴的信息，因此结合深度图进行三维重建是可以的。</p>
+<p>实际上深度图在很多3D应用中扮演了很重要的角色，高品质的深度图像可以帮助解决计算机视觉中的很多挑战。实际中深度图像可以通过深度相机（Kinect）或者立体图像获取，得到的深度图像经常因为闭塞，重复纹理或者传感器噪声导致深度图像的品质不够好。</p>
+<p>因为深度图像的广泛应用，对于深度图像品质的评估就显得很重要。</p>
+<h3 id="Compare-with-its-ground-truth-depth-image"><a href="#Compare-with-its-ground-truth-depth-image" class="headerlink" title="Compare with its ground truth depth image"></a>Compare with its ground truth depth image</h3><p>可以想到的简单的方法是通过与它的ground truth depth image（找不到一个很好的翻译来翻译这个术语）作比较。这个方法可以准确的衡量深度图像的品质，但是ground truth depth image在大多数实际应用中并没有那么容易获得。</p>
+<p>(<em>What’s the ground truth depth image?Here are some answers I searched:</em></p>
+<blockquote>
+<p>The ground truth depth image depends on what kind of object you want to detect, but usually the ground truth is done by experts in the area.</p>
+</blockquote>
+<blockquote>
+<p>If you need ground truth information for real images, you need a way to label the pixels in your image with the information, which object they belong to. This can be a manual (and very time-consuming) process or be semi-automatic (run some segmentation algorithms and only correct wrong pixel manually).</p>
+</blockquote>
+<p><em>So We can clearly know that the ground truth image is not easy to get. If we have this, Why do I still need a depth image??</em>)</p>
+<h3 id="Evaluate-the-quality-of-the-reconstructed-color-image-obtained-by-the-tested-depth-image"><a href="#Evaluate-the-quality-of-the-reconstructed-color-image-obtained-by-the-tested-depth-image" class="headerlink" title="Evaluate the quality of the reconstructed color image obtained by the tested depth image"></a>Evaluate the quality of the reconstructed color image obtained by the tested depth image</h3><p>另一种办法是评估通过这张深度图重建的普通场景图片。如果我们有一个物品的深度图像以及该物品的部分视图图片，我们可以通过这些对物体进行3D建模，当然可以渲染别的部分的视图图片。然后通过该图片与真实的视图图片作比较，从而评估深度图像的品质。</p>
+<p>不过这个算法也是有缺点的，因为这需要几对真实照片，这个并不一定那么容易获取。另外渲染算法的好坏也会影响到评估结果。</p>
+<h3 id="RR-DQM-Use-A-pair-of-color-image-and-depth-image"><a href="#RR-DQM-Use-A-pair-of-color-image-and-depth-image" class="headerlink" title="RR-DQM(Use A pair of color image and depth image)"></a>RR-DQM(Use A pair of color image and depth image)</h3><p>我在网络上查到了一篇关于仅仅使用一张色彩图和深度图的深度图品质评估方法的论文。实际上一般的深度相机在得到深度图像的时候也会得到对应的灰度图像。而因为各种原因造成的深度图片失真，在灰度图上并不会出现。因此一种可行的办法是对比与对应的灰度图的各个特征来评估深度图的失真情况。</p>
+<p>论文中，先通过制造水平与垂直方向的噪声（人工数据），来观察合成图片的失真情况，发现深度图像失真的对于合成图片的影响力大小依赖于灰度图的特点。因此深度失真与图片特点的关系可以用来衡量深度图的质量。</p>
+<p>论文中，首先会利用Gabor滤波器以及Susan算子进行纹理以及边缘检测。Gabor滤波器从0°，45°，90°，135°进行Gabor energy(融合了条纹以及边缘的获取)的计算，而Susan算子则通过检测边缘以及边缘方向，与深度图结合得到深度图的局部失真。当一个像素处于非边缘的情况时，则通过它周围的8个像素点来得到失真情况。最后通过将Gabor滤波与Susan算子得到的结果结合得到某个像素点的全局失真情况。最后通过将所有可用像素点（因为有部分深度图中的像素点因为位于高反射区域而得到错误的深度值，这些部分的像素点被称为outlier，不参与计算当中）的global distortion相加求评价，得到整张深度图的失真情况，从而进行深度图片的品质评估。</p>
+<p>论文链接：<a href="https://link.springer.com/article/10.1007/s11042-016-3392-4" target="_blank" rel="noopener">A new depth image quality metric using a pair of color and depth images</a>.</p>
+<h3 id="FDQM-fast-quality-metric-for-depth-maps"><a href="#FDQM-fast-quality-metric-for-depth-maps" class="headerlink" title="FDQM(fast quality metric for depth maps)"></a>FDQM(fast quality metric for depth maps)</h3><p>文章在刚开始介绍了很多一般图片的品质评估算法，而这些算法在MVD（the multiview video plus depth）应用中也可以用来评估深度图像的质量，然而通过对比一个参考深度图以及它的失真版本来进行对比，想要得到较好的效果需要较大的时间复杂的。也就是没有对于深度图的品质评估上还没有发展出比较好的评估算法。在深度图上的小错误可能会导致中间合成图质量严重降低。这篇论文提出的算法可以高效地衡量深度图的错误在合成2D图上的影响。</p>
+<p>首先通过需要将参考与失真图的深度值转换为参考图与失真深度图之间的差异，然后测量由视差引起的合成像素失真，最后通过空间汇集方式整合像素失真，得到FDQM指数。</p>
+<p>这个算法需要左视与右视两张RGB图，对于该算法，逐像素计算时候依然需要结合各个点权重，而物品边界的像素相对于平滑区域的需要更大的权重，因此需要计算颜色图与差异图的梯度图。通过左右视图逐像素地处理得到总的失真衡量。</p>
+<p>论文链接：<a href="http://mcl.korea.ac.kr/~dotol1216/Publications/2015_TCSVT_WDJANG.pdf" target="_blank" rel="noopener">FDQM: Fast Quality Metric for Depth Maps<br>Without View Synthesis
+</a></p>
+<h3 id="其他链接："><a href="#其他链接：" class="headerlink" title="其他链接："></a>其他链接：</h3><p><a href="https://ieeexplore.ieee.org/document/5877203" target="_blank" rel="noopener">A novel depth map quality metric and its usage in depth map coding</a></p>
+<p><a href="https://www.researchgate.net/publication/261387264_A_comprehensive_evaluation_of_full_reference_image_quality_assessment_algorithms" target="_blank" rel="noopener">A comprehensive evaluation of full reference image quality assessment algorithms</a></p>
+<p>对于深度图像的品质评估我可以搜到的论文不够多，而且这些论文普遍引用量不够高，因此质量无法评定。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/24/计算摄像学——Depth-image-quality-assessment/" data-id="cjnyn0h5w003e51lt0rvntznm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/24/图形学——Basic-Math/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          图形学——Basic Math
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/22/Learning-From-Data——Generalized-Linear-Model/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Learning From Data——Generalized Linear Model</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

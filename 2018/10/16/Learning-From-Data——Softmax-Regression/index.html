@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Learning From Data——Softmax Regression | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Learning From Data是研究生修的一门课，其实也就是机器学习的另一种叫法。第一门课中介绍了Linear Regression，Logistic Regression，Softmax Regression.虽然前两个都学过，但是还是有一些收获，比如另外的解释方法等等。">
+<meta name="keywords" content="machine learning,LFD class,regression">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning From Data——Softmax Regression">
+<meta property="og:url" content="http://yoursite.com/2018/10/16/Learning-From-Data——Softmax-Regression/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Learning From Data是研究生修的一门课，其实也就是机器学习的另一种叫法。第一门课中介绍了Linear Regression，Logistic Regression，Softmax Regression.虽然前两个都学过，但是还是有一些收获，比如另外的解释方法等等。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-23T05:35:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Learning From Data——Softmax Regression">
+<meta name="twitter:description" content="Learning From Data是研究生修的一门课，其实也就是机器学习的另一种叫法。第一门课中介绍了Linear Regression，Logistic Regression，Softmax Regression.虽然前两个都学过，但是还是有一些收获，比如另外的解释方法等等。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Learning-From-Data——Softmax-Regression" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/16/Learning-From-Data——Softmax-Regression/" class="article-date">
+  <time datetime="2018-10-16T03:43:43.000Z" itemprop="datePublished">2018-10-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据学习课程/">数据学习课程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Learning From Data——Softmax Regression
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Learning From Data是研究生修的一门课，其实也就是机器学习的另一种叫法。第一门课中介绍了Linear Regression，Logistic Regression，Softmax Regression.虽然前两个都学过，但是还是有一些收获，比如另外的解释方法等等。<a id="more"></a></p>
+<h2 id="Linear-Regression"><a href="#Linear-Regression" class="headerlink" title="Linear Regression"></a>Linear Regression</h2><p>这次Linear Regression主要学习到的新的东西是，从概率角度来理解为什么使用Least Square.</p>
+<p>假设目标函数是 $Y = W^Tx+ \epsilon$，其中$\epsilon$是N维向量.假设$\epsilon$是独立同分布（IID）的，而且满足高斯分布$N(0,\sigma)$,则:<br>$$<br>p(y_n|X_n,W) = \frac 1 {\sqrt{2\pi }\sigma } exp \left(-\frac{(Y_n - W^TX_n)^2}{2\sigma ^2} \right)<br>$$</p>
+<p>而出现这个样本的概率如下：</p>
+<p>$L(W) = p(Y|X,W) = \prod _{n=1}^N p(y_n|X_n,W)$.</p>
+<p>我们想要求得最大概率估计（Maximum Likelihood Estimation）:$W_{MLE} = argmax_W(L{W})$.</p>
+<p>展开之前我们应该加个log，因为我们喜欢sum而不是prod。如下：</p>
+<p>$$<br>\begin{array} {l}<br>\log{L(W)} &amp;= \sum _{n=1}^N(\log{\frac 1 {\sqrt {2 \pi} \sigma}}- \frac 1 {2\sigma ^2 } (Y_n - W^TX_n)^2 \log e )\<br> &amp;= m \log{\frac 1 {\sqrt {2 \pi }\sigma}} - \frac 1 {2\sigma ^2 }  \sum_{n=1}^N  (Y_n - W^TX_n)^2<br>\end{array}<br>$$</p>
+<p>所以，$argmax_{W} (L(W)) = argmin_{W} (\sum_{n=1}^N  (Y_n - W^TX_n)^2 )$.这也正是我们的cost function的定义。</p>
+<h2 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h2><p>Logistic Regression学习了从另一种角度思考得到另一种定义cost function的方法，当然最终效果是一致的。</p>
+<p>之前的logsitic regression对于$P(X_i \bigcap y_i)$的估计如下：<br>$$<br>P(X_i \bigcap y_i) =\frac {(y_i+1)} 2 P(X_i) \times P(y_i = +1|X_i) +\frac {(1 - y_i)} 2 P(X_i) \times (1 - P(y_i = +1|X_i))<br>$$</p>
+<p>实际上有另外一种可以达到一样的效果,不过此时我们需要的就是另外一种对$y$的定义了：$y \in {0,1}$:<br>$$<br>P(X_i \bigcap y_i) = (P(X_i) \times P(y_i = 1|X_i))^{y_i} (P(X_i) \times (1 - P(y_i = 1|X_i)))^{1-y_i}<br>$$</p>
+<p>因此出现这个样本的概率为：<br>$$<br>L(W) = \prod _{i=1}^N (P(X_i \bigcap y_i) = P(X_i) \times h_w(X_i) )^{y_i} (P(X_i) \times (1-h_W(X_i)))^{1-y_i} .<br>$$</p>
+<p>我们可以略去这些$P(X_i)$,因为这是确定的而且也不是我们需要注意的。<br>这时候log之后，得到最后的cost funtion的形式与之前就有了一些不同：</p>
+<p>$$<br>f(W) = -(\sum _{i=1}^N y_i \log h_W{X_i} + (1 - y_i)\log{ (1 -h_W{X_i})})<br>$$.<br>接下来要做的就是求这个函数的梯度，但是为了看的清楚，首先说明下各个函数的意义：<br>$$<br>h_W(X) = \frac 1 {1 - e^{-g_W(X)}}<br>$$<br>$$<br>g_W(X) = W^TX<br>$$</p>
+<p>求梯度过程如下：<br>$$<br>\begin{array}{l}<br>\nabla f(W) &amp;= -(\sum _{i=1} ^N (y_i log(h_W(X_i)) + (1-y_i) log(1-h_W(X_i))))\<br>&amp;= -(\sum_{i=1}^N \left[ \frac {y_i}{h_W(X_i)} - \frac {1-y_i}{1-h_W(X_i)} \right] h_W’(x))\<br>&amp;= -(\left[y_i + \frac {1-y_i}{e^{-g_W(X_i)}} \right] \frac {e^{-g_W(X_i)}}{1 - e^{-g_W(X_i)}} g_W’(X_i)) \\<br>&amp;= -(\left[ \frac 1 {1 - e^{-g_W(X_i)}} - y_i \frac {1 - e^{-g_W(X_i)}}{1 - e^{-g_W(X_i)}} \right] g_W’(X_i))\<br>&amp;=-(y_i - h_W(X_i))X_i<br>\end{array}<br>$$</p>
+<p>而且这个cost function的好处是，利用梯度下降的时候它和线性回归的步骤是非常相似的,线性回归中：</p>
+<p>$$<br>\frac {\partial f(W)}{\partial w_j} = \sum _{i=1}^N(y_i - g_{W}(X_i))x_{i,j}.<br>$$</p>
+<p>即<br>$$<br>\nabla f(W) = \sum_{i=1}^N (y_i - g_{W}(X_i))X_i.<br>$$</p>
+<p>最后回到两种不同的cost funtion，实际上两者本质没有太大的区别，只是negative，positive的标识数字不同。最后得到的结果可能也不一样，但是差距不会太大，都会得到比较理想的结果。</p>
+<h2 id="Softmax-Regression"><a href="#Softmax-Regression" class="headerlink" title="Softmax Regression"></a>Softmax Regression</h2><p>Softmax Regression是一种多维分类算法。依然是站在概率的角度来讨论。</p>
+<p>假设共有k类，即$y \in {1,…,k}$.我们先给出一个概率估计，之前得概率估计是logistic函数，现在我们给出另一种情况：<br>$$<br>h_W(X_i) = \left [<br>    \begin{matrix}<br>p(y_i = 1|X_i;W_1)\<br>p(y_i=2|X_i;W_2)\<br>…\<br>p(y_i=k|X_i;W_k)<br> \end{matrix}\right] = \frac 1 {\sum _{j=1}^k e^{W_j^TX_i}}<br> \left[\begin{matrix} e^{W_1^TX_i}\<br> e^{W_2^TX_i}\<br> …\<br> e^{W_k^TX_i}<br> \end{matrix}\right]<br>  = softmax(W,X_i)<br>$$<br>同时我们定义:$softmax(z_i) = p{y = i|X,W} = \frac {e^{z_i}}{\sum _{j=1}{k} e^{z_j}}$，此时$i \in {1,…,k}$.</p>
+<p>当然，W参数也会发生变化：</p>
+<p>$$<br>W = \left[<br>\begin{matrix}<br>-W_1^T-\<br>-W_2^T-\<br>…\<br>-W_k^T-<br>\end{matrix}<br>\right]<br>$$.</p>
+<p>因此我们确定了给定$W$和$X$的时候，$y$的概率。</p>
+<p>而出现当前样本的概率（我们忽略$P(W,X)$,像之前一样它不会影响结果）：<br>$$<br>L(W) = \prod_{i=1}^{N} P(y_i|X_i,W).<br>$$<br>其实我们可以想象的是这个式子展开了后会很复杂，因为对$y_i$可能的各个情况也要连乘。不如先log好了：<br>$$<br>\begin {array}{l}<br> F(W) = \log{L(W)} &amp;= \sum_{i=1}^N \log {p(y_i|X_i,W) }\<br> &amp;= \sum_{i=1}^N \log{\prod_{j=1}^k p_{W_j}(j|X_i,W)^{\mathbf{1}\{y_i = j\}}}\<br> &amp;= \sum_{i=1}^N \sum_{j=1}^k \mathbf{1}\{y_i = j\} \log { \frac {e^{W_jX_i}}{\sum _{l=1}^k e^{W_l^TX_i}}}<br>\end {array}<br>$$</p>
+<p>这个东西，其实我推算的时候对他的符号表示已经很头大了。但是它虽然复杂但原理不难懂，和logistic regression的道理基本上一样的。</p>
+<p>最后，我们就是要求这个函数的梯度了。这个函数的梯度求解想必是非常复杂的，但是实际上没有想象的那么麻烦。最后的结果也非常的简单：</p>
+<p>$$<br>\nabla _{W_j} F(W) =<br>\sum _{i=1}^m \left( \mathbf{1}\{y_i = j\} \log {\frac {e^{W_j^TX_i}}{\sum _{l=1}^k e^{W_l^TX_i}}} + \mathbf{1}\{y_i \ne j\} \log {\frac {e^{W_{y_i}^TX_i}}{\sum _{l=1}^k e^{W_l^TX_i}}} \right)<br>$$</p>
+<p>我们仔细观察原式就可以化简上面的样子。为了简化后面的步骤，假设$g(W_l) = W_l^TX_i$.<br>第一种情况$ {y_i = j}$：<br>$$<br>f_1(W) = \log {\frac {e^{g(W_j)}}{\sum_{l=1}^k e^{g(W_l)}}}<br>$$<br>$$<br>\begin{array}{l}<br>\nabla _{W_j} f_1(W)  &amp;= \frac {\sum_{l=1}^k e^{g(W_l)}}{e^{g(W_j)}} \cdot \frac { -e^{2g(W_j)}+ (\sum_{l=1}^k e^{W_l})e^{W_j}}{(\sum_{l=1}^k e^{g(W_l)})^2} \cdot g’(W_j)\<br>&amp;= \frac{\sum_{l=1}^k e^{g(W_l) - e^{g(W_j)}}}{\sum_{l=1}^k e^{g(W_l)}} \cdot g’(W_j) \\<br>&amp;= (1 - p(y_i = l|X_i,W))X_i<br>\end{array}<br>$$</p>
+<p>第二种情况$y_i \ne j$,假设$y_i = q \ne j$:<br>$$<br>f_2(W) = \log {\frac {e^{g(W_q)}}{\sum_{l=1}^k e^{g(W_l)}}}<br>$$<br>$$<br>\begin{array}{c}<br>\nabla _{W_j} f_2(W) &amp;=\frac {\sum_{l=1}^k e^{g(W_l)}}{e^{g(W_q)}} \cdot \frac { -e^{g(W_j) e^{g(W_q)}}}{(\sum_{l=1}^k e^{g(W_l)})^2} \cdot g’(W_j)\<br>&amp;= - p(y_i = l|X_i,W)X_i<br>\end{array}<br>$$</p>
+<p>也是两种情况的差别只有前面是否加一个1。合并两种情况，可以得到：<br>$$<br>\nabla _{W_j} F(W) = \sum _{i=1} ^N [(\mathbf{1}\{y_i=j\} - p(y_i=l|X_i,W))X_i]<br>$$<br>上面推出来的要注意是我们想要最大化的函数。</p>
+<p>而cost funtion的梯度应该是： \sum _{i=1} ^N [(-\mathbf{1}\{y_i=j\} + p(y_i=l|X_i,W))X_i] </p>
+<p>对于softmax regression我们需要知道，它的参数$W_j$之间并不是独立的，因为各个概率加起来为1，有这个约束后实际上，只要知道$k-1$个参数，就可以确定这个模型。</p>
+<p>实际上，可以很容易证明logistic regression 是 softmax regression的特殊情况。</p>
+<p>以上就是上节课学到的所有新东西。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/16/Learning-From-Data——Softmax-Regression/" data-id="cjnyn0h4o000551ltkv0cco3u" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/regression/">regression</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/22/Learning-From-Data——Generalized-Linear-Model/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Learning From Data——Generalized Linear Model
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/16/数学——Newton-Method/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">数学——Newton Method</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

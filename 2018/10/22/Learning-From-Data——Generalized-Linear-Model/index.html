@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Learning From Data——Generalized Linear Model | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这次数据学习课上，讲的是Generalized Linear Model。我心里想着是要概况线性模型，我应该都清楚吧。上课了之后才发现，这实际上是广义线性模型，有很多新东西。然而我还是睡着了。">
+<meta name="keywords" content="machine learning,LFD class,exponential family,mathematics">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning From Data——Generalized Linear Model">
+<meta property="og:url" content="http://yoursite.com/2018/10/22/Learning-From-Data——Generalized-Linear-Model/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="这次数据学习课上，讲的是Generalized Linear Model。我心里想着是要概况线性模型，我应该都清楚吧。上课了之后才发现，这实际上是广义线性模型，有很多新东西。然而我还是睡着了。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-10-23T09:05:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Learning From Data——Generalized Linear Model">
+<meta name="twitter:description" content="这次数据学习课上，讲的是Generalized Linear Model。我心里想着是要概况线性模型，我应该都清楚吧。上课了之后才发现，这实际上是广义线性模型，有很多新东西。然而我还是睡着了。">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Learning-From-Data——Generalized-Linear-Model" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/10/22/Learning-From-Data——Generalized-Linear-Model/" class="article-date">
+  <time datetime="2018-10-22T12:26:26.000Z" itemprop="datePublished">2018-10-22</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/数据学习课程/">数据学习课程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Learning From Data——Generalized Linear Model
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这次数据学习课上，讲的是Generalized Linear Model。我心里想着是要概况线性模型，我应该都清楚吧。上课了之后才发现，这实际上是广义线性模型，有很多新东西。然而我还是睡着了。<br><a id="more"></a></p>
+<p>首先引入一个概念，叫做<strong>指数族分布</strong>。</p>
+<h3 id="Exponential-Family"><a href="#Exponential-Family" class="headerlink" title="Exponential Family"></a>Exponential Family</h3><p>如果一个分布可以被写成下面的形式：</p>
+<p>$$<br>p(y;\eta) = b(y)e^{\eta ^T T(y) - a(\eta)}<br>$$</p>
+<p>那么这个分布属于Exponential Family。其中：</p>
+<p>$\eta$: natural/canonical parameter(自然参数) </p>
+<p>$T(y)$: suﬃcient statistic of the distribution(充分统计量) </p>
+<p>$a(η)$: log partition function(对数划分函数)</p>
+<p>其中$a(\eta)$是一个归一化常数的对数。也就是：</p>
+<p>$p(y;\eta) = b(y)e^{\eta ^T T(y) - a(\eta)} = \frac {b(y)e^{\eta^T T(y)} } {e^{a(\eta)} }$</p>
+<p>$\sum_{y} p(y;\eta) = 1(or \int _y p(y;\eta) dy = 1) $</p>
+<p>我们可以得到：<br>$a(\eta) = \log {\left(\sum _y b(y)e^{\eta ^T T(y)} \right)}$</p>
+<p>指数分布族有很多成员，实际上我们熟悉的很多分布都是指数分布族的。下面举几个例子：</p>
+<h4 id="Bernoulli-Distribution"><a href="#Bernoulli-Distribution" class="headerlink" title="Bernoulli Distribution"></a>Bernoulli Distribution</h4><p>伯努利分布应该是最简单的分布之一了。$y \in {1,0}$，而且$p(y=1) = φ,p(y=0) = 1 - φ$，因此它的分布可以写成下面的样子：</p>
+<p>$p(y;φ) = φ^y(1-φ)^{1-y}$</p>
+<p>如何将它转化为指数族的形式？</p>
+<ul>
+<li><p>$\eta = \log {\frac {\phi } {1-\phi} }$</p>
+</li>
+<li><p>$T(y) = y$</p>
+</li>
+<li><p>$a(\eta) = \log {(1 + e^{\eta})}$ </p>
+</li>
+<li><p>$b(y) = 1$</p>
+</li>
+</ul>
+<h4 id="Gaussian-Distribution-unit-variance"><a href="#Gaussian-Distribution-unit-variance" class="headerlink" title="Gaussian Distribution(unit variance)"></a>Gaussian Distribution(unit variance)</h4><p>高斯分布也是很常见的分布，这里我们先说明一下unit variance的情况，也就是$\sigma = 1$。它的概率密度如下：<br>$$<br>p(y;\mu) = \frac 1 {\sqrt{2 \pi} } exp\left(- \frac {(y - \mu)^2}{2} \right)<br>$$</p>
+<ul>
+<li><p>$\eta = \mu$</p>
+</li>
+<li><p>$ T(y) = y$</p>
+</li>
+<li><p>$a(\eta) = \frac {\eta ^2} {2}$</p>
+</li>
+<li><p>$b(y) = \frac 1 {\sqrt{2 \pi} } e^{-\frac {y^2}{2} } $</p>
+</li>
+</ul>
+<h4 id="Gaussian-Distribution"><a href="#Gaussian-Distribution" class="headerlink" title="Gaussian Distribution"></a>Gaussian Distribution</h4><p>现在将目标放到普通的高斯分布上。<br>$$<br>p(y;\mu) = \frac 1 {\sqrt{2 \pi \sigma ^ 2} } exp\left(- \frac {(y - \mu)^2}{2\sigma ^ 2} \right)<br>$$</p>
+<ul>
+<li><p>$$<br>\eta = \left[\begin{matrix}<br>\frac {\mu}{\sigma^2} \<br>-\frac {1}{2\sigma^2}<br>\end{matrix}\right]$$</p>
+</li>
+<li><p>$$<br>  T(y) = \left[ \begin{matrix} y \<br>y^2<br>\end{matrix}<br>\right]<br>$$</p>
+</li>
+<li><p>$a(\eta) = \frac {\mu^2}{2\sigma^2} + \log {\sigma}$</p>
+</li>
+<li><p>$b(y) = \frac 1 {\sqrt {2 \pi} }$</p>
+</li>
+</ul>
+<p>这里情况变得就稍微复杂了点。</p>
+<h4 id="Poisson-Distribution-Poisson-lambda"><a href="#Poisson-Distribution-Poisson-lambda" class="headerlink" title="Poisson Distribution:Poisson($\lambda$)"></a>Poisson Distribution:Poisson($\lambda$)</h4><p>泊松分布平时我们接触不如前两项多。泊松分布一般可以用在估计一个固定的时间段内某个事情发生的次数，假设各个事件之间互相独立，它们发生有一个固定的比率$\lambda$.</p>
+<p>泊松分布的概率密度函数如下：<br>$$<br>p(y;\lambda) = \frac {\lambda ^y e ^{- \lambda} }{y!}<br>$$</p>
+<ul>
+<li><p>$\eta = \log {\lambda}$</p>
+</li>
+<li><p>$T(y) = y$</p>
+</li>
+<li><p>$a(\eta) = e^{\eta}$</p>
+</li>
+<li><p>$b(y) = \frac {1}{y!}$</p>
+</li>
+</ul>
+<h3 id="Generalized-Linear-Models"><a href="#Generalized-Linear-Models" class="headerlink" title="Generalized Linear Models"></a>Generalized Linear Models</h3><p>所以什么是广义线性模型？GLM是从来自于指数族分布$y|X;\theta$一种构造线性模型的方法。</p>
+<p>广义线性模型的设计动机为：</p>
+<ul>
+<li>相应变量y可以是任意分布</li>
+<li>允许y的任意函数（链接函数）可以随输入值x线性变化</li>
+</ul>
+<p>广义线性模型形式化定义有下面几个假设：</p>
+<ol>
+<li>$y|x;\theta$ ~ Exponential Family(\eta),如高斯分布，伯努利分布，泊松分布等</li>
+<li>假设目标函数是$h(x) = \mathbb{E}[T(y)|x]$</li>
+<li>自然常数$\eta$和输入$X$是线性相关的：$\eta = \theta^TX$ or $\eta_i = \theta_i^T X (\eta = \Theta^T X)$ </li>
+</ol>
+<p>将自然参数与分布平均值连接得到：$\mathbb{E}[T(y);\eta]$.</p>
+<p>权威响应函数（Canonical response function）g给出了分布平均值：$g(\eta) = \mathbb{E}[T(y);\eta]$.</p>
+<p>则 $\eta = g^{-1}(\mathbb{E}[T(y);\eta])$,被称为权威链接函数（canonical link function）。</p>
+<p>写成广义线性模型，可以得到：$\mathbb{E}(y;\eta)=\frac{d}{d\eta}a({\eta})$（证明较为复杂）。因此，可以很轻易得求出假设函数。</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><h4 id="Ordinary-Least-Square"><a href="#Ordinary-Least-Square" class="headerlink" title="Ordinary Least Square"></a>Ordinary Least Square</h4><p>应用GLM到下面的假设：</p>
+<ol>
+<li><p>$y|X;\theta ~ N(\mu,1)$,则$\eta = \mu,T(y) = y$.</p>
+</li>
+<li><p>Derive Hypothesis function $h_\theta(X) = \mathbb{E}[y|X;\theta] = \mu = \eta$.</p>
+</li>
+<li><p>Adopt linear model $\eta = \theta ^TX $: $h_\theta (X) = \eta = \theta ^T X$.</p>
+</li>
+</ol>
+<p>Canonical response function:$g(\eta) = \mu = \eta$</p>
+<p>Canonical link function:$\eta = g^{-1}(\mathbb{E}[T(y);\eta] = g’(\mu) = mu$</p>
+<h4 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h4><ol>
+<li><p>$y|X;\theta ~ Bernoulli(\phi)$，则$\eta = \log {\left(\frac {\phi}{1 - \phi}\right)},T(y) = y$</p>
+</li>
+<li><p>Derive hypothesis function $h_\theta(X) = \mathbb{E}[y|X;\theta] = \phi = $,则$\phi = \frac {1}{1 + e^{-\eta} }$</p>
+</li>
+<li><p>Adopt linear model $\eta = \theta ^T X$: $h_\theta(X) = \phi = \frac {1}{1 + e^{-\theta^TX} }$</p>
+</li>
+</ol>
+<p>Canonical response function:$ φ = g(η) = sigmoid(η)$ </p>
+<p>Canonical link function : $η = g^{−1}(φ) = logit(φ)$</p>
+<h4 id="Possion-Regression"><a href="#Possion-Regression" class="headerlink" title="Possion Regression"></a>Possion Regression</h4><ol>
+<li><p>$y|X;\theta ~ P(\lambda)$,则$\eta = \log{\lambda},T(y) = y$</p>
+</li>
+<li><p>Derive hypothesis function $h_\theta(X) = \mathbb{E}[y|X;\theta] = \lambda = e^{\eta}$</p>
+</li>
+<li><p>Adopt linear model $\eta = \theta^TX$: $h_\theta (X) = \lambda = e^{\theta^TX}$</p>
+</li>
+</ol>
+<p>Canonical response function:$\lambda = g(\eta) = e^{\eta}$</p>
+<p>Canonical link function:$\eta = g^{-1}(\lambda) = log(\lambda)$</p>
+<h4 id="Softmax-Regression"><a href="#Softmax-Regression" class="headerlink" title="Softmax Regression"></a>Softmax Regression</h4><p>最后我们来推断下Softmax Regression，因为softmax是多维的分布，所以还是有点难度的。</p>
+<p>首先我们应该写出它的分布函数如下：<br>$$<br>p(y;\theta) = \prod_{i=1}^k \phi_i^{\mathbf{1}\{y = i\} }<br>$$</p>
+<p>然后需要做的是把它写成Exponential Family的形式.</p>
+<p>如果照着平时的思路下来，我们会发现，$a(\eta) = 0$,这是不允许发生的（Why？）。因此我们需要想办法，如果把$\phi_k$移到最后，又如何保证前面没有$y$的影响？</p>
+<p>仔细观察上式，我们发现可以将上式写为：$\prod _{i=1}^k \left(\frac{\phi_i}{\phi_k} \right)^{\mathbf{1}\{y=i\} } \phi_k$. (!!!Genius!).</p>
+<ul>
+<li><p>$\eta = \left [ \begin{matrix}<br>\log{\frac {\phi_1}{\phi_k} }\<br>\log{\frac {\phi_2}{\phi_k} }\<br>…\<br>\log{\frac{\phi_{k-1} }{\phi_k} }<br>\end{matrix} \right ]$</p>
+</li>
+<li><p>$T(y) = \left[<br>  \begin{matrix}<br>  \mathbf{1}\{y=1\}\<br>  \mathbf{2}\{y=2\}\<br>  …\<br>  \mathbf{k-1}\{y=k-1\}<br>  \end{matrix}<br>  \right]$</p>
+</li>
+<li><p>$b(y) = 1$</p>
+</li>
+<li><p>$a(\eta) = -\log{(\phi_k)}$</p>
+</li>
+</ul>
+<p>有了上面的格式，如何运用线性模型就比较顺理成章了。</p>
+<ol>
+<li><p>$y|X;\theta ~ P(\Phi)$,则$\eta ,T(y)$如上。</p>
+</li>
+<li><p>Derive hypothesis function :<br>$$<br>h_\theta(X) = \mathbb{E}[y|X;\theta] = \Phi =<br>$$<br>$$<br>\begin{bmatrix}<br>\frac {e^{\eta_1} }{\sum _{i=1}^k e^{\eta_i} }\<br>\frac {e^{\eta_2} }{\sum _{i=2}^k e^{\eta_i} }\<br>…\<br>1 - \frac {e^{\eta_k} }{\sum _{i=1}^k e^{\eta_i} }<br>\end{bmatrix}<br>$$<br>(注意，在这里为了方便我们定义$\eta_k = \log { {\eta_k}{\eta_k} } = 0$)</p>
+</li>
+<li><p>Adopt linear model $eta = \Theta^TX$:</p>
+<p>$ h_\Theta (X)  =\begin{bmatrix}<br>\frac {e^{\theta_1^TX} }{\sum _{i=1}^k e^{\theta_i^TX} }\<br>\frac {e^{\theta_2^TX} }{\sum _{i=1}^k e^{\theta_i^TX} }\<br>…\<br>1 - \frac {e^{\theta_k ^TX} }{\sum _{i=1}^k e^{\eta_i^TX} }<br>\end{bmatrix} $</p>
+</li>
+</ol>
+<p>Canonical response function:$\phi_i = g(\eta) =\frac  {e^{\eta_i} }{\sum _{i=2}^k e^{\eta_i} }$</p>
+<p>Canonical link function:$\eta_i = g^{-1}(\phi) = \log {\frac {\phi_i}{\phi_k} }$.</p>
+<p>因此，根据广义线性模型，我们可以推出需要的hypothesis funtion的形式，从而进行进一步的学习。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/10/22/Learning-From-Data——Generalized-Linear-Model/" data-id="cjnyn0h4m000451ltwyifcjx6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mathematics/">mathematics</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/24/计算摄像学——Depth-image-quality-assessment/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          计算摄像学——Depth image quality assessment
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/10/16/Learning-From-Data——Softmax-Regression/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Learning From Data——Softmax Regression</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
