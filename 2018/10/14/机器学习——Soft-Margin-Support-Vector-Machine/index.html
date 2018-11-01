@@ -5,14 +5,14 @@
   
 
   
-  <title>机器学习——Soft-Margin Support Vector Machine | Hexo</title>
+  <title>机器学习——Soft-Margin Support Vector Machine | 無聊時的自娛自樂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="之前提到的之前的SVM会overfitting除了模型过于复杂，另一个问题就是它要将样本分类在训练集上做到完全正确。这时候一些噪声就会很大程度上影响结果。为了适应这些噪声，不得不做出很复杂的模型。">
 <meta name="keywords" content="machine learning,SVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习——Soft-Margin Support Vector Machine">
-<meta property="og:url" content="http://yoursite.com/2018/10/14/机器学习——Soft-Margin-Support-Vector-Machine/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/10/14/机器学习——Soft-Margin-Support-Vector-Machine/index.html">
+<meta property="og:site_name" content="無聊時的自娛自樂">
 <meta property="og:description" content="之前提到的之前的SVM会overfitting除了模型过于复杂，另一个问题就是它要将样本分类在训练集上做到完全正确。这时候一些噪声就会很大程度上影响结果。为了适应这些噪声，不得不做出很复杂的模型。">
 <meta property="og:locale" content="default">
 <meta property="og:updated_time" content="2018-10-22T12:16:48.000Z">
@@ -20,7 +20,7 @@
 <meta name="twitter:title" content="机器学习——Soft-Margin Support Vector Machine">
 <meta name="twitter:description" content="之前提到的之前的SVM会overfitting除了模型过于复杂，另一个问题就是它要将样本分类在训练集上做到完全正确。这时候一些噪声就会很大程度上影响结果。为了适应这些噪声，不得不做出很复杂的模型。">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="無聊時的自娛自樂" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -39,7 +39,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">無聊時的自娛自樂</a>
       </h1>
       
     </div>
@@ -59,7 +59,7 @@
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wlsdzyzl.com"></form>
       </div>
     </div>
   </div>
@@ -126,7 +126,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/10/14/机器学习——Soft-Margin-Support-Vector-Machine/" data-id="cjnyn0h5h002651ltq4en0r4e" class="article-share-link">Share</a>
+      <a data-url="http://wlsdzyzl.com/2018/10/14/机器学习——Soft-Margin-Support-Vector-Machine/" data-id="cjnyn0h5h002651ltq4en0r4e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SVM/">SVM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li></ul>
@@ -238,7 +238,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2018 John Doe<br>
+      &copy; 2018 無聊時的自娛自樂<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -265,5 +265,21 @@
 
 
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
 </body>
 </html>

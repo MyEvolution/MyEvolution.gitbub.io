@@ -5,14 +5,14 @@
   
 
   
-  <title>机器学习——linear model for classification | Hexo</title>
+  <title>机器学习——linear model for classification | 無聊時的自娛自樂</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="到目前为止，已经学习了3个线性模型了，他们都使用到了$score = W^TX$(后文中简写为$s$)，使用特征间线性组合来打分，通过分数来做后续的处理。">
 <meta name="keywords" content="machine learning,classification,visualization">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习——linear model for classification">
-<meta property="og:url" content="http://yoursite.com/2018/09/01/机器学习——linear-model-for-classification/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/09/01/机器学习——linear-model-for-classification/index.html">
+<meta property="og:site_name" content="無聊時的自娛自樂">
 <meta property="og:description" content="到目前为止，已经学习了3个线性模型了，他们都使用到了$score = W^TX$(后文中简写为$s$)，使用特征间线性组合来打分，通过分数来做后续的处理。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/87T%7EV%5DV75N992E1I%5B3M9%5DZK.png">
@@ -23,7 +23,7 @@
 <meta name="twitter:description" content="到目前为止，已经学习了3个线性模型了，他们都使用到了$score = W^TX$(后文中简写为$s$)，使用特征间线性组合来打分，通过分数来做后续的处理。">
 <meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/87T%7EV%5DV75N992E1I%5B3M9%5DZK.png">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="無聊時的自娛自樂" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -42,7 +42,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">無聊時的自娛自樂</a>
       </h1>
       
     </div>
@@ -62,7 +62,7 @@
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wlsdzyzl.com"></form>
       </div>
     </div>
   </div>
@@ -132,7 +132,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/09/01/机器学习——linear-model-for-classification/" data-id="cjnyn0h5k002g51ltf8vwd0fh" class="article-share-link">Share</a>
+      <a data-url="http://wlsdzyzl.com/2018/09/01/机器学习——linear-model-for-classification/" data-id="cjnyn0h5k002g51ltf8vwd0fh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/classification/">classification</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
@@ -244,7 +244,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2018 John Doe<br>
+      &copy; 2018 無聊時的自娛自樂<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -271,5 +271,21 @@
 
 
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
 </body>
 </html>
