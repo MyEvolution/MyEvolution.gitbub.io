@@ -1,110 +1,152 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
 
-  
-  <title>机器学习——Validation | 無聊時的自娛自樂</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="上次regularization最后留下了一个问题：$\lambda$的选择。其实仔细想想，从学习机器学习到现在，我们面临的选择，可不止一个$\lambda$.">
-<meta name="keywords" content="machine learning,validation">
-<meta property="og:type" content="article">
-<meta property="og:title" content="机器学习——Validation">
-<meta property="og:url" content="http://wlsdzyzl.com/2018/09/28/机器学习——Validation/index.html">
-<meta property="og:site_name" content="無聊時的自娛自樂">
-<meta property="og:description" content="上次regularization最后留下了一个问题：$\lambda$的选择。其实仔细想想，从学习机器学习到现在，我们面临的选择，可不止一个$\lambda$.">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/%7ELN%7EMS5IB6G61%40DWBDM51OE.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/VQVY7%5B%60%5BQA%40AT%7BQ_S24LDQ4.png">
-<meta property="og:updated_time" content="2018-09-30T09:58:48.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习——Validation">
-<meta name="twitter:description" content="上次regularization最后留下了一个问题：$\lambda$的选择。其实仔细想想，从学习机器学习到现在，我们面临的选择，可不止一个$\lambda$.">
-<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/%7ELN%7EMS5IB6G61%40DWBDM51OE.png">
-  
-    <link rel="alternate" href="/atom.xml" title="無聊時的自娛自樂" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+    <title>
+        
+        机器学习——Validation - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
 </head>
-</html>
+
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">無聊時的自娛自樂</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wlsdzyzl.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-机器学习——Validation" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/28/机器学习——Validation/" class="article-date">
-  <time datetime="2018-09-28T12:35:19.000Z" itemprop="datePublished">2018-09-28</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      机器学习——Validation
-    </h1>
-  
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
 
-      </header>
+<div class="index-about">
+    <i> null </i>
+</div>
+
+<div class="index-container">
     
-    <div class="article-entry" itemprop="articleBody">
-      
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/">
+        </div>
+        <div class="name">
+            <i></i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> null </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        机器学习——Validation
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2018-09-28 20:35:19</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#machine learning" title="machine learning">machine learning</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#validation" title="validation">validation</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
         <p>上次regularization最后留下了一个问题：$\lambda$的选择。其实仔细想想，从学习机器学习到现在，我们面临的选择，可不止一个$\lambda$.<br><a id="more"></a></p>
 <p>模型的选择（PLA，POKCET，Linear Regression，Logistic Regression），特征转换的方法（用什么样的多项式转换），Regularizer的选择等等，这些组合起来足够让人头大。而实际上，也没有一种永远都表现得很好的组合，对于不同的问题需要不同的方法，也就是做选择是必须的。</p>
 <p>为了简化问题，我们就仅以不同的假说的选择为例。其他的选择也与这个类似。</p>
 <p>假设我们目前有2个$H$，一个$H_2$,另一个$H_{10}$，应该选择哪一个？</p>
 <p>一个简单的想法，是利用$E_{in}$去判断。但是这个想法太naive了。我们之前讲过过拟合了，如果用$E_{in}$去判断，那就不用想了，因为$H_{10}$一定比$H_2$要好，而且如果两个模型一个加了$regularization$，它的表现一定不如另一个.而且如果两个$H$没有交集，从两个$E_{in}$中选择一个好的，那么实际上是在两个$H$的并集中选择，这也就意味着增大了代价，更容易得到不好的$E_{out}$。</p>
-<p>另一种简单的想法，用测试数据来判断。这是一个很好的办法。我们知道$E_{test}$与$E_{out}$是满足霍夫丁不等式的，因此可以得到：<br>$$<br>E_{out} \leq E_{test}+O(\sqrt {\frac{\log M}{N_{test}}})<br>$$</p>
-<p>所以用测试集来从模型中选择一个最好的是可行的。但是测试集从哪里来？</p>
+<p>另一种简单的想法，用测试数据来判断。这是一个很好的办法。我们知道$E_{test}$与$E_{out}$是满足霍夫丁不等式的，因此可以得到：</p>
+<script type="math/tex; mode=display">
+E_{out} \leq E_{test}+O(\sqrt {\frac{\log M}{N_{test}}})</script><p>所以用测试集来从模型中选择一个最好的是可行的。但是测试集从哪里来？</p>
 <p>一般来说，测试集是锁在老板的柜子中。测试集相当于考试试卷，用来评判最终的分数.我们无法得到测试集，这就像考试前你想让自己做到最好，你没法用考试的卷子来测试自己，这叫作弊。</p>
 <p>但是我们可以自己测验自己。这就是validation。</p>
 <p>从给到的训练集当中，我们随机挑出一部分（保证iid），用来当作val集，其余部分用来训练模型。然后通过val集来选出表现最好的g’.为什么不是g？因为毕竟它的训练集相对于之前要少了很多，所以加个标识以区分。</p>
-<p>一般来说，得到g’以后，也就是选出了我们想要的那个$H$，然后我们要做的就是将验证集再次融合回去，用这个整体的训练集在该假说上训练。毕竟某种程度上来说，N越大，得到的模型是越好的。而且<br>$$<br>E_{out}(g_{H_{chosen}}) &lt; E_{out}(g’_{H_{chosen}})<br>$$<br>上式是实际中的一个很常见的式子，但理论上要这么保证还需要一定的限制条件。</p>
+<p>一般来说，得到g’以后，也就是选出了我们想要的那个$H$，然后我们要做的就是将验证集再次融合回去，用这个整体的训练集在该假说上训练。毕竟某种程度上来说，N越大，得到的模型是越好的。而且</p>
+<script type="math/tex; mode=display">
+E_{out}(g_{H_{chosen}}) < E_{out}(g'_{H_{chosen}})</script><p>上式是实际中的一个很常见的式子，但理论上要这么保证还需要一定的限制条件。</p>
 <p>假设我们从N个训练样本中挑出K个来做验证集，当然这个K的大小是会影响结果的。如果K很大，那么很开心，$E_{val}$与$E_{out}$更有可能很接近，这对于选择g’来说是很好的，但是K过大意味着留下来的训练样本过少，g’与g差别很大，可能导致我们无法找到应该选择的那个$H$；另一方面，K很小，g与g’相差很小，但是$E_{val}$与$E_{out}$可能实际上差的很远，也不能得到好的结果。因此这又是一个难题。<br>一般来说有下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/%7ELN%7EMS5IB6G61%40DWBDM51OE.png" alt=""><br>可以看到如果K过大，导致训练g’的训练集很小，使得它的学习效果很差，甚至不如不用验证的情况。</p>
 <p>为了解决这个问题，引入一种新的工具：交叉验证。</p>
 <p>首先我们考虑一种很极端的情况：K=1.每次留出一个来做验证，对于单个样本来说它当然无法代表$E_{out}$.但是如果我们对这个过程进行N次，所有的样本都曾做过验证集，最后求出来$E_{val}$的平均值，可以证明它就能代表g’的$E_{out}$.上面的办法，叫做leave-one-out cross validation.假设它得到的错误我们称为$E_{looc}$，则有下面的证明：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/VQVY7%5B%60%5BQA%40AT%7BQ_S24LDQ4.png" alt=""><br>(上面的证明我是看不大懂的)</p>
@@ -113,148 +155,49 @@
 <p>对于其他情况的选择，也可以用这样的办法，因为我们最终目的是得到尽量好的$E_{out}$。</p>
 <p>最后，validation依然是为了做选择，因此它的结果依然是比较optimistic，算法最终的衡量还是要通过测试集，而不是将最好的validation结果作为衡量标准，这是自欺欺人的表现。</p>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wlsdzyzl.com/2018/09/28/机器学习——Validation/" data-id="cjnyn0h5j002d51ltd0l8f5f1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/validation/">validation</a></li></ul>
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
 
-    </footer>
-  </div>
-  
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
     
-<nav id="article-nav">
-  
-    <a href="/2018/10/03/机器学习——（基石）总结/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          机器学习——（基石）总结
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/09/28/机器学习——Regularization/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">机器学习——Regularization</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 無聊時的自娛自樂<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
 
 
 
-  </div>
+
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {
@@ -272,4 +215,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
 </body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
 </html>
