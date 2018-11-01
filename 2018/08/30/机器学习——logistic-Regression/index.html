@@ -1,145 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head><meta name="generator" content="Hexo 3.8.0">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="keyword" content="">
-    <link rel="shortcut icon" href="/img/favicon.ico">
+  <meta charset="utf-8">
+  
 
-    <title>
-        
-        机器学习——logistic Regression - undefined
-        
-    </title>
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/aircloud.css">
-    <link rel="stylesheet" href="/css/gitment.css">
-    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
-    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
-    <!-- ga & ba script hoook -->
-    <script></script>
+  
+  <title>机器学习——logistic Regression | 無聊時的自娛自樂</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="通过线性分类，我们预测的是一个样本是positive，还是negative，不过有时候我们并不想要那样明确的结果。">
+<meta name="keywords" content="machine learning,regression">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习——logistic Regression">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/08/30/机器学习——logistic-Regression/index.html">
+<meta property="og:site_name" content="無聊時的自娛自樂">
+<meta property="og:description" content="通过线性分类，我们预测的是一个样本是positive，还是negative，不过有时候我们并不想要那样明确的结果。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Logistic-curve.svg/480px-Logistic-curve.svg.png">
+<meta property="og:updated_time" content="2018-09-01T04:33:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习——logistic Regression">
+<meta name="twitter:description" content="通过线性分类，我们预测的是一个样本是positive，还是negative，不过有时候我们并不想要那样明确的结果。">
+<meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Logistic-curve.svg/480px-Logistic-curve.svg.png">
+  
+    <link rel="alternate" href="/atom.xml" title="無聊時的自娛自樂" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-
+</html>
 <body>
-
-<div class="site-nav-toggle" id="site-nav-toggle">
-    <button>
-        <span class="btn-bar"></span>
-        <span class="btn-bar"></span>
-        <span class="btn-bar"></span>
-    </button>
-</div>
-
-<div class="index-about">
-    <i> null </i>
-</div>
-
-<div class="index-container">
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">無聊時的自娛自樂</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wlsdzyzl.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-机器学习——logistic-Regression" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/08/30/机器学习——logistic-Regression/" class="article-date">
+  <time datetime="2018-08-30T11:29:47.000Z" itemprop="datePublished">2018-08-30</time>
+</a>
     
-    <div class="index-left">
-        
-<div class="nav" id="nav">
-    <div class="avatar-name">
-        <div class="avatar">
-            <img src="/">
-        </div>
-        <div class="name">
-            <i></i>
-        </div>
-    </div>
-    <div class="contents" id="nav-content">
-        <ul>
-            <li>
-                <a href="/">
-                    <i class="iconfont icon-shouye1"></i>
-                    <span>HOME</span>
-                </a>
-            </li>
-            <li>
-                <a href="/tags">
-                    <i class="iconfont icon-biaoqian1"></i>
-                    <span>TAGS</span>
-                </a>
-            </li>
-            <li>
-                <a href="/archives">
-                    <i class="iconfont icon-guidang2"></i>
-                    <span>ARCHIVES</span>
-                </a>
-            </li>
-            <li>
-                <a href="/about/">
-                    <i class="iconfont icon-guanyu2"></i>
-                    <span>ABOUT</span>
-                </a>
-            </li>
-            
-            <li>
-                <a id="search">
-                    <i class="iconfont icon-sousuo1"></i>
-                    <span>SEARCH</span>
-                </a>
-            </li>
-            
-        </ul>
-    </div>
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
     
-        <div id="toc" class="toc-article">
     
-</div>
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      机器学习——logistic Regression
+    </h1>
+  
+
+      </header>
     
-</div>
-
-
-<div class="search-field" id="search-field">
-    <div class="search-container">
-        <div class="search-input">
-            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
-            <input id="search-input">
-            <span id="begin-search">search</span>
-        </div>
-        <div class="search-result-container" id="search-result-container">
-
-        </div>
-    </div>
-</div>
-        <div class="index-about-mobile">
-            <i> null </i>
-        </div>
-    </div>
-    
-    <div class="index-middle">
-        <!-- Main Content -->
-        
-
-
-<div class="post-container">
-    <div class="post-title">
-        机器学习——logistic Regression
-    </div>
-
-    <div class="post-meta">
-        <span class="attr">Post：<span>2018-08-30 19:29:47</span></span>
-        
-        <span class="attr">Tags：/
-        
-        <a class="tag" href="/tags/#machine learning" title="machine learning">machine learning</a>
-        <span>/</span>
-        
-        <a class="tag" href="/tags/#regression" title="regression">regression</a>
-        <span>/</span>
-        
-        
-        </span>
-        <span class="attr">Visit：<span id="busuanzi_value_page_pv"></span>
-</span>
-
-    </div>
-    <div class="post-content ">
+    <div class="article-entry" itemprop="articleBody">
+      
         <p>通过线性分类，我们预测的是一个样本是positive，还是negative，不过有时候我们并不想要那样明确的结果。<a id="more"></a>有时候，这种情况在医学中更为常见，我们想知道一个样本是正的概率，比如医院中对肿瘤良性与恶性的预测，来决定后续的治疗方式。概率是从0到1的实数，因此对概率的预测依然属于回归而非分类。</p>
 <p>理想中，我们希望样本的样子是这样的：$\\{X_1,0.9\\},\\{x_2,0.2\\},\\{x_3,0.65\\}…$，即对每个样本，都已知它是positive的概率。但是实际上我们往往无法得到这样的结果，我们无法确切知道某个样本是正的概率。我们得到的样本，往往与分类问题的样本一样，对每个样本，知道它是negative，还是positive。不过我们可以假想，得到的训练集是理想情况+噪声造成的：如果是negative，我们可以说它是positive的概率为0，如果是positive，我们称该概率为1。我们希望可以预测出概率。</p>
 <p>首先，有之前的pla与linear regression的基础，很容易想到，使用$WX$去得到预测值。但是预测值虽然是实数，但是因为是概率，所以它的分布仅在于$[0,1]$，因此仅仅使用$WX$是不符合预期的。</p>
@@ -165,78 +118,147 @@ E_{in} =\frac{1}{n}  \sum _{i = 1}^{n} \ln(1+e^{-y_iW^TX_i})</script><p>从上�
 <p>梯度下降具体内容查看：<a href="https://wlsdzyzl.top/2018/08/31/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94Gradient-Decent/" target="_blank" rel="noopener">Gradient Decent</a>。</p>
 <p>通过梯度下降，我们可以找到一个合适的$W$，从而得到较好的逻辑回归效果。</p>
 
-        
-        <br>
-        <div id="comment-container">
-        </div>
-        <div id="disqus_thread"></div>
-
-        <div id="lv-container">
-        </div>
-
+      
     </div>
-</div>
-    </div>
-</div>
+    <footer class="article-footer">
+      <a data-url="http://wlsdzyzl.com/2018/08/30/机器学习——logistic-Regression/" data-id="cjnyo8mto002u1nltp84h9keo" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/regression/">regression</a></li></ul>
 
-
-<footer class="footer">
-    <ul class="list-inline text-center">
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-    </ul>
+    </footer>
+  </div>
+  
     
-    <p>
-        <span id="busuanzi_container_site_pv">
-            <span id="busuanzi_value_site_pv"></span>PV
-        </span>
-        <span id="busuanzi_container_site_uv">
-            <span id="busuanzi_value_site_uv"></span>UV
-        </span>
-        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+<nav id="article-nav">
+  
+    <a href="/2018/08/31/机器学习——Gradient-Decent/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          机器学习——Gradient Decent
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/08/29/新生活——有点想回去/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">新生活——有点想回去</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
+          </li>
+        
+          <li>
+            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2018 無聊時的自娛自樂<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
 </footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
 
 
 
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+  </div>
 </body>
-
-<script>
-    // We expose some of the variables needed by the front end
-    window.hexo_search_path = "search.json"
-    window.hexo_root = "/"
-    window.isPost = true
-</script>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="/js/index.js"></script>
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-
 </html>
