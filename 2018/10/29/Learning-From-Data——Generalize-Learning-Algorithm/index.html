@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg5.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg4.png">
-<meta property="og:updated_time" content="2018-11-02T09:52:20.837Z">
+<meta property="og:updated_time" content="2018-11-02T10:03:34.044Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Generalize Learning Algorithm">
 <meta name="twitter:description" content="之前我们介绍的分类算法，包括，logistic regression，PLA甚至加上linear regression，他们都是试图找到一条线然后来将两种类别分开。这种算法叫做Discriminative Learning Algorithm，他们的由来，都是直接去估计$P(Y|X)$,这样的话根据新样本的X，从而预测Y。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-11-02 17:52:20" itemprop="dateModified" datetime="2018-11-02T17:52:20+08:00">2018-11-02</time>
+                <time title="Modified: 2018-11-02 18:03:34" itemprop="dateModified" datetime="2018-11-02T18:03:34+08:00">2018-11-02</time>
               
             
           </span>
@@ -470,7 +470,7 @@
 P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}</script><p>我们知道：</p>
 <p>$argmax_yp(y|x) = argmax_y \frac{p(x|y)p(y)}{p(x)} = argmax_y p(x|y)p(y) = WhatWePredict$</p>
 <p>所以我们真正需要解决的是$P(x|y)P(y)$.</p>
-<p>当然，如果想要求得P(X),可以通过全概率公式：$P(X) = P(y=1)\cdotP(X|y=1) +P(y=0)\cdot P(X|y=0)$.</p>
+<p>当然，如果想要求得P(X),可以通过全概率公式：$P(X) = P(y=1)\cdot P(X|y=1) +P(y=0)\cdot P(X|y=0)$.</p>
 <p>下面介绍两个最常见的生成学习算法：Gaussian Discriminant Analysis(高斯判别分析)与Naive Beyas(朴素贝叶斯模型)。</p>
 <h3 id="Gaussian-Discriminate-Analysis"><a href="#Gaussian-Discriminate-Analysis" class="headerlink" title="Gaussian Discriminate Analysis"></a>Gaussian Discriminate Analysis</h3><p>高斯判别模型主要用于输入是连续的时候，也就是X的特征值是属于实数集的。首先来复习一下多维高斯分布模型，它是高斯判别模型的基础：</p>
 <p>一般来说，多维高斯分布简写为：X ～ N(\mu,\Sigma).</p>
@@ -529,7 +529,7 @@ P(y=1|X;\Phi,\mu_0,\mu_1,\Sigma) &=  \frac{p(X|y=1)p(y=1)}{p(X|y=1)p(y=1)+p(X|y=
 .\\
 .\\
 .
-\end{bmatrix} \begin{bmatrix}
+\end{bmatrix} \begin{matrix}
 a\\
 aadjsa\\
 .\\
@@ -539,7 +539,7 @@ b\\
 .\\
 .\\
 .
-\end{bmatrix}.</script><p>1或者0代表了在这个邮件中是否出现了。</p>
+\end{matrix}.</script><p>1或者0代表了在这个邮件中是否出现了。</p>
 <p>现在希望对$P(X|Y)$建模。对于一封垃圾邮件：</p>
 <script type="math/tex; mode=display">
 p(x_1,x_2,...,x_n|y) = p(x_1|y)p(x_2|y,x_1),...,p(x_n|y,x_1,...,x_{n-1})</script><p><em>使用了概率论中的链式法则。这个规则我也不了解，概率论还需要学习</em></p>
