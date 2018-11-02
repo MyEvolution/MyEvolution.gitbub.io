@@ -119,9 +119,9 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg1.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg3.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg5.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0366.JPG">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg4.png">
-<meta property="og:updated_time" content="2018-11-02T10:03:34.044Z">
+<meta property="og:updated_time" content="2018-11-02T10:47:31.591Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Generalize Learning Algorithm">
 <meta name="twitter:description" content="之前我们介绍的分类算法，包括，logistic regression，PLA甚至加上linear regression，他们都是试图找到一条线然后来将两种类别分开。这种算法叫做Discriminative Learning Algorithm，他们的由来，都是直接去估计$P(Y|X)$,这样的话根据新样本的X，从而预测Y。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-11-02 18:03:34" itemprop="dateModified" datetime="2018-11-02T18:03:34+08:00">2018-11-02</time>
+                <time title="Modified: 2018-11-02 18:47:31" itemprop="dateModified" datetime="2018-11-02T18:47:31+08:00">2018-11-02</time>
               
             
           </span>
@@ -502,8 +502,9 @@ l(\Phi,\mu_0,\mu_1,\Sigma)&= \log \prod_{i=1}^{m}p(X_i,y_i;\Phi,\mu_0,\mu_1,\Sig
 \Phi = \frac 1 m \sum_{i=1}^m \mathbf{1}\{ y_i = 1\}\\
 \mu_b = \frac{\sum_{i=1}^m \mathbf{1}\{y_i=b\}X_i}{\sum_{i=1}^m \mathbf{1}\{y_i=b\}},b=0,1\\
 \Sigma = \frac 1 m \sum_{i=1}^m(X_i - \mu_{y_i})(X_i - \mu_{y_i})^T</script><p>我们希望生成的模型如下：</p>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg5.png" alt=""></p>
-<p>如果画等高线图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg4.png" alt=""> </p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0366.JPG" alt=""></p>
+<p>如果画等高线图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg4.png" alt=""> </p>
 <p>我们会发现找到一条线，它属于0或者1的概率是相等的。因此我们就找到了这条线。</p>
 <h4 id="GDA与Logistic-Regression"><a href="#GDA与Logistic-Regression" class="headerlink" title="GDA与Logistic Regression"></a>GDA与Logistic Regression</h4><p>在上面的推导过程中我们发现：</p>
 <script type="math/tex; mode=display">
@@ -539,7 +540,7 @@ b\\
 .\\
 .\\
 .
-\end{matrix}.</script><p>1或者0代表了在这个邮件中是否出现了。</p>
+\end{matrix}</script><p>1或者0代表了在这个邮件中是否出现了。</p>
 <p>现在希望对$P(X|Y)$建模。对于一封垃圾邮件：</p>
 <script type="math/tex; mode=display">
 p(x_1,x_2,...,x_n|y) = p(x_1|y)p(x_2|y,x_1),...,p(x_n|y,x_1,...,x_{n-1})</script><p><em>使用了概率论中的链式法则。这个规则我也不了解，概率论还需要学习</em></p>
@@ -579,6 +580,60 @@ p(y=1|X) &= \frac{p(X|y=1)p(y=1)}{p(X)}\\
 <p>所以最后的估计就成了下面的样子：</p>
 <script type="math/tex; mode=display">
 \Phi_{j|y=b} = \frac {\sum_{i=1}^m \mathbf{1}\{y_i = b\} \cdot \mathbf{1}\{ x_{i,j} = 1\} +1}{\sum_{i=1}^m \mathbf{1}\{y_i = b\} +2},b=0,1</script><p>除此之外其他地方是一样的。</p>
+<h4 id="Naive-Bayes-and-Multinomial-Event-Model"><a href="#Naive-Bayes-and-Multinomial-Event-Model" class="headerlink" title="Naive Bayes and Multinomial Event Model"></a>Naive Bayes and Multinomial Event Model</h4><p>现在有一个新的方法，就是多项式模型。</p>
+<p>现在$x_i \in {1,…,\vert V \vert}$,其中|V|为字典的长度。而n为信息的长度，也就是现在每个样本的特征数已经不一样了，因为我们没法保证每封信长度一样。</p>
+<p>对字典中每个词都进行编号：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>dictionary id</th>
+<th>1</th>
+<th>2</th>
+<th>…</th>
+<th>1300</th>
+<th>…</th>
+<th>2400</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>word</td>
+<td>a</td>
+<td>aa</td>
+<td>…</td>
+<td>free</td>
+<td>…</td>
+<td>gift</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>多项式模型中有下面几个假设：</p>
+<ul>
+<li>信息随机地被以概率$p(y)$生成</li>
+<li>$x_1,x_2,…,x_n$独立同分布</li>
+<li>$p(x_1,x_2,…,x_n,y) = p(y)\prod _{i=1}^n p(x_i|y)$</li>
+</ul>
+<p>假设$p(x_i=k|y)$对所有的$k$来说都相等。<br>则该模型参数如下：</p>
+<ul>
+<li>$\Phi_y = p(y)$ </li>
+<li>$\Phi_{k|y=1} = p(x_j = k|y=1)$ for any $j \in \{1,…,n\}$</li>
+<li>$\Phi_{k|y=1} = p(x_j = k|y=0)$ for any $j \in \{1,…,n\}$</li>
+</ul>
+<p>则出现训练样本的概率为:</p>
+<script type="math/tex; mode=display">
+\begin{align}
+L(\Phi_y,\Phi_{k|y=0},\Phi_{k|y=1}) &= \prod_{i=1}^m p(x_i,y_i)\\
+&= \prod_{i=1}^m p(y_i)p(x_i|y_i)\\
+&=\prod_{i=1}^m p(y_i) \prod_{j=1}^{n_i} p(x_{i,j}|y_i;\Phi_y,\Phi_{k|y=1},\Phi_{k|y=0})
+\end{align}</script><p>各个参数取值如下：</p>
+<script type="math/tex; mode=display">
+\Phi_y = \frac 1 m \sum_{i=1}^m \mathbf{1}\{y_i=1\}\\
+\Phi_{k|y=1} = \frac{\sum_{i=1}^m \mathbf{1}\{y_i=1\}\cdot (\sum_{j=1}^{n_i}\mathbf{1}\{x_i=k\}) +1}{\sum_{i=1}^m \mathbf{1}\{y_i=1\}+|V|}\\
+\Phi_{k|y=0} = \frac{\sum_{i=1}^m \mathbf{1}\{y_i=0\}\cdot (\sum_{j=1}^{n_i}\mathbf{1}\{x_i=k\}) +1}{\sum_{i=1}^m \mathbf{1}\{y_i=0\}+|V|}</script><p>最后，预测值为：$p(y=1|x) = \frac{p(x|y=1)p(y)} {p(x|y=1)+p(x|y=0)}$</p>
 
       
     </div>
@@ -834,7 +889,7 @@ p(y=1|X) &= \frac{p(X|y=1)p(y=1)}{p(X)}\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gaussian-Discriminate-Analysis"><span class="nav-number">1.</span> <span class="nav-text">Gaussian Discriminate Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GDA与Logistic-Regression"><span class="nav-number">1.1.</span> <span class="nav-text">GDA与Logistic Regression</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Naive-Beyas"><span class="nav-number">2.</span> <span class="nav-text">Naive Beyas</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多变量伯奴利事件模型"><span class="nav-number">2.1.</span> <span class="nav-text">多变量伯奴利事件模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laplace-Smoothing"><span class="nav-number">2.2.</span> <span class="nav-text">Laplace Smoothing</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gaussian-Discriminate-Analysis"><span class="nav-number">1.</span> <span class="nav-text">Gaussian Discriminate Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GDA与Logistic-Regression"><span class="nav-number">1.1.</span> <span class="nav-text">GDA与Logistic Regression</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Naive-Beyas"><span class="nav-number">2.</span> <span class="nav-text">Naive Beyas</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多变量伯奴利事件模型"><span class="nav-number">2.1.</span> <span class="nav-text">多变量伯奴利事件模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laplace-Smoothing"><span class="nav-number">2.2.</span> <span class="nav-text">Laplace Smoothing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Naive-Bayes-and-Multinomial-Event-Model"><span class="nav-number">2.3.</span> <span class="nav-text">Naive Bayes and Multinomial Event Model</span></a></li></ol></li></ol></div>
             
 
           </div>
