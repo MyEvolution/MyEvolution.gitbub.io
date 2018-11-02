@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0366.JPG">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg4.png">
-<meta property="og:updated_time" content="2018-11-02T10:47:31.591Z">
+<meta property="og:updated_time" content="2018-11-02T10:49:04.535Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Generalize Learning Algorithm">
 <meta name="twitter:description" content="之前我们介绍的分类算法，包括，logistic regression，PLA甚至加上linear regression，他们都是试图找到一条线然后来将两种类别分开。这种算法叫做Discriminative Learning Algorithm，他们的由来，都是直接去估计$P(Y|X)$,这样的话根据新样本的X，从而预测Y。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-11-02 18:47:31" itemprop="dateModified" datetime="2018-11-02T18:47:31+08:00">2018-11-02</time>
+                <time title="Modified: 2018-11-02 18:49:04" itemprop="dateModified" datetime="2018-11-02T18:49:04+08:00">2018-11-02</time>
               
             
           </span>
@@ -576,7 +576,7 @@ p(y=1|X) &= \frac{p(X|y=1)p(y=1)}{p(X)}\\
 \Phi_{j|y=b} = \frac {\sum_{i=1}^m \mathbf{1}\{y_i = b\} \cdot \mathbf{1}\{ x_{i,j}=1\} }{\sum_{i=1}^m \mathbf{1}\{y_i = b\} } = 0,b=0,1</script><p>也就是垃圾邮件和非垃圾邮件里出现它的概率都为0.那么最后预测结果为$\frac 0 0$,这就没法计算了。</p>
 <p>所以我们需要进行Laplace平滑。对于没有出现过的词，我们给他赋一个较小值，而不是让他为0：</p>
 <script type="math/tex; mode=display">
-\Phi_j = \frac{\sum_{i=1}^m \mathbf{1}\{z_i = j\}+1}{m+k}</script><p>为了最后使得$Phi_j$的和为0,所以k为类比的个数，即$\sum_{i=1}^k\Phi_i = 1$。</p>
+\Phi_j = \frac{\sum_{i=1}^m \mathbf{1}\{z_i = j\}+1}{m+k}</script><p>为了最后使得$\Phi_j$的和为0,所以k为类比的个数，即$\sum_{i=1}^k\Phi_i = 1$。</p>
 <p>所以最后的估计就成了下面的样子：</p>
 <script type="math/tex; mode=display">
 \Phi_{j|y=b} = \frac {\sum_{i=1}^m \mathbf{1}\{y_i = b\} \cdot \mathbf{1}\{ x_{i,j} = 1\} +1}{\sum_{i=1}^m \mathbf{1}\{y_i = b\} +2},b=0,1</script><p>除此之外其他地方是一样的。</p>
