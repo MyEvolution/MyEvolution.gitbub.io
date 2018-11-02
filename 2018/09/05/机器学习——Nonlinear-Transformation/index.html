@@ -1,100 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="keywords" content="hexo, autumn">
+    <title>
+        無聊時的自娛自樂
+    </title>
+    <!-- favicon -->
+    
+    <link rel="icon" href="http://osly086qe.bkt.clouddn.com/favicon.ico">
+    
+    <link rel="stylesheet" href="/css/style.css">
 
-  
-  <title>机器学习——Nonlinear Transformation | 無聊時的自娛自樂</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="之前我们学习的所有模型，都是linear model。我们做的都是用一条直线（或者平面等）来分类，或者拟合，或者是通过该直线来预测概率。但是现实中很多时候线性不一定能做得很好。">
-<meta name="keywords" content="machine learning,polynomial">
-<meta property="og:type" content="article">
-<meta property="og:title" content="机器学习——Nonlinear Transformation">
-<meta property="og:url" content="http://wlsdzyzl.com/2018/09/05/机器学习——Nonlinear-Transformation/index.html">
-<meta property="og:site_name" content="無聊時的自娛自樂">
-<meta property="og:description" content="之前我们学习的所有模型，都是linear model。我们做的都是用一条直线（或者平面等）来分类，或者拟合，或者是通过该直线来预测概率。但是现实中很多时候线性不一定能做得很好。">
-<meta property="og:locale" content="default">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/5%4014N%288G7K0JNSKXZF%29DU_7.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/M%29P32DW%29EE9%7BWB%246A08T8%29X.png">
-<meta property="og:updated_time" content="2018-09-17T08:07:52.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习——Nonlinear Transformation">
-<meta name="twitter:description" content="之前我们学习的所有模型，都是linear model。我们做的都是用一条直线（或者平面等）来分类，或者拟合，或者是通过该直线来预测概率。但是现实中很多时候线性不一定能做得很好。">
-<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/5%4014N%288G7K0JNSKXZF%29DU_7.png">
-  
-    <link rel="alternate" href="/atom.xml" title="無聊時的自娛自樂" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+    <!-- highlight -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/github-gist.min.css">
+    <script src="//cdn.bootcss.com/highlight.js/9.2.0/highlight.min.js"></script>
+    <script>
+        hljs.initHighlightingOnLoad()
+    </script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://osly086qe.bkt.clouddn.com/hexo-infinite-scroll-v1.0.1.min.css">
+    <script src="http://osly086qe.bkt.clouddn.com/hexo-infinite-scroll-v1.0.3.min.js"></script>
+    <script>
+        infiniteScroll()
+
+        // for mobile menu
+        $(function() {
+            $('.social-button').click(function() {
+                if ($('.social-links').hasClass('hide-links')) {
+                    $('.social-links').removeClass('hide-links')
+                } else {
+                    $('.social-links').addClass('hide-links')
+                }
+            })
+        })
+    </script>
 </head>
-</html>
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">無聊時的自娛自樂</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://wlsdzyzl.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-机器学习——Nonlinear-Transformation" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/05/机器学习——Nonlinear-Transformation/" class="article-date">
-  <time datetime="2018-09-05T10:01:45.000Z" itemprop="datePublished">2018-09-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      机器学习——Nonlinear Transformation
+    <body style="background: url(http://osly086qe.bkt.clouddn.com/button-bg.png) #f3f3f3">
+        <div class="container">
+            <header class="header">
+    <h1 class="title">
+        <a href="/" class="logo">
+            無聊時的自娛自樂
+        </a>
     </h1>
-  
+    <h2 class="desc">
+        
+    </h2>
 
-      </header>
+    <nav class="links">
+        <button class="social-button">
+            menu
+        </button>
+        <ul class="social-links hide-links">
+            
+                <li>
+                    <a href="https://github.com/FrontendSophie">
+                        Github
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://www.linkedin.com/in/frontendsophie/">
+                        LinkedIn
+                    </a>
+                </li>
+                
+        </ul>
+    </nav>
+</header>
+                <main class="main">
+                    <article class="post">
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>之前我们学习的所有模型，都是linear model。我们做的都是用一条直线（或者平面等）来分类，或者拟合，或者是通过该直线来预测概率。但是现实中很多时候线性不一定能做得很好。<a id="more"></a>如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/5%4014N%288G7K0JNSKXZF%29DU_7.png" alt=""></p>
+        <h4 class="post-cat">
+            <a href="/categories/机器学习/">
+                机器学习
+            </a>
+        </h4>
+        
+            <h2 class="post-title">
+                机器学习——Nonlinear Transformation
+            </h2>
+            <ul class="post-date">
+                <li>
+                    2018-09-05
+                </li>
+                <li>
+                    
+                </li>
+            </ul>
+            <div class="post-content">
+                <p>之前我们学习的所有模型，都是linear model。我们做的都是用一条直线（或者平面等）来分类，或者拟合，或者是通过该直线来预测概率。但是现实中很多时候线性不一定能做得很好。<a id="more"></a>如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/5%4014N%288G7K0JNSKXZF%29DU_7.png" alt=""></p>
 <p>似乎用一个圆，能更好地对这些样本进行分类。实际上，上图的分类的依据是：</p>
 <script type="math/tex; mode=display">
 h(X) = sign(0.6-x_1^2-x_2^2)</script><p>因此，这样我们就引入了二次假设（quadratic）。<br>在上式中，如果我们令$z_0 = x_0 = 1, z_1 = x_1^2 ,z_2 = x_2^2$，那么就发现，实际上上面中对于$x$的二次假设实际上转换为了对$Z$的线性假设。一个样本在x空间上是很难线性分割的，无论怎样都不能得到较好的$E_{in}$，但是展开到z空间上也许就是线性可分的了。</p>
@@ -129,147 +127,35 @@ h(X) = sign(0.6-x_1^2-x_2^2)</script><p>因此，这样我们就引入了二次�
 <p>最后，要注意，有的人说，刚开始举得例子中，如果通过可视化，我们直接用 $s(X) = w_0 + W_1 x_1^2 + W_2x_2 ^2$，这样看起来，似乎维度只有3个，实际上类似的还有$s(x) = w_0 + W_1( x_1^2 + x_2 ^2)$,似乎维度只有两个，甚至是可以降到0个。但是这实际上是人脑学习的过程，我们已经替机器学习了不少，因此最后的泛化结果可能并不是我们想象的那么好，因为真实的代价还是存在的。而且，高纬度的可视化是很难做到的。</p>
 <p>因此，使用多项式并不见得就是好的，我们要结合实际情况来进行学习。</p>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://wlsdzyzl.com/2018/09/05/机器学习——Nonlinear-Transformation/" data-id="cjnyo8mtb001r1nlt16nk0pc0" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/polynomial/">polynomial</a></li></ul>
-
-    </footer>
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2018/09/05/机器学习——（基石）作业3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          机器学习——（基石）作业3
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2018/09/03/机器学习——Multiclass/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">机器学习——Multiclass（OVA and OVO）</div>
-    </a>
-  
-</nav>
-
-  
+            </div>
 </article>
 
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Categories</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
-    </div>
-  </div>
+                </main>
+                <aside class="aside">
+                    <section class="aside-section">
+                        
+    <h1>Categories</h1>
+
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/信息论/">信息论</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/博客建设/">博客建设</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/图形学/">图形学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数学/">数学</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据学习课程/">数据学习课程</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/灌水/">灌水</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/算法/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计算摄像学/">计算摄像学</a></li></ul>
+
+                    </section>
+                    <section class="aside-section">
+                        
+    <h1>Archives</h1>
+
+    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/">2018</a></li></ul>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
-    </div>
-  </div>
+                    </section>
+                    <section class="aside-section tag">
+                        
+    <h1>Tags</h1>
 
+    <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/LFD-class/">LFD class</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LaTex/">LaTex</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Matrix/">Matrix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVM/">SVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/casual-note/">casual note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/classification/">classification</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/code/">code</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computational-photography/">computational photography</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-graphics/">computer graphics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/depth-image/">depth image</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/exponential-family/">exponential family</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homework/">homework</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/information-theory/">information theory</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mathematics/">mathematics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/overfitting/">overfitting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/polynomial/">polynomial</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quality-assessment/">quality assessment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regression/">regression</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/regularization/">regularization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tips/">tips</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/transformation/">transformation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/validation/">validation</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/visualization/">visualization</a></li></ul>
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/LFD-class/" style="font-size: 11.67px;">LFD class</a> <a href="/tags/LaTex/" style="font-size: 10px;">LaTex</a> <a href="/tags/Matrix/" style="font-size: 10px;">Matrix</a> <a href="/tags/SVM/" style="font-size: 15px;">SVM</a> <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/casual-note/" style="font-size: 11.67px;">casual note</a> <a href="/tags/classification/" style="font-size: 15px;">classification</a> <a href="/tags/code/" style="font-size: 11.67px;">code</a> <a href="/tags/computational-photography/" style="font-size: 10px;">computational photography</a> <a href="/tags/computer-graphics/" style="font-size: 13.33px;">computer graphics</a> <a href="/tags/depth-image/" style="font-size: 10px;">depth image</a> <a href="/tags/exponential-family/" style="font-size: 10px;">exponential family</a> <a href="/tags/homework/" style="font-size: 16.67px;">homework</a> <a href="/tags/information-theory/" style="font-size: 15px;">information theory</a> <a href="/tags/machine-learning/" style="font-size: 20px;">machine learning</a> <a href="/tags/markdown/" style="font-size: 10px;">markdown</a> <a href="/tags/mathematics/" style="font-size: 18.33px;">mathematics</a> <a href="/tags/overfitting/" style="font-size: 11.67px;">overfitting</a> <a href="/tags/polynomial/" style="font-size: 10px;">polynomial</a> <a href="/tags/quality-assessment/" style="font-size: 10px;">quality assessment</a> <a href="/tags/regression/" style="font-size: 15px;">regression</a> <a href="/tags/regularization/" style="font-size: 10px;">regularization</a> <a href="/tags/tips/" style="font-size: 10px;">tips</a> <a href="/tags/transformation/" style="font-size: 10px;">transformation</a> <a href="/tags/validation/" style="font-size: 10px;">validation</a> <a href="/tags/visualization/" style="font-size: 13.33px;">visualization</a>
-    </div>
-  </div>
+                    </section>
+                </aside>
+        </div>
+    </body>
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">August 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/11/01/信息论——连续随机变量的熵和互信息/">信息论——连续随机变量的熵和互信息</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/01/信息论——Fano不等式/">信息论——Fano不等式</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/31/信息论——the-Convexity/">信息论——the Convexity</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/29/Learning-From-Data——Generalize-Learning-Algorithm/">Learning From Data——Generalize Learning Algorithm</a>
-          </li>
-        
-          <li>
-            <a href="/2018/10/29/信息论——Basic-Conception/">信息论——Basic Conception</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2018 無聊時的自娛自樂<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
-
-  </div>
-</body>
 </html>
