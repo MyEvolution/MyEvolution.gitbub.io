@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-06T05:28:36.000Z">
+<meta property="og:updated_time" content="2018-11-06T07:33:23.443Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Lossless Encoding">
 <meta name="twitter:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-06 13:28:36" itemprop="dateModified" datetime="2018-11-06T13:28:36+08:00">2018-11-06</time>
+                <time title="更新于：2018-11-06 15:33:23" itemprop="dateModified" datetime="2018-11-06T15:33:23+08:00">2018-11-06</time>
               
             
           </span>
@@ -483,8 +483,7 @@
 \end{aligned}</script><p>因为我们知道，$X_1,X_2,…,X_n$是互相独立的，因此，$\log X_1,\log X_2,…,\log X_n$也是互相独立同分布的。利用(1)：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
--\frac 1 n \sum_{i=1}^n \log p(X_i)
-\end{aligned} &= -E(\log p(X))\\ 
+-\frac 1 n \sum_{i=1}^n \log p(X_i) &= -E(\log p(X))\\ 
 &= \sum_{x \in \mathcal{X}} (-p(x)\log p(x)) \\
 &= H(X)
 \end{aligned}</script><p>这意味着，当n很大的时候，一个序列出现的概率是几乎相等的，这个概率为$2^{-nH(X)}$.</p>
@@ -494,8 +493,8 @@
 <ol>
 <li>若$\mathbf{x} \in A_\epsilon ^ {(n)}$,则$H(X)-\epsilon \leq -\frac 1 n \log p(\mathbf{x}) \leq H(X) + \epsilon$.</li>
 <li>若$n$足够大，$Pr(A_\epsilon ^{(n)}) \geq 1 - \epsilon $</li>
-<li>\vert A_\epsilon ^{(n)}\vert \leq 2^{m(H(X)+\epsilon)}</li>
-<li>\vert A_\epsilon ^{(n)}\vert \geq (1-\epsilon)2^{m(H(X)-\epsilon)}</li>
+<li>$\vert A_\epsilon ^{(n)}\vert \leq 2^{m(H(X)+\epsilon)}$</li>
+<li>$\vert A_\epsilon ^{(n)}\vert \geq (1-\epsilon)2^{m(H(X)-\epsilon)}$</li>
 </ol>
 <p>性质1,2可以用定义得到。因此这里证明3和4.</p>
 <p>3.</p>
@@ -504,7 +503,7 @@
 1 &= \sum_{x^n \in \mathcal{X}}P(x^n)\\
 &\geq \sum_{x^n \in A_\epsilon ^{(n)}} p(x^n)\\
 &\geq \sum_{x^n \in A_\epsilon ^{(n)}} 2^{-n(H(x)+\epsilon)}\\
- = 2^{-n(H(x)+\epsilon)}\vert A_\epsilon ^{(n)} \vert
+&= 2^{-n(H(x)+\epsilon)}\vert A_\epsilon ^{(n)} \vert
 \end{aligned}</script><p>4的证明首先要使用性质2。</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -554,6 +553,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/06/机器学习——Kernel-Logistic-Regression/" rel="prev" title="机器学习——Kernel Logistic Regression">
+                机器学习——Kernel Logistic Regression <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -625,7 +628,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">43</span>
+                    <span class="site-state-item-count">45</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -721,7 +724,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">26</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
