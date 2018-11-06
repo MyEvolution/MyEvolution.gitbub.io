@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0366.JPG">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/mg4.png">
-<meta property="og:updated_time" content="2018-11-06T12:56:38.237Z">
+<meta property="og:updated_time" content="2018-11-06T12:59:17.806Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Generative Learning Algorithm">
 <meta name="twitter:description" content="之前我们介绍的分类算法，包括，logistic regression，PLA甚至加上linear regression，他们都是试图找到一条线然后来将两种类别分开。这种算法叫做Discriminative Learning Algorithm，他们的由来，都是直接去估计$P(Y|X)$,这样的话根据新样本的X，从而预测Y。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-06 20:56:38" itemprop="dateModified" datetime="2018-11-06T20:56:38+08:00">2018-11-06</time>
+                <time title="更新于：2018-11-06 20:59:17" itemprop="dateModified" datetime="2018-11-06T20:59:17+08:00">2018-11-06</time>
               
             
           </span>
@@ -473,7 +473,7 @@ P(Y|X) = \frac{P(X|Y)P(Y)}{P(X)}</script><p>我们知道：</p>
 <p>当然，如果想要求得P(X),可以通过全概率公式：$P(X) = P(y=1)\cdot P(X|y=1) +P(y=0)\cdot P(X|y=0)$.</p>
 <p>下面介绍两个最常见的生成学习算法：Gaussian Discriminant Analysis(高斯判别分析)与Naive Beyas(朴素贝叶斯模型)。</p>
 <h3 id="Gaussian-Discriminate-Analysis"><a href="#Gaussian-Discriminate-Analysis" class="headerlink" title="Gaussian Discriminate Analysis"></a>Gaussian Discriminate Analysis</h3><p>高斯判别模型主要用于输入是连续的时候，也就是X的特征值是属于实数集的。首先来复习一下多维高斯分布模型，它是高斯判别模型的基础：</p>
-<p>一般来说，多维高斯分布简写为：X ~ N(\mu,\Sigma).</p>
+<p>一般来说，多维高斯分布简写为：X ~{} N(\mu,\Sigma).</p>
 <ul>
 <li>$\mu \in \mathbb{R}^n$ 是平均向量。</li>
 <li>$\Sigma \in \mathbb{R}^{n \times n}$是协方差矩阵。$\Sigma$是对称的SPD（ symmetric and positive definite matrix）.</li>
@@ -488,9 +488,9 @@ p(x;\mu,\Sigma) = \frac{1}{(2\pi)^{\frac n 2}\vert \Sigma\vert ^{\frac 1 2}} e^{
 <p>最后一个就是$mu$的变化，很显而易见，图形的中心改变了。</p>
 <p>现在假如有一个分类问题，其中$X \in \mathbb{R}^n$,利用高斯判别模型的话，我们会有以下假设：</p>
 <script type="math/tex; mode=display">
-y\~ Bernuolli(\Phi)\\
-p(x|y=0)\~N(\mu_0,\Sigma)\\
-p(x|y=1)\~N(\mu_1,\Sigma)</script><p>从上面看出来，我们对于两个模型的生成采用的$\mu$不一样，但是$\Sigma$一样，这样不光保证了两个模型的形状一样，简化了计算过程，最后可以用它们接触点的切线来当做分割线，从而实现与之前Discriminative学习算法的比较。</p>
+y\~{} Bernuolli(\Phi)\\
+p(x|y=0)\~{}N(\mu_0,\Sigma)\\
+p(x|y=1)\~{}N(\mu_1,\Sigma)</script><p>从上面看出来，我们对于两个模型的生成采用的$\mu$不一样，但是$\Sigma$一样，这样不光保证了两个模型的形状一样，简化了计算过程，最后可以用它们接触点的切线来当做分割线，从而实现与之前Discriminative学习算法的比较。</p>
 <p>Note:现在n为向量的维度，而m为样本个数。</p>
 <p>和往常一样，我们求它的log极大似然估计：</p>
 <script type="math/tex; mode=display">
@@ -512,9 +512,9 @@ l(\Phi,\mu_0,\mu_1,\Sigma)&= \log \prod_{i=1}^{m}p(X_i,y_i;\Phi,\mu_0,\mu_1,\Sig
 P(y=1|X;\Phi,\mu_0,\mu_1,\Sigma) &=  \frac{p(X|y=1)p(y=1)}{p(X|y=1)p(y=1)+p(X|y=0)p(y=0)}\\
 &=\frac {1}{1+e^{-\theta ^TX}}
 \end{align}</script><p>上式中：$\theta = \begin{bmatrix} \log \frac{1-\Phi}{\Phi} - \frac 1 2(\mu_0^T\Sigma^{-1}\mu_0 - \mu_1^T \Sigma^{-1}\mu_1) \ \Sigma ^{-1}(\mu_0 - \mu_1)\end{bmatrix}$.</p>
-<p>如果还记得上次讲过的exponential family，我们应该知道对于伯奴利分布$(y|x ~ B(\psi))$的canonical link funtion是 $\log \frac{\psi}{1-\psi}$.</p>
+<p>如果还记得上次讲过的exponential family，我们应该知道对于伯奴利分布$(y|x ~{} B(\psi))$的canonical link funtion是 $\log \frac{\psi}{1-\psi}$.</p>
 <p>因此$\theta ^X = \log \frac{\psi}{1-psi} = \log \frac{p(y=1|X)}{p(y=0|X)} = \log \frac {p(X|y=1)p(y=1)}{p(X|y=0)p(y=0)}$</p>
-<p>这意味着：如果$p(x|y)~N(\mu,\Sigma)$,则$p(y|x)$是logistic function.但是从logistic regression是无法推出来GDA的。</p>
+<p>这意味着：如果$p(x|y)~{}N(\mu,\Sigma)$,则$p(y|x)$是logistic function.但是从logistic regression是无法推出来GDA的。</p>
 <p>如果我们的假设正确，GDA模型更高效，效果也更好，但是logistic regression因为比较简单，对于即使假设错误了依然有很好的鲁棒性。GDA最大化联合分布，而LR最大化的是概率分布。</p>
 <p>所以我们发现，GDA并不像普通的学习算法那样需要去进行cost funtion的优化。这得益于我们假设整个正样本的X服从一个高斯分布。而之前的学习方法，每个样本因为X不同各个样本之间服从分布的参数都会不一致，也就是每个样本在给定y的时候有一个自己的分布（如逻辑回归，每个样本都有不同的概率，而它预测的是伯奴利分布，也就是每个样本服从不同的伯奴利分布；又如线性回归，每个样本有不一样的$\mu$）。</p>
 <h3 id="Naive-Beyas"><a href="#Naive-Beyas" class="headerlink" title="Naive Beyas"></a>Naive Beyas</h3><p>下面介绍朴素贝叶斯模型。它用来处理输入为离散数据时候的情况。假如有这么一个例子：垃圾邮件分类。如何定义邮件的特征？当然定义的是其中的单词了。但是这个世界上单词有很多很多，而垃圾邮件很可能更包含了很多无意义的字符组合，这样特征就更多了。</p>
