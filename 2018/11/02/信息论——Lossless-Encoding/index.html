@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-06T07:33:23.443Z">
+<meta property="og:updated_time" content="2018-11-06T12:56:35.117Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Lossless Encoding">
 <meta name="twitter:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-06 15:33:23" itemprop="dateModified" datetime="2018-11-06T15:33:23+08:00">2018-11-06</time>
+                <time title="更新于：2018-11-06 20:56:35" itemprop="dateModified" datetime="2018-11-06T20:56:35+08:00">2018-11-06</time>
               
             
           </span>
@@ -459,7 +459,7 @@
 
       
         <p>信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。<br><a id="more"></a></p>
-<p>首先，说到无失真编码，我们首先想到的是无损压缩了。无损压缩实际上是一个最大熵的问题。这样的情况下，能包含最多的信息，如果信息量一定，也就是需要平均较小的比特。我们都知道的是，在均匀分布的时候熵是最大的。但是我们不能选择信源的分布，因为信源就在那里已经确定了。我们能否通过一个映射，一一对应的映射，使得一个非等概分布逐渐走向等概呢？答案是，可以，但是这太反直觉了。是啊虽然反直觉，但是它不反数学，所以它就是对的。</p>
+<p>首先，说到无失真编码，我们首先想到的是无损压缩了。无损压缩实际上是一个最大熵的问题。这样的情况下，能包含最多的信息，如果信息量一定，也就是最大熵的情况下需要平均较小的比特数（比如一个均匀分布随机变量X的熵为3,另一个非均匀分布随机变量熵Y也为3，那么|Y|&gt;|X|,如果普通编码的话，Y的编码更长，但是它们包含的信息量却是一样的）。我们都知道的是，在均匀分布的时候熵是最大的。但是我们不能选择信源的分布，因为信源就在那里已经确定了。我们能否通过一个映射，一一对应的映射，使得一个非等概分布逐渐走向等概呢？答案是，可以，但是这太反直觉了。是啊虽然反直觉，但是它不反数学，所以它就是对的。</p>
 <h2 id="渐进等同分割性质（Asymptotic-Equipartition-Property）"><a href="#渐进等同分割性质（Asymptotic-Equipartition-Property）" class="headerlink" title="渐进等同分割性质（Asymptotic Equipartition Property）"></a>渐进等同分割性质（Asymptotic Equipartition Property）</h2><h3 id="大数定律（Law-of-Large-Number）"><a href="#大数定律（Law-of-Large-Number）" class="headerlink" title="大数定律（Law of Large Number）"></a>大数定律（Law of Large Number）</h3><p>这里只介绍伯奴利大数定律(弱大数定律)。实际上所有的大数定律都在说一件事：当实验次数非常大的时候，频率趋向于概率（经验分布逼近于统计分布）。</p>
 <script type="math/tex; mode=display">
 \frac{S_n}{n} \underrightarrow{p}p</script><p>更精确一点的说法：</p>
@@ -487,14 +487,14 @@
 &= \sum_{x \in \mathcal{X}} (-p(x)\log p(x)) \\
 &= H(X)
 \end{aligned}</script><p>这意味着，当n很大的时候，一个序列出现的概率是几乎相等的，这个概率为$2^{-nH(X)}$.</p>
-<h2 id="典型序列（Typical-Sequence）"><a href="#典型序列（Typical-Sequence）" class="headerlink" title="典型序列（Typical Sequence）"></a>典型序列（Typical Sequence）</h2><p>典型序列定义如下：<br>相对于分布$p(x)$和序列$(x_1,x_2,…,x_n) \in X_n$,典型序列集合$A_\epsilon ^ {(n)}$定义为满足下列不等式约束的所有序列$\mathbf{x}$的集合：</p>
+<h2 id="（弱）典型序列（Typical-Sequence）"><a href="#（弱）典型序列（Typical-Sequence）" class="headerlink" title="（弱）典型序列（Typical Sequence）"></a>（弱）典型序列（Typical Sequence）</h2><p>典型序列定义如下：<br>相对于分布$p(x)$和序列$(x_1,x_2,…,x_n) \in X_n$,典型序列集合$A_\epsilon ^ {(n)}$定义为满足下列不等式约束的所有序列$\mathbf{x}$的集合：</p>
 <script type="math/tex; mode=display">
 2^{-n(H(X)+\epsilon) \leq p(\mathbf{x}) = p(x_1,x_2,...,x_n) \leq 2^{-n(H(X)-\epsilon)}}</script><p>所以典型序列具有以下性质：</p>
 <ol>
 <li>若$\mathbf{x} \in A_\epsilon ^ {(n)}$,则$H(X)-\epsilon \leq -\frac 1 n \log p(\mathbf{x}) \leq H(X) + \epsilon$.</li>
 <li>若$n$足够大，$Pr(A_\epsilon ^{(n)}) \geq 1 - \epsilon $</li>
-<li>$\vert A_\epsilon ^{(n)}\vert \leq 2^{m(H(X)+\epsilon)}$</li>
-<li>$\vert A_\epsilon ^{(n)}\vert \geq (1-\epsilon)2^{m(H(X)-\epsilon)}$</li>
+<li>$\vert A_\epsilon ^{(n)}\vert \leq 2^{n(H(X)+\epsilon)}$</li>
+<li>$\vert A_\epsilon ^{(n)}\vert \geq (1-\epsilon)2^{n(H(X)-\epsilon)}$</li>
 </ol>
 <p>性质1,2可以用定义得到。因此这里证明3和4.</p>
 <p>3.</p>
@@ -510,8 +510,35 @@
 1 - \epsilon &\leq Pr\{A_\epsilon ^{(n)}\}\\
 &\leq \sum_{x^n \in A_\epsilon ^{(n)}} 2 ^{-n(H(X) - \epsilon)}\\
 &= 2 ^{-n(H(X) - \epsilon)} \vert A_\epsilon ^{(n)}\vert 
-\end{aligned}</script><p>所有可能出现的序列一共有$|X|^n$种，大多数情况下，$ 2^{m(H(X)+\epsilon)} &lt;&lt; |X|^n$.所以典型序列集合只是所有可能集合的一个很小的子集。但是它几乎一定会出现，而且每个典型序列出现的概率几乎一样。这是很好的消息，为我们刚开始提出来的映射提供了很好的思路。</p>
-<h2 id="定长编码定理"><a href="#定长编码定理" class="headerlink" title="定长编码定理"></a>定长编码定理</h2>
+\end{aligned}</script><p>所有可能出现的序列一共有$|X|^n$种，大多数情况下，$ 2^{m(H(X)+\epsilon)} &lt;&lt; |X|^n$.所以典型序列集合只是所有可能集合的一个很小（尤其是原来分布远离均匀分布的时候）的子集。但是它几乎一定会出现，而且每个典型序列出现的概率几乎一样。这是很好的消息，为我们刚开始提出来的映射提供了很好的思路。</p>
+<h2 id="定长编码定理-香农第一定理"><a href="#定长编码定理-香农第一定理" class="headerlink" title="定长编码定理(香农第一定理)"></a>定长编码定理(香农第一定理)</h2><p>假设$X^n$是由独立同分布离散随机变量$X~p(X)$构成的序列。对于任意正数$\epsilon$，总有足够大的n，可以找到一个一一映射，将$X^n$映射到二进制序列，且满足:</p>
+<script type="math/tex; mode=display">
+E\left[\frac 1 n l(X^n) \right] \leq H(X)+\epsilon</script><p>上式中，$l(X^n)$表示的是编码需要的bit数。</p>
+<p>接下来提供证明：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+E(l(X^n)) &= \sum_{x \in \mathcal{X}} p(x) l(x)\\
+&= \sum_{x \in A_\epsilon ^{(n)}} p(x) l(x) + \sum_{x \in \overline{A_\epsilon ^{(n)}}} p(x) l(x)\\
+& \leq \sum_{x \in A_\epsilon ^{(n)}} p(x) [ n(H(X)+\epsilon)+1+1 ] + \sum_{x \in \overline{A_\epsilon ^{(n)}}} p(x) [ n\log \vert X\vert +2 ]\\
+&=[ n(H(X)+\epsilon)+1+1 ] Pr\{ A_\epsilon ^{(n)}\} +  [ n\log \vert X\vert +2] Pr\{\overline{A_\epsilon ^{(n)}}\} \\
+&\leq n(H(X)+\epsilon)+2 +  n\epsilon \log\vert X\vert+2\epsilon
+= n(H(X) + \epsilon ')
+\end{aligned}</script><p>其中 $\epsilon’ = \epsilon + \epsilon \log \vert X \vert X + \frac {2\epsilon}{n}$,可以看到的是$n \rightarrow \infty,epsilon’ \rightarrow 0$.</p>
+<p>上面证明过程中值得注意的事情是，为什么要加2？第一个加一是为了处理log后为非整数的情况，第二个+1是留一个比特位置来区分典型序列与非典型序列的编码。</p>
+<p>但是，定长编码定理是无法应用到工业界的。因为它需要对序列长度为n来进行编码，由于精确度的要求，这个n往往很大（上亿），这在现实中是无法实现的。</p>
+<h2 id="码的类型"><a href="#码的类型" class="headerlink" title="码的类型"></a>码的类型</h2><h3 id="非奇异码"><a href="#非奇异码" class="headerlink" title="非奇异码"></a>非奇异码</h3><p>若一个码C可以将不同的x映射为不同的$D^*$中 的序列，即：</p>
+<script type="math/tex; mode=display">
+x \ne x' \rightarrow C(x) \ne C(x')</script><p>则该码为非奇异码。</p>
+<p>但是仅仅是非奇异码的序列可能会有歧义（很好笑）。$x_1 \rightarrow 0,x_2 \rightarrow 1,x_3 \rightarrow 01$，那么我收到$01$就不知道该如何介绍它了。</p>
+<h3 id="唯一可译码"><a href="#唯一可译码" class="headerlink" title="唯一可译码"></a>唯一可译码</h3><p>唯一可译码是非奇异码的子集。称码$C^<em>$为码$C$的扩展，当$C^</em>$是有限长X的序列到有限长D序列的映射，且满足：</p>
+<script type="math/tex; mode=display">
+C(x_1,x_2,...,x_n) = C(x_1)C(x_2)...C(x_n)</script><p>则该码为唯一可译码。</p>
+<p>从另一方面来说，如果码的扩展为非奇异码，则该码为唯一可译码。</p>
+<p>换句话说，没有码字是码字的组合。</p>
+<p>这样的也是有缺点的，因为解码器复杂度要求较高。如$x_1 = 01,x_2 = 10,x_3 = 0111$,当收到0110的时候，在前三个的时候解码器预测可能是个$x_3$,但是最后一个不满足，因此就需要回退。</p>
+<h3 id="即时码（前缀码）"><a href="#即时码（前缀码）" class="headerlink" title="即时码（前缀码）"></a>即时码（前缀码）</h3><p>前缀码大家就比较熟悉了。前缀码是唯一可译码的子集。如常用的霍夫曼编码。它的意思是没有什么码字是另一个码字的前缀。所以解码器只要发现有认识的，立马就可以解码了，所以叫即时码。</p>
+<p>莫尔斯电码是非奇异码，但不是唯一可译码。汉语也不是唯一可译码，因为断句不对就会引起歧义。</p>
+
       
     </div>
 
@@ -788,7 +815,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#渐进等同分割性质（Asymptotic-Equipartition-Property）"><span class="nav-number">1.</span> <span class="nav-text">渐进等同分割性质（Asymptotic Equipartition Property）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#大数定律（Law-of-Large-Number）"><span class="nav-number">1.1.</span> <span class="nav-text">大数定律（Law of Large Number）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#典型序列（Typical-Sequence）"><span class="nav-number">2.</span> <span class="nav-text">典型序列（Typical Sequence）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定长编码定理"><span class="nav-number">3.</span> <span class="nav-text">定长编码定理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#渐进等同分割性质（Asymptotic-Equipartition-Property）"><span class="nav-number">1.</span> <span class="nav-text">渐进等同分割性质（Asymptotic Equipartition Property）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#大数定律（Law-of-Large-Number）"><span class="nav-number">1.1.</span> <span class="nav-text">大数定律（Law of Large Number）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#（弱）典型序列（Typical-Sequence）"><span class="nav-number">2.</span> <span class="nav-text">（弱）典型序列（Typical Sequence）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定长编码定理-香农第一定理"><span class="nav-number">3.</span> <span class="nav-text">定长编码定理(香农第一定理)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#码的类型"><span class="nav-number">4.</span> <span class="nav-text">码的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#非奇异码"><span class="nav-number">4.1.</span> <span class="nav-text">非奇异码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#唯一可译码"><span class="nav-number">4.2.</span> <span class="nav-text">唯一可译码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#即时码（前缀码）"><span class="nav-number">4.3.</span> <span class="nav-text">即时码（前缀码）</span></a></li></ol></li></ol></div>
             
 
           </div>
