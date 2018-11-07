@@ -3,11 +3,38 @@
   
     
     <entry>
+      <title>SLAM——基本介绍</title>
+      <link href="/2018/11/06/SLAM%E2%80%94%E2%80%94%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/"/>
+      <url>/2018/11/06/SLAM%E2%80%94%E2%80%94%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D/</url>
+      
+        <content type="html"><![CDATA[<p>不出意外的话，以后我的方向应该就是三维重建方向了，而SLAM是一个逃不开的东西。<a id="more"></a></p><p>SLAM（simultaneous localization and mapping），即时定位与地图构建。它是个什么东西？就是将一个机器人放到一个陌生的环境，它能够自我定位并构建出当前环境的三维地图。我们实验室的有一个项目：<a href="http://luvision.net/FlashFusion/" target="_blank" rel="noopener">FlashFusion</a>，和SLAM也有这千丝万缕的关系。</p><p>SLAM已经诞生了30多年了，也取得了很长足的进步吸引了很多学术界的关注，但是一直达不到业界使用的要求。</p><p>SLAM学习的门槛比较高，因为对知识储备以及工程能力都有较高的要求。</p><p>我的这个SLAM打算利用高翔的《SLAM十四讲》来完成。首先第一章是一些大概的介绍以及一些编程的环境的搭建。实际上我对linux还不够熟悉，对于CMake也使用较少。所以这篇博客也会介绍一些这方面的东西。</p><h2 id="传感器介绍"><a href="#传感器介绍" class="headerlink" title="传感器介绍"></a>传感器介绍</h2><p>首先，SLAM需要的一些传感器，有激光，也有相机。实际上我们的重点在于相机，因为相机便宜，而激光很贵。相机分为单目相机，双目相机（Stereo）以及深度相机（RGBD），事件相机（Event）。一般来说使用较多的Stereo和RGBD，单目没有深度，只能同过移动相机来想办法产生深度，Stereo相机通过两个镜头来获得深度，而RGBD相机通过一定的物理手段来获取深度（如红外线，结构光等）。而到后面我们会知道，深度对于SLAM是非常重要的一个信息。</p><p>当我们拍摄一张照片的时候，从3D到2D，会损失了很多信息。所以我们需要深度才能构建三维模型。单目相机，只能通过运动来推算距离（远的运动慢，近的运动快），但是计算比较复杂，也经常出问题，不能避免很多不确定性。</p><h2 id="视觉SLAM框架"><a href="#视觉SLAM框架" class="headerlink" title="视觉SLAM框架"></a>视觉SLAM框架</h2><ul><li>前端（Visual Odometry）</li><li>后端（Optimization）</li><li>回环检测（Loop Closure Detection）</li><li>建图（Mapping）</li></ul><p>这些模块每个都需要很多的知识和精力来学习，所以这里只列出来框架。以后学习完毕之后，在给它们加上超链接。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> SLAM </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SLAM </tag>
+            
+            <tag> 3D reconstruction </tag>
+            
+            <tag> CMake </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Learning From Data——Covariance Matrix Derivation</title>
       <link href="/2018/11/06/Learning-From-Data%E2%80%94%E2%80%94Covariance-Matrix-Derivation/"/>
       <url>/2018/11/06/Learning-From-Data%E2%80%94%E2%80%94Covariance-Matrix-Derivation/</url>
       
-        <content type="html"><![CDATA[<p>上周的数据学习课程布置了一个作业，主要做的是对多维高斯分布下求得协方差矩阵的取值。这个和之前将的Generative Learning Algorithm很相关，但是当时是直接给出了协方差矩阵的取值。结果是异常简单的，但是其中的证明可能要费点功夫。<br><a id="more"></a></p><p>题目描述如下：</p><p>Linear Discriminant Analysis (LDA) is a special case of Gaussian Discriminant Analysis (GDA) which assumes that the classes have a common covariance matrix $\Sigma_j = \Sigma, \forall j$. Now suppose all the $\Sigma_j$’s are not equal, and we will get the Quadratic Discriminant Analysis (QDA). The estimations for QDA are similar to those for LDA, except that separate covariance matrices must be estimated for each class. Give the maximum likelihood estimate of Σ j ’s for the case K = 2.</p><p>题目中说，之前博客中介绍的各个分类的$\Sigma$都是一样的，那叫做LDA，如果每个类别都有自己的$\Sigma_j$，则是QDA。让我们推导QDA的协方差矩阵应该是什么样子。</p><p>实际上，对于QDA还是LDA，协方差矩阵的推导是大致一样的，而QDA的最后结果也是非常简单。至于$\phi_j,\mu_j$等相比之下更简单，结果也和之前一样，就不在这里进行证明了。</p><p>这篇博客实际上就是把之前的写的作业发出来，因为我们作业要求为英文，因此下面的证明将为英文。</p>]]></content>
+        <content type="html"><![CDATA[<p>上周的数据学习课程布置了一个作业，主要做的是对多维高斯分布下求得协方差矩阵的取值。这个和之前将的Generative Learning Algorithm很相关，但是当时是直接给出了协方差矩阵的取值。结果是异常简单的，但是其中的证明可能要费点功夫。<br><a id="more"></a></p><p>题目描述如下：</p><p>Linear Discriminant Analysis (LDA) is a special case of Gaussian Discriminant Analysis (GDA) which assumes that the classes have a common covariance matrix $\Sigma_j = \Sigma, \forall j$. Now suppose all the $\Sigma_j$’s are not equal, and we will get the Quadratic Discriminant Analysis (QDA). The estimations for QDA are similar to those for LDA, except that separate covariance matrices must be estimated for each class. Give the maximum likelihood estimate of Σ j ’s for the case K = 2.</p><p>题目中说，之前博客中介绍的各个分类的$\Sigma$都是一样的，那叫做LDA，如果每个类别都有自己的$\Sigma_j$，则是QDA。让我们推导QDA的协方差矩阵应该是什么样子。</p><p>实际上，对于QDA还是LDA，协方差矩阵的推导是大致一样的，而QDA的最后结果也是非常简单。至于$\phi_j,\mu_j$等相比之下更简单，结果也和之前一样，就不在这里进行证明了。</p><p>这篇博客实际上就是把之前的写的作业发出来，因为我们作业要求为英文，因此下面的证明将为英文。</p><p>Firstly,  we need to know the log Maximum Likelihood Estimate:</p><script type="math/tex; mode=display">\begin{equation*}\begin{aligned}&\log L(\mu_1,...,\mu_k,\Sigma_1,...,\Sigma_k,\phi_1,...,\phi_k)\\ &= \log \prod_{i=1}^m p(x_i,y_i;\mu_1,...,\mu_k,\Sigma_1,...,\Sigma_k,\phi_1,...,\phi_k)\\ &=\log \prod_{i=1}^m p(x_i|y_i;\mu_{y_i},\Sigma_{y_i})p(y_i;\phi_{y_i})\\ &=\log \prod_{i=1}^m \prod_{j=1}^k \mathbf{1}\{y_i=j\} \frac{1}{(2\pi)^{\frac n 2}\vert \Sigma_j\vert ^{\frac 1 2}} e^{-\frac 1 2(x_i-u_j)^T\Sigma^{-1}(x_i-u_j)}p(y_i=k;\phi_{k}) \\ &= \sum_{i=1}^m  \sum_{j=1}^k \mathbf{1}\{y_i=j\}( - \frac 1 2(x_i-u_j)^T\Sigma^{-1}(x_i-u_j) -\frac n 2 \log (2\pi) + \frac 1 2 \log\vert \Sigma_j\vert+\log p(y_i;\phi_{y_i}))\\\end{aligned}\end{equation*}</script><p>If we want to find the Maximum, we need to get the derivative of Sigma. If we cut the useless parts,the function will be look like this:</p><script type="math/tex; mode=display">l = \frac 1 2\sum_{i=1}^m  \sum_{j=1}^k \mathbf{1}\{y_i=j\}(\log\vert \Sigma_j\vert - (x_i-u_j)^T\Sigma^{-1}(x_i-u_j))</script><p>I need to tell some basic rules about derivative of matrix:</p><script type="math/tex; mode=display">\begin{align}\frac { \partial \vert A\vert}{\partial A} = |A|(A^{-1})^T\\\frac {\partial A^{-1}}{\partial x} = A^{-1}\frac{\partial A}{\partial x} A^{-1}     \end{align}</script><p>We could use the (1) to get the $\log |\Sigma_k|$ ‘s derivative. Because of the SPD, we could get:</p><script type="math/tex; mode=display">\begin{align}\frac {\partial \log \vert \Sigma_j \vert}{\partial \Sigma_j} = (\Sigma_j^{-1})^T = \Sigma_j^{-1}\end{align}</script><p>Then, use the rule (2). Because the x is a scalar, so we need to separate the process.First let’s try to find the derivative of $\Sigma_{k,(i,j)}$:</p><script type="math/tex; mode=display">\begin{equation*}\begin{aligned}\frac{\partial \Sigma_k^{-1}}{\partial \Sigma_{k,(i,j)}} &= \Sigma_k^{-1} \frac{\partial \Sigma_k}{ \Sigma_{k,(i,j)}}\Sigma_k^{-1}\\(x_i-u_j)^T\frac{\partial \Sigma_k^{-1}}{\partial \Sigma_{k,(i,j)}}(x_i-u_j)&=  (x_i-u_j)^T\Sigma_k^{-1} \frac{\partial \Sigma_k}{ \Sigma_{k,(i,j)}}\Sigma_k^{-1}(x_i-u_j)\end{aligned}\end{equation*}</script><p>We noticed that $(x_i-u_j)^T\Sigma_k^{-1} = (\Sigma_k^{-1}(x_i-u_j))^T $.</p><p>And the matrix $\frac{\partial \Sigma_k^{-1}}{\partial \Sigma_{k,(i,j)}}$ will be like a n $\times$ n matrix with the exception that the value of the position(i,j) will be 1.</p><p>So we could get:</p><script type="math/tex; mode=display">\begin{equation*}\begin{aligned}(x_i-u_j)^T\frac{\partial \Sigma_k^{-1}}{\partial \Sigma_{k,(i,j)}}(x_i-u_j)&=  (x_i-u_j)^T\Sigma_k^{-1} \frac{\partial \Sigma_k}{ \Sigma_{k,(i,j)}}\Sigma_k^{-1}(x_i-u_j)\\&= [(\Sigma_k^{-1}(x_i-u_j)) (\Sigma_k^{-1}(x_i-u_j))^T]_{(i,j)}\end{aligned}\end{equation*}</script><p>So:</p><script type="math/tex; mode=display">\begin{align}(x_i-u_j)^T\frac{\partial \Sigma_k^{-1}}{\partial \Sigma_{k,(i,j)}}(x_i-u_j) = (\Sigma_k^{-1}(x_i-u_j)) (\Sigma_k^{-1}(x_i-u_j))^T\end{align}</script><p>Now use (3) and (4),we could get: </p><script type="math/tex; mode=display">\begin{equation*}\begin{aligned}\frac{\partial l}{\partial \Sigma_j} &=\frac 1 2\sum_{i=1}^m \mathbf{1}\{y_i=j\} (\Sigma_j ^{-1}-   (\Sigma_k^{-1}(x_i-u_j)) (\Sigma_k^{-1}(x_i-u_j))^T)\\ &=\frac 1 2\sum_{i=1}^m \mathbf{1}\{y_i=j\} (\Sigma_j ^{-1}-   \Sigma_j^{-1}(x_i-u_j)(x_i-u_j)^T\Sigma_j^{-1})\end{aligned}\end{equation*}</script><p>Because we want to let $\frac{\partial l}{\partial \Sigma_j} = \mathbf{0}$:</p><script type="math/tex; mode=display">\begin{equation*}\begin{aligned}\frac 1 2\sum_{i=1}^m  \mathbf{1}\{y_i=j\} (\Sigma_j ^{-1}-   \Sigma_j^{-1}(x_i-u_j)(x_i-u_j)^T\Sigma_j^{-1}) = \mathbf{0}\\\sum_{i=1}^m\mathbf{1}\{y_i=j\} (I - \Sigma_j^{-1}(x_i-u_j)(x_i-u_j)^T) = \mathbf{0}\\\sum_{i=1}^m\mathbf{1}\{y_i=j\} I = \Sigma_j^{-1}\sum_{i=1}^m \mathbf{1}\{y_i=j\}(x_i-u_j)(x_i-u_j)^T\end{aligned}\end{equation*}</script><p>So,for QDA,the $\Sigma_j$ will be like this:</p><script type="math/tex; mode=display">\begin{equation*}\begin{aligned}\Sigma_j = \frac{\sum_{i=1}^m \mathbf{1}\{y_i=j\}(x_i - \mu_{j}) (x_i - \mu_{j})^T}{\sum_{i=1}^m \mathbf{1}\{y_i=j\}}\end{aligned}\end{equation*}</script><p>where $j=1,2$.</p>]]></content>
       
       
       <categories>
@@ -629,9 +656,9 @@
             
             <tag> machine learning </tag>
             
-            <tag> regularization </tag>
-            
             <tag> overfitting </tag>
+            
+            <tag> regularization </tag>
             
         </tags>
       
