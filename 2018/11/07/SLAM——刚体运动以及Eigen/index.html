@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这次主要介绍一些刚体运动中需要的数学知识以及Eigen库的基本使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-08T12:10:03.932Z">
+<meta property="og:updated_time" content="2018-11-08T13:02:58.473Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——刚体运动以及Eigen">
 <meta name="twitter:description" content="这次主要介绍一些刚体运动中需要的数学知识以及Eigen库的基本使用。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-08 20:10:03" itemprop="dateModified" datetime="2018-11-08T20:10:03+08:00">2018-11-08</time>
+                <time title="更新于：2018-11-08 21:02:58" itemprop="dateModified" datetime="2018-11-08T21:02:58+08:00">2018-11-08</time>
               
             
           </span>
@@ -643,6 +643,13 @@ sR&\mathbf{t}\\
 <p>四元素-&gt;旋转矩阵：Eigen::Matrix3d Rx = q.toRotationMatrix();</p>
 <p>旋转向量-&gt;欧拉角：Eigen::Vector3d eulerAngle=rotationVector.matrix().eulerAngles(0,1,2);</p>
 <p>旋转矩阵-&gt;欧拉角：Eigen::Vector3d euler_angles = rotation_matrix.eulerAngles ( 2,1,0 ); // ZYX顺序，即roll pitch yaw顺序</p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>这一讲最后说明了世界坐标和相机坐标的转换。世界坐标下的坐标为$\mathbf{p}_w$，相机坐标下的坐标为$mathbf{p}_c$，则二者转换为：</p>
+<script type="math/tex; mode=display">
+\mathbf{p}_w = T_{c2w}\mathbf{p}_c</script><script type="math/tex; mode=display">
+\mathbf{p}_c = T_{w2c}\mathbf{p}_w</script><p>值得注意的是，它提到了一般更常用的是从世界坐标到相机坐标的转换，但是从相机坐标到世界坐标的转换却更直观。因为如果相机坐标$\mathbf{p}_c$下为0,则世界坐标$\mathbf{p}_w$就是相机在世界坐标的位置:</p>
+<script type="math/tex; mode=display">
+\mathbf{p}_w = T_{c2w} = t_{c2w}</script><p>上式中$t_{c2w}$正是相机的位置。也是平移向量。</p>
+<p>所以从相机坐标到世界坐标的转换可以直接看到相机位置。这也是因为从相机坐标到世界坐标的转换是先旋转后平移的特性。先旋转后平移，则平移向量是不用改变的。</p>
 
       
     </div>
@@ -928,7 +935,7 @@ sR&\mathbf{t}\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#旋转向量"><span class="nav-number">1.</span> <span class="nav-text">旋转向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#欧拉角"><span class="nav-number">2.</span> <span class="nav-text">欧拉角</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四元数"><span class="nav-number">3.</span> <span class="nav-text">四元数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加减"><span class="nav-number">3.1.</span> <span class="nav-text">加减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法"><span class="nav-number">3.2.</span> <span class="nav-text">乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共轭"><span class="nav-number">3.3.</span> <span class="nav-text">共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模长"><span class="nav-number">3.4.</span> <span class="nav-text">模长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逆"><span class="nav-number">3.5.</span> <span class="nav-text">逆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数乘和点乘"><span class="nav-number">3.6.</span> <span class="nav-text">数乘和点乘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用四元数表示旋转"><span class="nav-number">3.7.</span> <span class="nav-text">用四元数表示旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四元数和旋转矩阵的转换"><span class="nav-number">3.8.</span> <span class="nav-text">四元数和旋转矩阵的转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相似，仿射，射影变换"><span class="nav-number">4.</span> <span class="nav-text">相似，仿射，射影变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相似变换"><span class="nav-number">4.1.</span> <span class="nav-text">相似变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#仿射变换"><span class="nav-number">4.2.</span> <span class="nav-text">仿射变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#射影变换"><span class="nav-number">4.3.</span> <span class="nav-text">射影变换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eigen"><span class="nav-number">5.</span> <span class="nav-text">Eigen</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#eigen几何模块："><span class="nav-number">5.1.</span> <span class="nav-text">eigen几何模块：</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#旋转向量"><span class="nav-number">1.</span> <span class="nav-text">旋转向量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#欧拉角"><span class="nav-number">2.</span> <span class="nav-text">欧拉角</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四元数"><span class="nav-number">3.</span> <span class="nav-text">四元数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加减"><span class="nav-number">3.1.</span> <span class="nav-text">加减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乘法"><span class="nav-number">3.2.</span> <span class="nav-text">乘法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#共轭"><span class="nav-number">3.3.</span> <span class="nav-text">共轭</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模长"><span class="nav-number">3.4.</span> <span class="nav-text">模长</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逆"><span class="nav-number">3.5.</span> <span class="nav-text">逆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数乘和点乘"><span class="nav-number">3.6.</span> <span class="nav-text">数乘和点乘</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用四元数表示旋转"><span class="nav-number">3.7.</span> <span class="nav-text">用四元数表示旋转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四元数和旋转矩阵的转换"><span class="nav-number">3.8.</span> <span class="nav-text">四元数和旋转矩阵的转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相似，仿射，射影变换"><span class="nav-number">4.</span> <span class="nav-text">相似，仿射，射影变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相似变换"><span class="nav-number">4.1.</span> <span class="nav-text">相似变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#仿射变换"><span class="nav-number">4.2.</span> <span class="nav-text">仿射变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#射影变换"><span class="nav-number">4.3.</span> <span class="nav-text">射影变换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Eigen"><span class="nav-number">5.</span> <span class="nav-text">Eigen</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#eigen几何模块："><span class="nav-number">5.1.</span> <span class="nav-text">eigen几何模块：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Note"><span class="nav-number">6.</span> <span class="nav-text">Note</span></a></li></ol></div>
             
 
           </div>
