@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-10T06:02:26.656Z">
+<meta property="og:updated_time" content="2018-11-10T08:00:05.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——李群和李代数">
 <meta name="twitter:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-10 14:02:26" itemprop="dateModified" datetime="2018-11-10T14:02:26+08:00">2018-11-10</time>
+                <time title="更新于：2018-11-10 16:00:05" itemprop="dateModified" datetime="2018-11-10T16:00:05+08:00">2018-11-10</time>
               
             
           </span>
@@ -461,13 +461,13 @@
         <p>在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。<br><a id="more"></a></p>
 <h2 id="群-Group"><a href="#群-Group" class="headerlink" title="群(Group)"></a>群(Group)</h2><p>群是一种集合加上一种运算的代数结构。如果记集合为$A$，运算为$\cdot$,如果满足以下性质，则称$(A,\cdot)$为群：</p>
 <ol>
-<li>封闭性： $\forall a_1,a_2\in A,\a_1 \cdot \a_2 \in A$.</li>
+<li>封闭性： $\forall a_1,a_2\in A,a_1 \cdot a_2 \in A$.</li>
 <li>结合律：$\forall a_1,a_2,a_3 \in A (a_1 \cdot a_2) \cdot a_3 = a_1 \cdot (a_2 \cdot a_3)$.</li>
-<li>幺元：$\exits a_0 \in A, s.t. \forall a \in A,a_0\cdot a = a \cdot a_0 = a$.</li>
-<li>逆：$\forall a\inA,\exists a^{-1} \in A, a\cdot a^{-1} = a_0$.</li>
+<li>幺元：$\exists a_0 \in A, s.t. \forall a \in A,a_0\cdot a = a \cdot a_0 = a$.</li>
+<li>逆：$\forall a\in A,\exists a^{-1} \in A, a\cdot a^{-1} = a_0$.</li>
 </ol>
 <p>可以验证旋转矩阵和转换矩阵与矩阵乘法运算都可以构成群。其中旋转矩阵与乘法构成的群为$SO(3)$,特殊正交群，欧式转换矩阵与乘法构成特殊欧氏群$SE(3)$.</p>
-<h3 id="李群（Lie-Group）"><a href="#李群（Lie-Group）" class="headerlink" title="李群（Lie Group）"></a>李群（Lie Group）</h3><p>具有连续（光滑）性质的群。李群既是群也是流形。SO(3),SE(3)都是李群，但是只有定义良好的乘法，没有加法，所以难以进行极限求导（$+\Delta x$）等操作。</p>
+<h3 id="李群（Lie-Grhop）"><a href="#李群（Lie-Grhop）" class="headerlink" title="李群（Lie Grhop）"></a>李群（Lie Grhop）</h3><p>具有连续（光滑）性质的群。李群既是群也是流形。SO(3),SE(3)都是李群，但是只有定义良好的乘法，没有加法，所以难以进行极限求导（$+\Delta x$）等操作。</p>
 <h2 id="引出李代数"><a href="#引出李代数" class="headerlink" title="引出李代数"></a>引出李代数</h2><p>一种李群，对应一个李代数。李代数用小写表示，如$so(3),se(3)$.</p>
 <p>任意旋转矩阵，则$RR^T = I$.</p>
 <p>考虑R随时间变化，有$R(t)R(t)^T = I$.</p>
@@ -476,13 +476,13 @@
 <p>所以我们可以知道：$R’(t)R(t)^T$是一个反对称矩阵。反对称矩阵都会有一个对应的向量，假设$R’(t)R(t)^T$对应的向量为$\phi(t)$,则：</p>
 <p>$R’(t)R(t)^T = \phi(t)$</p>
 <p>两侧同时右乘$R(t)$，得到：</p>
-<p>$R’(t) = \phi(t)^{\^} R(t)$</p>
+<p>$R’(t) = \phi(t)^{\^{}} R(t)$</p>
 <p>所以我们可以看到对R求导之海，多出来一个$\phi(t)$.</p>
 <p>假如$t_0=0,R(t_0) = I$，对于$R(t)$进行泰勒展开：</p>
 <script type="math/tex; mode=display">
 R(t) \approx R(t_0) + R'(t_0)(t - t_0) = I+\phi(0)t.</script><p>在很短的时间($t=t_0+\Delta t$)里，假设$\phi(t_0)$不会变化。</p>
-<p>R’(t) = \phi(t_0)^{\^}R(t) = \phi_0^{\^}R(t)</p>
-<p>如果解上述微分方程（$R(0) = I$），可以得到：$R(t) = exp(\phi_0^{\^} t)$</p>
+<p>$R’(t) = \phi(t_0)^{\^{}}R(t) = \phi_0^{\^{}}R(t)$</p>
+<p>如果解上述微分方程（$R(0) = I$），可以得到：$R(t) = exp(\phi_0^{\^{}} t)$</p>
 <p>所以我们就得到了一个在$t_0$附近的近似估计。</p>
 <p>实际上$phi$就是$SO(3)$对应的李代数。</p>
 <h2 id="李代数"><a href="#李代数" class="headerlink" title="李代数"></a>李代数</h2><p>李代数由一个集合$\mathbb{V}$，一个数域$\mathbb{F}$,一个二元运算$[ ,]$组成。这个运算某一定程度上反映了两个数的差异。李代数满足下面几个性质：</p>
@@ -491,44 +491,44 @@ R(t) \approx R(t_0) + R'(t_0)(t - t_0) = I+\phi(0)t.</script><p>在很短的时�
 <li>双线性：$\forall X,Y,Z \in \mathbb{V},a,b \in \mathbb{F}$,有：<script type="math/tex; mode=display">
 [aX+bY,Z ]= a[X,Z ] + b[Y,Z ],[Z,aX+bY ] = a[Z,X ]+b[Z,Y ].</script></li>
 <li>自反性：$\forall X \in \mathbb{V},[X, X] = 0$</li>
-<li>雅科比等价：$\fotall X,Y,Z \in \mathbb{V},[X, [Y,Z ]] + [Z, [X,Y ]]+ [Y, [Z,X ]] = 0$</li>
+<li>雅科比等价：$\forall X,Y,Z \in \mathbb{V},[X, [Y,Z ]] + [Z, [X,Y ]]+ [Y, [Z,X ]] = 0$</li>
 </ol>
 <p>其中二元运算被称为李括号。</p>
-<h3 id="李代数-so-3-："><a href="#李代数-so-3-：" class="headerlink" title="李代数$so(3)$ ###："></a>李代数$so(3)$ ###：</h3><p>$so(3) = \{\phi \in \mathbb{R}^3 ,\Phi = \phi ^{\^} \in \mathbb{R}^{3 \times 3}\}$.</p>
-<p>李括号：$[\phi_1,\phi_2 ]= (\Phi_1\Phi_2 - \Phi_2 \Phi_1)^{\^}$.</p>
-<p>Note: $\Phi = \phi^{\^},\phi = \Phi^{\^}$.</p>
-<h3 id="李代数-se-3"><a href="#李代数-se-3" class="headerlink" title="李代数$se(3)$"></a>李代数$se(3)$</h3><p>$se(3) = \left\{<br>    \xi = \begin{bmatrix}<br>    \rou\\<br>    \phi<br>    \end{bmatrix} \in \mathbb{R}^6,\rou \in \mathbb{R}^3,\phi \in so(3),\xi ^{\^} = \begin{bmatrix}<br>    \phi^{^}&amp;\rou\\<br>    0,0<br>    \end{bmatrix}<br>    \right\}$</p>
+<h3 id="李代数-so-3-："><a href="#李代数-so-3-：" class="headerlink" title="李代数$so(3)$ ###："></a>李代数$so(3)$ ###：</h3><p>$so(3) = \{\phi \in \mathbb{R}^3 ,\Phi = \phi ^{\^{}} \in \mathbb{R}^{3 \times 3}\}$.</p>
+<p>李括号：$[\phi_1,\phi_2 ]= (\Phi_1\Phi_2 - \Phi_2 \Phi_1)^{\^{}}$.</p>
+<p>Note: $\Phi = \phi^{\^{}},\phi = \Phi^{\^{}}$.</p>
+<h3 id="李代数-se-3"><a href="#李代数-se-3" class="headerlink" title="李代数$se(3)$"></a>李代数$se(3)$</h3><p>$se(3) = \left\{<br>    \xi = \begin{bmatrix}<br>    \rho\\<br>    \phi<br>    \end{bmatrix} \in \mathbb{R}^6,\rho \in \mathbb{R}^3,\phi \in so(3),\xi ^{\^{}} = \begin{bmatrix}<br>    \phi^{\^{}}&amp;\rho\\<br>    0&amp;0<br>    \end{bmatrix}<br>    \right\}$</p>
 <h2 id="指数与对数映射"><a href="#指数与对数映射" class="headerlink" title="指数与对数映射"></a>指数与对数映射</h2><p>之前引出李代数中推导的$R(t) = exp(\phi_0t)$,R是李群SO(3)，而$\phi$是李代数so(3).他们之间是有一一对应的关系的。恩，从上面的推导中并不能保证R就是$\phi$的exp映射，但是实际上就是这样做的。</p>
 <p>但是如何对一个$\phi$进行指数映射？映射还需转换为$\Phi$.对于一个矩阵，我们是没法进行exp运算的。因此我们使用泰勒展开：</p>
 <script type="math/tex; mode=display">
 exp(A) = \sum_{n=0}^\infty \frac{1}{n!}A^n</script><p>同样上述展开也没那么容易进行，好在还有一些别的方法。</p>
 <p>任何一个向量，我们都可以分解成方向和长度，也就是$\theta \mathbf{a}$.其中$\mathbf{a}$为单位向量。</p>
 <p>然后，我们可以验证的是：</p>
-<p>$\mathbf{a}^{\^}\mathbf{a}^{\^} = \mathbf{aa}^T -I$</p>
-<p>$\mathbf{a}^{\^}\mathbf{a}^{\^}\mathbf{a}^{\^} = -\mathbf{a}^{\^}$</p>
-<p>因为我们$\Phi = \phi^{\^}$,所以上式提供了很好的办法来解决exp问题。经过推导，我们可以得到：</p>
+<p>$\mathbf{a}^{\^{}}\mathbf{a}^{\^{}} = \mathbf{aa}^T -I$</p>
+<p>$\mathbf{a}^{\^{}}\mathbf{a}^{\^{}}\mathbf{a}^{\^{}} = -\mathbf{a}^{\^{}}$</p>
+<p>因为我们$\Phi = \phi^{\^{}}$,所以上式提供了很好的办法来解决exp问题。经过推导，我们可以得到：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-exp(\phi^{\^}) &= exp(\theta \mathbf{a}^T) = \sum_{n=0}^\infty \frac {1} {n!} (\theta \mathbf{a}^{\^})^n\\
-&=\cos \theta I + (1 - \cos \theta)\mathbf{aa}^T + \sin \theta \mathbf{a}^{\^}
+exp(\phi^{\^{}}) &= exp(\theta \mathbf{a}^T) = \sum_{n=0}^\infty \frac {1} {n!} (\theta \mathbf{a}^{\^{}})^n\\
+&=\cos \theta I + (1 - \cos \theta)\mathbf{aa}^T + \sin \theta \mathbf{a}^{\^{}}
 \end{aligned}</script><p>很神奇的事情，上面竟然就是罗德里克斯公式（推导过程实际上不复杂，省略掉了）。</p>
 <p>对应的还有一个对数映射：</p>
-<p>$\phi$ = \ln(R)^{\^} = \left (\sum_{n=0}^\infty \frac{(-1)^n}{n+1}(R-I)^{n+1} \right)</p>
+<p>$\phi$ = \ln(R)^{\^{}} = \left (\sum_{n=0}^\infty \frac{(-1)^n}{n+1}(R-I)^{n+1} \right)</p>
 <p>当然，既然我们已经知道罗德里克斯公式了，就不用上式这么复杂的式子去求对数映射了。</p>
 <p>旋转角，和旋转矩阵不是一一对应的，因为旋转矩阵唯一的情况下，旋转角可能有多个（角度多了$2\pi$）。这意味着指数映射是满射的。如果角度限制到$[-\pi,\pi ]$，那么李群和李代数元素就是一一对映的了。</p>
 <p>同样，我们也可以得到$SE(3)$与$se(3)$的指数映射和对数映射:</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-exp(\xi^{\^}) &= \begin{bmatrix}
-\sum_{n=0}^\infty \frac{1}{n!}(\phi ^{\^})^n& \sum_{n=0}^\infty \frac{1}{(n+1)!}(\phi^{\^})^n \rou\\
+exp(\xi^{\^{}}) &= \begin{bmatrix}
+\sum_{n=0}^\infty \frac{1}{n!}(\phi ^{\^{}})^n& \sum_{n=0}^\infty \frac{1}{(n+1)!}(\phi^{\^{}})^n \rho\\
 0&1
 \end{bmatrix}
 & \triangleq \begin{bmatrix}
-R&J\rou\\
+R&J\rho\\
 0&1
 \end{bmatrix} = T
-\end{aligned}</script><p>上式中$J = \frac{\sin \theta}{\theta}I + \left(1 - \frac {\sing \theta}{\theta}\right)\mathbf{aa}^T + \frac{1 - \cos \theta}{\theta} \mathbf{a}^{\^}$</p>
-<p>它的对数映射，右上角与之前一样，而这里的$t = J\rou$,通过$\phi$可以计算出来J，从而解线性方程得到$\rou$.</p>
+\end{aligned}</script><p>上式中$J = \frac{\sin \theta}{\theta}I + \left(1 - \frac {\sin\theta}{\theta}\right)\mathbf{aa}^T + \frac{1 - \cos \theta}{\theta} \mathbf{a}^{\^{}}$</p>
+<p>它的对数映射，右上角与之前一样，而这里的$t = J\rho$,通过$\phi$可以计算出来J，从而解线性方程得到$\rho$.</p>
 <p>J为雅克比矩阵。</p>
 <h2 id="李代数的求导与扰动模型"><a href="#李代数的求导与扰动模型" class="headerlink" title="李代数的求导与扰动模型"></a>李代数的求导与扰动模型</h2><p>之所以要学习李群和李代数，是因为我们的SO(3)和SE(3)都是没有定义加法的。所以无法求导，对于优化非常难办。因此我们想做的是能否将李群和李代数上对应关系运用到求导中，把对李群的求导，转化为对李代数的求导。</p>
 <p>所以我们希望的是：$exp(\Phi_1 +\Phi_2) = exp(\Phi_1)exp(\Phi_2)$.</p>
@@ -536,7 +536,7 @@ R&J\rou\\
 <h3 id="BCH公式"><a href="#BCH公式" class="headerlink" title="BCH公式"></a>BCH公式</h3><p>那他妈咋办！</p>
 <p>$<br>\ln(exp(A)exp(B)) \approx A+B+\frac 1 2 [A,B ]+\frac 1 {12} [A, [A ,B]]+…<br>$</p>
 <p>可以看到，在数学上，它会有这么多的余项存在的。不过我们做近似的估计。如果$\phi_1$或者$\phi_2$有一个量是小量，我们可以忽略其二次项。直接考虑到李代数的转换：</p>
-<p>$<br>\ln(exp(\phi_1^{\^})exp(\phi_2^{\^}))^{\^} \approx<br>\left \{\begin{matrix}<br>J_l(\phi_2)^{-1}\phi_1 +\phi_2&amp;\phi_1为小量\\<br>J_r(\phi_1)^{-1}\phi_2 +\phi_1&amp;\phi_2为小量\\<br>\end{matrix}<br>\right .<br>$</p>
+<p>$<br>\ln(exp(\phi_1^{\^{}})exp(\phi_2^{\^{}}))^{\^{}} \approx<br>\left \{\begin{matrix}<br>J_l(\phi_2)^{-1}\phi_1 +\phi_2&amp;\phi_1为小量\\<br>J_r(\phi_1)^{-1}\phi_2 +\phi_1&amp;\phi_2为小量\\<br>\end{matrix}<br>\right .<br>$</p>
 <p>既然导数模型左或者右加上一个小量，上式中，第一个对应的是$\phi_2$为R对应的李代数，而$\phi_1$为小量，对应到李群，就是R左乘一个小量，第二个式子对应的就是右乘一个小量了。我们后面规定使用为左乘，实际上右乘的J和左乘也相差不多。</p>
 <h3 id="so-3-求导"><a href="#so-3-求导" class="headerlink" title="so(3)求导"></a>so(3)求导</h3><h3 id="se-3-求导"><a href="#se-3-求导" class="headerlink" title="se(3)求导"></a>se(3)求导</h3><h2 id="Sophus库"><a href="#Sophus库" class="headerlink" title="Sophus库"></a>Sophus库</h2><p>李群李代数听得人头大。不过，我们不用自己去完成这些东西。对于李群李代数支持比较好的库是sophus，我们就使用这个库来实现slam中李群李代数需要的应用。</p>
 <p>sophus是eigen的一个扩展，它在eigen的基础上实现了一些李群李代数的操作，没有任何别的依赖项。</p>
@@ -825,7 +825,7 @@ R&J\rou\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#群-Group"><span class="nav-number">1.</span> <span class="nav-text">群(Group)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#李群（Lie-Group）"><span class="nav-number">1.1.</span> <span class="nav-text">李群（Lie Group）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引出李代数"><span class="nav-number">2.</span> <span class="nav-text">引出李代数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#李代数"><span class="nav-number">3.</span> <span class="nav-text">李代数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#李代数-so-3-："><span class="nav-number">3.1.</span> <span class="nav-text">李代数$so(3)$ ###：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#李代数-se-3"><span class="nav-number">3.2.</span> <span class="nav-text">李代数$se(3)$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指数与对数映射"><span class="nav-number">4.</span> <span class="nav-text">指数与对数映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#李代数的求导与扰动模型"><span class="nav-number">5.</span> <span class="nav-text">李代数的求导与扰动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BCH公式"><span class="nav-number">5.1.</span> <span class="nav-text">BCH公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#so-3-求导"><span class="nav-number">5.2.</span> <span class="nav-text">so(3)求导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#se-3-求导"><span class="nav-number">5.3.</span> <span class="nav-text">se(3)求导</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sophus库"><span class="nav-number">6.</span> <span class="nav-text">Sophus库</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#群-Group"><span class="nav-number">1.</span> <span class="nav-text">群(Group)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#李群（Lie-Grhop）"><span class="nav-number">1.1.</span> <span class="nav-text">李群（Lie Grhop）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引出李代数"><span class="nav-number">2.</span> <span class="nav-text">引出李代数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#李代数"><span class="nav-number">3.</span> <span class="nav-text">李代数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#李代数-so-3-："><span class="nav-number">3.1.</span> <span class="nav-text">李代数$so(3)$ ###：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#李代数-se-3"><span class="nav-number">3.2.</span> <span class="nav-text">李代数$se(3)$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指数与对数映射"><span class="nav-number">4.</span> <span class="nav-text">指数与对数映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#李代数的求导与扰动模型"><span class="nav-number">5.</span> <span class="nav-text">李代数的求导与扰动模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BCH公式"><span class="nav-number">5.1.</span> <span class="nav-text">BCH公式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#so-3-求导"><span class="nav-number">5.2.</span> <span class="nav-text">so(3)求导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#se-3-求导"><span class="nav-number">5.3.</span> <span class="nav-text">se(3)求导</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sophus库"><span class="nav-number">6.</span> <span class="nav-text">Sophus库</span></a></li></ol></div>
             
 
           </div>
