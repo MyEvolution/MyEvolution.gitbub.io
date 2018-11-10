@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="在我们的生活中，其实大部分使用的都是soft-margin SVM，很少会有人真正去使用hard-margin，因为我们无法避免噪声。现在想想，能否将soft-margin svm与我们之前的losgistic regress结合起来，会得到什么样的学习算法？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-10T07:25:01.345Z">
+<meta property="og:updated_time" content="2018-11-10T07:41:45.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习——Kernel Logistic Regression">
 <meta name="twitter:description" content="在我们的生活中，其实大部分使用的都是soft-margin SVM，很少会有人真正去使用hard-margin，因为我们无法避免噪声。现在想想，能否将soft-margin svm与我们之前的losgistic regress结合起来，会得到什么样的学习算法？">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-10 15:25:01" itemprop="dateModified" datetime="2018-11-10T15:25:01+08:00">2018-11-10</time>
+                <time title="更新于：2018-11-10 15:41:45" itemprop="dateModified" datetime="2018-11-10T15:41:45+08:00">2018-11-10</time>
               
             
           </span>
@@ -508,25 +508,25 @@ min_{A,B} \frac 1 N \sum_{n=1}^N \log\left( 1+\exp\left( -y_n(A\cdot(W_{SVM}^T\p
 <p>当然，如果SVM做的好的话，A的值应该是大于0的，B的值应该是接近于0的，因为我们得到的最终的参数分别为$AW_{SVM}^T$与$Ab_{SVM}+AB$，分别对应最终的W和b，如果SVM做的不错，意味着他们和$W_{SVM},b_{SVM}$差距太大。</p>
 <p>上述中$\phi(X)$意味着利用了特征转换，也就是会使用kernel。可以得到比较不错的logistic regression在z空间不错的解。</p>
 <p>但是上面这个办法，不能保证这是logistic regression在Z空间（转换之后的空间）真正最好的解。</p>
-<h3 id="Kernal-Logistic-Regression"><a href="#Kernal-Logistic-Regression" class="headerlink" title="Kernal Logistic Regression"></a>Kernal Logistic Regression</h3><p>想要找到logistic regression在Z空间真正最好的解，一个办法是在Z空间做logistic regression。但是我们的转换实际上是由kernel提供的，方便计算$Z^_nZ_m$。而logistic regression根本就不是二次规划问题，又如何用到kernel？</p>
+<h3 id="Kernal-Logistic-Regression"><a href="#Kernal-Logistic-Regression" class="headerlink" title="Kernal Logistic Regression"></a>Kernal Logistic Regression</h3><p>想要找到logistic regression在Z空间真正最好的解，一个办法是在Z空间做logistic regression。但是我们的转换实际上是由kernel提供的，方便计算$Z_n^TZ_m$。而logistic regression根本就不是二次规划问题，又如何用到kernel？</p>
 <p>其实，我们一直在求的东西是$W$，$W$的维度是和$Z$的维度一样，那么$W$是不是$Z$的线性组合呢？</p>
 <p>在SVM中，正是这样，还记得$W$怎么算吗：</p>
 <script type="math/tex; mode=display">
 W = \sum_{n=1}^N \alpha_n y_nX_n</script><p>同样的，在PLA，Logistic Regression中也是这样。假如我们想想$W$的初始值为0,那么每次更新步骤不就是一个系数乘上一个$X_i$的线性组合吗？</p>
 <p>实际上，在L2的regularization中，最好的W都是可以被Z线性组合表示出来的。</p>
 <p>如何证明这件事情？</p>
-<p>我们将optimal $W$ 写为$W^<em>$.<br>其中$W^</em>$可以表示为垂直X空间的与平行X空间（线性组合即为平行）的。</p>
+<p>我们将optimal $W$ 写为$W^*$.<br>其中$W^*$可以表示为垂直X空间的与平行X空间（线性组合即为平行）的。</p>
 <p>$W^* = W_{\Vert} + W_{\perp}$</p>
 <p>我们可以证明的是，当$W^*$中$W^{\perp}$为0.</p>
 <p>如果$W_{\perp}!=0$,则$W^{*T}X = W_{\Vert}^T X + 0$。</p>
-<p>从另一方面来说：$W^{ <em> T}W^</em> = W_{\Vert} ^T W_{\Vert} + W_{\perp}^TW_{\perp} &gt;W_{\Vert} ^T W_{\Vert} $</p>
+<p>从另一方面来说：<br>$W^{ * T}W^* = W_{\Vert} ^T W_{\Vert} + W_{\perp}^TW_{\perp} &gt;W_{\Vert} ^T W_{\Vert} $</p>
 <p>这说明$W_{\Vert}$比$W^*$是更好的选择，与假设矛盾。</p>
 <p>所以，$W^{*} = \sum_{n=1}^N\beta_nZ_n$.</p>
 <p>因此，我们将W换成上式，那么就会出现了我们想要的$Z_nZ_m$.</p>
 <p>L2 regularization变成下面的样子：</p>
 <script type="math/tex; mode=display">
-min_{W} \frac \lambda N \sum_{n}^N\sum_{m}^N \beta_n\beta_m Z_n^TZ_m + \frac 1 N \sum_{n=1}^N \log \left(1 + exp(-y_n \sum_{m=1}^N \beta_m Z_m Z_n \right) \right)</script><p>我们可以轻易将上式中的$Z_n^TZ_m$换成$k(x_n,x_m)$.从而实现在z空间上logistic regression的最优解。</p>
-<p>从另一方面来说，$ \sum_{n}^N\sum_{m}^N \beta_n\beta_m k(x_n,_m) = \Beta ^T K \Beta$,可以将它看成一种特殊的正则化。所以实际上我们可以将KLR看成关于转换后的数据在$Beta$上的线性模型（原来是关于W的线性模型）。</p>
+min_{W} \frac \lambda N \sum_{n=1}^N\sum_{m=1}^N \beta_n\beta_m Z_n^TZ_m + \frac 1 N \sum_{n=1}^N \log \left(1 + \exp\left(-y_n \sum_{m=1}^N \beta_m Z_m Z_n \right) \right)</script><p>我们可以轻易将上式中的$Z_n^TZ_m$换成$k(x_n,x_m)$.从而实现在z空间上logistic regression的最优解。</p>
+<p>从另一方面来说，$ \sum_{n}^N\sum_{m}^N \beta_n\beta_m k(x_n,_m) = \beta ^T K \beta$,可以将它看成一种特殊的正则化。所以实际上我们可以将KLR看成关于转换后的数据在$\beta$上的线性模型（原来是关于W的线性模型）。</p>
 <p>一般来说$beta_n$都不为0,这个和SVM中的$\alpha_n$不一样。</p>
 
       
