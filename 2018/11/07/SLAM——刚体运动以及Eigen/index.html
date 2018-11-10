@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这次主要介绍一些刚体运动中需要的数学知识以及Eigen库的基本使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-08T13:02:58.473Z">
+<meta property="og:updated_time" content="2018-11-08T15:00:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——刚体运动以及Eigen">
 <meta name="twitter:description" content="这次主要介绍一些刚体运动中需要的数学知识以及Eigen库的基本使用。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-08 21:02:58" itemprop="dateModified" datetime="2018-11-08T21:02:58+08:00">2018-11-08</time>
+                <time title="更新于：2018-11-08 23:00:00" itemprop="dateModified" datetime="2018-11-08T23:00:00+08:00">2018-11-08</time>
               
             
           </span>
@@ -470,15 +470,15 @@ R = \cos \theta I + (1-\cos \theta)\mathbf{nn}^T + \sin \theta \mathbf{n}^\^</sc
 <p>首先，对于旋转角：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\tr(R) &= \cos\theta \tr(I) +(1 - \cos \theta) tr(\mathbf{nn}^T) + \sin \theta \tr (\mathbf{n}^\^)\\
+tr(R) &= \cos\theta tr(I) +(1 - \cos \theta) tr(\mathbf{nn}^T) + \sin \theta tr (\mathbf{n}^\^)\\
 &= 3\cos \theta + (1-\cos \theta)\\
 &= 1+ 2\cos\theta
 \end{aligned}</script><p>所以根据上式可以很简单求得：</p>
 <script type="math/tex; mode=display">
-\theta = \arccos\left( \frac{\tr(R)-1}{2}\right)</script><p>至于\mathbf{n}，由于旋转轴的向量旋转后不会发生变化，因此$R\mathbf{n} = \mathbf{n}$.</p>
-<p>所以$\n$为矩阵R特征值为1的对应的特征向量。</p>
+\theta = \arccos\left( \frac{tr(R)-1}{2}\right)</script><p>至于$\mathbf{n}$，由于旋转轴的向量旋转后不会发生变化，因此$R\mathbf{n} = \mathbf{n}$.</p>
+<p>所以$\mathbf{n}$为矩阵R特征值为1的对应的特征向量。</p>
 <h2 id="欧拉角"><a href="#欧拉角" class="headerlink" title="欧拉角"></a>欧拉角</h2><p>旋转向量以及旋转矩阵对于人的角度来说都不够直观。因此有了欧拉角的诞生。其实欧拉角就是将一个旋转转化为3个绕坐标轴的转动。因此这个转动的顺序就不唯一了。在航空里可能经常听到“偏航-俯仰-滚转”（yam-pitch-roll），实际上就是欧拉角的一种，等价与ZYX轴的旋转。</p>
-<p>因此欧拉角就是用一个向量$[ r,p,y ]^T$（3个角度）来表示一个旋转。但是欧拉角有个著名的万能锁问题。如果pitch转动了$\pm90\degree$,则最后一个转动绕的轴实际上和z轴一样，这就使得损失了一个自由度，这被称为奇异性问题（？）。因此欧拉角不适用与插值和迭代，往往用于人工交互。</p>
+<p>因此欧拉角就是用一个向量$[ r,p,y ]^T$（3个角度）来表示一个旋转。但是欧拉角有个著名的万能锁问题。如果pitch转动了$\pm90°$,则最后一个转动绕的轴实际上和z轴一样，这就使得损失了一个自由度，这被称为奇异性问题（？）。因此欧拉角不适用与插值和迭代，往往用于人工交互。</p>
 <h2 id="四元数"><a href="#四元数" class="headerlink" title="四元数"></a>四元数</h2><p>旋转矩阵用9个量描述，有冗余，而旋转向量和欧拉角却具有奇异性。实际上我们找不到不带奇异性的三维向量描述方式。<br>因此在这里再介绍一个四元数。它用四个量来描述旋转足够紧凑同时也没有奇异性。</p>
 <p>一个四元数$\mathbf{q} = q_0+q_1i+q_2j+q_3k$,有一个实部，3个虚部。其中虚部满足下面的一组式子：</p>
 <script type="math/tex; mode=display">
@@ -494,7 +494,7 @@ ki=j,ik = -j
 <p>如果实部为0,称为虚四元数，如果虚部为0称为实四元数。</p>
 <p>我们能用单位四元数表示三维空间中的任意旋转。不过由于复数的引入，它的表示是有点反直觉的。假如旋转向量为$\mathbf{n} \theta$，则对应的四元数为：</p>
 <script type="math/tex; mode=display">
-\mathbf{q} = [ \cos \frac \theta 2, n_x\sin \frac \theta 2 ,n_y \sing \frac \theta 2,n_z,\frac \theta 2]^T.</script><p>因此从单位四元数中也很容易得到对应的旋转轴和旋转角度：</p>
+\mathbf{q} = [ \cos \frac \theta 2, n_x\sin \frac \theta 2 ,n_y \sin \frac \theta 2,n_z,\frac \theta 2]^T.</script><p>因此从单位四元数中也很容易得到对应的旋转轴和旋转角度：</p>
 <script type="math/tex; mode=display">
 \left \{
 \begin{aligned}
@@ -540,7 +540,7 @@ R = \begin{bmatrix}
 2q_1q_2+2q_0q_3& 1-2q_1^2-2q_3^2& 2q_2q_3 - 2q_0q_1 \\
 2q_1q_3-2q_0q_2&2q_2q_3+2q_0q_1&1 - 2q_1^2 - 2q_2^2
 \end{bmatrix}</script><p>如果知道了旋转矩阵，想要得到四元数：</p>
-<p>$q_0 = \frac{\sqrt{\tr(R) + 1}{2},q_1 = \frac{r_{2,3} - r_{3,2}}{4q_0},q_2 = \frac{r_{3,1} - r_{1,3}}{4q_0},q_3 = \frac{r_{1,2} - r_{2,1}}{4q_0}$</p>
+<p>$q_0 = \frac{\sqrt{tr(R) + 1}}{2},q_1 = \frac{r_{2,3} - r_{3,2}}{4q_0},q_2 = \frac{r_{3,1} - r_{1,3}}{4q_0},q_3 = \frac{r_{1,2} - r_{2,1}}{4q_0}$</p>
 <p>这里面$r_{i,j}$表示$R$的第i行j列。在计算过程中，如果$q_0$接近于0,则其他3个量就会很大，这是很需要考虑别的方式来表示旋转。</p>
 <h2 id="相似，仿射，射影变换"><a href="#相似，仿射，射影变换" class="headerlink" title="相似，仿射，射影变换"></a>相似，仿射，射影变换</h2><h3 id="相似变换"><a href="#相似变换" class="headerlink" title="相似变换"></a>相似变换</h3><p>相似变换比之前的欧式变换多了一个自由度：</p>
 <script type="math/tex; mode=display">
@@ -574,57 +574,57 @@ sR&\mathbf{t}\\
 <tbody>
 <tr>
 <td>Core</td>
-<td>#include<eigen core=""></eigen></td>
+<td>#include &lt; Eigen/Core &gt;</td>
 <td>Matrix和Array类，基础的线性代数运算和数组操作</td>
 </tr>
 <tr>
 <td>Geometry</td>
-<td>#include<eigen geometry=""></eigen></td>
+<td>#include&lt; Eigen/Geometry &gt;</td>
 <td>旋转、平移、缩放、2维和3维的各种变换</td>
 </tr>
 <tr>
 <td>LU</td>
-<td>#include<eigen lu=""></eigen></td>
+<td>#include&lt; Eigen/LU &gt;</td>
 <td>求逆，行列式，LU分解</td>
 </tr>
 <tr>
 <td>Cholesky</td>
-<td>#include <eigen cholesky=""></eigen></td>
+<td>#include &lt; Eigen/Cholesky &gt;</td>
 <td>LLT和LDLT Cholesky分解</td>
 </tr>
 <tr>
 <td>Householder</td>
-<td>#include<eigen householder=""></eigen></td>
+<td>#include&lt; Eigen/Householder &gt;</td>
 <td>豪斯霍尔德变换，用于线性代数运算</td>
 </tr>
 <tr>
 <td>SVD</td>
-<td>#include<eigen svd=""></eigen></td>
+<td>#include&lt; Eigen/SVD &gt;</td>
 <td>SVD分解</td>
 </tr>
 <tr>
 <td>QR</td>
-<td>#include<eigen qr=""></eigen></td>
+<td>#include&lt; Eigen/QR &gt;</td>
 <td>QR分解</td>
 </tr>
 <tr>
 <td>Eigenvalues</td>
-<td>#include<eigen eigenvalues=""></eigen></td>
+<td>#include&lt; Eigen/Eigenvalues &gt;</td>
 <td>特征值，特征向量分解</td>
 </tr>
 <tr>
 <td>Sparse</td>
-<td>#include<eigen sparse=""></eigen></td>
+<td>#include&lt; Eigen/Sparse &gt;</td>
 <td>稀疏矩阵的存储和一些基本的线性运算</td>
 </tr>
 <tr>
 <td>稠密矩阵</td>
-<td>#include<eigen dense=""></eigen></td>
+<td>#include&lt; Eigen/Dense &gt;</td>
 <td>包含Core/Geometry/LU/Cholesky/SVD/QR/Eigenvalues模块</td>
 </tr>
 <tr>
 <td>矩阵</td>
-<td>#include<eigen eigen=""></eigen></td>
+<td>#include&lt; Eigen/Eigen &gt;</td>
 <td>包括Dense和Sparse(整合库)</td>
 </tr>
 </tbody>
@@ -694,6 +694,10 @@ sR&\mathbf{t}\\
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/09/SLAM——李群和李代数/" rel="prev" title="SLAM——李群和李代数">
+                SLAM——李群和李代数 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -765,7 +769,7 @@ sR&\mathbf{t}\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-count">48</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
