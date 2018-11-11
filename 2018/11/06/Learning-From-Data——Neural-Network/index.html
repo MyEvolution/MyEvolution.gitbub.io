@@ -117,7 +117,7 @@
 <meta property="og:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Artificial_neural_network.svg/560px-Artificial_neural_network.svg.png">
-<meta property="og:updated_time" content="2018-11-11T12:07:15.079Z">
+<meta property="og:updated_time" content="2018-11-11T12:26:12.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Neural Network">
 <meta name="twitter:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-11 20:07:15" itemprop="dateModified" datetime="2018-11-11T20:07:15+08:00">2018-11-11</time>
+                <time title="更新于：2018-11-11 20:26:12" itemprop="dateModified" datetime="2018-11-11T20:26:12+08:00">2018-11-11</time>
               
             
           </span>
@@ -549,15 +549,16 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 &=\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)}}
 \end{aligned}</script><p>这其中，一个个的导数都是可以计算出来的。因此我们就得到了最终的梯度：</p>
 <script type="math/tex; mode=display">
-\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)} = (a^{(L)} - y)W^{(L)}g'(z^{(L-1)})a^{(L-2)}</script><p>不过需要注意的是，上面得到的导数最后是一个值($a^{(L)}$是最后一个神经元，如果最后一层有多个，也是分别计算的)，但是我们需要的是一个矩阵。因此这个形式必须要重新组织一下：</p>
+\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)} = (a^{(L)} - y)W^{(L)}g'(z^{(L-1)})a^{(L-2)}</script><p>不过需要注意的是，上面得到的导数你会发现矩阵的维度可能不合适。因此这个形式必须要重新组织一下：</p>
 <script type="math/tex; mode=display">
-\frac{\partial L}{\partial \Theta^{(L-1)}} = \Theta^{(L)}^T g'(z^{(L-1)})(a^{(L)}-y)(a^{(L-2)})^T</script><p>为了更好的计算各个层的梯度，我们新定义一个符号:</p>
+\frac{\partial L}{\partial \Theta^{(L-1)}} = \Theta^{(L)}^T g'(z^{(L-1)})(a^{(L)}-y)(a^{(L-2)})^T</script><p>如果想要计算更前面的参数矩阵的导数，这个链式法则会越来越长。</p>
+<p>为了更好的计算各个层的梯度，我们新定义一个符号:</p>
 <script type="math/tex; mode=display">
 \sigma^{(l)} = \nabla_{z^{(l)}}L(y,y')</script><ol>
 <li><strong>$l = L$</strong></li>
 </ol>
 <p>有时候我们可以直接计算出来$\nabla_{z^{(L)}}L(y,y’)$(g为softmax函数)，有时候需要使用链式法则:</p>
-<p>$\nabla_{z^{(L)}}L(y,y’) = \nabla_{y’}L(y’,y) .* g’(z^{(N)})$</p>
+<p>$\nabla_{z^{(L)}}L(y,y’) = \nabla_{y’}L(y’,y) .* g’(z^{(L)})$</p>
 <ol>
 <li><strong>$l \ne L$</strong></li>
 </ol>
@@ -565,7 +566,10 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 <ol>
 <li>$\nabla _{\Theta^{(l)}} L = \sigma^{(l)}(a^{(l-1)})^T$</li>
 </ol>
+<p>通过验证你会发现实际上上面说的正是我们推导的内容。</p>
 <p>使用梯度下降,或者SGD（更加常用），最终求得合适的$\Theta$.</p>
+<p>可以看到的$sigma^{(l)}$的计算，需要的是后向计算，所以这个叫后项传播。</p>
+<p>上面的推导过程都是以一个training example的，对于多个样本就需要多次计算。不过一般来说，我们经常使用的是SGD算法，或者mini-batch gd算法，整个gd的计算对于一般神经网络来说需要太大的计算量。</p>
 
       
     </div>
