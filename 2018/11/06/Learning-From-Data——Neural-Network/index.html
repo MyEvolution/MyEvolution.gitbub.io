@@ -117,7 +117,7 @@
 <meta property="og:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Artificial_neural_network.svg/560px-Artificial_neural_network.svg.png">
-<meta property="og:updated_time" content="2018-11-12T05:38:47.400Z">
+<meta property="og:updated_time" content="2018-11-12T05:54:23.649Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Neural Network">
 <meta name="twitter:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-12 13:38:47" itemprop="dateModified" datetime="2018-11-12T13:38:47+08:00">2018-11-12</time>
+                <time title="更新于：2018-11-12 13:54:23" itemprop="dateModified" datetime="2018-11-12T13:54:23+08:00">2018-11-12</time>
               
             
           </span>
@@ -529,7 +529,7 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 \end{bmatrix}</script><h2 id="后向传播（back-propagation）"><a href="#后向传播（back-propagation）" class="headerlink" title="后向传播（back propagation）"></a>后向传播（back propagation）</h2><h3 id="参数初始化（Parameter-Initialization）"><a href="#参数初始化（Parameter-Initialization）" class="headerlink" title="参数初始化（Parameter Initialization）"></a>参数初始化（Parameter Initialization）</h3><p>需要注意的是，神经网络中我们不能简单地将参数初始化为0.经过计算你就会明白，如果参数初始化为0,则计算出来的梯度就是一样的，无法进行梯度下降,无论怎么运行，最后得到的结果为$0.5$(sigmoid)。可以进行随机初始化，给每个参数一个很小的值$N(0,0.1)$.</p>
 <p>在实际中，证明了有比随机初始化更好的方法来进行初始化：Xavier/He initialization.</p>
 <script type="math/tex; mode=display">
-\Theta ^{(l)} \~{} N\left(0,\sqrt{\frac {2}{s_l + s_{l-1}}} \right)</script><h3 id="梯度（gradient）"><a href="#梯度（gradient）" class="headerlink" title="梯度（gradient）"></a>梯度（gradient）</h3><p>后向传播实际上是建立在梯度下降的基础上的，所以最复杂的部分就是计算梯度了。</p>
+\Theta ^{(l)} \tilde{} N\left(0,\sqrt{\frac {2}{s_l + s_{l-1}}} \right)</script><h3 id="梯度（gradient）"><a href="#梯度（gradient）" class="headerlink" title="梯度（gradient）"></a>梯度（gradient）</h3><p>后向传播实际上是建立在梯度下降的基础上的，所以最复杂的部分就是计算梯度了。</p>
 <p>假设，这个层数一共有L层，最后的输出是$a^{L}$，因此cost funtion和L层的参数是直接相关的。所以首先计算的就是cost funtion对$\Theta^{(L)}$的梯度。</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
