@@ -117,7 +117,7 @@
 <meta property="og:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Artificial_neural_network.svg/560px-Artificial_neural_network.svg.png">
-<meta property="og:updated_time" content="2018-11-11T12:26:12.563Z">
+<meta property="og:updated_time" content="2018-11-12T05:38:47.400Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Neural Network">
 <meta name="twitter:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-11 20:26:12" itemprop="dateModified" datetime="2018-11-11T20:26:12+08:00">2018-11-11</time>
+                <time title="更新于：2018-11-12 13:38:47" itemprop="dateModified" datetime="2018-11-12T13:38:47+08:00">2018-11-12</time>
               
             
           </span>
@@ -484,15 +484,16 @@ g(\Theta_{2,0}^{(2)}a_0^{(1)} + \Theta_{2,1}^{(2)}a_1^{(1)} + \Theta_{2,2}^{(2)}
 \begin{matrix}
 g(z) = \frac 1 {1+e^{-z}} &(sigmoid)\\
 g(z) = \max(z,0) &(ReLU)\\
-g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}& (tanh)</script><p>我们定义$a_{j}^1$为原始输入。</p>
+g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}& (tanh)
+\end{matrix}</script><p>我们定义$a_{j}^1$为原始输入。</p>
 <p>我们可以使用向量化来加速神经网络的计算过程。这个应该不算很稀奇的技术。对于每一层来说，$theta$都是严格的矩阵的,而输入也是一个矩阵。所以每一层的向量化都不算困难。</p>
 <p>通过输入，计算出每一层的输出，然后将这层输出当作下一层的输入，最后得到最后的结果，这就是前向传播。前向传播实际上就是神经网络怎么计算出结果的过程。</p>
 <p>利用神经网络我们可以很容易地实现很复杂的非线性函数的边界，从而进行分类。吴恩达在视频中介绍了用神经网络对与，或非以及异或的实现。不过这些都是相对简单的，复杂的神经网络分析其来完全没有这么容易，这也是神经网络强大的一个原因。</p>
 <p>为了实现多个分类，我们可以将最后的输出定位k个，分别来判断是否为当前类。这个做法实际上one-Vs-all的做法。</p>
 <h2 id="cost-function"><a href="#cost-function" class="headerlink" title="cost function"></a>cost function</h2><p>接下来我们来谈谈neural network的cost function。之前的logistic regression的cost function是通过计算极大似然估计得到的。而神经网络的cost funtion实际上呢也是一样的，不过它的h(x)不再是之前那么简单了，这里的$W$变成了$\Theta$。而且由于输出可能是多元的（多元分类），所以这个cost funtion实际上是各个类别的cost funtion的叠加：</p>
 <script type="math/tex; mode=display">
-J(\Theta) = -\frac{1}{m} \sum_{i=1}^m \sum_{k=1}^K y_i^{(k)} \log(h_{\Theta}(X_i))_k + (1-y_i^{(k)}) \log (1 - (h_\Theta(X_i))_k)</script><p>如果加上正则化的话，则正则化项为：$\frac \lambda {2m} \sum_{l=1}^{L}\sum_{i=1}^{s_{l}}\sum_{j=1}{s_{l-1}} \Theta_{i,j}^{(l)}^2$</p>
-<p>需要注意的是这个$s_{l+1}$,为何是这样？$s_l$表示了第l层有多少神经元（如果l=0则表示有多少个原始输入），也就表示了有多少个输入向量，而输入向量的长度则由前一个输入的个数决定，因此$s_{l-1}$实际上输入向量的长度。所以呢，我们先从层数开始，然后到该层的每个神经元，最后再到每个参数的每个取值。<br>（这里和吴恩达的课程的表述稍微有点区别，也就是我的输入是表示为第0层，也就是一共有L+1层，而吴恩达的课程中，共有L层，原来的0变成现在的第1层。不过这意味着，从1开始计数，由于第一层是没有theta参数的，所以第一层计算的实际是下一层的theta，而$s_l$是下一层的输入向量长度，而$s_{l+1}$才是输入向量的个数，至于最后一层的theta由于已经在前一次计算过了，所以这里的regularization为$\frac \lambda {2m} \sum_{l=1}^{L-1}\sum_{i=1}^{s_{l}}\sum_{j=1}{s_{l+1}} \Theta_{j,i}^{(l)}^2$）.</p>
+J(\Theta) = -\frac{1}{m} \sum_{i=1}^m \sum_{k=1}^K y_i^{(k)} \log(h_{\Theta}(X_i))_k + (1-y_i^{(k)}) \log (1 - (h_\Theta(X_i))_k)</script><p>如果加上正则化的话，则正则化项为：$\frac \lambda {2m} \sum_{l=1}^{L}\sum_{i=1}^{s_{l}}\sum_{j=1}{s_{l-1}} (\Theta_{i,j}^{(l)})^2$</p>
+<p>需要注意的是这个$s_{l+1}$,为何是这样？$s_l$表示了第l层有多少神经元（如果l=0则表示有多少个原始输入），也就表示了有多少个输入向量，而输入向量的长度则由前一个输入的个数决定，因此$s_{l-1}$实际上输入向量的长度。所以呢，我们先从层数开始，然后到该层的每个神经元，最后再到每个参数的每个取值。<br>（这里和吴恩达的课程的表述稍微有点区别，也就是我的输入是表示为第0层，也就是一共有L+1层，而吴恩达的课程中，共有L层，原来的0变成现在的第1层。不过这意味着，从1开始计数，由于第一层是没有theta参数的，所以第一层计算的实际是下一层的theta，而$s_l$是下一层的输入向量长度，而$s_{l+1}$才是输入向量的个数，至于最后一层的theta由于已经在前一次计算过了，所以这里的regularization为$\frac \lambda {2m} \sum_{l=1}^{L-1}\sum_{i=1}^{s_{l}}\sum_{j=1}{s_{l+1}} (\Theta_{j,i}^{(l)})^2$）.</p>
 <h2 id="向量化（vectorize）"><a href="#向量化（vectorize）" class="headerlink" title="向量化（vectorize）"></a>向量化（vectorize）</h2><p>首先，为了方便后面的说明，我们定义</p>
 <p>$z_{j}^{(i)} = (\Theta_{j}^{(i)})^Ta^{(i-1)}$.</p>
 <p>而$a_{j}^{(i)} = g(z_{j}^{(i)})$.</p>
@@ -535,10 +536,9 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 \frac{\partial L(\Theta)}{ \partial \Theta^{(L)}} &= -\frac{\partial}{\partial \Theta{(L)}} \left((1-y)\log (1 - y')  + y\log y'\right)\\
 &=-(1 - y)\frac{\partial}{\partial \Theta{(L)}} \log (1 - g(\Theta^{(L)}a^{(L-1)}))  - y \frac{\partial}{\partial \Theta{(L)}} \log g(\Theta^{(L)}a^{(L-1)})\\
 &= (1-y)\frac{1}{1 - g(\Theta^{(L)}a^{(L-1)})} g'(\Theta^{(L)}a^{(L-1)}))(a^{(L-1)})^T - y \frac {1}{g(\Theta^{(L)}a^{(L-1)}} g'(\Theta^{(L)}a^{(L-1)}(a^{(L-1)})^T\\
-&= (1-y)\sigma(\Theta^{(L)}a^{(L-1))(a^{(L-1)})^T - y(1 - \sigma(\Theta^{(L)}a^{(L-1))) (a^{(L-1)})^T\\
+&= (1-y)\sigma(\Theta^{(L)}a^{(L-1)})(a^{(L-1)})^T - y(1 - \sigma(\Theta^{(L)}a^{(L-1)})) (a^{(L-1)})^T\\
 &= (1 - y)a^{(L)} (a^{(L-1)})^T - y (1 - a^{(L)})(a^{(L-1)})^T\\
-&= (a^{(L)} - y)(a^{(L-1)})^T
-\end{aligned}</script><p>上述推导过程中，g为sigmoid函数，因此$g’ = \sigma’ = \sigma(1 - \sigma)$.</p>
+&= (a^{(L)} - y)(a^{(L-1)})^T</script><p>上述推导过程中，g为sigmoid函数，因此$g’ = \sigma’ = \sigma(1 - \sigma)$.</p>
 <p>$a^{(i)}$我们都是可以通过前向传播得到的。</p>
 <p>然后我们想要计算的是$\Theta{(L-1)},…,\Theta{(1)}$这些的梯度。但是它们是和$L(\Theta)$是没有直接的关系的。不过，在微积分中是有链式求导法则的：</p>
 <script type="math/tex; mode=display">
@@ -554,18 +554,18 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 \frac{\partial L}{\partial \Theta^{(L-1)}} = \Theta^{(L)}^T g'(z^{(L-1)})(a^{(L)}-y)(a^{(L-2)})^T</script><p>如果想要计算更前面的参数矩阵的导数，这个链式法则会越来越长。</p>
 <p>为了更好的计算各个层的梯度，我们新定义一个符号:</p>
 <script type="math/tex; mode=display">
-\sigma^{(l)} = \nabla_{z^{(l)}}L(y,y')</script><ol>
+\sigma^{(l)} = \nabla_{z^{(l)}}L(y,y')</script><ul>
 <li><strong>$l = L$</strong></li>
-</ol>
+</ul>
 <p>有时候我们可以直接计算出来$\nabla_{z^{(L)}}L(y,y’)$(g为softmax函数)，有时候需要使用链式法则:</p>
 <p>$\nabla_{z^{(L)}}L(y,y’) = \nabla_{y’}L(y’,y) .* g’(z^{(L)})$</p>
-<ol>
+<ul>
 <li><strong>$l \ne L$</strong></li>
-</ol>
+</ul>
 <p>$\sigma^{l} = ((\Theta^{(l+1))^T}\sigma^{(l+1)}) .*g’(z^{(l)})$</p>
-<ol>
+<ul>
 <li>$\nabla _{\Theta^{(l)}} L = \sigma^{(l)}(a^{(l-1)})^T$</li>
-</ol>
+</ul>
 <p>通过验证你会发现实际上上面说的正是我们推导的内容。</p>
 <p>使用梯度下降,或者SGD（更加常用），最终求得合适的$\Theta$.</p>
 <p>可以看到的$sigma^{(l)}$的计算，需要的是后向计算，所以这个叫后项传播。</p>

@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-11T14:21:35.429Z">
+<meta property="og:updated_time" content="2018-11-12T05:51:09.372Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——李群和李代数">
 <meta name="twitter:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-11 22:21:35" itemprop="dateModified" datetime="2018-11-11T22:21:35+08:00">2018-11-11</time>
+                <time title="更新于：2018-11-12 13:51:09" itemprop="dateModified" datetime="2018-11-12T13:51:09+08:00">2018-11-12</time>
               
             
           </span>
@@ -476,13 +476,13 @@
 <p>所以我们可以知道：$R’(t)R(t)^T$是一个反对称矩阵。反对称矩阵都会有一个对应的向量，假设$R’(t)R(t)^T$对应的向量为$\phi(t)$,则：</p>
 <p>$R’(t)R(t)^T = \phi(t)$</p>
 <p>两侧同时右乘$R(t)$，得到：</p>
-<p>$R’(t) = \phi(t)^{\^{}} R(t)$</p>
+<p>$R’(t) = \phi(t)^{\hat{}} R(t)$</p>
 <p>所以我们可以看到对R求导之海，多出来一个$\phi(t)$.</p>
 <p>假如$t_0=0,R(t_0) = I$，对于$R(t)$进行泰勒展开：</p>
 <script type="math/tex; mode=display">
 R(t) \approx R(t_0) + R'(t_0)(t - t_0) = I+\phi(0)t.</script><p>在很短的时间($t=t_0+\Delta t$)里，假设$\phi(t_0)$不会变化。</p>
-<p>$R’(t) = \phi(t_0)^{\^{}}R(t) = \phi_0^{\^{}}R(t)$</p>
-<p>如果解上述微分方程（$R(0) = I$），可以得到：$R(t) = exp(\phi_0^{\^{}} t)$</p>
+<p>$R’(t) = \phi(t_0)^{\hat{}}R(t) = \phi_0^{\hat{}}R(t)$</p>
+<p>如果解上述微分方程（$R(0) = I$），可以得到：$R(t) = exp(\phi_0^{\hat{}} t)$</p>
 <p>所以我们就得到了一个在$t_0$附近的近似估计。</p>
 <p>实际上$phi$就是$SO(3)$对应的李代数。</p>
 <h2 id="李代数"><a href="#李代数" class="headerlink" title="李代数"></a>李代数</h2><p>李代数由一个集合$\mathbb{V}$，一个数域$\mathbb{F}$,一个二元运算$[ ,]$组成。这个运算某一定程度上反映了两个数的差异。李代数满足下面几个性质：</p>
@@ -494,40 +494,40 @@ R(t) \approx R(t_0) + R'(t_0)(t - t_0) = I+\phi(0)t.</script><p>在很短的时�
 <li>雅科比等价：$\forall X,Y,Z \in \mathbb{V},[X, [Y,Z ]] + [Z, [X,Y ]]+ [Y, [Z,X ]] = 0$</li>
 </ol>
 <p>其中二元运算被称为李括号。</p>
-<h3 id="李代数-so-3-："><a href="#李代数-so-3-：" class="headerlink" title="李代数$so(3)$ ###："></a>李代数$so(3)$ ###：</h3><p>$so(3) = \{\phi \in \mathbb{R}^3 ,\Phi = \phi ^{\^{}} \in \mathbb{R}^{3 \times 3}\}$.</p>
-<p>李括号：$[\phi_1,\phi_2 ]= (\Phi_1\Phi_2 - \Phi_2 \Phi_1)^{\^{}}$.</p>
-<p>Note: $\Phi = \phi^{\^{}},\phi = \Phi^{\^{}}$.</p>
-<h3 id="李代数-se-3"><a href="#李代数-se-3" class="headerlink" title="李代数$se(3)$"></a>李代数$se(3)$</h3><p>$se(3) = \left\{<br>    \xi = \begin{bmatrix}<br>    \rho\\<br>    \phi<br>    \end{bmatrix} \in \mathbb{R}^6,\rho \in \mathbb{R}^3,\phi \in so(3),\xi ^{\^{}} = \begin{bmatrix}<br>    \phi^{\^{}}&amp;\rho\\<br>    0&amp;0<br>    \end{bmatrix}<br>    \right\}$</p>
+<h3 id="李代数-so-3-："><a href="#李代数-so-3-：" class="headerlink" title="李代数$so(3)$ ###："></a>李代数$so(3)$ ###：</h3><p>$so(3) = \{\phi \in \mathbb{R}^3 ,\Phi = \phi ^{\hat{}} \in \mathbb{R}^{3 \times 3}\}$.</p>
+<p>李括号：$[\phi_1,\phi_2 ]= (\Phi_1\Phi_2 - \Phi_2 \Phi_1)^{\hat{}}$.</p>
+<p>Note: $\Phi = \phi^{\hat{}},\phi = \Phi^{\hat{}}$.</p>
+<h3 id="李代数-se-3"><a href="#李代数-se-3" class="headerlink" title="李代数$se(3)$"></a>李代数$se(3)$</h3><p>$se(3) = \left\{<br>    \xi = \begin{bmatrix}<br>    \rho\\<br>    \phi<br>    \end{bmatrix} \in \mathbb{R}^6,\rho \in \mathbb{R}^3,\phi \in so(3),\xi ^{\hat{}} = \begin{bmatrix}<br>    \phi^{\hat{}}&amp;\rho\\<br>    0&amp;0<br>    \end{bmatrix}<br>    \right\}$</p>
 <h2 id="指数与对数映射"><a href="#指数与对数映射" class="headerlink" title="指数与对数映射"></a>指数与对数映射</h2><p>之前引出李代数中推导的$R(t) = exp(\phi_0t)$,R是李群SO(3)，而$\phi$是李代数so(3).他们之间是有一一对应的关系的。恩，从上面的推导中并不能保证R就是$\phi$的exp映射，但是实际上就是这样做的。</p>
 <p>但是如何对一个$\phi$进行指数映射？映射还需转换为$\Phi$.对于一个矩阵，我们是没法进行exp运算的。因此我们使用泰勒展开：</p>
 <script type="math/tex; mode=display">
 exp(A) = \sum_{n=0}^\infty \frac{1}{n!}A^n</script><p>同样上述展开也没那么容易进行，好在还有一些别的方法。</p>
 <p>任何一个向量，我们都可以分解成方向和长度，也就是$\theta \mathbf{a}$.其中$\mathbf{a}$为单位向量。</p>
 <p>然后，我们可以验证的是：</p>
-<p>$\mathbf{a}^{\^{}}\mathbf{a}^{\^{}} = \mathbf{aa}^T -I$</p>
-<p>$\mathbf{a}^{\^{}}\mathbf{a}^{\^{}}\mathbf{a}^{\^{}} = -\mathbf{a}^{\^{}}$</p>
-<p>因为我们$\Phi = \phi^{\^{}}$,所以上式提供了很好的办法来解决exp问题。经过推导，我们可以得到：</p>
+<p>$\mathbf{a}^{\hat{}}\mathbf{a}^{\hat{}} = \mathbf{aa}^T -I$</p>
+<p>$\mathbf{a}^{\hat{}}\mathbf{a}^{\hat{}}\mathbf{a}^{\hat{}} = -\mathbf{a}^{\hat{}}$</p>
+<p>因为我们$\Phi = \phi^{\hat{}}$,所以上式提供了很好的办法来解决exp问题。经过推导，我们可以得到：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-exp(\phi^{\^{}}) &= exp(\theta \mathbf{a}^T) = \sum_{n=0}^\infty \frac {1} {n!} (\theta \mathbf{a}^{\^{}})^n\\
-&=\cos \theta I + (1 - \cos \theta)\mathbf{aa}^T + \sin \theta \mathbf{a}^{\^{}}
+exp(\phi^{\hat{}}) &= exp(\theta \mathbf{a}^T) = \sum_{n=0}^\infty \frac {1} {n!} (\theta \mathbf{a}^{\hat{}})^n\\
+&=\cos \theta I + (1 - \cos \theta)\mathbf{aa}^T + \sin \theta \mathbf{a}^{\hat{}}
 \end{aligned}</script><p>很神奇的事情，上面竟然就是罗德里克斯公式（推导过程实际上不复杂，省略掉了）。</p>
 <p>对应的还有一个对数映射：</p>
-<p>$\phi$ = \ln(R)^{\^{}} = \left (\sum_{n=0}^\infty \frac{(-1)^n}{n+1}(R-I)^{n+1} \right)$</p>
+<p>$\phi$ = \ln(R)^{\hat{}} = \left (\sum_{n=0}^\infty \frac{(-1)^n}{n+1}(R-I)^{n+1} \right)$</p>
 <p>当然，既然我们已经知道罗德里克斯公式了，就不用上式这么复杂的式子去求对数映射了。</p>
 <p>旋转角，和旋转矩阵不是一一对应的，因为旋转矩阵唯一的情况下，旋转角可能有多个（角度多了$2\pi$）。这意味着指数映射是满射的。如果角度限制到$[-\pi,\pi ]$，那么李群和李代数元素就是一一对映的了。</p>
 <p>同样，我们也可以得到$SE(3)$与$se(3)$的指数映射和对数映射:</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-exp(\xi^{\^{}}) &= \begin{bmatrix}
-\sum_{n=0}^\infty \frac{1}{n!}(\phi ^{\^{}})^n& \sum_{n=0}^\infty \frac{1}{(n+1)!}(\phi^{\^{}})^n \rho\\
+exp(\xi^{\hat{}}) &= \begin{bmatrix}
+\sum_{n=0}^\infty \frac{1}{n!}(\phi ^{\hat{}})^n& \sum_{n=0}^\infty \frac{1}{(n+1)!}(\phi^{\hat{}})^n \rho\\
 0&1
 \end{bmatrix}
 & \triangleq \begin{bmatrix}
 R&J\rho\\
 0&1
 \end{bmatrix} = T
-\end{aligned}</script><p>上式中$J = \frac{\sin \theta}{\theta}I + \left(1 - \frac {\sin\theta}{\theta}\right)\mathbf{aa}^T + \frac{1 - \cos \theta}{\theta} \mathbf{a}^{\^{}}$</p>
+\end{aligned}</script><p>上式中$J = \frac{\sin \theta}{\theta}I + \left(1 - \frac {\sin\theta}{\theta}\right)\mathbf{aa}^T + \frac{1 - \cos \theta}{\theta} \mathbf{a}^{\hat{}}$</p>
 <p>它的对数映射，右上角与之前一样，而这里的$t = J\rho$,通过$\phi$可以计算出来J，从而解线性方程得到$\rho$.</p>
 <p>J为雅克比矩阵。</p>
 <h2 id="李代数的求导与扰动模型"><a href="#李代数的求导与扰动模型" class="headerlink" title="李代数的求导与扰动模型"></a>李代数的求导与扰动模型</h2><p>之所以要学习李群和李代数，是因为我们的SO(3)和SE(3)都是没有定义加法的。所以无法求导，对于优化非常难办。因此我们想做的是能否将李群和李代数上对应关系运用到求导中，把对李群的求导，转化为对李代数的求导。</p>
@@ -536,40 +536,42 @@ R&J\rho\\
 <h3 id="BCH公式"><a href="#BCH公式" class="headerlink" title="BCH公式"></a>BCH公式</h3><p>有一个BCH公式，它是对于矩阵来说的以及李群李代数相关的指数相乘展开：</p>
 <p>$<br>\ln(exp(A)exp(B)) \approx A+B+\frac 1 2 [A,B ]+\frac 1 {12} [A, [A ,B]]+…<br>$</p>
 <p>可以看到，在数学上，它会有这么多的余项存在的。不过我们做近似的估计。如果$\phi_1$或者$\phi_2$有一个量是小量，我们可以忽略其二次项。直接考虑到李代数的转换：</p>
-<p>$<br>\ln(exp(\phi_1^{\^{}})exp(\phi_2^{\^{}}))^{\^{}} \approx<br>\left \{\begin{matrix}<br>J_l(\phi_2)^{-1}\phi_1 +\phi_2&amp;\phi_1为小量\\<br>J_r(\phi_1)^{-1}\phi_2 +\phi_1&amp;\phi_2为小量\\<br>\end{matrix}<br>\right .<br>$</p>
+<p>$<br>\ln(exp(\phi_1^{\hat{}})exp(\phi_2^{\hat{}}))^{\hat{}} \approx<br>\left \{\begin{matrix}<br>J_l(\phi_2)^{-1}\phi_1 +\phi_2&amp;\phi_1为小量\\<br>J_r(\phi_1)^{-1}\phi_2 +\phi_1&amp;\phi_2为小量\\<br>\end{matrix}<br>\right .<br>$</p>
 <p>既然导数模型左或者右加上一个小量，上式中，第一个对应的是$\phi_2$为R对应的李代数，而$\phi_1$为小量，对应到李群，就是R左乘一个小量，第二个式子对应的就是右乘一个小量了。我们后面规定使用为左乘，实际上右乘的J和左乘也相差不多。</p>
 <script type="math/tex; mode=display">
-J_l = J = \frac {\sin\theta}{\theta} I + (1 - \frac {\sin \theta}{\theta})\mathbf{aa}^T + \frac{1 - \cos \theta}{\theta} \mathbf{a}^{\^{}}</script><script type="math/tex; mode=display">
-J_l^{-1} = \frac{\theta}{2} \cot \frac{\theta}{2}I + (1 - \frac{\theta}{2}\cot\frac{\theta}{2})\mathbf{aa}^T - \frac{\theta}{2}\mathbf{a}^{\^{}}</script><p>右乘的雅科比矩阵：$J_r (\phi) = J_l(-\phi)$.</p>
-<p>也就是：$\exp(\Delta \phi ^{\^{}})\exp(\phi^{\^{}}) \approx \exp ((\phi + J_l^{-1}(\phi)\Delta \phi)^{\^{}})$.</p>
+J_l = J = \frac {\sin\theta}{\theta} I + (1 - \frac {\sin \theta}{\theta})\mathbf{aa}^T + \frac{1 - \cos \theta}{\theta} \mathbf{a}^{\hat{}}</script><script type="math/tex; mode=display">
+J_l^{-1} = \frac{\theta}{2} \cot \frac{\theta}{2}I + (1 - \frac{\theta}{2}\cot\frac{\theta}{2})\mathbf{aa}^T - \frac{\theta}{2}\mathbf{a}^{\hat{}}</script><p>右乘的雅科比矩阵：$J_r (\phi) = J_l(-\phi)$.</p>
+<p>也就是：$\exp(\Delta \phi ^{\hat{}})\exp(\phi^{\hat{}}) \approx \exp ((\phi + J_l^{-1}(\phi)\Delta \phi)^{\hat{}})$.</p>
 <p>同理，如果我们在李代数上进行加法：</p>
 <script type="math/tex; mode=display">
-\exp((\phi+\Delta \phi)^{\^{}}) = \exp((J\Delta \phi)^{\^{}})\exp(\phi^{\^{}})</script><p>上述都是左乘模型。</p>
+\exp((\phi+\Delta \phi)^{\hat{}}) = \exp((J\Delta \phi)^{\hat{}})\exp(\phi^{\hat{}})</script><p>上述都是左乘模型。</p>
 <p>同样的，对于SE(3)也有类似的BCH近似公式：</p>
 <script type="math/tex; mode=display">
-\exp(\Delta \xi ^{\^{}}) \exp(\xi^{\^{}}) \approx \exp((\mathcal{J}_l^{-1}\Delta \xi + \xi)^{\^{}}),\\
-\exp(\xi^{\^{}})\exp(\Delta \xi ^{\^{}})  \approx \exp((\mathcal{J}_r^{-1}\Delta \xi + \xi)^{\^{}}).</script><p>$\mathcal{J}_l$的形式比较复杂，我们也用不上，就不提了。</p>
+\exp(\Delta \xi ^{\hat{}}) \exp(\xi^{\hat{}}) \approx \exp((\mathcal{J}_l^{-1}\Delta \xi + \xi)^{\hat{}}),\\
+\exp(\xi^{\hat{}})\exp(\Delta \xi ^{\hat{}})  \approx \exp((\mathcal{J}_r^{-1}\Delta \xi + \xi)^{\hat{}}).</script><p>$\mathcal{J}_l$的形式比较复杂，我们也用不上，就不提了。</p>
 <h3 id="so-3-求导"><a href="#so-3-求导" class="headerlink" title="so(3)求导"></a>so(3)求导</h3><p>我们想要实现对旋转矩阵的求导，由于旋转矩阵是乘法定义的，所以直接在SO(3)上无法定义出来导数。因此要转换到对应的李代数上来求得导数。</p>
 <p>为了得到so(3)上的导数，有两种办法。第一种，是通过so(3)来实现，另一种是给SO(3)左乘一个矩阵来实现。</p>
 <h4 id="导数模型"><a href="#导数模型" class="headerlink" title="导数模型"></a>导数模型</h4><p>根据导数的定义：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\frac{\partial (\exp(\phi^{\^{}})p)} &= \lim_{\delta \phi \rightarrow 0} \frac{\exp((\phi + \delta \phi)^{\^{}})p - exp(\phi^{\^{}})p} {\delta \phi}\\
-&\approx -(Rp)^{\^{}} J_l
+\frac{\partial (\exp(\phi^{\hat{}})p)} &= \lim_{\delta \phi \rightarrow 0} \frac{\exp((\phi + \delta \phi)^{\hat{}})p - exp(\phi^{\hat{}})p} {\delta \phi}\\
+&\approx -(Rp)^{\hat{}} J_l
 \end{aligned}</script><p>这里有形式比较复杂的$J_l$,我们不想计算它。所以看看扰动模型。</p>
-<h4 id="扰动模型"><a href="#扰动模型" class="headerlink" title="扰动模型"></a>扰动模型</h4><p>扰动模型是在李群上左乘一个很小的矩阵$\Delta R$。通过扰动模型得到的导数为$-(Rp)^{\^{}}$.</p>
+<h4 id="扰动模型"><a href="#扰动模型" class="headerlink" title="扰动模型"></a>扰动模型</h4><p>扰动模型是在李群上左乘一个很小的矩阵$\Delta R$。通过扰动模型得到的导数为$-(Rp)^{\hat{}}$.</p>
 <p>可以看到扰动模型的比导数模型得到的结果更加简便一些。因此扰动模型相对于导数模型来说更加的实用。</p>
 <h3 id="se-3-求导"><a href="#se-3-求导" class="headerlink" title="se(3)求导"></a>se(3)求导</h3><p>对于se(3)的求导，我们直接给出扰动模型：</p>
 <script type="math/tex; mode=display">
-\frac{\partial (Tp)}{\partial \delta \xi} = \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
-\delta \phi^{\^{}}(Rp+t) + \delta p\\
+\begin{aligned}
+\frac{\partial (Tp)}{\partial \delta \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
+\delta \phi^{\hat{}}(Rp+t) + \delta p\\
 0
 \end{bmatrix}}{\delta \xi}\\
 &= \begin{bmatrix}
-I&-(Rp+t)^{\^{}}\\
+I&-(Rp+t)^{\hat{}}\\
 0&0
 \end{bmatrix}\\
-&\triangleq (Tp)^{\bigodot}</script><p>如果没有李群和李代数的提出，求导就没有理论依据了。而因为有了李群和李代数这种映射关系，我们可以通过将李群用李代数来表示，而李代数是可以进行求导的。从而实现对旋转矩阵的求导。</p>
+&\triangleq (Tp)^{\bigodot}
+\end{aligned}</script><p>如果没有李群和李代数的提出，求导就没有理论依据了。而因为有了李群和李代数这种映射关系，我们可以通过将李群用李代数来表示，而李代数是可以进行求导的。从而实现对旋转矩阵的求导。</p>
 <h2 id="Sophus库"><a href="#Sophus库" class="headerlink" title="Sophus库"></a>Sophus库</h2><p>李群李代数听得人头大。不过，我们不用自己去完成这些东西。对于李群李代数支持比较好的库是sophus，我们就使用这个库来实现slam中李群李代数需要的应用。</p>
 <p>sophus是eigen的一个扩展，它在eigen的基础上实现了一些李群李代数的操作，没有任何别的依赖项。</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cmath&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>; </span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Eigen/Core&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Eigen/Geometry&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 李群李代数 库 </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"sophus/so3.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"sophus/se3.h"</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span>** argv )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"> <span class="comment">/*******************************************/</span></span><br><span class="line">  <span class="comment">// 旋转矩阵群/////特殊正交群　　　仅有　旋转没有平移</span></span><br><span class="line">    <span class="comment">// 沿Z轴转90度的旋转矩阵</span></span><br><span class="line">    <span class="comment">// 　　　　　　　　　　　旋转向量　　角度　　轴　　　　罗德里格公式进行转换为旋转矩阵　　　</span></span><br><span class="line">    Eigen::Matrix3d R = Eigen::AngleAxisd(M_PI/<span class="number">2</span>, Eigen::Vector3d(<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>)).toRotationMatrix();</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"RotationMatrix R: \n"</span>&lt;&lt;R&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/***李群*****/</span></span><br><span class="line">    Sophus::<span class="function">SO3 <span class="title">SO3_R</span><span class="params">(R)</span></span>;               <span class="comment">// Sophus::SO(3)可以直接从旋转矩阵构造</span></span><br><span class="line">    Sophus::<span class="function">SO3 <span class="title">SO3_v</span><span class="params">( <span class="number">0</span>, <span class="number">0</span>, M_PI/<span class="number">2</span> )</span></span>;  <span class="comment">// 亦可从旋转向量构造  这里注意，不是旋转向量的三个坐标值，有点像欧拉角构造。</span></span><br><span class="line">    Eigen::<span class="function">Quaterniond <span class="title">q</span><span class="params">(R)</span></span>;            <span class="comment">// 或者四元数(从旋转矩阵构造)</span></span><br><span class="line">    Sophus::<span class="function">SO3 <span class="title">SO3_q</span><span class="params">( q )</span></span>;</span><br><span class="line">    <span class="comment">// 上述表达方式都是等价的</span></span><br><span class="line">    <span class="comment">// 输出SO(3)时，以so(3)形式输出</span></span><br><span class="line">    <span class="comment">//从输出的形式可以看出，虽然SO3是李群，是旋转矩阵，但是输出形式还是向量（被转化成李代数输出）。</span></span><br><span class="line">    <span class="comment">// 重载了 &lt;&lt; 运算符  out_str &lt;&lt; so3.log().transpose() &lt;&lt; std::endl;  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SO(3) from matrix: "</span>&lt;&lt;SO3_R&lt;&lt;<span class="built_in">endl</span>;  <span class="comment">//SO(3) from matrix:      0      0 1.5708  </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SO(3) from vector: "</span>&lt;&lt;SO3_v&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SO(3) from quaternion :"</span>&lt;&lt;SO3_q&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/****李代数*****/</span></span><br><span class="line">    <span class="comment">// 使用对数映射获得它的李代数</span></span><br><span class="line">    <span class="comment">// 所以，李代数 so3的本质就是个三维向量，直接Eigen::Vector3d定义。</span></span><br><span class="line">    Eigen::Vector3d so3 = SO3_R.<span class="built_in">log</span>();</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"so3 = "</span>&lt;&lt;so3.transpose()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// hat 为向量 到反对称矩阵  相当于　^　运算。</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"so3 hat=\n"</span>&lt;&lt;Sophus::SO3::hat(so3)&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// 相对的，vee为 反对称矩阵 到 向量  相当于下尖尖运算 </span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"so3 hat vee= "</span>&lt;&lt;Sophus::SO3::vee( Sophus::SO3::hat(so3) ).transpose()&lt;&lt;<span class="built_in">endl</span>; <span class="comment">// transpose纯粹是为了输出美观一些</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/****李代数求导　更新*****/</span></span><br><span class="line">    <span class="comment">// 增量扰动模型的更新</span></span><br><span class="line">    Eigen::<span class="function">Vector3d <span class="title">update_so3</span><span class="params">(<span class="number">1e-4</span>, <span class="number">0</span>, <span class="number">0</span>)</span></span>; <span class="comment">//假设更新量为这么多</span></span><br><span class="line">    Sophus::SO3 SO3_updated = Sophus::SO3::<span class="built_in">exp</span>(update_so3)*SO3_R;<span class="comment">// 增量指数映射×原李代数</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SO3 updated = "</span>&lt;&lt;SO3_updated&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">/********************萌萌的分割线*****************************/</span></span><br><span class="line">    <span class="comment">/************特殊欧式群　变换矩阵群　有旋转有平移*********************/</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"************我是分割线*************"</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// 李群 对SE(3)操作大同小异</span></span><br><span class="line">    Eigen::<span class="function">Vector3d <span class="title">t</span><span class="params">(<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>)</span></span>;           <span class="comment">// 沿X轴平移1</span></span><br><span class="line">    Sophus::<span class="function">SE3 <span class="title">SE3_Rt</span><span class="params">(R, t)</span></span>;           <span class="comment">// 从R,t构造SE(3)</span></span><br><span class="line">    Sophus::<span class="function">SE3 <span class="title">SE3_qt</span><span class="params">(q,t)</span></span>;            <span class="comment">// 从q,t构造SE(3)</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SE3 from R,t= "</span>&lt;&lt;<span class="built_in">endl</span>&lt;&lt;SE3_Rt&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SE3 from q,t= "</span>&lt;&lt;<span class="built_in">endl</span>&lt;&lt;SE3_qt&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// 李代数se(3) 是一个六维向量，方便起见先typedef一下</span></span><br><span class="line">    <span class="keyword">typedef</span> Eigen::Matrix&lt;<span class="keyword">double</span>,<span class="number">6</span>,<span class="number">1</span>&gt; Vector6d;<span class="comment">// Vector6d指代　Eigen::Matrix&lt;double,6,1&gt;</span></span><br><span class="line">    Vector6d se3 = SE3_Rt.<span class="built_in">log</span>();</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"se3 = "</span>&lt;&lt;se3.transpose()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="comment">// 观察输出，会发现在Sophus中，se(3)的平移在前，旋转在后.</span></span><br><span class="line">    <span class="comment">// 同样的，有hat和vee两个算符</span></span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"se3 hat = "</span>&lt;&lt;<span class="built_in">endl</span>&lt;&lt;Sophus::SE3::hat(se3)&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"se3 hat vee = "</span>&lt;&lt;Sophus::SE3::vee( Sophus::SE3::hat(se3) ).transpose()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 最后，演示一下更新</span></span><br><span class="line">    Vector6d update_se3; <span class="comment">//更新量</span></span><br><span class="line">    update_se3.setZero();</span><br><span class="line">    update_se3(<span class="number">0</span>,<span class="number">0</span>) = <span class="number">1e-4</span>d;</span><br><span class="line">    Sophus::SE3 SE3_updated = Sophus::SE3::<span class="built_in">exp</span>(update_se3)*SE3_Rt;</span><br><span class="line">    <span class="built_in">cout</span>&lt;&lt;<span class="string">"SE3 updated = "</span>&lt;&lt;<span class="built_in">endl</span>&lt;&lt;SE3_updated.matrix()&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
