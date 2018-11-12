@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="在我们的生活中，其实大部分使用的都是soft-margin SVM，很少会有人真正去使用hard-margin，因为我们无法避免噪声。现在想想，能否将soft-margin svm与我们之前的losgistic regress结合起来，会得到什么样的学习算法？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-10T07:41:45.992Z">
+<meta property="og:updated_time" content="2018-11-11T12:49:51.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习——Kernel Logistic Regression">
 <meta name="twitter:description" content="在我们的生活中，其实大部分使用的都是soft-margin SVM，很少会有人真正去使用hard-margin，因为我们无法避免噪声。现在想想，能否将soft-margin svm与我们之前的losgistic regress结合起来，会得到什么样的学习算法？">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-10 15:41:45" itemprop="dateModified" datetime="2018-11-10T15:41:45+08:00">2018-11-10</time>
+                <time title="更新于：2018-11-11 20:49:51" itemprop="dateModified" datetime="2018-11-11T20:49:51+08:00">2018-11-11</time>
               
             
           </span>
@@ -527,7 +527,7 @@ W = \sum_{n=1}^N \alpha_n y_nX_n</script><p>同样的，在PLA，Logistic Regres
 <script type="math/tex; mode=display">
 min_{W} \frac \lambda N \sum_{n=1}^N\sum_{m=1}^N \beta_n\beta_m Z_n^TZ_m + \frac 1 N \sum_{n=1}^N \log \left(1 + \exp\left(-y_n \sum_{m=1}^N \beta_m Z_m Z_n \right) \right)</script><p>我们可以轻易将上式中的$Z_n^TZ_m$换成$k(x_n,x_m)$.从而实现在z空间上logistic regression的最优解。</p>
 <p>从另一方面来说，$ \sum_{n}^N\sum_{m}^N \beta_n\beta_m k(x_n,_m) = \beta ^T K \beta$,可以将它看成一种特殊的正则化。所以实际上我们可以将KLR看成关于转换后的数据在$\beta$上的线性模型（原来是关于W的线性模型）。</p>
-<p>一般来说$beta_n$都不为0,这个和SVM中的$\alpha_n$不一样。</p>
+<p>一般来说$beta_n$都不为0,所以这个和SVM中的$\alpha_n$不一样。</p>
 
       
     </div>
