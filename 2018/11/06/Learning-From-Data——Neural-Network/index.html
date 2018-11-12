@@ -117,7 +117,7 @@
 <meta property="og:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Artificial_neural_network.svg/560px-Artificial_neural_network.svg.png">
-<meta property="og:updated_time" content="2018-11-12T05:54:23.649Z">
+<meta property="og:updated_time" content="2018-11-12T06:23:44.366Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Neural Network">
 <meta name="twitter:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-12 13:54:23" itemprop="dateModified" datetime="2018-11-12T13:54:23+08:00">2018-11-12</time>
+                <time title="更新于：2018-11-12 14:23:44" itemprop="dateModified" datetime="2018-11-12T14:23:44+08:00">2018-11-12</time>
               
             
           </span>
@@ -538,7 +538,8 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 &= (1-y)\frac{1}{1 - g(\Theta^{(L)}a^{(L-1)})} g'(\Theta^{(L)}a^{(L-1)}))(a^{(L-1)})^T - y \frac {1}{g(\Theta^{(L)}a^{(L-1)}} g'(\Theta^{(L)}a^{(L-1)}(a^{(L-1)})^T\\
 &= (1-y)\sigma(\Theta^{(L)}a^{(L-1)})(a^{(L-1)})^T - y(1 - \sigma(\Theta^{(L)}a^{(L-1)})) (a^{(L-1)})^T\\
 &= (1 - y)a^{(L)} (a^{(L-1)})^T - y (1 - a^{(L)})(a^{(L-1)})^T\\
-&= (a^{(L)} - y)(a^{(L-1)})^T</script><p>上述推导过程中，g为sigmoid函数，因此$g’ = \sigma’ = \sigma(1 - \sigma)$.</p>
+&= (a^{(L)} - y)(a^{(L-1)})^T
+\end{aligned}</script><p>上述推导过程中，g为sigmoid函数，因此$g’ = \sigma’ = \sigma(1 - \sigma)$.</p>
 <p>$a^{(i)}$我们都是可以通过前向传播得到的。</p>
 <p>然后我们想要计算的是$\Theta{(L-1)},…,\Theta{(1)}$这些的梯度。但是它们是和$L(\Theta)$是没有直接的关系的。不过，在微积分中是有链式求导法则的：</p>
 <script type="math/tex; mode=display">
@@ -546,12 +547,14 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 \frac{\partial L}{\partial \Theta^{(L-1)}} &= \frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{\partial \Theta^{(L-1)}}\\
  &=\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{\Theta^{(L-1)}}\\
 &=\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{\Theta^{(L-1)}}\\
-&=\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)}}
+&=\underbrace{\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}}}_{a^{(L-1)} - y}\underbrace{ \frac{z^{(L)}}{a^{(L-1)}}}_{\Theta^{(L)}}\underbrace{\frac{a^{(L-1)}}{z^{(L-1)}}}_{g'(z^{(L-1)})}\underbrace{\frac{z^{(L-1)}}{\Theta^{(L-1)}}}_{a^{(L-2)}}
 \end{aligned}</script><p>这其中，一个个的导数都是可以计算出来的。因此我们就得到了最终的梯度：</p>
 <script type="math/tex; mode=display">
-\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)} = (a^{(L)} - y)W^{(L)}g'(z^{(L-1)})a^{(L-2)}</script><p>不过需要注意的是，上面得到的导数你会发现矩阵的维度可能不合适。因此这个形式必须要重新组织一下：</p>
+\begin{aligned}
+\frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)}} = (a^{(L)} - y)W^{(L)}g'(z^{(L-1)})a^{(L-2)}
+\end{aligned}</script><p>不过需要注意的是，上面得到的导数你会发现矩阵的维度可能不合适。因此这个形式必须要重新组织一下：</p>
 <script type="math/tex; mode=display">
-\frac{\partial L}{\partial \Theta^{(L-1)}} = \Theta^{(L)}^T g'(z^{(L-1)})(a^{(L)}-y)(a^{(L-2)})^T</script><p>如果想要计算更前面的参数矩阵的导数，这个链式法则会越来越长。</p>
+\frac{\partial L}{\partial \Theta^{(L-1)}}=(\Theta^{(L)})^T .*g'(z^{(L-1)})(a^{(L)}-y)(a^{(L-2)})^T</script><p>如果想要计算更前面的参数矩阵的导数，这个链式法则会越来越长。</p>
 <p>为了更好的计算各个层的梯度，我们新定义一个符号:</p>
 <script type="math/tex; mode=display">
 \sigma^{(l)} = \nabla_{z^{(l)}}L(y,y')</script><ul>
@@ -570,6 +573,9 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 <p>使用梯度下降,或者SGD（更加常用），最终求得合适的$\Theta$.</p>
 <p>可以看到的$sigma^{(l)}$的计算，需要的是后向计算，所以这个叫后项传播。</p>
 <p>上面的推导过程都是以一个training example的，对于多个样本就需要多次计算。不过一般来说，我们经常使用的是SGD算法，或者mini-batch gd算法，整个gd的计算对于一般神经网络来说需要太大的计算量。</p>
+<p>参考文献：</p>
+<p><a href="http://cs229.stanford.edu/notes/cs229-notes-deep_learning.pdf" target="_blank" rel="noopener">css229:deep learning</a></p>
+<p><a href="http://cs229.stanford.edu/notes/cs229-notes-backprop.pdf" target="_blank" rel="noopener">css229:back-prop</a></p>
 
       
     </div>
