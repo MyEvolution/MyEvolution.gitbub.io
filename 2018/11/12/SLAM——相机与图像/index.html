@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0516.JPG">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0519.PNG">
-<meta property="og:updated_time" content="2018-11-13T11:38:20.686Z">
+<meta property="og:updated_time" content="2018-11-13T11:49:16.676Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——相机与图像">
 <meta name="twitter:description" content="SLAM建模的过程中，相机是很重要的一个部分。因此这一讲主要探讨相机的成像模型。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-13 19:38:20" itemprop="dateModified" datetime="2018-11-13T19:38:20+08:00">2018-11-13</time>
+                <time title="更新于：2018-11-13 19:49:16" itemprop="dateModified" datetime="2018-11-13T19:49:16+08:00">2018-11-13</time>
               
             
           </span>
@@ -495,8 +495,9 @@ f_x&0&c_x\\
 \end{pmatrix}\begin{pmatrix}
 X\\
 Y\\
-Z \triangleq \frac 1 Z K P
-\end{pmatrix}</script><p>一般来说习惯将Z移到右侧。上式中中间量为相机内参，一般来说在出厂之后就固定了。不知道的话也可以用算法进行标定。</p>
+Z 
+\end{pmatrix}
+\triangleq \frac 1 Z K P</script><p>一般来说习惯将Z移到右侧。上式中中间量为相机内参，一般来说在出厂之后就固定了。不知道的话也可以用算法进行标定。</p>
 <p>既然有内参，对应的也就有一个外参。我们上面的介绍都是以相机坐标为基础的，而相机坐标实际上是由世界坐标转换的。从世界坐标到相机坐标的转换，之前图形学中介绍，需要旋转R和平移t操作，而R和t就够成来相机的外参，也叫相机的位姿。假如某个点在世界坐标下为$P_w$,则：</p>
 <script type="math/tex; mode=display">
 ZP_{uv} = Z\begin{bmatrix}
