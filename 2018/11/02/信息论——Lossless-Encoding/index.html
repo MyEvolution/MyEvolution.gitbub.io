@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-12T05:55:25.271Z">
+<meta property="og:updated_time" content="2018-11-13T05:07:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Lossless Encoding">
 <meta name="twitter:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-12 13:55:25" itemprop="dateModified" datetime="2018-11-12T13:55:25+08:00">2018-11-12</time>
+                <time title="更新于：2018-11-13 13:07:14" itemprop="dateModified" datetime="2018-11-13T13:07:14+08:00">2018-11-13</time>
               
             
           </span>
@@ -526,6 +526,21 @@ E(l(X^n)) &= \sum_{x \in \mathcal{X}} p(x) l(x)\\
 \end{aligned}</script><p>其中 $\epsilon’ = \epsilon + \epsilon \log \vert X \vert X + \frac {2\epsilon}{n}$,可以看到的是$n \rightarrow \infty,epsilon’ \rightarrow 0$.</p>
 <p>上面证明过程中值得注意的事情是，为什么要加2？第一个加一是为了处理log后为非整数的情况，第二个+1是留一个比特位置来区分典型序列与非典型序列的编码。</p>
 <p>但是，定长编码定理是无法应用到工业界的。因为它需要对序列长度为n来进行编码，由于精确度的要求，这个n往往很大（上亿），这在现实中是无法实现的。</p>
+<p>顺便我们证明一下，平均每个字符编码所需要的bit数一定是大于等于$H(X)$.</p>
+<p>假设$X^n \rightarrow M \in C = \underbrace{\{1,2,3,…,2^{nR}\}}_{need ~nR~ bits} \rightarrow \hat{X}^n$.</p>
+<p>意思就是，M为X^n编码后的结果，它一定是属于后面的某个数字。</p>
+<p>如果我们想要$P_e = 0$,也就是无失真编码，那么根据Fano不等式：</p>
+<script type="math/tex; mode=display">
+H(X^n|M) = 0</script><p>因此：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+nH(X) &= H(X^n)...(Why?)\\
+&=H(X^n) - H(X^n|M)\\
+&=I(X^n,M)\\
+&=H(M) - H(M|X^n)\\
+&\leq H(M) \leq nR
+\end{aligned}</script><p>所以可以得到：$R\ge H(X)$.</p>
+<p>可见，熵是平均码长的下界。</p>
 <h2 id="码的类型"><a href="#码的类型" class="headerlink" title="码的类型"></a>码的类型</h2><h3 id="非奇异码"><a href="#非奇异码" class="headerlink" title="非奇异码"></a>非奇异码</h3><p>若一个码C可以将不同的x映射为不同的$D^*$中 的序列，即：</p>
 <script type="math/tex; mode=display">
 x \ne x' \rightarrow C(x) \ne C(x')</script><p>则该码为非奇异码。</p>
@@ -690,7 +705,7 @@ C(x_1,x_2,...,x_n) = C(x_1)C(x_2)...C(x_n)</script><p>则该码为唯一可译�
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
