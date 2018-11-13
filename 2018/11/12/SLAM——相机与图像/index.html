@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0516.JPG">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0519.PNG">
-<meta property="og:updated_time" content="2018-11-13T11:33:38.000Z">
+<meta property="og:updated_time" content="2018-11-13T11:36:38.301Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——相机与图像">
 <meta name="twitter:description" content="SLAM建模的过程中，相机是很重要的一个部分。因此这一讲主要探讨相机的成像模型。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-13 19:33:38" itemprop="dateModified" datetime="2018-11-13T19:33:38+08:00">2018-11-13</time>
+                <time title="更新于：2018-11-13 19:36:38" itemprop="dateModified" datetime="2018-11-13T19:36:38+08:00">2018-11-13</time>
               
             
           </span>
@@ -530,7 +530,7 @@ y_{distorted} = y(1+k_1r^2 + k_2r^4 +k_3r^6)+p_1(r^2+2y^2) + 2p_2xy
 <p>为了说明白双目相机的成像模型，我们需要将这个模型画出来，需要注意的是，我们像之前一样将成像平面放到光心前面：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0516.JPG" alt=""><br>双目相机两个光心的距离称为基线b，也就是$O_l,O_r$之间的距离。$u_r,u_l$分别为各自成像平面上的坐标，需要注意的是$u_l$为负数。</p>
 <p>考虑一个空间点P，它在左眼和右眼各成一个像，记做$P_l,P_r$.根据相似三角形：</p>
 <script type="math/tex; mode=display">
-\frac{z-f} = \frac{b-u_l+u_r}{b}</script><p>即：</p>
+\frac{z-f}{z} = \frac{b-u_l+u_r}{b}</script><p>即：</p>
 <script type="math/tex; mode=display">
 z = \frac{fb}{u_l - u_r}</script><p>这样就计算出来了距离z。上式中：$u_l - u_r=d$,我们称为视差。可以看到视差越大，则距离越远。实际中上视差最小为1,所以最远的距离就由fb限定了。所以双目相机可以测量的距离是有限的。</p>
 <p>原理简单，但是d不好计算。因为我们需要知道左眼图像的像素出现在右眼图像的哪个位置。因此计算量和精度都会造成问题。</p>
@@ -680,8 +680,6 @@ Y = \frac{u - c_y}{f_y}Z</script><p>而我们做的也正是用上面的过程�
                 <div class="site-state-item site-state-categories">
                   <a href="/categories/index.html">
                     
-                    
-                      
                     
                       
                     
