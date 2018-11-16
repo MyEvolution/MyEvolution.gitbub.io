@@ -117,7 +117,7 @@
 <meta property="og:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Artificial_neural_network.svg/560px-Artificial_neural_network.svg.png">
-<meta property="og:updated_time" content="2018-11-16T13:19:55.000Z">
+<meta property="og:updated_time" content="2018-11-16T13:30:06.835Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Neural Network">
 <meta name="twitter:description" content="这周上的数据学习，主要讲了一些神经网络相关的知识。神经网络是目前最流行的机器学习算法了，甚至由它诞生了一个新的学科：deep learning。因此一篇博客，只能浅浅介绍一些神经网络的基本内容。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-16 21:19:55" itemprop="dateModified" datetime="2018-11-16T21:19:55+08:00">2018-11-16</time>
+                <time title="更新于：2018-11-16 21:30:06" itemprop="dateModified" datetime="2018-11-16T21:30:06+08:00">2018-11-16</time>
               
             
           </span>
@@ -554,7 +554,7 @@ z^{(l)[1 ]} & ... &z^{(l)[m ]}\\
 \frac{\partial L}{a^{(L)}} \frac{a^{(L)}}{z^{(L)}} \frac{z^{(L)}}{a^{(L-1)}}\frac{a^{(L-1)}}{z^{(L-1)}}\frac{z^{(L-1)}}{\Theta^{(L-1)}} = \underbrace{(a^{(L)} - y)}_{s_L\times1}\underbrace{\Theta^{(L)}}_{s_l \times s_{l-1}}\underbrace{g'(z^{(L-1)})}_{s_{l-1} \times 1}\underbrace{a^{(L-2)}}_{s_{l-2} \times 1}
 \end{aligned}</script><p>不过需要注意的是，上面得到的导数你会发现矩阵的维度可能不合适。因此这个形式必须要重新组织一下：</p>
 <script type="math/tex; mode=display">
-\frac{\partial L}{\partial \Theta^{(L-1)}}=\underbrace{(\Theta^{(L)})^T }_{s_{l-1} \times s_{l}}\underbrace{(a^{(L)}-y)}_{s_l \times 1} .* \underbrace{g'(z^{(L-1)})}_{s_{l-1}\times 1}\underbrace{(a^{(L-2)})^T}_{1 \times s_{l-2}}</script><p>如果想要计算更前面的参数矩阵的导数，这个链式法则会越来越长。</p>
+\underbrace{\frac{\partial L}{\partial \Theta^{(L-1)}}}_{s_{l-1} \times s_{l-2}}=\underbrace{(\Theta^{(L)})^T }_{s_{l-1} \times s_{l}}\underbrace{(a^{(L)}-y)}_{s_l \times 1} .* \underbrace{g'(z^{(L-1)})}_{s_{l-1}\times 1}\underbrace{(a^{(L-2)})^T}_{1 \times s_{l-2}}</script><p>如果想要计算更前面的参数矩阵的导数，这个链式法则会越来越长。</p>
 <p>为了更好的计算各个层的梯度，我们新定义一个符号:</p>
 <script type="math/tex; mode=display">
 \sigma^{(l)} = \nabla_{z^{(l)}}L(y,y')</script><ul>
