@@ -116,14 +116,14 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上次lfd的博客讲了神经网络的一些基本内容，包括它的起源，前向传播以及后向传播。实际上，对于一个很重要的部分：activation function，只是简单提到。所以这次着重说一下不同的激活函数之间的区别。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/1.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/sigmoid.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tanh.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/3.png">
-<meta property="og:updated_time" content="2018-11-15T09:22:44.343Z">
+<meta property="og:updated_time" content="2018-11-16T10:05:05.536Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Activation Function">
 <meta name="twitter:description" content="上次lfd的博客讲了神经网络的一些基本内容，包括它的起源，前向传播以及后向传播。实际上，对于一个很重要的部分：activation function，只是简单提到。所以这次着重说一下不同的激活函数之间的区别。">
-<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/1.png">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/sigmoid.png">
 
 
 
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-15 17:22:44" itemprop="dateModified" datetime="2018-11-15T17:22:44+08:00">2018-11-15</time>
+                <time title="更新于：2018-11-16 18:05:05" itemprop="dateModified" datetime="2018-11-16T18:05:05+08:00">2018-11-16</time>
               
             
           </span>
@@ -478,7 +478,7 @@ g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}& (tanh)
 <p>同样，之前博客也说明了，为什么我们一定要在神经网络中使用非线性函数。所以在这里就不多提了。这篇博客，主要就介绍这3个函数的区别以及他们的使用场景。</p>
 <h2 id="sigmoid"><a href="#sigmoid" class="headerlink" title="sigmoid"></a>sigmoid</h2><p>Logistic Regression是一个非常基本的算法。在二元分类时候，它用的非常多。不过很遗憾的是，在neural network中，我们除了输出层几乎不使用这个函数。</p>
 <p>Logistic Function(Sigmoid Function)的图像如下：</p>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/1.png" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/sigmoid.png" alt=""></p>
 <p>它的缺点很明显：</p>
 <ol>
 <li>不是以0为中心的</li>
@@ -488,7 +488,7 @@ g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}& (tanh)
 <p>因为1的存在，使得下一层的输入都是正的，那么下一层的梯度就会受限。此外，饱和区梯度太小，再加上指数运算比较复杂，这些使得sigmoid的梯度下降非常缓慢。</p>
 <p>但是sigmoid函数也有非常大的优势，它一般作为输出层的激活函数，因为它将函数输出控制在0,1之间。实际运用中，除了输出层，几乎不用sigmoid函数。</p>
 <h2 id="tanh"><a href="#tanh" class="headerlink" title="tanh"></a>tanh</h2><p>tanh为双曲正切函数。它的图像如下：</p>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/2.png" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tanh.png" alt=""></p>
 <p>可以看到它和sigmoid函数非常相似，不过它的优点是以0为中心。不过呢它的缺点也比较明显，除了以0为中心，sigmoid有的缺点它都有。不过也因为这点，一般来说它表现的总是会比sigmoid函数更好。所以除了输出层，想要使用sigmoid的地方不如换成tanh函数。</p>
 <h2 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a>ReLU</h2><p>ReLU（Rectified Linear Unit）为线性整流函数，又称为修正线性单元。实际上它是目前最常用的激活函数。<br>它的正半轴没有饱和扼杀梯度的影响，而且运算也非常简单，使得它在神经网络中的收敛速度比其他的激活函数要快很多。它的图像如下：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/3.png" alt=""></p>
@@ -567,6 +567,10 @@ g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}& (tanh)
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/11/16/Learning-From-Data——拟合sin曲线/" rel="prev" title="Learning From Data——拟合sin曲线">
+                Learning From Data——拟合sin曲线 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -637,7 +641,7 @@ g(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}& (tanh)
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
