@@ -120,7 +120,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/loss.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/loss_t.png">
-<meta property="og:updated_time" content="2018-11-16T13:39:25.437Z">
+<meta property="og:updated_time" content="2018-11-16T13:44:52.143Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——拟合sin曲线">
 <meta name="twitter:description" content="这次的作业是用神经网络来拟合sin曲线。通过实践更能感受到ReLU以及sigmoid，tanh激活函数的区别。">
@@ -395,7 +395,7 @@
                 
               
 
-              <time title="创建于：2018-11-16 17:45:44 / 更新于：21:39:25" itemprop="dateCreated datePublished" datetime="2018-11-16T17:45:44+08:00">2018-11-16</time>
+              <time title="创建于：2018-11-16 17:45:44 / 更新于：21:44:52" itemprop="dateCreated datePublished" datetime="2018-11-16T17:45:44+08:00">2018-11-16</time>
             
 
             
@@ -454,7 +454,7 @@
         <p>这次的作业是用神经网络来拟合sin曲线。通过实践更能感受到ReLU以及sigmoid，tanh激活函数的区别。<br><a id="more"></a></p>
 <p>作业中已经将整体框架写好，好让我们能专注于算法部分。比较复杂的部分是向量化，因为自己的博客定义的这个矩阵的形式可能是多样的，但是最后的结果肯定是一致的，以及需要传入的参数如何分配。</p>
 <p>我选择传入的input为$a^{(l)}$以及$a^{(l-1)}$，传入的gran_out为$\sigma^{(l)}$中除去乘$g’(z)$的部分。因为导数部分需要上一层的激活函数来决定。</p>
-<p>在作业中定义W,a的方式和我定义$\Sigma,a$的方式正好相反，这是需要注意的地方。不过，作业中的定义使得对于批量计算矩阵更容易理解。</p>
+<p>在作业中定义W,a的方式和我定义$\Sigma,a$的方式正好相反，这是需要注意的地方。</p>
 <p>这个神经网络包含4层：输入层，全连接层（1×80），ReLU层（80×80），输出层（80×1）。</p>
 <p>最后得到的拟合结果和loss曲线如下：</p>
 <p>purelin:</p>
