@@ -108,23 +108,25 @@
 
 
 
-  <meta name="description" content="Everything is choice.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wlsdzyzl">
-<meta property="og:url" content="http://wlsdzyzl.com/categories/数据学习课程/index.html">
+  <meta name="description" content="上次介绍了香农无损编码定理以及一些不同类别的编码。这次介绍kraft不等式以及huffman编码，并且说明霍夫曼编码的最优性。">
+<meta name="keywords" content="information theory,lossless encoding">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息论——Kraft不等式以及变长编码定理">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/11/14/信息论——Kraft不等式以及变长编码定理/index.html">
 <meta property="og:site_name" content="wlsdzyzl">
-<meta property="og:description" content="Everything is choice.">
+<meta property="og:description" content="上次介绍了香农无损编码定理以及一些不同类别的编码。这次介绍kraft不等式以及huffman编码，并且说明霍夫曼编码的最优性。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-17T13:07:34.941Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wlsdzyzl">
-<meta name="twitter:description" content="Everything is choice.">
+<meta name="twitter:title" content="信息论——Kraft不等式以及变长编码定理">
+<meta name="twitter:description" content="上次介绍了香农无损编码定理以及一些不同类别的编码。这次介绍kraft不等式以及huffman编码，并且说明霍夫曼编码的最优性。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://wlsdzyzl.com/categories/数据学习课程/">
+  <link rel="canonical" href="http://wlsdzyzl.com/2018/11/14/信息论——Kraft不等式以及变长编码定理/">
 
 
 
@@ -134,7 +136,7 @@
   };
 </script>
 
-  <title>分类: 数据学习课程 | wlsdzyzl</title>
+  <title>信息论——Kraft不等式以及变长编码定理 | wlsdzyzl</title>
   
 
 
@@ -183,7 +185,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -248,7 +250,7 @@
         
         
           
-          <li class="menu-item menu-item-categories menu-item-active">
+          <li class="menu-item menu-item-categories">
     <a href="/categories/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
   </li>
@@ -326,242 +328,297 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>数据学习课程<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/11/14/信息论——Kraft不等式以及变长编码定理/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/11/16/Learning-From-Data——拟合sin曲线/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——拟合sin曲线</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">信息论——Kraft不等式以及变长编码定理
+              
+            
+          </h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-16T17:45:44+08:00" content="2018-11-16">
-          11-16
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
 
-    </header>
-  </article>
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2018-11-14 14:32:52" itemprop="dateCreated datePublished" datetime="2018-11-14T14:32:52+08:00">2018-11-14</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2018-11-17 21:07:34" itemprop="dateModified" datetime="2018-11-17T21:07:34+08:00">2018-11-17</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/信息论/" itemprop="url" rel="index"><span itemprop="name">信息论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/14/Learning-From-Data——Activation-Function/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——Activation Function</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-14T21:28:08+08:00" content="2018-11-14">
-          11-14
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
+        <p>上次介绍了香农无损编码定理以及一些不同类别的编码。这次介绍kraft不等式以及huffman编码，并且说明霍夫曼编码的最优性。<br><a id="more"></a></p>
+<p>Kraft不等式为前缀码约束条件。在前缀码中，显然不能使用所有的最短的码字，这样的话前缀码的条件就无法满足。就用二叉树来编码（二进制编码）的时候，如果一个节点被作为码字，则它的子树结点都无法作为码字。</p>
+<h2 id="Kraft不等式"><a href="#Kraft不等式" class="headerlink" title="Kraft不等式"></a>Kraft不等式</h2><p>kraft不等式定义如下：</p>
+<p>任意D-进制码前缀码其码长$l_1,l_2,…,l_m$，满足</p>
+<script type="math/tex; mode=display">
+\sum_{i} D^{-l_i} \leq 1</script><p>反之，如果码长约束满足上述不等式，则必然可以构造出具有此码长的前缀码。 </p>
+<p>Kraft不等式的证明是非常直接的：</p>
+<ul>
+<li>必要性：</li>
+</ul>
+<p>我们依然从D叉树来考虑这个问题。假如码字最长为$l_{max}$.当一个结点被选做码字的时候，假设这个结点的深度为$l_i$，也就是码长为$l_i$.那么因为它的存在，它子树的结点都不能再次作为码字。因此我们就损失了D^{l_{max} - l_i}个叶子结点（注意，这里说的是叶子结点）。</p>
+<p>这棵树的所有叶子结点数目为：$D^{l_max}$.我们最多把所有的叶子结点都给剪掉。</p>
+<p>现在假设一共有m个码字，则：</p>
+<script type="math/tex; mode=display">
+\sum_{i=1}^m D^{l_{max} - l_i} \leq D^{l_{max}}</script><p>两侧同时除以$D^{l_{max}}$,就得到了kraft不等式。</p>
+<ul>
+<li>充分性</li>
+</ul>
+<p>充分性更好证明。我们只要在树上就可以很容易构造出来这样的编码。</p>
+<p>Kraft不等式给出了即时码的充要条件，但是和最优码长无关。</p>
+<h2 id="任意前缀码码长约束"><a href="#任意前缀码码长约束" class="headerlink" title="任意前缀码码长约束"></a>任意前缀码码长约束</h2><p>对随机变量X进行D进制前缀码编码，得到的码长满足：</p>
+<script type="math/tex; mode=display">
+L \ge H_D(X)</script><p>等号当且仅当$D^{-l_i} = p_i$时候成立。这个L为平均码长。</p>
+<p>证明如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L - H_D(X) &= \sum P_i l_i - \sum P_i \log_D \frac 1 {P_i}\\
+&= \sum P_i \log_D D^{l_i} +\sum P_i \log_D P_i\\
+&= \sum P_i \log_D P_i - \sum P_i \log _D D^{-l_i}\\
+&= \sum P_i \log_D \frac{P_i}{D^{-l_i}} ----(1)\\
+\end{aligned}</script><p>也许大家会觉得从（1）可以直接得到:D(P\Vert D^{-l})，然后由互信息大于0从而完成证明。但这样是不严谨的，因为我们无法保证$\sum D^{-l_i} = 1$.</p>
+<p>因此这里需要做一个归一化处理：<br>令：$r_i = \frac{D^{-l_i}}{\Delta}，\Delta = \sum D^{-l_i}$<br>(这个地方真是不容易想到啊，很容易就不严谨了)</p>
+<p>则（1）可以写为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\sum P_i \log_D \frac{P_i}{D^{-l_i}} \\
+&=\sum P_i \log _D \frac{P_i}{r_i}\frac 1 {\Delta}\\
+&=\sum P_i \log_D \frac{P_i}{r_i} - \log_D \Delta \sum P_i\\
+&=D(P\Vert r) + \log \frac 1 \Delta 
+码长
+码长
+码长
+而$D(P\Vert r) + \log \frac 1 \Delta \ge 0$（由对数性质，鉴别信息性质以及Kraft不等式决定）.
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+所以，我们完成了对上述定理的证明。
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/06/Learning-From-Data——Covariance-Matrix-Derivation/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——Covariance Matrix Derivation</span>
-              
-            </a>
-        
-      </h2>
+## 最优前缀码定理（香农第一定理） ##
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-06T15:35:34+08:00" content="2018-11-06">
-          11-06
-        </time>
-      </div>
+该定理描述如下：
 
-    </header>
-  </article>
+对随机变量X进行D进制前缀编码，得到的最优码长满足下列不等式：</script><p>H_D(X) \leq L^* &lt; H_D(X)+1</p>
+<script type="math/tex; mode=display">
 
+左侧是不用证明的，因为上个定理已经证明了。我们主要需要证明的是右侧。
 
-      
-        
+香农通过构造香农码来证明右侧：
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+取$\lceil \log_D \frac 1{P_i} \rceil$为码字长度，这样的编码是满足kraft不等式的：</script><p>\sum D^{-\rceil \log_D \frac 1 {P_i}} \leq \sum D^{-\log_D \frac 1 {P_i}} = \sum P_i = 1</p>
+<script type="math/tex; mode=display">
+因此我们可以根据这个码长来构造出相应的前缀码。
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/11/06/Learning-From-Data——Neural-Network/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——Neural Network</span>
-              
-            </a>
-        
-      </h2>
+我们知道：</script><p>\log _D \frac 1 {P_i} \leq l_i \leq \log_D \frac 1 {P_i}+1</p>
+<script type="math/tex; mode=display">
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-11-06T13:54:51+08:00" content="2018-11-06">
-          11-06
-        </time>
-      </div>
+如果对上述不等式的所有side求期望，得到：</script><p>H_D(X) \leq \sum p_il_i \leq H_D(X) + 1</p>
+<script type="math/tex; mode=display">
 
-    </header>
-  </article>
+这就是香农码。它不一定是最优，因此我们就完成了香农第一定理的证明。
 
+## 分组前缀码 ##
 
-      
-        
+定长编码定理告诉我们，$\epsilon$可以任意小，而变长编码告诉我们，我们付出的代价小于1。能不能让这个代价能保证比1更小呢？这就是分组编码。
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+对于信源X进行分组前缀编码，得到的每消息符号数$L_n^*$满足不等式：</script><p>\frac{H(X_1,X_2,…,X_n)}{n} \leq L_n^* \leq \frac{H(X_1,X_2,…,X_n)}{n}  + \frac 1 n</p>
+<script type="math/tex; mode=display">
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/29/Learning-From-Data——Generative-Learning-Algorithm/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——Generative Learning Algorithm</span>
-              
-            </a>
-        
-      </h2>
+如果信源稳恒，则$L_n^* \rightarrow H(X)$.
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-29T21:19:48+08:00" content="2018-10-29">
-          10-29
-        </time>
-      </div>
+这要求我们对X进行分组，因此会有解码延迟，也需要缓冲区。但是通过这个，可以使得平均码长代价更小。天下没有免费的午餐。
 
-    </header>
-  </article>
+## 编码效率与互信息 ##
 
+最优前缀码的编码与信源的分布密切相关，但是我们不一定能准确知道信源的分布。如果信源分布估计出现偏差，则平均码长就会受到惩罚。
 
-      
-        
+Penalty分析：
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/22/Learning-From-Data——Generalized-Linear-Model/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——Generalized Linear Model</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-22T20:26:26+08:00" content="2018-10-22">
-          10-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/10/16/Learning-From-Data——Softmax-Regression/" itemprop="url">
-              
-                <span itemprop="name">Learning From Data——Softmax Regression</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-10-16T11:43:43+08:00" content="2018-10-16">
-          10-16
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+可以证明，对于服从p(x)信源X进行前缀编码，如果码字长度取$l(x) = \lceil \log \frac 1 {q(x)}\rceil$，则平均码长满足：</script><p>H(p) + D(p\Vert q) \leq E_{p}l(X) &lt; H(p) + D(p\Vert q) +1</p>
+<p>$$</p>
+<p>受到的惩罚中，互信息出来了。</p>
 
       
     </div>
 
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/information-theory/" rel="tag"># information theory</a>
+          
+            <a href="/tags/lossless-encoding/" rel="tag"># lossless encoding</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/14/SLAM——非线性优化/" rel="next" title="SLAM——非线性优化">
+                <i class="fa fa-chevron-left"></i> SLAM——非线性优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/14/Learning-From-Data——Activation-Function/" rel="prev" title="Learning From Data——Activation Function">
+                Learning From Data——Activation Function <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+
+
 
         </div>
         
@@ -582,8 +639,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -761,6 +827,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kraft不等式"><span class="nav-number">1.</span> <span class="nav-text">Kraft不等式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任意前缀码码长约束"><span class="nav-number">2.</span> <span class="nav-text">任意前缀码码长约束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -891,6 +973,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
 
   
 
@@ -1254,6 +1340,30 @@
   
   
 
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
   
 
 
