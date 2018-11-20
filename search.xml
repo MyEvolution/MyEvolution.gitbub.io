@@ -3,6 +3,60 @@
   
     
     <entry>
+      <title>Learning From Data——PCA</title>
+      <link href="/2018/11/19/Learning-From-Data%E2%80%94%E2%80%94PCA/"/>
+      <url>/2018/11/19/Learning-From-Data%E2%80%94%E2%80%94PCA/</url>
+      
+        <content type="html"><![CDATA[<p>上节课除了介绍了K-Means，更重点介绍了另外一个算法，PCA（Principal Component Analysis）。<br><a id="more"></a></p><p>PCA中文应该翻译为主要成分分析。这个翻译是直白的，我们也能很容易知道猜得到这个算法在做什么。</p><p>首先举个例子：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA1.png" alt=""></p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA2.png" alt=""></p><p>从上面看出来，有时候很多特征包含了很多的冗余信息。如拥挤程度和人流密度，就有很大的相关性。</p><p>我们需要消除这样的相关性，并且减少噪声。</p><h2 id="PCA描述"><a href="#PCA描述" class="headerlink" title="PCA描述"></a>PCA描述</h2><p>PCA算法的描述如下：</p><p>给定输入${X_1,X_2,…,X_m}，X_i \in \mathbb{R}$.找到输入的一个线性，正交转换W：$\mathbb{R}^n, \mathbb{R}^k$。W将最大方差方向与新空间的坐标轴对其。</p><p>如下图：左侧图片中，$x_1$与$x_2$是高度相关的，右侧图为转换过后的z，它几乎和水平坐标轴平行。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA3.png" alt=""></p><h2 id="推导PCA"><a href="#推导PCA" class="headerlink" title="推导PCA"></a>推导PCA</h2><p>为了方便PCA的推导，我们首先会对数据进行预处理，也就是对其进行normalize,使得Mean(X) =0,Stdev(X) = 1:</p><script type="math/tex; mode=display">X_i := X_i - Mean(X) \leftarrow recenterX_i := X_i / Stdev(X) \leftarrow scale</script><p>Stdev(X)为标准偏差函数。</p><p>我们希望在输入中找到让各个样本变化最大的方向的主轴u（找到变分单位向量的主轴），如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA7.png" alt=""></p><p>PCA的目标：</p><ol><li>找到互相正交的主要成分$u_1,u_2,…,u_n$，它们之间互不相关。</li><li>大多数X中的变化会被k个主要成分代表了，这里的$k &lt;&lt; n$.</li></ol><p>根据PCA的目标，我们可以分析PCA的主要步骤：</p><ol><li>找到X在某个向量上的投影，使得$u_1^TX$有最大的方差。</li><li>对于j=2,…n，继续上面的步骤，找到X在某个向量上的投影（与之前的向量正交），使得$u_j^TX$有最大的方差，再次强调：$u_j$与$u_1,…,u_{j-1}$正交。</li></ol><p>因为$\Vert u \Vert = 1$,则$X_i$在$u$上的投影长度为：$X_i^Tu$.而这些投影的方差计算结果如下：</p><script type="math/tex; mode=display">\begin{aligned}\frac 1 m \sum_{i=1}^m (X_i^T u)^2 &= \frac 1 m \sum{i=1}^m u^TX_iX_i^T u \\&= u^T (\sum_{i=1}^m X_i X_i^T)u\\&= u^T \Sigma u \end{aligned}</script><p>这里的$\Sigma$是$X$的协方差矩阵。</p><p>找到单位向量$u_1$使得投影的方差最大，可以用数学语言描述如下：</p><script type="math/tex; mode=display">u_1 =  argmax_{u:\Vert u \Vert = 1} u^T\Sigma u</script><p>$u_i$是X的第i个主要成分。</p><p>如何求解$u_i$呢？首先，既然$u_i$要与之前的正交，因此这个求解顺序是从1到n。现在我们来分析$u_1$。</p><h4 id="命题1"><a href="#命题1" class="headerlink" title="命题1"></a>命题1</h4><p>$u_1$是协方差矩阵最大的特征向量(eigen vector)。</p><p>证明如下：</p><p>首先，根据数学描述构建Lagrange function：</p><script type="math/tex; mode=display">L(u) = -u^T \Sigma u + \beta (u^Tu - 1)</script><p>to minimize $L(u)$:</p><script type="math/tex; mode=display">\frac{\partial L(u)} {\partial u} = -\Sigma u + \beta u = 0</script><p>因此我们可以确定了u是一个$\Sigma$的特征向量。</p><p>同时,投影方差等于 </p><p>$u^T \Sigma u = u^T \beta u = \beta $.</p><p>为了让方差最大，也就是$beta$最大。而最大的特征值对应这最大的特征向量。</p><h4 id="命题2"><a href="#命题2" class="headerlink" title="命题2"></a>命题2</h4><p>第j个X的主要成分，也就是$u_j$为$\Sigma$的第j个最大的特征向量。</p><p>为了简化问题，先写出第二个主要成分的数学描述：</p><script type="math/tex; mode=display">u = argmax_{u:\Vert u\Vert = 1;u_1^T u = 0} u^T \Sigma u</script><p>同样地构建Lagrange Function：</p><script type="math/tex; mode=display">L(u) = -u^T\Sigma u + \beta_1 (u^Tu-1 ) + \beta_2 (u_1^Tu)</script><script type="math/tex; mode=display">\frac{\partial L(u)} {\partial u} = -\Sigma u + \beta_1 u + \beta_2 u_1 = 0</script><p>上式中，我们知道两个互相正交的非零向量加起来不可能为0.所以得到：</p><p>$\beta_2 = 0, \Sigma u = \beta_1 u $</p><p>所以按照证明命题1同样的步骤，我们就证明了命题2中的第二个主要成分是成立的.</p><p>同样的证明方法可以继续拓展，$j=3,…,n$，都是成立的。</p><h2 id="PCA的性质"><a href="#PCA的性质" class="headerlink" title="PCA的性质"></a>PCA的性质</h2><p>从上面的推导，我们可以得到的PCA的下面几个性质：</p><ul><li>主要成分投影的方差分别为：</li></ul><p>$Var(X^Tu_j) = u_j^T \Sigma u_j = \lambda_j,j=1,2,…,n$</p><ul><li>不同方差的百分比$\frac {\lambda_j}{\sum_{i=1} ^n \lambda _i}$也就是主要成分的所占比重，也说明了各个主要成分之间是不相关的。</li></ul><h2 id="PCA投影"><a href="#PCA投影" class="headerlink" title="PCA投影"></a>PCA投影</h2><p>确定主要成分后，我们通过将原数据对主要成分投影来得到数据的压缩等效果。也就是：</p><p>$Z_i = [X_{i}^T u_1,X_i^T u_2,…,X_i^T u_n]$</p><p>使用矩阵形式：</p><script type="math/tex; mode=display">\begin{aligned}Z &= \begin{bmatrix}x_{1}^T&X_{2}^T&...&X_{m}^T\end{bmatrix}\begin{bmatrix} |&|&...&|\\u_1 & u_2& ... & u_n\\  |&|&...&|\end{bmatrix}&=XU\end{aligned}</script><p>或者$Z_i = U^TX_i$。</p><p>我们可以看出来，$Z_i$同样是n维度的。而截断转换$Z_k = XU_k$只保留前k个主要成分，用来做维度的压缩，因为前k个主要成分往往占了内容的大部分。</p><h2 id="PCA在做什么？"><a href="#PCA在做什么？" class="headerlink" title="PCA在做什么？"></a>PCA在做什么？</h2><p>PCA删除了输入X中的冗余数据：</p><p>如果经过转换后为Z，则 cov(Z) = \frac 1 n Z^T Z = \frac 1 n (XW)^T (XW) = \frac 1 n W^T(X^TX)W  = \frac 1 n W^T\Sigma W.</p><p>由于$\Sigma$是对称矩阵，因此它有实特征值。它的特征分解(eigen decomposition)为：</p><script type="math/tex; mode=display">\Sigma = W Λ W^T，\\where W = \begin{bmatrix} |&|&...&|\\u_1 & u_2& ... & u_n\\  |&|&...&|\end{bmatrix},Λ = \begin{bmatrix}\lambda _1 &0&\cdots&0\\0&\lambda_2&\cdots&0\\\vdots & \vdots& \ddots &\vdots\\0&0&\cdots&\lambda_n  \end{bmatrix}</script><p>因此： $cov(Z) = W^TW Λ W^TW = Λ $.主成分变换XW对角化了X的样本协方差矩阵.</p><p>PCA的著名例子：Iris Dataset，EigenFaces。</p><h2 id="PCA的限制"><a href="#PCA的限制" class="headerlink" title="PCA的限制"></a>PCA的限制</h2><p>PCA很有用，但是它也有一些明显的缺陷：</p><ul><li>只考虑线性关系</li><li>假设数据是真实并且连续的</li><li>假设输入空间近似正态分布（不过在非正态分布中也可能工作得很好）<br>下面是一个非正态分布的例子：</li></ul><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA4.png" alt=""></p><p>输入：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA5.png" alt=""></p><p>PCA投影：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png" alt=""></p><p>下次我们将主要说明一下第一个缺陷的解决办法：kernel PCA。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据学习课程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
+            
+            <tag> unsupervised learning </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Learning From Data——K-Means Clustering</title>
+      <link href="/2018/11/19/Learning-From-Data%E2%80%94%E2%80%94K-Means-Clustering/"/>
+      <url>/2018/11/19/Learning-From-Data%E2%80%94%E2%80%94K-Means-Clustering/</url>
+      
+        <content type="html"><![CDATA[<p>转眼间这一个学期已经过了一半了。开始学习非监督学习算法了。第一个介绍的算法，是K-Means聚类算法。</p><a id="more"></a><p>这是第一篇讲unsupervised learning的算法，先说一下，unsupervised learning试图在做些什么。</p><p>非监督学习和监督学习很像，都是希望学习出一个模型，$x \rightarrow f(x)$。不过非监督没有标签了。所以一般来说非监督学习更难。</p><p>非监督学习的目标，是想找到输入特征X的代表（Representation）。Representation learning problem可以描述为：给定了输入X，找到更简单的特征Z来保存和X一样的信息。</p><p>说了这么多，这哪像是一个学习算法，这更像是压缩算法。实际上，非监督学习就广泛应用于压缩。</p><p>一般，好的representation有以下几个特点：</p><ol><li><p>低维度：把信息压缩得更小</p></li><li><p>稀疏代表：比如一个矩阵，大部分项都是0,可以大大简化计算，称为稀疏矩阵。而稀疏代表也即大部分数据的特征的大部分项都是0.</p></li><li><p>独立代表：disentangle the source of variations.这个翻译是解开变异之源……好中二的感觉。这个是什么意思我也不是很理解。</p></li></ol><p>非监督学习广泛用于数据压缩，异常检测，分类聚类等等。</p><p>而这次要说的算法：K-Means算法，是一个聚类算法。</p><p>聚类的目标是给定一组输入特征，将数据分成几组结合在一起的簇。</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/k_means_1.png" alt="k-means-1"></p><p>聚类的理想结果应满足下面的条件：</p><ul><li>在同一个簇中的对象相比于不同的簇的对象来说更为相似。</li></ul><h2 id="K-Means问题描述"><a href="#K-Means问题描述" class="headerlink" title="K-Means问题描述"></a>K-Means问题描述</h2><p>给定n个样本：${X_1,X_2,…,X_n}$，将它们分为k个类（$k\leq n$）$C_1,C_2,…,C_k$，使得簇内平方和（within-cluster sum of squares，WCSS）达到最小：</p><script type="math/tex; mode=display">argmin_C \sum_{j=1}^k \sum{x \in C_j} \Vert x - \mu_j \Vert ^2</script><p>$\mu_j$是一个簇的中心：$\mu_j =\frac{1}{ \vert C_j \vert } \sum_{X \in C_j} X_j$。</p><p>这个问题还有其他几种等价的描述：</p><ul><li><p>最小化簇内协方差：$\sum_{j=1}^k \vert C_j\vert Var(C_j)$</p></li><li><p>最小化相同的簇内点的两两平方偏差：$\sum_{i=1}^k \frac 1 {2\vert C_i \vert} \sum_{x,x’\in C_i} \Vert x - x’ \Vert$</p></li><li><p>最大化簇与簇之间的平方和（BCSS）</p></li></ul><p>在欧几里得空间找到最好的聚类效果（全局最优解）是一个NP-hard问题。因此经常用启发式，迭代式的算法来得到聚类效果，一般得到的是局部最优解。</p><h2 id="Llyod’s-Algorithm"><a href="#Llyod’s-Algorithm" class="headerlink" title="Llyod’s Algorithm"></a>Llyod’s Algorithm</h2><p>虽然全局最优解是一个NP-hard问题，但是得到局部最优解确实非常容易的。在这里介绍Llyod’s Algorithm, 实际上它的过程是异常简单的。整个算法分为下面几步：</p><ol><li><p>随机初始化k个中心：$u_1,u_2,…,u_k$</p></li><li><p>对于每个样本i，$C^{(i)} = argmin_j \Vert X_i - \mu_j \Vert^2$</p></li><li><p>根据聚类结果重新计算$\mu_j$</p></li></ol><p>重复上述过程，直到$\mu$不再改变。</p><p>现在，从非监督学习的目标来重新理解这个聚类算法，它实际上是学习到了一个k-dimentional的稀疏代表。也就是：$X_i$转换到$Z_i$了，而</p><p>$z_{i,j} =\left \{ \begin{matrix}<br>1&amp; if C^{i} = j;\\<br>0&amp; otherwise<br>\end{matrix}<br>\right .<br>$</p><p>它将原来的X特征向量转换成Z维向量。而这个Z矩阵是稀疏的，因为每个向量只有一项值为0.</p><p>因为这个算法只能得到一个局部最优解，因此初始化是很重要的，可能会影响结果。</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/k_means_2.png" alt="k-means-2"></p><p>这个算法还留下几个疑问：</p><ol><li>如何初始化？</li></ol><p>Uniformly random sampling, </p><p>kmeans++ [Arthur &amp; Vassilvitskii SODA 2007]: distance-based sampling</p><ol><li>如何自动选择分成几类（k的取值）？</li></ol><p>Cross validation（交叉验证）</p><p>G-Means [Hamerly &amp; Elkan, NIPS 2003]</p><p>说到最后，说几句题外话。数据学习进行了期中考试，我的分数是后30%的水平。我的心里还是挺难过的。虽然我的本科也是很差的排名，但是那是因为我不学习。不过数据学习这门课我学得还是挺认真的。</p><p>我可以给自己找很多借口：没有复习;时间没安排好(第一题花了太长时间)等等，不过主要原因还是实力不够。就算这些我都做到了，我依然及不了格。既然有80分的大佬，那在乎这几分也没什么意思。说明自己还是太菜了。</p><p>希望期末考试可以取得一个好成绩。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据学习课程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
+            
+            <tag> unsupervised learning </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>信息论——Huffman编码实现及其最优性</title>
       <link href="/2018/11/17/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94Huffman%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%85%B6%E6%9C%80%E4%BC%98%E6%80%A7/"/>
       <url>/2018/11/17/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94Huffman%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%85%B6%E6%9C%80%E4%BC%98%E6%80%A7/</url>
@@ -46,9 +100,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> code </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> neural network </tag>
             
@@ -591,9 +645,9 @@
             
             <tag> LFD class </tag>
             
-            <tag> exponential family </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> exponential family </tag>
             
         </tags>
       
@@ -1093,9 +1147,9 @@
             
             <tag> machine learning </tag>
             
-            <tag> regression </tag>
-            
             <tag> classification </tag>
+            
+            <tag> regression </tag>
             
             <tag> visualization </tag>
             
@@ -1295,9 +1349,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> code </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> visualization </tag>
             
