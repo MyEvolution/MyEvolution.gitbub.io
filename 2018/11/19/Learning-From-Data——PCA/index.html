@@ -120,10 +120,10 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA7.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA5.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png">
-<meta property="og:updated_time" content="2018-11-21T13:15:46.222Z">
+<meta property="og:updated_time" content="2018-11-21T13:37:04.437Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——PCA">
 <meta name="twitter:description" content="上节课除了介绍了K-Means，更重点介绍了另外一个算法，PCA（Principal Component Analysis）。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-21 21:15:46" itemprop="dateModified" datetime="2018-11-21T21:15:46+08:00">2018-11-21</time>
+                <time title="更新于：2018-11-21 21:37:04" itemprop="dateModified" datetime="2018-11-21T21:37:04+08:00">2018-11-21</time>
               
             
           </span>
@@ -510,8 +510,7 @@ u_1 =  argmax_{u:\Vert u \Vert = 1} u^T\Sigma u</script><p>$u_i$是X的第i个�
 L(u) = -u^T \Sigma u + \beta (u^Tu - 1)</script><p>to minimize $L(u)$:</p>
 <script type="math/tex; mode=display">
 \frac{\partial L(u)} {\partial u} = -\Sigma u + \beta u = 0</script><p>因此我们可以确定了u是一个$\Sigma$的特征向量。</p>
-<p>同时,投影方差等于 </p>
-<p>$u^T \Sigma u = u^T \beta u = \beta $.</p>
+<p>同时,投影方差等于$u^T \Sigma u = u^T \beta u = \beta $.</p>
 <p>为了让方差最大，也就是$\beta$最大。而最大的特征值对应这最大的特征向量。</p>
 <h4 id="命题2"><a href="#命题2" class="headerlink" title="命题2"></a>命题2</h4><p>第j个X的主要成分，也就是$u_j$为$\Sigma$的第j个最大的特征向量。</p>
 <p>为了简化问题，先写出第二个主要成分的数学描述：</p>
@@ -550,11 +549,11 @@ u_1 & u_2& ... & u_n\\
 \end{aligned}</script><p>或者$Z_i = U^TX_i$。</p>
 <p>我们可以看出来，$Z_i$同样是n维度的。而截断转换$Z_k = XU_k$只保留前k个主要成分，用来做维度的压缩，因为前k个主要成分往往占了内容的大部分。</p>
 <h2 id="PCA在做什么？"><a href="#PCA在做什么？" class="headerlink" title="PCA在做什么？"></a>PCA在做什么？</h2><p>PCA删除了输入X中的冗余数据：</p>
-<p>如果经过转换后为Z，则 cov(Z) = \frac 1 n Z^T Z = \frac 1 n (XW)^T (XW) = \frac 1 n W^T(X^TX)W  = \frac 1 n W^T\Sigma W.</p>
+<p>如果经过转换后为Z，则 $cov(Z) = \frac 1 n Z^T Z = \frac 1 n (XW)^T (XW) = \frac 1 n W^T(X^TX)W  = \frac 1 n W^T\Sigma W$.</p>
 <p>由于$\Sigma$是对称矩阵，因此它有实特征值。它的特征分解(eigen decomposition)为：</p>
 <script type="math/tex; mode=display">
 \Sigma = W Λ W^T，\\
-where W = \begin{bmatrix}
+where~W = \begin{bmatrix}
  |&|&...&|\\
 u_1 & u_2& ... & u_n\\ 
  |&|&...&|
@@ -571,11 +570,11 @@ u_1 & u_2& ... & u_n\\
 <li>假设数据是真实并且连续的</li>
 <li>假设输入空间近似正态分布（不过在非正态分布中也可能工作得很好）<br>下面是一个非正态分布的例子：</li>
 </ul>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA4.png" alt=""></p>
-<p>输入：</p>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA5.png" alt=""></p>
-<p>PCA投影：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png" alt=""></p>
+<p>输入：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA4.png" alt=""></p>
+<p>PCA投影：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA5.png" alt=""></p>
 <p>下次我们将主要说明一下第一个缺陷的解决办法：kernel PCA。</p>
 <h2 id="k-means与PCA的对比"><a href="#k-means与PCA的对比" class="headerlink" title="k-means与PCA的对比"></a>k-means与PCA的对比</h2><p>Unsupervised learning algorithm:</p>
 <div class="table-container">
