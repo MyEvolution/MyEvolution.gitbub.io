@@ -116,12 +116,14 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上次图形学的博客中介绍了转换，所以我们可以从世界坐标转换到相机坐标了。不过虽然我们学的是三维模型，不过我们看到的都是二维的。近大远小是小学生都明白的道理，而一个物品的距离等等都会影响它在我们眼中,以及拍摄出来照片的样子。因此这次讲得内容是观察（Viewing）。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://wlsdzyzl.com/2018/11/14/图形学——Viewing/cg1.jpeg">
-<meta property="og:updated_time" content="2018-11-21T06:26:32.513Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0579.PNG">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0581.PNG">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0580.PNG">
+<meta property="og:updated_time" content="2018-11-21T06:38:25.699Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——Viewing">
 <meta name="twitter:description" content="上次图形学的博客中介绍了转换，所以我们可以从世界坐标转换到相机坐标了。不过虽然我们学的是三维模型，不过我们看到的都是二维的。近大远小是小学生都明白的道理，而一个物品的距离等等都会影响它在我们眼中,以及拍摄出来照片的样子。因此这次讲得内容是观察（Viewing）。">
-<meta name="twitter:image" content="http://wlsdzyzl.com/2018/11/14/图形学——Viewing/cg1.jpeg">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0579.PNG">
 
 
 
@@ -409,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-21 14:26:32" itemprop="dateModified" datetime="2018-11-21T14:26:32+08:00">2018-11-21</time>
+                <time title="更新于：2018-11-21 14:38:25" itemprop="dateModified" datetime="2018-11-21T14:38:25+08:00">2018-11-21</time>
               
             
           </span>
@@ -511,12 +513,10 @@ P = \begin{bmatrix}
 0&0&-\frac {1}{d}&0
 \end{bmatrix}</script><p>这个矩阵乘起来之后之前的坐标都没有改变，除了最后一项1变成了$-\frac Z d$. 而齐次坐标如果将最后一个转化为1,则之前的X，Y，Z变成了：$-d\frac X Z, -d\frac Y Z,-d$.这是个很巧妙的转换。</p>
 <p>而OpenGL中的透投影函数会更复杂一点。我们还是通过说明gluPerspective，来理解透射映射。</p>
-<p>首先我们需要定义一个新的名词，叫做Viewing Frustum(视锥体)。一个视锥体如下图：<br><img src="cg1.jpeg" alt=""></p>
+<p>首先我们需要定义一个新的名词，叫做Viewing Frustum(视锥体)。一个视锥体如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0579.PNG" alt=""></p>
 <p>任何近裁面近的点或者比远裁面远的点都会被遮挡。</p>
 <p>gluPerspective的参数需要：fovy，aspect,zNear,zFar(zNear,zFar&gt;0,后文简写为$Z_n,Z_f$). fovy为视野，可以理解为眼睛睁得大小程度，而aspect定义了视锥的高宽比，这个不是很重要。</p>
-<p>而zNear和zFar代表了我们需要透射投影的最近距离和最远距离。</p>
-<p>投影到的”屏幕”由下图确定，（其中投影屏幕高为两个单位）：</p>
-<p>也就是d的距离由$\theta$确定，而$\theta = \frac {fovy}/2，d = \cot \theta$.</p>
+<p>而zNear和zFar代表了我们需要透射投影的最近距离和最远距离。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0581.PNG" alt=""><br>投影到的”屏幕”由下图确定，（其中投影屏幕高为两个单位）：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0580.PNG" alt=""><br>也就是d的距离由$\theta$确定，而$\theta = \frac {fovy}2，d = \cot \theta$.</p>
 <p>gluPerspective依然是将这个视锥体的投影结果转换到坐标轴的中心，使得近截面的z坐标为1,远截面的z坐标为-1.</p>
 <p>由之前的基础，我们先这样写下这个式子：</p>
 <script type="math/tex; mode=display">
@@ -534,7 +534,7 @@ P = \begin{bmatrix}
 0&0&-1&0
 \end{bmatrix}</script><p>因为我们最后要影响Z坐标，所以需要改变的值是A和B的位置，而不能让他们为0.从上式求得坐标：</p>
 <script type="math/tex; mode=display">
-p' = begin{bmatrix}
+p' = \begin{bmatrix}
 \frac d {aspect}&0&0&0\\
 0&d&0&0\\
 0&0&A&B\\
@@ -799,7 +799,9 @@ B = -\frac{2 Z_n Z_f}{Z_f - Z_n}</script><p>因此将A，B带入后就是最后g
                     
                       
                     
-                    <span class="site-state-item-count">34</span>
+                      
+                    
+                    <span class="site-state-item-count">35</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
