@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA5.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png">
-<meta property="og:updated_time" content="2018-11-20T09:32:38.706Z">
+<meta property="og:updated_time" content="2018-11-21T13:15:46.222Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——PCA">
 <meta name="twitter:description" content="上节课除了介绍了K-Means，更重点介绍了另外一个算法，PCA（Principal Component Analysis）。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-20 17:32:38" itemprop="dateModified" datetime="2018-11-20T17:32:38+08:00">2018-11-20</time>
+                <time title="更新于：2018-11-21 21:15:46" itemprop="dateModified" datetime="2018-11-21T21:15:46+08:00">2018-11-21</time>
               
             
           </span>
@@ -512,7 +512,7 @@ L(u) = -u^T \Sigma u + \beta (u^Tu - 1)</script><p>to minimize $L(u)$:</p>
 \frac{\partial L(u)} {\partial u} = -\Sigma u + \beta u = 0</script><p>因此我们可以确定了u是一个$\Sigma$的特征向量。</p>
 <p>同时,投影方差等于 </p>
 <p>$u^T \Sigma u = u^T \beta u = \beta $.</p>
-<p>为了让方差最大，也就是$beta$最大。而最大的特征值对应这最大的特征向量。</p>
+<p>为了让方差最大，也就是$\beta$最大。而最大的特征值对应这最大的特征向量。</p>
 <h4 id="命题2"><a href="#命题2" class="headerlink" title="命题2"></a>命题2</h4><p>第j个X的主要成分，也就是$u_j$为$\Sigma$的第j个最大的特征向量。</p>
 <p>为了简化问题，先写出第二个主要成分的数学描述：</p>
 <script type="math/tex; mode=display">
@@ -577,6 +577,33 @@ u_1 & u_2& ... & u_n\\
 <p>PCA投影：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png" alt=""></p>
 <p>下次我们将主要说明一下第一个缺陷的解决办法：kernel PCA。</p>
+<h2 id="k-means与PCA的对比"><a href="#k-means与PCA的对比" class="headerlink" title="k-means与PCA的对比"></a>k-means与PCA的对比</h2><p>Unsupervised learning algorithm:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>algorithm</th>
+<th style="text-align:center">low dimension</th>
+<th style="text-align:center">sparse</th>
+<th style="text-align:center">disentangle variations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>k-means</td>
+<td style="text-align:center">no</td>
+<td style="text-align:center">yes</td>
+<td style="text-align:center">no</td>
+</tr>
+<tr>
+<td>PCA</td>
+<td style="text-align:center">yes</td>
+<td style="text-align:center">no</td>
+<td style="text-align:center">yes</td>
+</tr>
+</tbody>
+</table>
+</div>
 
       
     </div>
@@ -872,7 +899,7 @@ u_1 & u_2& ... & u_n\\
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA描述"><span class="nav-number">1.</span> <span class="nav-text">PCA描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推导PCA"><span class="nav-number">2.</span> <span class="nav-text">推导PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命题1"><span class="nav-number">2.0.1.</span> <span class="nav-text">命题1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命题2"><span class="nav-number">2.0.2.</span> <span class="nav-text">命题2</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA的性质"><span class="nav-number">3.</span> <span class="nav-text">PCA的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA投影"><span class="nav-number">4.</span> <span class="nav-text">PCA投影</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA在做什么？"><span class="nav-number">5.</span> <span class="nav-text">PCA在做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA的限制"><span class="nav-number">6.</span> <span class="nav-text">PCA的限制</span></a></li></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA描述"><span class="nav-number">1.</span> <span class="nav-text">PCA描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推导PCA"><span class="nav-number">2.</span> <span class="nav-text">推导PCA</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命题1"><span class="nav-number">2.0.1.</span> <span class="nav-text">命题1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命题2"><span class="nav-number">2.0.2.</span> <span class="nav-text">命题2</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA的性质"><span class="nav-number">3.</span> <span class="nav-text">PCA的性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA投影"><span class="nav-number">4.</span> <span class="nav-text">PCA投影</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA在做什么？"><span class="nav-number">5.</span> <span class="nav-text">PCA在做什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PCA的限制"><span class="nav-number">6.</span> <span class="nav-text">PCA的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#k-means与PCA的对比"><span class="nav-number">7.</span> <span class="nav-text">k-means与PCA的对比</span></a></li></div>
             
 
           </div>
