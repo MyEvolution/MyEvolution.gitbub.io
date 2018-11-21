@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/KPCA1.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/KPCA2.png">
-<meta property="og:updated_time" content="2018-11-21T13:26:38.275Z">
+<meta property="og:updated_time" content="2018-11-21T13:28:15.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Kernel PCA">
 <meta name="twitter:description" content="上次说了几个PCA的局限性，其中有一个是它只找各个特征之间的线性关系。如何拓展线性关系到非线性，似乎有点思路，因为之前SVM中说过，可以通过kernel将SVM拓展到非线性的分类。同样通过kernel，我们也可以找到特征之间的非线性关系，从而利用PCA进行数据压缩等操作。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-21 21:26:38" itemprop="dateModified" datetime="2018-11-21T21:26:38+08:00">2018-11-21</time>
+                <time title="更新于：2018-11-21 21:28:15" itemprop="dateModified" datetime="2018-11-21T21:28:15+08:00">2018-11-21</time>
               
             
           </span>
@@ -465,7 +465,7 @@
 <p>对于线性的PCA的扩展，就是将PCA映射到更高维度的空间,使其在更高维度的空间有线性关系：$\phi:\mathbb{R}^n \rightarrow \mathbb{R}^d,d\ge n$.而如何映射，通过一个kernel函数来定义：$k(X_i,X_j) = \phi(X_i)^T\phi(X_j)$或者kernel矩阵$K \in \mathbb{R}^{m \times m}$. 映射完成后，我们就可以在更高维度的空间再使用标准的PCA算法了。</p>
 <p>映射后的数据的协方差矩阵如下：</p>
 <script type="math/tex; mode=display">
-\Sigma = \frac 1 m  \sum_{i=1}^m \phi(X_i) \phi(X_i)^T \in \mathbb{R}^{d\times d}</script><p>假如$(\lambda_k,v_k)，k=1,…,d$为$\sigma$的特征分解，则：</p>
+\Sigma = \frac 1 m  \sum_{i=1}^m \phi(X_i) \phi(X_i)^T \in \mathbb{R}^{d\times d}</script><p>假如$(\lambda_k,v_k),k=1,…,d$为$\sigma$的特征分解，则：</p>
 <script type="math/tex; mode=display">
 \Sigma v_k = \lambda_k v_k</script><p>则原来$X_l$的在第k个主要成分的投影为：$\phi(X_l)^Tv_k$. </p>
 <p>到目前位置，我们都没有用到kernel，因为$\phi(X_i)$是难以计算的，而kernel是容易计算的。因此如何避免$\phi_(X_i)$的计算？</p>
@@ -506,7 +506,7 @@ k(X_m,X_1)&k(X_m,X_2)&\cdots&k(X_m,X_m)
 \end{bmatrix}</script><p>上式中$\alpha^{(k)}$可以通过求解K的特征向量得到，而K是kernel矩阵。</p>
 <p>我们希望正交化$\alpha^{(k)}$，使得$v_k^Tv_k = 1$（与之前的标准PCA一致）.</p>
 <script type="math/tex; mode=display">
-v_k^T v_k = (\alpha^{(k)})^T \Phi(X) \Phi(X)^T \alpha^{(k)} = \lambda_k m  ((\alpha^{(k)})^T \alpha^{(k)}).</script><p>所以$\Vert alpha^{(k)} \Vert^2 = \frac{1}{\lambda_k m} $.</p>
+v_k^T v_k = (\alpha^{(k)})^T \Phi(X) \Phi(X)^T \alpha^{(k)} = \lambda_k m  ((\alpha^{(k)})^T \alpha^{(k)}).</script><p>所以$\Vert \alpha^{(k)} \Vert^2 = \frac{1}{\lambda_k m} $.</p>
 <p>此外，如果$\mathbb{E}(\phi(X)) \ne 0$，我们还需要中心化$\phi(X)$:</p>
 <script type="math/tex; mode=display">
 \tilde{\phi}(X_i) = \phi(X_i) - \frac 1 m   \sum_{l=1}^m \phi(X_i)</script><p>而中心化以后的kernel矩阵为：</p>
