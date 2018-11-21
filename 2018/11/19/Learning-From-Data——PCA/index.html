@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA5.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA6.png">
-<meta property="og:updated_time" content="2018-11-20T09:29:31.369Z">
+<meta property="og:updated_time" content="2018-11-20T09:32:38.706Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——PCA">
 <meta name="twitter:description" content="上节课除了介绍了K-Means，更重点介绍了另外一个算法，PCA（Principal Component Analysis）。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-20 17:29:31" itemprop="dateModified" datetime="2018-11-20T17:29:31+08:00">2018-11-20</time>
+                <time title="更新于：2018-11-20 17:32:38" itemprop="dateModified" datetime="2018-11-20T17:32:38+08:00">2018-11-20</time>
               
             
           </span>
@@ -478,7 +478,7 @@
 <p>如下图：左侧图片中，$x_1$与$x_2$是高度相关的，右侧图为转换过后的z，它几乎和水平坐标轴平行。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA3.png" alt=""></p>
 <h2 id="推导PCA"><a href="#推导PCA" class="headerlink" title="推导PCA"></a>推导PCA</h2><p>为了方便PCA的推导，我们首先会对数据进行预处理，也就是对其进行normalize,使得Mean(X) =0,Stdev(X) = 1:</p>
 <script type="math/tex; mode=display">
-X_i := X_i - Mean(X) \leftarrow recenter
+X_i := X_i - Mean(X) \leftarrow recenter\\
 X_i := X_i / Stdev(X) \leftarrow scale</script><p>Stdev(X)为标准偏差函数。</p>
 <p>我们希望在输入中找到让各个样本变化最大的方向的主轴u（找到变分单位向量的主轴），如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/PCA7.png" alt=""></p>
@@ -624,6 +624,10 @@ u_1 & u_2& ... & u_n\\
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/11/20/Learning-From-Data——Kernel-PCA/" rel="prev" title="Learning From Data——Kernel PCA">
+                Learning From Data——Kernel PCA <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -694,7 +698,7 @@ u_1 & u_2& ... & u_n\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
