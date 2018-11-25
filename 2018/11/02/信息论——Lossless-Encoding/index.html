@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-14T06:32:45.083Z">
+<meta property="og:updated_time" content="2018-11-23T05:08:29.479Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Lossless Encoding">
 <meta name="twitter:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-14 14:32:45" itemprop="dateModified" datetime="2018-11-14T14:32:45+08:00">2018-11-14</time>
+                <time title="更新于：2018-11-23 13:08:29" itemprop="dateModified" datetime="2018-11-23T13:08:29+08:00">2018-11-23</time>
               
             
           </span>
@@ -460,20 +460,20 @@
       
         <p>信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。<br><a id="more"></a></p>
 <p>首先，说到无失真编码，我们首先想到的是无损压缩了。无损压缩实际上是一个最大熵的问题。这样的情况下，能包含最多的信息，如果信息量一定，也就是最大熵的情况下需要平均较小的比特数（比如一个均匀分布随机变量X的熵为3,另一个非均匀分布随机变量熵Y也为3，那么|Y|&gt;|X|,如果普通编码的话，Y的编码更长，但是它们包含的信息量却是一样的）。我们都知道的是，在均匀分布的时候熵是最大的。但是我们不能选择信源的分布，因为信源就在那里已经确定了。我们能否通过一个映射，一一对应的映射，使得一个非等概分布逐渐走向等概呢？答案是，可以，但是这太反直觉了。是啊虽然反直觉，但是它不反数学，所以它就是对的。</p>
-<h2 id="渐进等同分割性质（Asymptotic-Equipartition-Property）"><a href="#渐进等同分割性质（Asymptotic-Equipartition-Property）" class="headerlink" title="渐进等同分割性质（Asymptotic Equipartition Property）"></a>渐进等同分割性质（Asymptotic Equipartition Property）</h2><h3 id="大数定律（Law-of-Large-Number）"><a href="#大数定律（Law-of-Large-Number）" class="headerlink" title="大数定律（Law of Large Number）"></a>大数定律（Law of Large Number）</h3><p>这里只介绍伯奴利大数定律(弱大数定律)。实际上所有的大数定律都在说一件事：当实验次数非常大的时候，频率趋向于概率（经验分布逼近于统计分布）。</p>
+<h2 id="渐进等同分割性质（Asymptotic-Equipartition-Property）"><a href="#渐进等同分割性质（Asymptotic-Equipartition-Property）" class="headerlink" title="渐进等同分割性质（Asymptotic Equipartition Property）"></a>渐进等同分割性质（Asymptotic Equipartition Property）</h2><h3 id="大数定律（Law-of-Large-Number）"><a href="#大数定律（Law-of-Large-Number）" class="headerlink" title="大数定律（Law of Large Number）"></a>大数定律（Law of Large Number）</h3><p>这里先伯奴利大数定律(属于弱大数定律)。实际上所有的大数定律都在说一件事：当实验次数非常大的时候，频率趋向于概率（经验分布逼近于统计分布）。</p>
 <script type="math/tex; mode=display">
-\frac{S_n}{n} \underrightarrow{p}p</script><p>更精确一点的说法：</p>
+\frac{S_n}{n} \underrightarrow{p} p</script><p>更精确一点的说法：</p>
 <script type="math/tex; mode=display">
-\forall N, \exists \epsilon >0,\sigma>0, \text{while }n > N,p(\vert \frac{s_n}{n} - p\vert \geq \epsilon) <\sigma.</script><p>而且也可以表述如下：</p>
+\forall N, \exists \epsilon >0,\sigma>0, \text{where }n > N,p(\vert \frac{s_n}{n} - p\vert \geq \epsilon) <\sigma.</script><p>另外一个大数定理（辛钦大数定律）：</p>
 <script type="math/tex; mode=display">
 \begin{align}
-\frac 1 n \sum_{i=1}^n \underrightarrow{p} EX
+\frac 1 n \sum_{i=1}^n X_i\underrightarrow{p} EX
 \end{align}</script><p>渐进等同分割性质定义如下：</p>
 <p>如果$X_1,X_2,…$是独立同分布的离散随机变量，分布服从$p(x)$,则</p>
 <p>$-\frac 1 n \log p(X_1,X_2,…,X_n) \underrightarrow{p} H(X)$</p>
 <p>使用上面的更准确的写法如下：</p>
 <script type="math/tex; mode=display">
-\forall N, \exists \epsilon>0, \sigma >0, \text{while }n > N,p(\vert - \frac 1 n \log p(X_1,X_2,...,X_n) - H(X)\vert \geq \epsilon) <\sigma.</script><p>即$p(X_1,X_2,…,X_n)\approx 2^{-nH(X)}$.</p>
+\forall N, \exists \epsilon>0, \sigma >0, \text{where }n > N,p(\vert - \frac 1 n \log p(X_1,X_2,...,X_n) - H(X)\vert \geq \epsilon) <\sigma.</script><p>即$p(X_1,X_2,…,X_n)\approx 2^{-nH(X)}$.</p>
 <p>这个定理可以使用弱大数定理地证明：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -523,7 +523,7 @@ E(l(X^n)) &= \sum_{x \in \mathcal{X}} p(x) l(x)\\
 &=[ n(H(X)+\epsilon)+1+1 ] Pr\{ A_\epsilon ^{(n)}\} +  [ n\log \vert X\vert +2] Pr\{\overline{A_\epsilon ^{(n)}}\} \\
 &\leq n(H(X)+\epsilon)+2 +  n\epsilon \log\vert X\vert+2\epsilon
 = n(H(X) + \epsilon ')
-\end{aligned}</script><p>其中 $\epsilon’ = \epsilon + \epsilon \log \vert X \vert X + \frac {2\epsilon}{n}$,可以看到的是$n \rightarrow \infty,epsilon’ \rightarrow 0$.</p>
+\end{aligned}</script><p>其中 $\epsilon’ = \epsilon + \epsilon \log \vert X \vert +\frac 2 n + \frac {2\epsilon}{n}$,可以看到的是$n \rightarrow \infty,\epsilon’ \rightarrow 0$.</p>
 <p>上面证明过程中值得注意的事情是，为什么要加2？第一个加一是为了处理log后为非整数的情况，第二个+1是留一个比特位置来区分典型序列与非典型序列的编码。</p>
 <p>但是，定长编码定理是无法应用到工业界的。因为它需要对序列长度为n来进行编码，由于精确度的要求，这个n往往很大（上亿），这在现实中是无法实现的。</p>
 <p>顺便我们证明一下，平均每个字符编码所需要的bit数一定是大于等于$H(X)$.</p>
