@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导SVD的，因此就这么叫吧。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-28T12:39:01.024Z">
+<meta property="og:updated_time" content="2018-11-28T12:49:34.529Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Info between X and Y&#x2F;SVD">
 <meta name="twitter:description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导SVD的，因此就这么叫吧。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-28 20:39:01" itemprop="dateModified" datetime="2018-11-28T20:39:01+08:00">2018-11-28</time>
+                <time title="更新于：2018-11-28 20:49:34" itemprop="dateModified" datetime="2018-11-28T20:49:34+08:00">2018-11-28</time>
               
             
           </span>
@@ -473,7 +473,7 @@
 \end{aligned}</script><p>所以可以看到的是，我们应该让</p>
 <script type="math/tex; mode=display">
 \mathbb{E}[f(x) ] = \mathbb{E}[g(x) ] = 0,\\
-\mathbb{E}^2[f(x) ] = \mathbb{E}^2[g(x) ] = 1</script><p>这时候，$0\leq\rho_{XY}\leq 1$.当$\rho_{XY} = 0$时，说明二者独立（要注意，这并不意味着E(XY) = 0说明Ｘ，Ｙ独立，实际上相关系数为0才能证明二者独立，只不过我们这里加上了限制，使得$\rho_{XY} = \mathbb{E}[f(x)g(x) ]$）。</p>
+\mathbb{E}[f^2(x) ] = \mathbb{E}[g^2(x) ] = 1</script><p>这时候，$0\leq\rho_{XY}\leq 1$.当$\rho_{XY} = 0$时，说明二者独立（要注意，这并不意味着E(XY) = 0说明Ｘ，Ｙ独立，实际上相关系数为0才能证明二者独立，只不过我们这里加上了限制，使得$\rho_{XY} = \mathbb{E}[f(x)g(x) ]$）。</p>
 <p>现在，用数学语言来描述这个问题：</p>
 <script type="math/tex; mode=display">
 \begin{align}
@@ -502,7 +502,7 @@ B_{y,x} =  \frac{p_{XY}(x,y)}{\sqrt{p_X(x)p_Y(y)}},B_{|Y| \times |X|}.</script><
 (3): \Vert \Phi \Vert^2 = \Vert \Psi \Vert ^2 = 1</script><p>这时候我们的问题变成了：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\max \Psi^T B \Phi,s.t. &<\sqrt{P_X},\Phi> = <\sqrt{P_Y},\Psi> = 0;\\
+\max \Psi^T B \Phi,s.t. &\langle\sqrt{P_X},\Phi\rangle = \langle\sqrt{P_Y},\Psi\rangle = 0;\\
 &\Vert \Phi \Vert^2 = \Vert \Psi \Vert^2 = 1.
 \end{aligned}</script><p>而实际上，上面问题的解正是Ｂ矩阵的最大的奇异向量。</p>
 <h2 id="SVD"><a href="#SVD" class="headerlink" title="SVD"></a>SVD</h2><p>接下来，想提一下，什么是奇异值分解(Singular Value Decomposition)：</p>
@@ -510,8 +510,8 @@ B_{y,x} =  \frac{p_{XY}(x,y)}{\sqrt{p_X(x)p_Y(y)}},B_{|Y| \times |X|}.</script><
 B = [u　][\Sigma][　v^T],</script><p>其中$u,v$的列向量为Ｂ的左右奇异向量。</p>
 <p>而实际上，$\sqrt{P_X},\sqrt{P_Y}$正是Ｂ矩阵对应的最大的奇异向量。但是显然，我们是不能让它们作为$\Phi,\Psi$的值的，因为这个不满足约束(2):</p>
 <script type="math/tex; mode=display">
-<\sqrt{P_X},\Phi> = <\sqrt{P_X},\sqrt{P_X}> = 1 \ne 0;\\
-<\sqrt{P_Y},\Psi> = <\sqrt{P_Y},\sqrt{P_Y}> =1 \ne 0.</script><p>不过，好的消息是，实际上$\Phi,\Psi$正是第二大的奇异向量。可以看出来，不同奇异向量是互相正交的，这个和上次说的PCA非常像。实际上，PCA和SVD是有千丝万缕的关系的。</p>
+\langle\sqrt{P_X},\Phi\rangle = \langle\sqrt{P_X},\sqrt{P_X}\rangle = 1 \ne 0;\\
+\langle\sqrt{P_Y},\Psi\rangle = \langle\sqrt{P_Y},\sqrt{P_Y}\rangle =1 \ne 0.</script><p>不过，好的消息是，实际上$\Phi,\Psi$正是第二大的奇异向量。可以看出来，不同奇异向量是互相正交的，这个和上次说的PCA非常像。实际上，PCA和SVD是有千丝万缕的关系的。</p>
 <p>从上面的分析，我们可以直接得到：</p>
 <script type="math/tex; mode=display">
 f(x) = \frac{1}{\sqrt{p_X(x)}} \phi^*(x);\\
