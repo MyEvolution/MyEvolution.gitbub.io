@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="之前说明了linear SVM的，但是实际上依然还有一些问题。虽然在一定程度上，linear SVM会减小特征转换带来的复杂度，但是另一方面，它依然依赖着d.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-29T09:03:00.807Z">
+<meta property="og:updated_time" content="2018-11-29T09:05:02.949Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习——Dual Support Vector Machine">
 <meta name="twitter:description" content="之前说明了linear SVM的，但是实际上依然还有一些问题。虽然在一定程度上，linear SVM会减小特征转换带来的复杂度，但是另一方面，它依然依赖着d.">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-29 17:03:00" itemprop="dateModified" datetime="2018-11-29T17:03:00+08:00">2018-11-29</time>
+                <time title="更新于：2018-11-29 17:05:02" itemprop="dateModified" datetime="2018-11-29T17:05:02+08:00">2018-11-29</time>
               
             
           </span>
@@ -507,7 +507,7 @@
 <p> 计算出最佳的$\alpha$，可以很轻易地计算出$W$，而且通过约束也能轻易地计算出$b$.而且我们可以通过约束发现，其实相当一大部分$\alpha_n=0$，而$\alpha \ne 0$的那些点，也正是我们的支撑向量。</p>
 <p> 最后，我们提出一个疑问：这个计算方法，真的和维度没关系了吗？恐怕不是，维度隐含在了计算$Q$矩阵当中了.这还是没有达到我们的目的。这需要下一个改进：kernel。</p>
 <h2 id="p-s-QP问题的解决"><a href="#p-s-QP问题的解决" class="headerlink" title="p.s. QP问题的解决"></a>p.s. QP问题的解决</h2><p> 一般来说，解决QP问题的工具，需要提供下面几个参数：</p>
-<p>optimal $\alpha$ $\leftarrow$ $QP(Q,mathbf{p},A,mathbf{c})$</p>
+<p>optimal $\alpha$ $\leftarrow$ $QP(Q,\mathbf{p},A,\mathbf{c})$</p>
 <p> $\min_{\alpha}$  $\frac 1 2 \alpha ^T Q \alpha + p^T\alpha$</p>
 <p>subject to $a_i^T \alpha \ge C_i$, for i = 1,2,…</p>
 <p>因此，在本例中，Q：<br>$q_{n,m} = y_ny_mX^nX^m;$</p>
