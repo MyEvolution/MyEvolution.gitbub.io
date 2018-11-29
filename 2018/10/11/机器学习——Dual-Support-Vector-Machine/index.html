@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="之前说明了linear SVM的，但是实际上依然还有一些问题。虽然在一定程度上，linear SVM会减小特征转换带来的复杂度，但是另一方面，它依然依赖着d.">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-29T08:58:15.481Z">
+<meta property="og:updated_time" content="2018-11-29T09:01:58.742Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习——Dual Support Vector Machine">
 <meta name="twitter:description" content="之前说明了linear SVM的，但是实际上依然还有一些问题。虽然在一定程度上，linear SVM会减小特征转换带来的复杂度，但是另一方面，它依然依赖着d.">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-29 16:58:15" itemprop="dateModified" datetime="2018-11-29T16:58:15+08:00">2018-11-29</time>
+                <time title="更新于：2018-11-29 17:01:58" itemprop="dateModified" datetime="2018-11-29T17:01:58+08:00">2018-11-29</time>
               
             
           </span>
@@ -469,7 +469,7 @@
 <p>首先，如果原来的约束不满足，则：$y_n(W^TX_n+b) <1$，那么$(1-y_n(w^tx_n+b))>0$，而要最大化$\zeta(W,b,\alpha)$，$\alpha$又大于等于0，那么可以肯定的是$\sum _{n = 0} ^{N} \alpha_n (1 - y_n(W^TX_n+b)) $最后的结果是无穷大了，它一定不会被选上；</1$，那么$(1-y_n(w^tx_n+b))></p>
 <p>如果原来的约束满足的话，$(1 - y_n(W^TX_n+b)) \leq 0$,因为它小于0，要最大化$\zeta(W,b,\alpha)$，只能使得$\sum _{n = 0} ^{N} \alpha_n (1 - y_n(W^TX_n+b)) $等于0，也就是最后得到的结果是$\zeta(W,b,\alpha) = \frac 1 2 W^TW$，因此实际上最终求的的最大值，依然是满足条件的。</p>
 <p>通过这样就很巧妙地将条件与我们想要做的优化问题融合成了一个式子。</p>
-<p>而且我们很容易知道的事：$\min_{W,b}(\max_{text{all} \alpha_n \ge 0} \zeta (W,b,\alpha) ) \ge \min_{W,b} \zeta (W,b,\alpha ‘)$,上式中$\alpha’$是个定值，<br>也就可以推断出来：$\min_{W,b}(\max_{text{all }\alpha_n \ge 0} \zeta (W,b,\alpha) ) \ge \max_{text{all } \alpha_n \ge 0}( \min_{W,b} \zeta (W,b,\alpha ‘))$.</p>
+<p>而且我们很容易知道的事：$\min_{W,b}(\max_{\alpha_i \ge 0,i=1,…,n} \zeta (W,b,\alpha) ) \ge \min_{W,b} \zeta (W,b,\alpha ‘)$,上式中$\alpha’$是个定值，<br>也就可以推断出来：$\min_{W,b}(\max_{\alpha_i \ge 0,i=1,…,n} \zeta (W,b,\alpha) ) \ge \max_{\alpha_i \ge 0,i=1,…,n}( \min_{W,b} \zeta (W,b,\alpha ‘))$.</p>
 <p>更令人兴奋的是，在这些条件下：</p>
 <p>1.convex primal</p>
 <p>2.feasible primal（true if separable）</p>
@@ -490,7 +490,7 @@
 <script type="math/tex; mode=display">
 \zeta(W,b,\alpha) =   \sum _{n = 1} ^{N} \alpha_n - \frac 1 2 ||\sum_{n=1}^N \alpha_n y_nX_n||^2.</script><p>而且不要忘了我们最之前推导的： $\alpha_n (1 - y_n(W^TX_n+b)) = 0$.</p>
 <p>因此，现在的式子里面已经没有$W$与$b$了，我们要做的就是</p>
-<p>$\max_{all a_n \ge 0,\sum y_n \alpha_n = 0,W =\sum \alpha_n y_nX_n } - \frac 1 2 ||\sum_{n=1}^N \alpha_n y_nX_n||^2 +  \sum _{n = 1} ^{N} \alpha_n$.</p>
+<p>$\max_{\alpha_i \ge 0,i=1,…,n,\sum y_n \alpha_n = 0,W =\sum \alpha_n y_nX_n } - \frac 1 2 ||\sum_{n=1}^N \alpha_n y_nX_n||^2 +  \sum _{n = 1} ^{N} \alpha_n$.</p>
 <p>总结一下，要解决对偶问题得到上面的结果，需要达到的条件：</p>
 <p>1.primal feasible： $y_n(W^TX_n+b) \ge 1$</p>
 <p>2.dual feasible: $a_n \ge 0$</p>
