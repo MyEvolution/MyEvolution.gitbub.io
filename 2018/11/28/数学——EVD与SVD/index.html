@@ -117,8 +117,7 @@
 <meta property="og:description" content="这个博客介绍特征值分解（Eigen Value Decomposition,EVD）和奇异值分解(Singular Value Decomposition),　可以当作机器学习的补充材料。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/G6T%7DO%5B7%5BIW70%5DP0VF2D%5DR89.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_pdf/SVD-%5BDan-Kalman%5D.pdf">
-<meta property="og:updated_time" content="2018-12-02T12:16:14.048Z">
+<meta property="og:updated_time" content="2018-12-02T12:23:35.259Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数学——EVD与SVD">
 <meta name="twitter:description" content="这个博客介绍特征值分解（Eigen Value Decomposition,EVD）和奇异值分解(Singular Value Decomposition),　可以当作机器学习的补充材料。">
@@ -410,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-02 20:16:14" itemprop="dateModified" datetime="2018-12-02T20:16:14+08:00">2018-12-02</time>
+                <time title="更新于：2018-12-02 20:23:35" itemprop="dateModified" datetime="2018-12-02T20:23:35+08:00">2018-12-02</time>
               
             
           </span>
@@ -488,15 +487,15 @@ v_1^Tx\\
 \vdots\\
 v_n^Tx
 \end{bmatrix}\\
-\sigma_1v_1v_1^Tx + ...+ \sigma_nv_nv_n^Tx
+&=\sigma_1v_1v_1^Tx + ...+ \sigma_nv_nv_n^Tx
 \end{aligned}</script><p>观察上面的展开，实际上我们可以发现的是，$V^TX$得到的，实际上是在$V$这个正交基下，$x$的“坐标值”，而$V\Sigma$实际上是经过转换后的坐标轴，放大了对应特征值的倍数。从这里，我们就可以很清楚得看到A这个转换在做什么。</p>
 <h3 id="SVD"><a href="#SVD" class="headerlink" title="SVD"></a>SVD</h3><p>现在我们来看看，SVD的解释。同样我们把任意一个实矩阵$A$看作转换,它把$\mathbb{R}^n$向量，转化为$\mathbb{R}^m$，这意味着这个转换$domain$是$\mathbb{R}^n$，而$codomain$是$\mathbb{R}^m$，而image ∈ range ∈ $\mathbb{R}^m$。因此对于domain和range都搞一个单位正交基才是比较合理的，而$U,V$恰好提供了这样的基，分别用来表示domain的向量和range的向量。那么这个转换就和上面一样，变得比较容易理解了，它同样放大了一些成分，对应的是singular value的大小，同时抛弃了一些成分，对应的是singular value为0的方向。SVD告诉我们怎样选择正交基，使得转换被表示成最简单的方式————对角的形式。</p>
 <p>那么我们如何选择得到这些基？想要使中间矩阵的形式是对角的，很容易，只要让$Av_i = \sigma_iu_i$即可。</p>
 <p>为了理解这个，我们假设$m \geq n$，那么如果$A v_i = \sigma_i u_i$，则：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-AV = A\begin{bmatrix}
-v_1&\cdots\v_n
+AV = &A\begin{bmatrix}
+v_1&\cdots v_n
  \end{bmatrix}\\
 &= \begin{bmatrix}
 Av_1 & \cdots &Av_n
@@ -518,7 +517,7 @@ u_i = \frac{Av_i}{\Vert Av_i\Vert} = \frac{1}{ \sqrt{\lambda_i}} Av_i\\
 \sigma_i = \sqrt{\lambda_i}</script><p>我们也很容易推导，$\lambda_i \ge 0$的个数是$k$个，可以由秩得到。而$D$中特征值的顺序如果是按照从大到小的顺序排列，那么$\Sigma$中也是一样的递减顺序。</p>
 <p>如果$k&lt; m$，那么将$U$扩展到正交基即可。这样我们就得到了想要的SVD。总结一下，V是$A^TA$的特征向量组成，被称为右侧的奇异向量，$\Sigma$由特征值组成，其中$\sigma_i = \sqrt{\lambda_i}$，而$U$是正交化$Av_i$的结果，有必要的话再进行拓展，使其成为一个正交基。</p>
 <p>需要注意的一点是，我们在这里计算SVD是通过计算$A^TA$的特征值和特征矩阵，但是实际上还有其他的办法，在很多应用中SVD的实际用途是计算出$A^TA$的特征值和特征矩阵。</p>
-<p>在我们的构造方法中，我们从$A^TA$的EVD来得到SVD，而实际上从SVD的角度出发，我们也很容易得到EVD，如果$A = U\SigmaV^T$：</p>
+<p>在我们的构造方法中，我们从$A^TA$的EVD来得到SVD，而实际上从SVD的角度出发，我们也很容易得到EVD，如果$A = U\Sigma V^T$：</p>
 <script type="math/tex; mode=display">
 A^TA = V\Sigma^T U^T U \Sigma V^T = V \Sigma^T\Sigma V^T</script><p>可以很容易看到上面正是$A^TA$的EVD，同理也很容易得到：</p>
 <script type="math/tex; mode=display">
@@ -531,17 +530,17 @@ Ax = U\Sigma Vx = x_1\sigma_1u_1 + ...+ x_k\sigma_ku_k.</script><p>假设$y_i = 
 <p>我们可以很容易得到，$\Vert A Vert$，算子范数，定义为$\Vert Av \Vert$的最大值，也就是$sigma_1$，$A$最大的奇异值。也就是：$\Vert Ax \Vert \leq \sigma\Vert x \Vert,x \in \mathbb{R}^n$，当$x$为$v_1$的整数倍时等号成立。</p>
 <h2 id="SVD的分块矩阵以及外积形式"><a href="#SVD的分块矩阵以及外积形式" class="headerlink" title="SVD的分块矩阵以及外积形式"></a>SVD的分块矩阵以及外积形式</h2><p>实际上，SVD可以写成下面分块矩阵的形式：</p>
 <script type="math/tex; mode=display">
-A = \begin{bmatrix}{ccc|ccc}
+A = \left [\begin{array}{ccc|ccc}
 u_1&\cdots&u_k&u_{k+1}&\cdots&u_n
-\end{bmatrix}
-\begin{bmatrix}{ccc|c}
+\end{array}\right ]
+\left [\begin{array}{ccc|c}
 \sigma_1&\cdots&0&0\\
 \vdots&\ddots&\vdots&\vdots\\
 0&\cdots&\sigma_k&0\\
 \hline
 0&\cdots&0&0\\
 \vdots&\vdots&\vdots&\vdots
-\end{bmatrix}
+\end{array}\right]
 \begin{bmatrix}
 v_1^T\\
 \vdots\\
@@ -617,7 +616,7 @@ v_k^T
 <script type="math/tex; mode=display">
 Ax = \sum_{i=1}^k\sigma_iu_iv_i^Tx = \sum_{i=1}^kv_i^Tx \sigma_iu_i</script><p>因为$v_i^Tx$是一个标量。</p>
 <p>这个时候$Ax$被表达为$u_i$的线性组合。所以通过outer product expansion可以看到，通过A转换将x中每个$v_i$成分转换成$u_i$成分，并且以$\sigma_i$的系数放缩。</p>
-<p>这篇博客基本上是下面文献的部分翻译，更多内容请看：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_pdf/SVD-%5BDan-Kalman%5D.pdf" alt="">。</p>
+<p>这篇博客基本上是下面文献的部分翻译，更多内容请看：<br><a href="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_pdf/SVD-%5BDan-Kalman%5D.pdf" target="_blank" rel="noopener">SVD</a></p>
 
       
     </div>
