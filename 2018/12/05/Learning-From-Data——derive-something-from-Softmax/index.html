@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这周的数据学习课更不知道该起什么题目了。主要是加上一些假设，从Softmax函数开始推导，最后得到一个非常简单的形式，从而大大简化了算法。这次的derivation和上篇讲得东西还是有一些相关的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-05T12:48:47.499Z">
+<meta property="og:updated_time" content="2018-12-05T12:51:27.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——derive something from Softmax">
 <meta name="twitter:description" content="这周的数据学习课更不知道该起什么题目了。主要是加上一些假设，从Softmax函数开始推导，最后得到一个非常简单的形式，从而大大简化了算法。这次的derivation和上篇讲得东西还是有一些相关的。">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建于：2018-12-05 13:58:52 / 更新于：20:48:47" itemprop="dateCreated datePublished" datetime="2018-12-05T13:58:52+08:00">2018-12-05</time>
+              <time title="创建于：2018-12-05 13:58:52 / 更新于：20:51:27" itemprop="dateCreated datePublished" datetime="2018-12-05T13:58:52+08:00">2018-12-05</time>
             
 
             
@@ -498,7 +498,7 @@ e^{f^T(x)g(y) + d(y)} \approx 1 + f^T(x)g(y)+ d(y)
 \end{aligned}</script><p>而由泰勒展开$\frac{1}{1+x} \approx  1-x$得到：</p>
 <script type="math/tex; mode=display">
 \begin{align}
- p_Y(y')e^{f^T(x)g(y')+d(y')}}} \approx 1 -f^T(x)\mathbb{E}_Y[g(Y )] -\mathbb{E}_Y[d(Y )]
+\frac{1}{\sum_{ y'\in \mathcal{Y}} p_Y(y' )e^{f^T(x)g(y' )+d(y' )}} \approx 1 -f^T(x)\mathbb{E}_Y[g(Y )] -\mathbb{E}_Y[d(Y )]
 \end{align}</script><p>结合上面的(1),(2)，我们得到：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
