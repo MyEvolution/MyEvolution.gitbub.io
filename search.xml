@@ -3,13 +3,31 @@
   
     
     <entry>
-      <title>Learning From Data——Multi-Dimensional ACE</title>
+      <title>Learning From Data——Multivariate ACE</title>
       <link href="/2018/12/05/Learning-From-Data%E2%80%94%E2%80%94Multi-Dimensional-ACE/"/>
       <url>/2018/12/05/Learning-From-Data%E2%80%94%E2%80%94Multi-Dimensional-ACE/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<p>上节课除了说了softmax与HGR，还介绍了ACE算法的拓展：多变量下的ACE。<br><a id="more"></a><br>之前的ACE是从两个变量$X,Y$之间的信息推导出来的，而这次要拓展到d个变量。</p>]]></content>
       
       
+      <categories>
+          
+          <category> 数据学习课程 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
+            
+            <tag> ACE </tag>
+            
+            <tag> PCA </tag>
+            
+        </tags>
       
     </entry>
     
@@ -114,6 +132,8 @@
             <tag> mathematics </tag>
             
             <tag> SVD </tag>
+            
+            <tag> ACE </tag>
             
         </tags>
       
