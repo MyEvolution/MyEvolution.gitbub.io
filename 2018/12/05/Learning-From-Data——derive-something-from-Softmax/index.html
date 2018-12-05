@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这周的数据学习课更不知道该起什么题目了。主要是加上一些假设，从Softmax函数开始推导，最后得到一个非常简单的形式，从而大大简化了算法。这次的derivation和上篇讲得东西还是有一些相关的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-05T13:02:10.265Z">
+<meta property="og:updated_time" content="2018-12-05T13:06:21.194Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——derive something from Softmax">
 <meta name="twitter:description" content="这周的数据学习课更不知道该起什么题目了。主要是加上一些假设，从Softmax函数开始推导，最后得到一个非常简单的形式，从而大大简化了算法。这次的derivation和上篇讲得东西还是有一些相关的。">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建于：2018-12-05 13:58:52 / 更新于：21:02:10" itemprop="dateCreated datePublished" datetime="2018-12-05T13:58:52+08:00">2018-12-05</time>
+              <time title="创建于：2018-12-05 13:58:52 / 更新于：21:06:21" itemprop="dateCreated datePublished" datetime="2018-12-05T13:58:52+08:00">2018-12-05</time>
             
 
             
@@ -545,9 +545,9 @@ Q_{Y|X}(y|x) = p_Y(y)[1+ f^T(x)\tilde g (y) + \tilde d (y)]</script><p>现在我
 <script type="math/tex; mode=display">
 \frac{\partial \Delta}{\partial f(x)} = 0\\
 f(x) = \land ^{-1}_{\tilde g (Y)} \mathbb{E}[\tilde g(Y)|X = x]</script><p>其中$\land ^{-1}_{\tilde g (Y)}=(\mathbb{E}_{p_Y}[\tilde g(Y){\tilde g}^T(Y)])^{-1}$，也就是我们得到了最佳的$f,\tilde g$.</p>
-<p>同理我们也得到：$$<br>\tilde {g ^*}(y) = \land ^{-1}_{f(X)} \mathbb{E}[f(X)|Y = y]</p>
-<p>$$</p>
-<p>也就是如果我们向softmax函数中喂入$f(x)$（形式固定）,那么softmax尽量在学的东西，也就是$W$实际上是$g^*$，当然不一定能成功学到这样的形式。</p>
+<p>同理我们也得到：</p>
+<script type="math/tex; mode=display">
+\tilde {g ^*}(y) = \land ^{-1}_{f(X)} \mathbb{E}[f(X)|Y = y]</script><p>也就是如果我们向softmax函数中喂入$f(x)$（形式固定）,那么softmax尽量在学的东西，也就是$W$实际上是$g^*$，当然不一定能成功学到这样的形式。</p>
 <p>同样的，利用神经网络进行softmax可以看作是在寻找Ｘ的特征，它找到的最佳形式应该是$f*$.</p>
 <p>简直是头大。实际上我不能保证这篇博客的正确性。</p>
 
