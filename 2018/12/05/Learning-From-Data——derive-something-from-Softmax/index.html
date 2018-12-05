@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这周的数据学习课更不知道该起什么题目了。主要是加上一些假设，从Softmax函数开始推导，最后得到一个非常简单的形式，从而大大简化了算法。这次的derivation和上篇讲得东西还是有一些相关的。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-05T12:51:27.672Z">
+<meta property="og:updated_time" content="2018-12-05T13:02:10.265Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——derive something from Softmax">
 <meta name="twitter:description" content="这周的数据学习课更不知道该起什么题目了。主要是加上一些假设，从Softmax函数开始推导，最后得到一个非常简单的形式，从而大大简化了算法。这次的derivation和上篇讲得东西还是有一些相关的。">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建于：2018-12-05 13:58:52 / 更新于：20:51:27" itemprop="dateCreated datePublished" datetime="2018-12-05T13:58:52+08:00">2018-12-05</time>
+              <time title="创建于：2018-12-05 13:58:52 / 更新于：21:02:10" itemprop="dateCreated datePublished" datetime="2018-12-05T13:58:52+08:00">2018-12-05</time>
             
 
             
@@ -450,7 +450,7 @@
 <h2 id="Review"><a href="#Review" class="headerlink" title="Review"></a>Review</h2><p>首先回顾一下上篇博客介绍的内容，从HGR maximal correlation开始推导。依然是离散变量$X$与$Y$。不过稍微做点拓展，我们在提取ｘ，ｙ的信息时，把他们映射到一个ｋ维度的向量，也就是：</p>
 <script type="math/tex; mode=display">f(x) \rightarrow \mathbb{R}^k,g(x) \rightarrow \mathbb{R}^k.</script><p>这时候，和之前一样，做一些推导吧。这时候的相关系数变成了相关矩阵：</p>
 <script type="math/tex; mode=display">
-/max ρ_{XY}=/max 𝔼 p_{XY}[f(x) g(y)^T]</script><p>我们的约束变成：</p>
+\max ρ_{XY}=\max 𝔼 p_{XY}[f(x) g(y)^T]</script><p>我们的约束变成：</p>
 <script type="math/tex; mode=display">
 \mathbb{E}[f (x)] = \mathbb{E}[ g(y)] = \mathbf{0}\\
 \mathbb{E}[ f^2(x)] = \mathbb{E}[ g^2(y)] = I_{k \times k}</script><p>问题描述变为：</p>
@@ -492,7 +492,7 @@ e^{f^T(x)g(y) + d(y)} \approx 1 + f^T(x)g(y)+ d(y)
 \end{align}</script><p>而:</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\sum_{y' \in \mathcal{Y}} p_Y(y')e^{f^T(x)g(y')+d(y')} &\approx \sum_{y' \in \mathcal{Y}} p_Y(y')[1+f^T(x)g(y')+d(y')]\\
+\sum_{y' \in \mathcal{Y}} p_Y(y')e^{f^T(x)g(y')+d(y')} &\approx \sum_{y' \in \mathcal{Y}} p_Y(y')[ 1+f^T(x)g(y')+d(y')]\\
 &= 1 + f^T(x)\sum_{y' \in \mathcal Y} p_Y(y')g(y') + \sum_{y' \in \mathcal Y}p_Y(y')d(y')\\
 &= 1 +f^T(x)\mathbb{E}_Y[g(Y) ] + \mathbb{E}_Y[d(Y) ] 
 \end{aligned}</script><p>而由泰勒展开$\frac{1}{1+x} \approx  1-x$得到：</p>
@@ -510,8 +510,10 @@ Q_{Y|X}(y|x) &= \frac{p_Y(y)e^{f^T(x)g(y) + d(y)}}{\sum_{y' \in \mathcal{Y}} p_Y
 <script type="math/tex; mode=display">
 Q_{Y|X}(y|x) = p_Y(y)[1+ f^T(x)\tilde g (y) + \tilde d (y)]</script><p>现在我们利用这个式子构建$empirical risk$，实际上也就是$-\frac{1}{n} \sum_{i=1}^n \log Q_{Y|X}(y_i|x_i)$.最小化经验风险(empirical risk)实际上也就是最大化$\mathbb{E}_{p_{XY}} [ Q_{Y|X}(y|x)]$，也是极大似然估计。</p>
 <script type="math/tex; mode=display">
+\begin{aligned}
 \log Q_{Y|X}(y|x) &= \log p_Y(y) + \log (1+ f^T(x)\tilde{g}(y) + \tilde{d} (y))\\
-& \approx \log p_Y(y) + f^T(x)\tilde{g}(y) + \tilde{d}(y) -  \frac{1}{2} [(f^T(x)\tilde{g}(y))^2 + \tilde{d^2}(y) + 2 f^T(x)\tilde{g}(y)\tilde{d}(y)]</script><p>上述过程用到了泰勒展开：$\log(1+x) \approx x - \frac{x^2}{2}$.</p>
+& \approx \log p_Y(y) + f^T(x)\tilde{g}(y) + \tilde{d}(y) -  \frac{1}{2} [(f^T(x)\tilde{g}(y))^2 + \tilde{d^2}(y) + 2 f^T(x)\tilde{g}(y)\tilde{d}(y)]
+\end{aligned}</script><p>上述过程用到了泰勒展开：$\log(1+x) \approx x - \frac{x^2}{2}$.</p>
 <p>$\mathbb{E}[\log Q_{Y|X}(Y|X)] = \mathbb{E}[\log p_Y(Y)] + \mathbb{E}[f^T(X)\tilde{g}(Y) ] + \mathbb{E}[\tilde{d}(Y) ] - \mathbb{E}[\frac{1}{2} [(f^T(X)\tilde{g}(Y))^2 + \tilde{d^2}(Y) + 2 f^T(X)\tilde{g}(Y)\tilde{d}(Y)]] $</p>
 <p>现在，我们来说明一些必要的东西：由假设得到$p_{XY}(x,y) - p_X(x)p_Y(y) = \epsilon \cdot \square = o(\epsilon)$，$o(\epsilon)$表示$\epsilon$的无穷小量（这么说其实不准确，因为我们最后要最大化这种无穷小量，显然不合理，可以当作为衡量有多小的量级）。</p>
 <p>因为<script type="math/tex">Q_{Y|X}(y|x) = P_Y(y)[1+f^T(x)\tilde{g}(y) + \tilde{d}(y)] \approx p_{Y},</script><br>同理可以得到$f^T(x)\tilde g (y)  = o(\epsilon),\tilde d (y) = o(\epsilon)$，我们假设对所有的$f,\tilde g,\tilde d$都进行了normalize，也就是$\mathbb{E}f = \mathbb{E}\tilde{g} = \mathbb{E}\tilde{d} = 0$,则：</p>
@@ -541,7 +543,7 @@ Q_{Y|X}(y|x) = p_Y(y)[1+ f^T(x)\tilde g (y) + \tilde d (y)]</script><p>现在我
 <script type="math/tex; mode=display">
 \max_{f,\tilde g} (\underbrace{\mathbb{E}[f^T(x)\tilde g(y)] - \frac{1}{2}\mathbb{E} [(f^T(x)\tilde g(y))^2]}_{\Delta})</script><p>如果我们将$ \mathbb{E}[f^T(x)\tilde g(y)] $对$f(x)$求导，可以得到：</p>
 <script type="math/tex; mode=display">
-\frac{partial \Delta}{\partial f(x)} = 0\\
+\frac{\partial \Delta}{\partial f(x)} = 0\\
 f(x) = \land ^{-1}_{\tilde g (Y)} \mathbb{E}[\tilde g(Y)|X = x]</script><p>其中$\land ^{-1}_{\tilde g (Y)}=(\mathbb{E}_{p_Y}[\tilde g(Y){\tilde g}^T(Y)])^{-1}$，也就是我们得到了最佳的$f,\tilde g$.</p>
 <p>同理我们也得到：$$<br>\tilde {g ^*}(y) = \land ^{-1}_{f(X)} \mathbb{E}[f(X)|Y = y]</p>
 <p>$$</p>
