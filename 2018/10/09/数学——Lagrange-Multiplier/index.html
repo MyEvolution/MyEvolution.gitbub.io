@@ -117,7 +117,7 @@
 <meta property="og:description" content="拉格朗日乘数法，是我们大学或者考研过来的耳熟能详的名词了。我们接触他的时候，应该是在求条件极值的时候。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/2012101621500549.png">
-<meta property="og:updated_time" content="2018-12-07T13:54:15.748Z">
+<meta property="og:updated_time" content="2018-12-07T13:56:20.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数学——Lagrange Multiplier">
 <meta name="twitter:description" content="拉格朗日乘数法，是我们大学或者考研过来的耳熟能详的名词了。我们接触他的时候，应该是在求条件极值的时候。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-07 21:54:15" itemprop="dateModified" datetime="2018-12-07T21:54:15+08:00">2018-12-07</time>
+                <time title="更新于：2018-12-07 21:56:20" itemprop="dateModified" datetime="2018-12-07T21:56:20+08:00">2018-12-07</time>
               
             
           </span>
@@ -483,8 +483,8 @@
   \nabla f(x,y) = \lambda \nabla g(x,y)</script><p>联立$g(x,y)=0$即可得到原来的方程组。</p>
 <p>现在我们知道了条件极值如何解出来，但是这只是拉格朗日乘数法的一部分。拉格朗日乘数法是一种寻找变量受一个或多个条件所限制的多元函数的极值的方法。首先上面的条件限制只有一个，另外上面的条件也很简单，是在$g(x,y)=0$，如果我们要的是$g(x,y) \leq 0$的呢？</p>
 <p>如果$f(x,y)$极值点本身就在上面的约束范围内，那么相当于没有约束，也就是$\lambda = 0$，否则在边界上，又回到了上面的问题：$g(x,y)=0$.总之，$\lambda g(x,y) = 0$.因此我们需要改变联立条件即可。</p>
-<p>上面的式子，都是$\lambda$也会变化的情况。但是，在机器学习的正则化中，我们往往给出的式子是形如这样$E_{in} + \frac \lambda N ||W||^2$.而且这个$\lambda$可能是个定值。如果$\lambda$固定，得到的又是什么值？</p>
-<p>我们可以推断出来的是如果$E_{in}$找到了最小的地方，那么$W$也就为0，否则$\nabla E_{in}$与$W$的比值是一个定值。从这些里得不到很有用的信息。但是从另一个角度来说，它确实限制了$W$的大小，虽然目前不知道具体限定到哪个范围。$||W_{reg}|| \leq ||W_{lin}||$是一定的，可以从反证法证明：如果$||W_{lin}||&lt;||W_{reg}||$,那么E_{in}也会小，正则项也更小，所以这时候的$E_{reg}$比使用$W_{reg}$的更佳，也就是前面找到的不可能是最小值。</p>
+<p>上面的式子，都是$\lambda$也会变化的情况。但是，在机器学习的正则化中，我们往往给出的式子是形如这样$E_{in} + \frac \lambda N \VertW\Vert^2$.而且这个$\lambda$可能是个定值。如果$\lambda$固定，得到的又是什么值？</p>
+<p>我们可以推断出来的是如果$E_{in}$找到了最小的地方，那么$W$也就为0，否则$\nabla E_{in}$与$W$的比值是一个定值。从这些里得不到很有用的信息。但是从另一个角度来说，它确实限制了$W$的大小，虽然目前不知道具体限定到哪个范围。$\VertW_{reg}\Vert \leq \VertW_{lin}\Vert$是一定的，可以从反证法证明：如果$\VertW_{lin}\Vert&lt;\VertW_{reg}\Vert$,那么$E_{in}$也会小，正则项也更小，所以这时候的$E_{reg}$比使用$W_{reg}$的更佳，也就是前面找到的不可能是最小值。</p>
 <p>另一个拉格朗日乘数法重要的在机器学习中的应用，是在SVM中。 </p>
 
       
