@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上节课除了说了softmax与HGR，还介绍了ACE算法的拓展：多变量下的ACE。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-07T07:18:52.264Z">
+<meta property="og:updated_time" content="2018-12-07T07:24:02.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Multivariate ACE">
 <meta name="twitter:description" content="上节课除了说了softmax与HGR，还介绍了ACE算法的拓展：多变量下的ACE。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-07 15:18:52" itemprop="dateModified" datetime="2018-12-07T15:18:52+08:00">2018-12-07</time>
+                <time title="更新于：2018-12-07 15:24:02" itemprop="dateModified" datetime="2018-12-07T15:24:02+08:00">2018-12-07</time>
               
             
           </span>
@@ -497,7 +497,7 @@ B_{d1}&B_{d2}&\cdots&0
 \begin{aligned}
 \frac{1}{n} \sum_{i=1}^n(X_i^Tu)^2 &= \frac{1}{n} \sum_{i=1}^m(\sum_{j=1}^d x_{ij} \mu_j)^2\\
 &= \frac{1}{n} \sum_{i=1}^n (\sum_{j=1}^d x_{ij}^2 \mu_j^2 + 2\sum_{j \ne q} \underbrace{(x_{ij}\mu_j)}_{f_j(x_ij)}\underbrace{(x_{iq}\mu_q)}_{f_q(x_iq)}) 
-\end{aligned}</script><p>由于normalize, 我们可以使得：$\sum_{i=1}^n \sum_{j=1}^d x_{ij}^2 \mu_j^2  = 1$.</p>
+\end{aligned}</script><p>由于normalize, 我们可以使得：<script type="math/tex">\frac{1}{n}\sum_{i=1}^n \sum_{j=1}^d x_{ij}^2 \mu_j^2 =\sum_{j=1}^d \sum_{i=1}^n  x_{ij}^2 \mu_j^2 = \sum_{j=1}^d \mathbb{E}[f_j^2(X_j)]= d</script>.</p>
 <p>而上式中：</p>
 <script type="math/tex; mode=display">
 \frac{1}{n} \sum_{i=1}^n \sum_{j \ne q} \underbrace{(x_{ij}\mu_j)}_{f_j(x_ij)}\underbrace{(x_{iq}\mu_q)}_{f_q(x_iq)}) = \mathbb{E}[\sum_{j \ne q}f_j(X_j)f_q(X_q)]</script><p>而这正是MACE在做的事情。不过PCA只能发现线性关系，因此它要求f为线性映射。</p>
