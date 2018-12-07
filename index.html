@@ -347,6 +347,141 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/12/07/数学——KKT-condition/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/07/数学——KKT-condition/" itemprop="url">
+                  数学——KKT condition
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2018-12-07 21:01:35" itemprop="dateCreated datePublished" datetime="2018-12-07T21:01:35+08:00">2018-12-07</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/12/05/Learning-From-Data——Multi-Dimensional-ACE/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -410,7 +545,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-07 15:33:13" itemprop="dateModified" datetime="2018-12-07T15:33:13+08:00">2018-12-07</time>
+                <time title="更新于：2018-12-07 15:42:52" itemprop="dateModified" datetime="2018-12-07T15:42:52+08:00">2018-12-07</time>
               
             
           </span>
@@ -926,7 +1061,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-28 20:51:56" itemprop="dateModified" datetime="2018-11-28T20:51:56+08:00">2018-11-28</time>
+                <time title="更新于：2018-12-07 17:27:13" itemprop="dateModified" datetime="2018-12-07T17:27:13+08:00">2018-12-07</time>
               
             
           </span>
@@ -979,7 +1114,99 @@
       
         
           
-            
+            <h2 id="离散无记忆信道的容量"><a href="#离散无记忆信道的容量" class="headerlink" title="离散无记忆信道的容量"></a>离散无记忆信道的容量</h2><p>现在来看一看最简单的信道：离散无记忆信道的容量应如何计算。这一小节主要通过举几个例子，然后再得到普遍的结论。</p>
+<h4 id="无噪声二元信道"><a href="#无噪声二元信道" class="headerlink" title="无噪声二元信道"></a>无噪声二元信道</h4><script type="math/tex; mode=display">
+0 \rightarrow 0
+1 \rightarrow 1</script><p>输入X，输出Y。由于传输误差错，所以每次传输都传递了1 bit的无差错信息。所以直观来说信道容量为1 bit.</p>
+<p>利用信道容量的定义来计算，则：</p>
+<script type="math/tex; mode=display">
+C=\max I(X;Y) = \max(H(X) - H(X|Y)) = \max H(X) = 1\\
+p(X) = (0.5,0.5)</script><p>如果字符个数变成m个，则这个信道容量变为：$\log m$.</p>
+<h4 id="输出不重叠的噪声信道"><a href="#输出不重叠的噪声信道" class="headerlink" title="输出不重叠的噪声信道"></a>输出不重叠的噪声信道</h4><p>观察上图，我们发现这个信道有下面几个特点：</p>
+<ol>
+<li>信道存在噪声，输出不确定</li>
+<li>但是不确定性不影响正确估计输入</li>
+<li>信道实际是无差错的</li>
+<li>X到Y是一对多映射<script type="math/tex; mode=display">
+C = \max I(X;Y) = \max(H(X)-H(X|Y)) = \max(H(X))=1\\
+p(X) = (0.5,0.5)</script></li>
+</ol>
+<p>因此可以看到即时有噪声，我们依然可以得到无差错的信道传输。</p>
+<h4 id="混乱打字机"><a href="#混乱打字机" class="headerlink" title="混乱打字机"></a>混乱打字机</h4><p>混乱打字机把每个字母以0.5的概率映射为其自身或者下一个字母。</p>
+<p>则：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+C &= \max I(X;Y)\\
+&= \max(H(Y) - H(Y|X))\\
+&= \max(H(Y)-1)\\
+&= \log 26 - 1 = \log 13
+\end{aligned}</script><p>我们只是在互信息求得这个，但是我们不一定能找到一个实际的概率控制得到这个容量。而实际上，这个容量是可以达到的。</p>
+<p>我们要求输入端只能输入$A,C,E…$这些字母，从而退化成了一个输出不重叠噪声信道，这称为无重叠约化。通过这个方法，我们实现了$\log13$的容量。实际上香农告诉我们，任何一种混乱的信道，都可以看作是混乱打字机信道。</p>
+<h4 id="BSC-Binary-Symmetric-Channel"><a href="#BSC-Binary-Symmetric-Channel" class="headerlink" title="BSC(Binary Symmetric Channel)"></a>BSC(Binary Symmetric Channel)</h4><script type="math/tex; mode=display">
+\begin{aligned}
+C &= \max_{p(x)} I(X;Y)\\
+&=\max( H(Y) - H(Y|X))\\
+&=\max(H(Y) - H(p))\\
+&=1-H(p)
+\end{aligned}</script><p>我们必须证明这个容量可以取到,也就是一个上确界，这样得到信道的容量才有意义。为了让$H(Y)$最大，那么$p(Y)=(0.5,0.5)$,可以简单的发现这时候$p(X) = (0.5,0.5)$.也就是我们可以通过调制信源的输入概率分布得到这个最大的容量 因此$C_{BSC} = 1 - H(p)$</p>
+<h4 id="EC-删除信道"><a href="#EC-删除信道" class="headerlink" title="EC(删除信道)"></a>EC(删除信道)</h4><script type="math/tex; mode=display">
+C = \max_{p(x)}I(X;Y)</script><script type="math/tex; mode=display">
+\begin{aligned}
+I(X;Y) &= H(Y) - H(Y|X)\\
+&=H(Y) - H(p)\\
+&\leq \log 3 - H(p)
+\end{aligned}</script><p>这时候我们就遇到问题了，我们不能通过调制信源的输入概率分布使得$p(Y)=(\frac{1}{3},\frac{1}{3},\frac 1 3)$，因此上面得到的不是信道容量。因此重新计算这个容量,假设p(X) = (\pi,1-\pi)：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+I(X;Y) &= H(Y) - H(p)\\
+&= H((\pi(1-p),p,(1-\pi)(1-p)))\\
+&= (1-p)H(\pi) + H(p) - H(p)\\
+&= (1-p)H(\pi)
+\end{aligned}</script><p>上式中用到了熵的可加性。这时候我们可以取到$H(\pi)=1$，因此得到$C = 1-p$.</p>
+<h3 id="离散无记忆对称信道容量"><a href="#离散无记忆对称信道容量" class="headerlink" title="离散无记忆对称信道容量"></a>离散无记忆对称信道容量</h3><p>实际上，上面的几个信道有很多都属于离散无记忆对称信道。他们的特点是概率转移矩阵$Q$为对称矩阵，使得$H(Y|X)$可以由信道性质确定，大大简化了我们要思考的问题。</p>
+<p>离散无记忆对称信道的定义：<br>若信道的概率转移矩阵的行互为置换，列互为置换，则该信道对称，如果行互为置换，各列之和相等，则该信道弱对称。</p>
+<p>强对称：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+\frac 1 2&\frac 1 3& \frac 1 6\\
+\frac 1 6&\frac 1 2&\frac 1 3\\
+\frac 1 3&\frac 1 6&\frac 1 2
+\end{bmatrix}</script><p>弱对称：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+\frac 1 3 & \frac 1 6 &\frac 1 2\\
+\frac 1 3 & \frac 1 2 & \frac 1 6
+\end{bmatrix}</script><p>不管是强对称还是弱对称，他们都有一个好处，那就是$H(Y|X)$不会随着信源的概率分布而改变，是一个常数。</p>
+<p>弱对称信道Q的容量为：$C=\log \vert Y\vert - H(Q的行向量对应的分布)$,容量在输入为等概分布时候取得。</p>
+<p>而EC不是一个对称信道：</p>
+<script type="math/tex; mode=display">
+Q = \begin{bmatrix}
+1-p & p & 0\\
+0 & p & 1-p 
+\end{bmatrix}</script><h3 id="一般离散无记忆信道的容量"><a href="#一般离散无记忆信道的容量" class="headerlink" title="一般离散无记忆信道的容量"></a>一般离散无记忆信道的容量</h3><p>由于$I(p,Q)$是$p$的上凸函数，因此求信道容量实际上可以表述为一个约束的极值问题：</p>
+<script type="math/tex; mode=display">
+\max _{p} I(p,Q)\\
+s.t. \sum_{x}p(x)=1;p(x)\ge 0</script><h4 id="kkt-condition"><a href="#kkt-condition" class="headerlink" title="kkt condition"></a>kkt condition</h4><p>设$f(x)$为定义在Ｎ维无穷凸集$S$,<br>$S=\{x = (x_1,x_2,…,x_N):x_i \ge 0,i=1,…,N\}$上的可微上凸函数，设$x^* = {x_1^*,…,x_N^*} \in S$，则$f(x)$在$x = x^*$达到$S$上的极大值的充要条件为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial f(x)}{\partial x_n}\lvert_{x = x^*} = 0,x_n^* > 0\\
+\frac{\partial f(x)}{\partial x_n}\lvert_{x = x^*} \leq 0,
+x_n^* = 0</script><p>我们称$x^*(x^*=(x_1^*,…,x_N^*),x_n^* &gt; 0)为$S$的内点，而$\exists x_n^* = 0$时，$x^*$为$S$的边界点。</p>
+<p>用图像来看的话会更容易理解：</p>
+<p>上图中求最小值，而沿着y的方向，偏导数是大于0的，如果是最大值则正好相反。而x因为在内部，所以在x方向的偏导数为0.</p>
+<p>实际上的kkt条件比这个更严谨，可以参考：<a href="https://wlsdzyzl.top/2018/12/07/数学%E2%80%94%E2%80%94KKT-condition/" target="_blank" rel="noopener">kkt condition</a></p>
+<p>由于它是一个凸函数下的充要条件，因此只要我们找到了一个点符合KKT条件，我们就可以称他为全局极值。</p>
+<p>由KKT条件可以得到下面的关于信道容量的定理：</p>
+<p>对于信道矩阵为$Q$的离散无记忆信道，其输入分布$p^*$能使互信息$I(p,Q)$取得最大值的充要条件是：</p>
+<script type="math/tex; mode=display">
+I(X=x_k;Y) = C,p^\*(x_k) > 0\\
+I(X=x_k;Y) \leq C,p^\*(x_k)=0\\
+k \in {1,2,...,K}</script><p>其中$I(X=x_k;Y) = \sum_{j=1}^J q(y_j|x_k) \log \frac{q(y_j|x_k)}{p(y_j)}$,表示的是信源字母$x_k$传送的平均互信息。</p>
+<p>当然我们拿到一个信道以后，不一定一定要通过这样的方法来求得信道容量，很多时候我们可以联系物理猜到最好的哪个情况。如下：</p>
+<script type="math/tex; mode=display">
+</script><p>我们可以很容易看出来1是最差的情况，因为它可能映射到三种结果，而0,２一样好，因此我们猜测：$p(x_1) = 0,p(x_2)=p(x_0)=0.5$，计算得到：</p>
+<script type="math/tex; mode=display">
+I(X=x_0;Y) = I(X=x_2;Y)=0.75, I(X=x_1;Y) = 0.0251<0.75</script><p>符合kkt条件，因此它的容量就是0.75.</p>
+
           
         
       
@@ -1447,7 +1674,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-21 21:37:04" itemprop="dateModified" datetime="2018-11-21T21:37:04+08:00">2018-11-21</time>
+                <time title="更新于：2018-12-07 15:37:16" itemprop="dateModified" datetime="2018-12-07T15:37:16+08:00">2018-12-07</time>
               
             
           </span>
@@ -1885,182 +2112,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/11/16/Learning-From-Data——拟合sin曲线/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="wlsdzyzl">
-      <meta itemprop="description" content="Everything is choice.">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="wlsdzyzl">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/16/Learning-From-Data——拟合sin曲线/" itemprop="url">
-                  Learning From Data——拟合sin曲线
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建于：2018-11-16 17:45:44" itemprop="dateCreated datePublished" datetime="2018-11-16T17:45:44+08:00">2018-11-16</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="更新于：2018-11-25 14:17:16" itemprop="dateModified" datetime="2018-11-25T14:17:16+08:00">2018-11-25</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/数据学习课程/" itemprop="url" rel="index"><span itemprop="name">数据学习课程</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>这次的作业是用神经网络来拟合sin曲线。通过实践更能感受到ReLU以及sigmoid，tanh激活函数的区别。<br>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2018/11/16/Learning-From-Data——拟合sin曲线/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-         
-          <!--/noindex-->
-        
-      
-    </p></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2110,7 +2161,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">62</span>
+                    <span class="site-state-item-count">63</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -2781,9 +2832,9 @@
   
     
       
-        
-      
     
+      
+        
       
     
       
