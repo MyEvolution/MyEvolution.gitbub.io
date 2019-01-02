@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="信道编码这里我们先回忆一下之前的混乱打字机。之前说过，世界上任何一个数字信道，都可以直接或者间接地看作是混乱打字机模型。 对于信道$\{X,q(y|x),Y\}$的信道编码包含以下要素：  输入符号集合$\{1,2,…,2^{nR}\}$ 编码函数$X^n$:$\{1,2,…,2^{nR}\}\rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(">
+<meta name="keywords" content="information theory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息论——信道及其容量（二）">
+<meta property="og:url" content="http://wlsdzyzl.com/2019/01/02/信息论——信道及其容量（二）/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="信道编码这里我们先回忆一下之前的混乱打字机。之前说过，世界上任何一个数字信道，都可以直接或者间接地看作是混乱打字机模型。 对于信道$\{X,q(y|x),Y\}$的信道编码包含以下要素：  输入符号集合$\{1,2,…,2^{nR}\}$ 编码函数$X^n$:$\{1,2,…,2^{nR}\}\rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wlsdzyzl.com/2019/01/02/信息论——信道及其容量（二）/到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。">
+<meta property="og:updated_time" content="2019-01-02T12:27:49.820Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="信息论——信道及其容量（二）">
+<meta name="twitter:description" content="信道编码这里我们先回忆一下之前的混乱打字机。之前说过，世界上任何一个数字信道，都可以直接或者间接地看作是混乱打字机模型。 对于信道$\{X,q(y|x),Y\}$的信道编码包含以下要素：  输入符号集合$\{1,2,…,2^{nR}\}$ 编码函数$X^n$:$\{1,2,…,2^{nR}\}\rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(">
+<meta name="twitter:image" content="http://wlsdzyzl.com/2019/01/02/信息论——信道及其容量（二）/到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2019/01/02/信息论——信道及其容量（二）/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>信息论——信道及其容量（二） | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/01/02/信息论——信道及其容量（二）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">信息论——信道及其容量（二）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-01-02 20:26:11 / 更新于：20:27:49" itemprop="dateCreated datePublished" datetime="2019-01-02T20:26:11+08:00">2019-01-02</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/信息论/" itemprop="url" rel="index"><span itemprop="name">信息论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。" alt=""></p>
+<h2 id="信道编码"><a href="#信道编码" class="headerlink" title="信道编码"></a>信道编码</h2><p>这里我们先回忆一下之前的混乱打字机。之前说过，世界上任何一个数字信道，都可以直接或者间接地看作是混乱打字机模型。</p>
+<p>对于信道$\{X,q(y|x),Y\}$的信道编码包含以下要素：</p>
+<ul>
+<li>输入符号集合$\{1,2,…,2^{nR}\}$</li>
+<li>编码函数$X^n$:$\{1,2,…,2^{nR}\}\rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(2),…,X^n(m)$，这些码字构成的集合称为“码本”。</li>
+<li>解码函数$g$:$Y^n \rightarrow \{1,2,…,2^{nR}\}$，该函数为一个确定性判决函数，将每一个可能的接受向量映射到一个输入符号。</li>
+</ul>
+<p>意思也就是，对于符号个数为$2^{nR}$的符号集，我们把它映射到一个长度为n的序列上,分n次传输。</p>
+<h3 id="信道编码的码率"><a href="#信道编码的码率" class="headerlink" title="信道编码的码率"></a>信道编码的码率</h3><p>$(M,n)$码的码率Ｒ定义为：</p>
+<script type="math/tex; mode=display">
+R = \frac{\log M}{n} ,</script><p>单位为比特/传输。这是信道码的每个码字母所能携带的最大的信息量。</p>
+<p>如何理解？对于输入集合如果取等概分布，则它的信息量为$M$，这时候呢，$n$次传输才能传达这么多的信息量，所以每个传输的量就是$\frac{\log M}{n} = R$，则$M = 2^{nR}$。称这样的码为$(2^{nR},n)$码。</p>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p><strong>重复码</strong>，输入字母数$M = 2$:$\{0,1\}$，重复n次，这个码率为$1/n$。</p>
+<p><strong>二进制奇偶校验码</strong>，输入字母数$M = 2^{n-1}:{x_1,x_2,…,x_{n-1}}$，信道编码方案为$C = x_1,x_2,…,x_{n-1}x_{\text{parity}}$，其中$x_{\text{parity}}$用于辨识码字中$1$的个数为奇数还是偶数，这个码率为：$\frac{n-1}{n}$。</p>
+<h3 id="信道编码的错误概率"><a href="#信道编码的错误概率" class="headerlink" title="信道编码的错误概率"></a>信道编码的错误概率</h3><p>输入为符号$i$时的条件错误概率为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\lambda_i &= Pr\{g(Y^n) \ne i \vert X^n = x^n(i)\}\\
+&= \sum_{y^n} q(y^n\vert x^n(i))I(g(y^n) \ne i)
+\end{aligned}</script><p>其中$I(\cdot)$为指示函数。</p>
+<p>$(M,n)$码的最大错误概率为：</p>
+<script type="math/tex; mode=display">
+\lambda^{(n)} = \max_{i \in 1,2,...M} \lambda_i</script><p>$(M,n)$码的算术平均错误概率为：</p>
+<script type="math/tex; mode=display">
+P_e^{(n)} = \frac{1}{M} \sum_{i=1}^M\lambda_i</script><p>我们称一个码率$R$是可达的，若存在一个信道编码$(\lceil 2^{nR}\rceil,n )$，其最大差错概率在$n\rightarrow \infty$时趋于0。可以看出来可达要求无差错，而且是渐进的。</p>
+<p>这时候我们得到信道容量的另外一个定义：一个信道的容量是该信道上所有可达码率的上确界，即$C = \text{sup }R$，这意味着$C$一定对应着一种信道编码方案。</p>
+<h3 id="经验主义式的设计"><a href="#经验主义式的设计" class="headerlink" title="经验主义式的设计"></a>经验主义式的设计</h3><p>在信道传输中如何减少差错？由香农公式：</p>
+<script type="math/tex; mode=display">
+C_T(\beta) = WT \log(1+\frac{P_S}{N_0W})</script><p>可以得到，提高抗干扰能力的方法如下：</p>
+<ol>
+<li>增加功率(提高信噪比)</li>
+<li>加大带宽(信号变化剧烈)</li>
+<li>延长时间(降低速率)</li>
+</ol>
+<p>$C = max_{p(x),功率约束}\{I(X;Y)\}$</p>
+<p>而降低重复速率，实际上就是重复，增加冗余。</p>
+<h3 id="重复码"><a href="#重复码" class="headerlink" title="重复码"></a>重复码</h3><p>最直观的纠错方法就是：重复，增加冗余。</p>
+<ul>
+<li>编码１：将每个输入元重复三次<ul>
+<li>纠正任一位上的错误</li>
+<li>设码字记为$(c_8,c_7,…,c_0)$</li>
+<li>由编码方法可知，信道无误时：<script type="math/tex; mode=display">
+c_8 = c_7 = c_6\\
+c_5 = c_4 = c_3\\
+c_2 = c_1 = c_0</script></li>
+<li>解码时，若$c_8 = c_6 \ne c_7$，则判定$c_7$位出错，采用简单多数法进行判定</li>
+<li>依据是：连续出现两个错误的概率远远小于出现一个错误的概率<br>如下图，如果我们将上述编码放进二进制对称信道，则想要得到无差错编码，$n \rightarrow 0$，而码率也趋近于0，这不是一个好消息。</li>
+</ul>
+</li>
+</ul>
+<p>但是，是否对于信息的无差错传输，就意味着码率为0呢？答案是否定的。</p>
+<p>现在我们考虑BSC信道，$W= \{1,2,…,2^k\}$,如图：<br><img src="" alt=""></p>
+<p>我们可以得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+nC &\ge nI(X;Y)\\
+&\ge I(X^n;Y^n)\\
+&\ge I(W,\hat W)\\
+&=H(W) - H(W\vert \hat W)\\
+&\ge k - k H(P_e)
+\end{aligned}</script><p>上式中最后一步是有Fano不等式得到的。</p>
+<p>则：<script type="math/tex">k \leq  \frac{nC}{1 - H(P_e)}</script></p>
+<p>而由于BSC信道的容量可以得到：$C = 1 - H(P)$，所以我们得到一个R的上界：</p>
+<script type="math/tex; mode=display">
+R = \frac{k}{n} \ge \frac{1 - H(P)}{1 - H(P_e)}</script><p>通过变形，我们可以得到：</p>
+<script type="math/tex; mode=display">
+H(P_e) \ge 1 - \frac C R \rightarrow P_e \ge H^{-1}\left(1 - \frac C R\right)</script><p>这意味着，如果想要让$P_e\leq 0$，则$R \leq C$，如果$R &gt; C$，则$H(P_e)&gt;0$，所以我们一定可以得到$P_e&gt;0$，不可能进行可靠通信。</p>
+<p>那么无差错传输的情况下，码率最大能有多少？先给你看一个preview，很直白的内容，不过它被证明确实是正确的：</p>
+<p><img src="" alt=""></p>
+<p>想象信道将信源映射到一个球体里，而对每个输入符号也对应一个球。而这个球的体积就意味着噪声带来的体积，而大球中能容纳多少小球，正是这个信道编码在无错的情况下可以映射的符号数M。因为这个球的维度是n维的，我么可以得到：</p>
+<script type="math/tex; mode=display">
+M = \frac{\left[\sqrt{P_S +P_N}\right]^n}{\left[\sqrt{P_N}\right]^n} = (1 + \frac{P_S}{P_N})^{\frac n 2}</script><p>由上式，可以计算得出：</p>
+<script type="math/tex; mode=display">
+R = \frac 1 2 \log (1 + \frac{P_S}{P_N})</script><p>而这个值，正好与连续无记忆加性高斯噪声信道的容量一致。</p>
+<p>当然，这个只是preview，不是严格的证明过程。下面对这个证明进行稍微严谨地推导，说明大多数噪声信道都有这样地特性。</p>
+<p>为了证明这个东西，我们需要介绍一些别的定义。之前证明信源无失真压缩定理地时候，用到了典型序列，而这次我们在典型序列地基础上，重新介绍一个新的内容。</p>
+<h3 id="证明香农第二定理"><a href="#证明香农第二定理" class="headerlink" title="证明香农第二定理"></a>证明香农第二定理</h3><h4 id="联合典型序列"><a href="#联合典型序列" class="headerlink" title="联合典型序列"></a>联合典型序列</h4><p>设$(X^n,Y^n)$是长为$n$的随机序列对，其概率分布满足</p>
+<script type="math/tex; mode=display">
+p(x^n,y^n) = \prod_{i=1}^n p(x_i,y_i)</script><p>若$(X^n,Y^n)$满足以下条件，则称其为联合典型序列：</p>
+<ul>
+<li>$\lvert -\frac 1 n \log p(x^n) - H(X) \rvert &lt; \epsilon$</li>
+<li>$\lvert -\frac 1 n \log p(y^n) - H(Y) \rvert &lt; \epsilon$</li>
+<li>$\lvert -\frac 1 n \log p(x^n,y^n) - H(X,Y)\rvert &lt; \epsilon$<br>联合典型序列构成的集合为$A_\epsilon^{(n)}$。</li>
+</ul>
+<p>联合典型序列与之前典型序列定义是有很大地相似性：<a href="https://wlsdzyzl.top/2018/11/02/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94Lossless-Encoding/" target="_blank" rel="noopener">信息论——Lossless-Encoding</a>.我们首先要看看联合典型序列的性质，才能用它来证明。</p>
+<h4 id="联合渐进等同分割定理（Joint-AEP）"><a href="#联合渐进等同分割定理（Joint-AEP）" class="headerlink" title="联合渐进等同分割定理（Joint AEP）"></a>联合渐进等同分割定理（Joint AEP）</h4><p>设$(X^n,Y^n)$是长度为$n$的随机序列对，其分布满足：</p>
+<script type="math/tex; mode=display">
+p(x^n,y^n) = \prod_{i=1}^n p(x_i,y_i)</script><p>则以下性质成立：</p>
+<ul>
+<li>当$n \rightarrow \infty$时，$Pr((X^n,Y^n) \in A_\epsilon ^{(n)}) \rightarrow 1$</li>
+<li>$(1 - \epsilon)2^{n(H(X,Y) - \epsilon)} \leq \vert A_\epsilon ^{(n)} \vert\leq 2^{n(H(X,Y)+\epsilon)}$</li>
+<li>设$(\tilde{X^n},\tilde{Y^n})\sim p(x^n)p(y^n) $,即$\tilde{X^n},\tilde{Y^n}$统计独立，且具有与$p(x^n,y^n)$一致的边缘分布，则：<script type="math/tex; mode=display">
+Pr\left((\tilde{X^n},\tilde{Y^n}) \in A_\epsilon ^{(n)}\right) \leq 2^{-n(I(X,Y) - 3\epsilon)}</script>若$n$足够大，则：<script type="math/tex; mode=display">
+Pr\left((\tilde{X^n},\tilde{Y^n}) \in A_\epsilon ^{(n)}\right) \ge (1 - \epsilon)2^{-n(I(X,Y) + 3\epsilon)}</script></li>
+</ul>
+<p>前两点都比较好理解，第三点中，$(\tilde{X^n},\tilde{Y^n})$是由$(X^n,Y^n)$的边缘分布依照$X^n,Y^n$独立形成的另一个联合分布，而这个分布属于典型序列的概率约等于$2^{-nI(X,Y)}$。</p>
+<p>在这里我们证明以下第三条的前半部分：</p>
+<script type="math/tex; mode=display">
+\tilde{X^n},\tilde{Y^n}\text{ are independent. }\tilde{X^n}\sim P_X(x^n),\tilde{Y^n}\sim P_Y(y^n)\\
+\begin{aligned}
+Pr\{(\tilde{X^n},\tilde{Y^n}) \in A_\epsilon^{(n)} \} &= \sum_{(\tilde{x^n},\tilde{y^n}) \in A_\epsilon^{(n)}} P(x^n)P(y^n)\\
+&\leq 2^{b(H(X,Y) + \epsilon)}\cdot 2^{-n(H(X) - \epsilon)} \cdot 2^{-n(H(Y) - \epsilon)}\\
+&= 2^{-n(I(X,Y) - 3\epsilon)}
+\end{aligned}</script><p>下图可以帮助我们更好地理解这些性质：<br><img src="" alt=""></p>
+<ul>
+<li>联合分布中，大约有$2^{nH(X)}$个典型X序列和$2^{nH(Y)}$个典型Y序列</li>
+<li>其组合共有$2^{nH(X) + nH(Y)}$个，但是其中联合典型的只有$2^{nH(X,Y)}$个</li>
+<li>随机选择而出现联合典型序列的概率为$2^{-nI(X,Y)}$</li>
+</ul>
+<p>现在来看一下联合典型序列的另一个解释：</p>
+<ul>
+<li>对于典型输入序列$x^n$，存在大约$2^{nH(Y|X)}$个可能的输出，且它们等概</li>
+<li>所有可能的典型输出序列大约有$2^{nH(Y)}$个，这些序列被分成若干个不相交的子集</li>
+<li>子集个数为$2^{n(H(Y) - H(Y|X))} = 2^{nI(X;Y)}$，表示信道可以无错误传递的最大字母序列个数<br><img src="" alt=""></li>
+</ul>
+<h4 id="可达性的证明"><a href="#可达性的证明" class="headerlink" title="可达性的证明"></a>可达性的证明</h4><p>可达性的证明也就是我们可以找到一个编码函数和解码函数，使得信道带到容量C，而且是无差错地传输。</p>
+<script type="math/tex; mode=display">
+W \in [1:2^{nR}] \rightarrow X^n \sim P_X(x) \rightarrow q(y|X)\rightarrow Y^n \hat W</script>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/information-theory/" rel="tag"># information theory</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/02/Learning-From-Data——DQN/" rel="next" title="Learning From Data——DQN">
+                <i class="fa fa-chevron-left"></i> Learning From Data——DQN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">71</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#信道编码"><span class="nav-number">1.</span> <span class="nav-text">信道编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信道编码的码率"><span class="nav-number">1.1.</span> <span class="nav-text">信道编码的码率</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">1.1.1.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信道编码的错误概率"><span class="nav-number">1.2.</span> <span class="nav-text">信道编码的错误概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#经验主义式的设计"><span class="nav-number">1.3.</span> <span class="nav-text">经验主义式的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重复码"><span class="nav-number">1.4.</span> <span class="nav-text">重复码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#证明香农第二定理"><span class="nav-number">1.5.</span> <span class="nav-text">证明香农第二定理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#联合典型序列"><span class="nav-number">1.5.1.</span> <span class="nav-text">联合典型序列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#联合渐进等同分割定理（Joint-AEP）"><span class="nav-number">1.5.2.</span> <span class="nav-text">联合渐进等同分割定理（Joint AEP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可达性的证明"><span class="nav-number">1.5.3.</span> <span class="nav-text">可达性的证明</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
