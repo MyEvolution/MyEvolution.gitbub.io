@@ -124,7 +124,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/dqn8.gif">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/dqn9.gif">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/dqn1.png">
-<meta property="og:updated_time" content="2019-01-02T11:41:08.974Z">
+<meta property="og:updated_time" content="2019-01-02T11:52:06.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——DQN">
 <meta name="twitter:description" content="之前的博客讲了reinforcement learning，但是上节课讲得更多的像是理论层面的东西，实际操作起来还是一脸懵逼。这次介绍一个非常有名的DQN（Deep Q-network），是神经网络和Q-learning结合起来的一个算法。并且在最后，我们会用它做一个有趣的事情。">
@@ -399,7 +399,7 @@
                 
               
 
-              <time title="创建于：2019-01-02 00:42:53 / 更新于：19:41:08" itemprop="dateCreated datePublished" datetime="2019-01-02T00:42:53+08:00">2019-01-02</time>
+              <time title="创建于：2019-01-02 00:42:53 / 更新于：19:52:06" itemprop="dateCreated datePublished" datetime="2019-01-02T00:42:53+08:00">2019-01-02</time>
             
 
             
@@ -499,6 +499,7 @@ Q(1,5) &=R(1,5)+\max\{Q(5,1),Q(5,4),Q(5,5)\}\\
 </blockquote>
 <p>这里，$\alpha$为学习率，$\gamma$为折扣因子。这些一般都是经验值。Q表可以看作是agent的记忆，如果$\alpha$更小，我们更依赖于当前表的值，否则我们更倾向于更新的值。而$\gamma$则是我们是否有长远眼光的一个度量。</p>
 <p>其次$\epsilon$-greedy也是为了解决上面的问题提出来的，以$\epsilon$的概率来进行贪婪搜索（选最大的），而$1-\epsilon$的概率来进行开发。</p>
+<p>在使用贪婪的时候，Q-learning实际上就是在选择最大让奖励最大的action，而且它更新的是Q值，因此实际上Q-learning实际上是值迭代的一种。</p>
 <p>Q-learning还是挺强大的，但是之前我们提到了维度诅咒，如果这个维度过大，维护这个表的负担将是不可想象的。因此就有了很多别的方法来计算这个Q值，之前提到了有线性的，特征映射的线性，以及使用神经网络。当然神经网络的效果是好于其他两个的，这就是Deep Q-Network。</p>
 <h2 id="Sarsa"><a href="#Sarsa" class="headerlink" title="Sarsa"></a>Sarsa</h2><p>在介绍Deep Q-Network之前，我们再提一个简单的强化学习算法，叫Sarsa，它和Q-learning算法非常相似。</p>
 <blockquote>
