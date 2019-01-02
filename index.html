@@ -393,7 +393,7 @@
                 
               
 
-              <time title="创建于：2019-01-02 20:26:11 / 更新于：20:27:49" itemprop="dateCreated datePublished" datetime="2019-01-02T20:26:11+08:00">2019-01-02</time>
+              <time title="创建于：2019-01-02 20:26:11 / 更新于：20:30:10" itemprop="dateCreated datePublished" datetime="2019-01-02T20:26:11+08:00">2019-01-02</time>
             
 
             
@@ -450,130 +450,19 @@
 
       
         
+          <p>到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。<br>
+          <!--noindex-->
           
-            <p><img src="到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。" alt=""></p>
-<h2 id="信道编码"><a href="#信道编码" class="headerlink" title="信道编码"></a>信道编码</h2><p>这里我们先回忆一下之前的混乱打字机。之前说过，世界上任何一个数字信道，都可以直接或者间接地看作是混乱打字机模型。</p>
-<p>对于信道$\{X,q(y|x),Y\}$的信道编码包含以下要素：</p>
-<ul>
-<li>输入符号集合$\{1,2,…,2^{nR}\}$</li>
-<li>编码函数$X^n$:$\{1,2,…,2^{nR}\}\rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(2),…,X^n(m)$，这些码字构成的集合称为“码本”。</li>
-<li>解码函数$g$:$Y^n \rightarrow \{1,2,…,2^{nR}\}$，该函数为一个确定性判决函数，将每一个可能的接受向量映射到一个输入符号。</li>
-</ul>
-<p>意思也就是，对于符号个数为$2^{nR}$的符号集，我们把它映射到一个长度为n的序列上,分n次传输。</p>
-<h3 id="信道编码的码率"><a href="#信道编码的码率" class="headerlink" title="信道编码的码率"></a>信道编码的码率</h3><p>$(M,n)$码的码率Ｒ定义为：</p>
-<script type="math/tex; mode=display">
-R = \frac{\log M}{n} ,</script><p>单位为比特/传输。这是信道码的每个码字母所能携带的最大的信息量。</p>
-<p>如何理解？对于输入集合如果取等概分布，则它的信息量为$M$，这时候呢，$n$次传输才能传达这么多的信息量，所以每个传输的量就是$\frac{\log M}{n} = R$，则$M = 2^{nR}$。称这样的码为$(2^{nR},n)$码。</p>
-<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p><strong>重复码</strong>，输入字母数$M = 2$:$\{0,1\}$，重复n次，这个码率为$1/n$。</p>
-<p><strong>二进制奇偶校验码</strong>，输入字母数$M = 2^{n-1}:{x_1,x_2,…,x_{n-1}}$，信道编码方案为$C = x_1,x_2,…,x_{n-1}x_{\text{parity}}$，其中$x_{\text{parity}}$用于辨识码字中$1$的个数为奇数还是偶数，这个码率为：$\frac{n-1}{n}$。</p>
-<h3 id="信道编码的错误概率"><a href="#信道编码的错误概率" class="headerlink" title="信道编码的错误概率"></a>信道编码的错误概率</h3><p>输入为符号$i$时的条件错误概率为：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-\lambda_i &= Pr\{g(Y^n) \ne i \vert X^n = x^n(i)\}\\
-&= \sum_{y^n} q(y^n\vert x^n(i))I(g(y^n) \ne i)
-\end{aligned}</script><p>其中$I(\cdot)$为指示函数。</p>
-<p>$(M,n)$码的最大错误概率为：</p>
-<script type="math/tex; mode=display">
-\lambda^{(n)} = \max_{i \in 1,2,...M} \lambda_i</script><p>$(M,n)$码的算术平均错误概率为：</p>
-<script type="math/tex; mode=display">
-P_e^{(n)} = \frac{1}{M} \sum_{i=1}^M\lambda_i</script><p>我们称一个码率$R$是可达的，若存在一个信道编码$(\lceil 2^{nR}\rceil,n )$，其最大差错概率在$n\rightarrow \infty$时趋于0。可以看出来可达要求无差错，而且是渐进的。</p>
-<p>这时候我们得到信道容量的另外一个定义：一个信道的容量是该信道上所有可达码率的上确界，即$C = \text{sup }R$，这意味着$C$一定对应着一种信道编码方案。</p>
-<h3 id="经验主义式的设计"><a href="#经验主义式的设计" class="headerlink" title="经验主义式的设计"></a>经验主义式的设计</h3><p>在信道传输中如何减少差错？由香农公式：</p>
-<script type="math/tex; mode=display">
-C_T(\beta) = WT \log(1+\frac{P_S}{N_0W})</script><p>可以得到，提高抗干扰能力的方法如下：</p>
-<ol>
-<li>增加功率(提高信噪比)</li>
-<li>加大带宽(信号变化剧烈)</li>
-<li>延长时间(降低速率)</li>
-</ol>
-<p>$C = max_{p(x),功率约束}\{I(X;Y)\}$</p>
-<p>而降低重复速率，实际上就是重复，增加冗余。</p>
-<h3 id="重复码"><a href="#重复码" class="headerlink" title="重复码"></a>重复码</h3><p>最直观的纠错方法就是：重复，增加冗余。</p>
-<ul>
-<li>编码１：将每个输入元重复三次<ul>
-<li>纠正任一位上的错误</li>
-<li>设码字记为$(c_8,c_7,…,c_0)$</li>
-<li>由编码方法可知，信道无误时：<script type="math/tex; mode=display">
-c_8 = c_7 = c_6\\
-c_5 = c_4 = c_3\\
-c_2 = c_1 = c_0</script></li>
-<li>解码时，若$c_8 = c_6 \ne c_7$，则判定$c_7$位出错，采用简单多数法进行判定</li>
-<li>依据是：连续出现两个错误的概率远远小于出现一个错误的概率<br>如下图，如果我们将上述编码放进二进制对称信道，则想要得到无差错编码，$n \rightarrow 0$，而码率也趋近于0，这不是一个好消息。</li>
-</ul>
-</li>
-</ul>
-<p>但是，是否对于信息的无差错传输，就意味着码率为0呢？答案是否定的。</p>
-<p>现在我们考虑BSC信道，$W= \{1,2,…,2^k\}$,如图：<br><img src="" alt=""></p>
-<p>我们可以得到：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-nC &\ge nI(X;Y)\\
-&\ge I(X^n;Y^n)\\
-&\ge I(W,\hat W)\\
-&=H(W) - H(W\vert \hat W)\\
-&\ge k - k H(P_e)
-\end{aligned}</script><p>上式中最后一步是有Fano不等式得到的。</p>
-<p>则：<script type="math/tex">k \leq  \frac{nC}{1 - H(P_e)}</script></p>
-<p>而由于BSC信道的容量可以得到：$C = 1 - H(P)$，所以我们得到一个R的上界：</p>
-<script type="math/tex; mode=display">
-R = \frac{k}{n} \ge \frac{1 - H(P)}{1 - H(P_e)}</script><p>通过变形，我们可以得到：</p>
-<script type="math/tex; mode=display">
-H(P_e) \ge 1 - \frac C R \rightarrow P_e \ge H^{-1}\left(1 - \frac C R\right)</script><p>这意味着，如果想要让$P_e\leq 0$，则$R \leq C$，如果$R &gt; C$，则$H(P_e)&gt;0$，所以我们一定可以得到$P_e&gt;0$，不可能进行可靠通信。</p>
-<p>那么无差错传输的情况下，码率最大能有多少？先给你看一个preview，很直白的内容，不过它被证明确实是正确的：</p>
-<p><img src="" alt=""></p>
-<p>想象信道将信源映射到一个球体里，而对每个输入符号也对应一个球。而这个球的体积就意味着噪声带来的体积，而大球中能容纳多少小球，正是这个信道编码在无错的情况下可以映射的符号数M。因为这个球的维度是n维的，我么可以得到：</p>
-<script type="math/tex; mode=display">
-M = \frac{\left[\sqrt{P_S +P_N}\right]^n}{\left[\sqrt{P_N}\right]^n} = (1 + \frac{P_S}{P_N})^{\frac n 2}</script><p>由上式，可以计算得出：</p>
-<script type="math/tex; mode=display">
-R = \frac 1 2 \log (1 + \frac{P_S}{P_N})</script><p>而这个值，正好与连续无记忆加性高斯噪声信道的容量一致。</p>
-<p>当然，这个只是preview，不是严格的证明过程。下面对这个证明进行稍微严谨地推导，说明大多数噪声信道都有这样地特性。</p>
-<p>为了证明这个东西，我们需要介绍一些别的定义。之前证明信源无失真压缩定理地时候，用到了典型序列，而这次我们在典型序列地基础上，重新介绍一个新的内容。</p>
-<h3 id="证明香农第二定理"><a href="#证明香农第二定理" class="headerlink" title="证明香农第二定理"></a>证明香农第二定理</h3><h4 id="联合典型序列"><a href="#联合典型序列" class="headerlink" title="联合典型序列"></a>联合典型序列</h4><p>设$(X^n,Y^n)$是长为$n$的随机序列对，其概率分布满足</p>
-<script type="math/tex; mode=display">
-p(x^n,y^n) = \prod_{i=1}^n p(x_i,y_i)</script><p>若$(X^n,Y^n)$满足以下条件，则称其为联合典型序列：</p>
-<ul>
-<li>$\lvert -\frac 1 n \log p(x^n) - H(X) \rvert &lt; \epsilon$</li>
-<li>$\lvert -\frac 1 n \log p(y^n) - H(Y) \rvert &lt; \epsilon$</li>
-<li>$\lvert -\frac 1 n \log p(x^n,y^n) - H(X,Y)\rvert &lt; \epsilon$<br>联合典型序列构成的集合为$A_\epsilon^{(n)}$。</li>
-</ul>
-<p>联合典型序列与之前典型序列定义是有很大地相似性：<a href="https://wlsdzyzl.top/2018/11/02/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94Lossless-Encoding/" target="_blank" rel="noopener">信息论——Lossless-Encoding</a>.我们首先要看看联合典型序列的性质，才能用它来证明。</p>
-<h4 id="联合渐进等同分割定理（Joint-AEP）"><a href="#联合渐进等同分割定理（Joint-AEP）" class="headerlink" title="联合渐进等同分割定理（Joint AEP）"></a>联合渐进等同分割定理（Joint AEP）</h4><p>设$(X^n,Y^n)$是长度为$n$的随机序列对，其分布满足：</p>
-<script type="math/tex; mode=display">
-p(x^n,y^n) = \prod_{i=1}^n p(x_i,y_i)</script><p>则以下性质成立：</p>
-<ul>
-<li>当$n \rightarrow \infty$时，$Pr((X^n,Y^n) \in A_\epsilon ^{(n)}) \rightarrow 1$</li>
-<li>$(1 - \epsilon)2^{n(H(X,Y) - \epsilon)} \leq \vert A_\epsilon ^{(n)} \vert\leq 2^{n(H(X,Y)+\epsilon)}$</li>
-<li>设$(\tilde{X^n},\tilde{Y^n})\sim p(x^n)p(y^n) $,即$\tilde{X^n},\tilde{Y^n}$统计独立，且具有与$p(x^n,y^n)$一致的边缘分布，则：<script type="math/tex; mode=display">
-Pr\left((\tilde{X^n},\tilde{Y^n}) \in A_\epsilon ^{(n)}\right) \leq 2^{-n(I(X,Y) - 3\epsilon)}</script>若$n$足够大，则：<script type="math/tex; mode=display">
-Pr\left((\tilde{X^n},\tilde{Y^n}) \in A_\epsilon ^{(n)}\right) \ge (1 - \epsilon)2^{-n(I(X,Y) + 3\epsilon)}</script></li>
-</ul>
-<p>前两点都比较好理解，第三点中，$(\tilde{X^n},\tilde{Y^n})$是由$(X^n,Y^n)$的边缘分布依照$X^n,Y^n$独立形成的另一个联合分布，而这个分布属于典型序列的概率约等于$2^{-nI(X,Y)}$。</p>
-<p>在这里我们证明以下第三条的前半部分：</p>
-<script type="math/tex; mode=display">
-\tilde{X^n},\tilde{Y^n}\text{ are independent. }\tilde{X^n}\sim P_X(x^n),\tilde{Y^n}\sim P_Y(y^n)\\
-\begin{aligned}
-Pr\{(\tilde{X^n},\tilde{Y^n}) \in A_\epsilon^{(n)} \} &= \sum_{(\tilde{x^n},\tilde{y^n}) \in A_\epsilon^{(n)}} P(x^n)P(y^n)\\
-&\leq 2^{b(H(X,Y) + \epsilon)}\cdot 2^{-n(H(X) - \epsilon)} \cdot 2^{-n(H(Y) - \epsilon)}\\
-&= 2^{-n(I(X,Y) - 3\epsilon)}
-\end{aligned}</script><p>下图可以帮助我们更好地理解这些性质：<br><img src="" alt=""></p>
-<ul>
-<li>联合分布中，大约有$2^{nH(X)}$个典型X序列和$2^{nH(Y)}$个典型Y序列</li>
-<li>其组合共有$2^{nH(X) + nH(Y)}$个，但是其中联合典型的只有$2^{nH(X,Y)}$个</li>
-<li>随机选择而出现联合典型序列的概率为$2^{-nI(X,Y)}$</li>
-</ul>
-<p>现在来看一下联合典型序列的另一个解释：</p>
-<ul>
-<li>对于典型输入序列$x^n$，存在大约$2^{nH(Y|X)}$个可能的输出，且它们等概</li>
-<li>所有可能的典型输出序列大约有$2^{nH(Y)}$个，这些序列被分成若干个不相交的子集</li>
-<li>子集个数为$2^{n(H(Y) - H(Y|X))} = 2^{nI(X;Y)}$，表示信道可以无错误传递的最大字母序列个数<br><img src="" alt=""></li>
-</ul>
-<h4 id="可达性的证明"><a href="#可达性的证明" class="headerlink" title="可达性的证明"></a>可达性的证明</h4><p>可达性的证明也就是我们可以找到一个编码函数和解码函数，使得信道带到容量C，而且是无差错地传输。</p>
-<script type="math/tex; mode=display">
-W \in [1:2^{nR}] \rightarrow X^n \sim P_X(x) \rightarrow q(y|X)\rightarrow Y^n \hat W</script>
-          
+            <div class="post-button text-center">
+              <a class="btn" href="/2019/01/02/信息论——信道及其容量（二）/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+         
+          <!--/noindex-->
         
       
-    </div>
+    </p></div>
 
     
 
