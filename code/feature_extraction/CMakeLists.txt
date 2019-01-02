@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.2)
+project(feature_extraction)
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS} )
+ADD_EXECUTABLE(${PROJECT_NAME} feature_extraction.cpp)
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})

@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导到SVD的，因此就这么叫吧。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-05T13:14:02.684Z">
+<meta property="og:updated_time" content="2018-12-08T09:03:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Info between X and Y&#x2F;SVD">
 <meta name="twitter:description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导到SVD的，因此就这么叫吧。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-05 21:14:02" itemprop="dateModified" datetime="2018-12-05T21:14:02+08:00">2018-12-05</time>
+                <time title="更新于：2018-12-08 17:03:38" itemprop="dateModified" datetime="2018-12-08T17:03:38+08:00">2018-12-08</time>
               
             
           </span>
@@ -571,7 +571,7 @@ B \Phi(y) &= \sum_{x} B(y,x)\phi(x)\\
 \end{aligned}</script><p>从上面的推导中，我们得到：$g(y) = \mathbb{E}[f(X)\vert Y=y ]$.</p>
 <p>所以从原来的$ \Psi^{(0)} = B\Phi^{(0)} \rightarrow g^{(0)} = \mathbb{E}[f^{(1)}(x) \vert Y=y]$</p>
 <h2 id="ACE算法"><a href="#ACE算法" class="headerlink" title="ACE算法"></a>ACE算法</h2><ol>
-<li>选择$f^{(0)}(x), s.t. \mathbb{E}[f^{(0)}(X) ] = 0$(注意，这里$ \mathbb{E}[f^{(0)}(X) ] = P_Xf_X(X) = \sqrt{P_X} \sqrt{P_X}f_X(X) = \sqrt{P_X}\Phi  = 0$，也就暗含了$\Phi$与$\sqrt{P_X}$垂直)</li>
+<li>选择<script type="math/tex">f^{(0)}(x), s.t. \mathbb{E}[f^{(0)}(X) ] = 0</script>(注意，这里<script type="math/tex">\mathbb{E}[f^{(0)}(X) ] = P_Xf_X(X) = \sqrt{P_X} \sqrt{P_X}f_X(X) = \sqrt{P_X}\Phi  = 0</script>，也就暗含了$\Phi\perp \sqrt{P_X}$)</li>
 <li><ul>
 <li>$g^{(0)}(y) = \mathbb{E}[f^{(0)}(x)\vert Y=y]$</li>
 <li>$f^{(1)}(x) = \mathbb{E}[g^{(0)}(y)\vert X = x]$</li>
@@ -709,7 +709,7 @@ B \Phi(y) &= \sum_{x} B(y,x)\phi(x)\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -839,7 +839,21 @@ B \Phi(y) &= \sum_{x} B(y,x)\phi(x)\\
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -919,7 +933,7 @@ B \Phi(y) &= \sum_{x} B(y,x)\phi(x)\\
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-wlsdzyzl"></i>
   </span>

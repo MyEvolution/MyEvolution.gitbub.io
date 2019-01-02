@@ -117,7 +117,7 @@
 <meta property="og:description" content="这个博客介绍特征值分解（Eigen Value Decomposition,EVD）和奇异值分解(Singular Value Decomposition),　可以当作机器学习的补充材料。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/G6T%7DO%5B7%5BIW70%5DP0VF2D%5DR89.png">
-<meta property="og:updated_time" content="2018-12-02T12:26:05.228Z">
+<meta property="og:updated_time" content="2018-12-08T09:42:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数学——EVD与SVD">
 <meta name="twitter:description" content="这个博客介绍特征值分解（Eigen Value Decomposition,EVD）和奇异值分解(Singular Value Decomposition),　可以当作机器学习的补充材料。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-02 20:26:05" itemprop="dateModified" datetime="2018-12-02T20:26:05+08:00">2018-12-02</time>
+                <time title="更新于：2018-12-08 17:42:18" itemprop="dateModified" datetime="2018-12-08T17:42:18+08:00">2018-12-08</time>
               
             
           </span>
@@ -527,7 +527,7 @@ AA^T = U\Sigma V^TV \Sigma^T U^T = U \Sigma \Sigma^T U^T</script><p>这意味着
 Ax = U\Sigma Vx = x_1\sigma_1u_1 + ...+ x_k\sigma_ku_k.</script><p>假设$y_i = \sigma_ix_i$，则单位球体的image也等于$\sum_{i=1}^k y_iu_i$，其中：</p>
 <script type="math/tex; mode=display">
 \sum_{i=1}^k \frac{y_i^2}{\sigma_i^2} = \sum_{i=1}^k x_i^2 \ge 1.</script><p>如果$\mathbb{R}(A)= k = n$，那么上述不等式是相等的。其他情况下，意味着一些纬度被抛弃了。 所以$A$的转换实际上是先抛弃$n-k$个维度，将其压缩到$k$维，再通过$\Sigma$来对不同维度的权值进行放缩，最后拓展的$m$维空间。下图展示了这个过程(n=m=3,k=2)：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/G6T%7DO%5B7%5BIW70%5DP0VF2D%5DR89.png" alt=""></p>
-<p>我们可以很容易得到，$\Vert A Vert$，算子范数，定义为$\Vert Av \Vert$的最大值，也就是$sigma_1$，$A$最大的奇异值。也就是：$\Vert Ax \Vert \leq \sigma\Vert x \Vert,x \in \mathbb{R}^n$，当$x$为$v_1$的整数倍时等号成立。</p>
+<p>我们可以很容易得到，$\Vert A \Vert_2$，算子范数，定义为$\frac{\Vert Ax \Vert}{\Vert x \Vert}$的最大值，也就是$\sigma_1$，$A$最大的奇异值。也就是：$\Vert Ax \Vert \leq \sigma\Vert x \Vert,x \in \mathbb{R}^n$，当$x$为$v_1$的整数倍时等号成立。</p>
 <h2 id="SVD的分块矩阵以及外积形式"><a href="#SVD的分块矩阵以及外积形式" class="headerlink" title="SVD的分块矩阵以及外积形式"></a>SVD的分块矩阵以及外积形式</h2><p>实际上，SVD可以写成下面分块矩阵的形式：</p>
 <script type="math/tex; mode=display">
 A = \left [\begin{array}{ccc|ccc}
@@ -738,7 +738,7 @@ Ax = \sum_{i=1}^k\sigma_iu_iv_i^Tx = \sum_{i=1}^kv_i^Tx \sigma_iu_i</script><p>�
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">70</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -868,7 +868,21 @@ Ax = \sum_{i=1}^k\sigma_iu_iv_i^Tx = \sum_{i=1}^kv_i^Tx \sigma_iu_i</script><p>�
                     
                       
                     
-                    <span class="site-state-item-count">43</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -948,7 +962,7 @@ Ax = \sum_{i=1}^k\sigma_iu_iv_i^Tx = \sum_{i=1}^kv_i^Tx \sigma_iu_i</script><p>�
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright"> &copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-wlsdzyzl"></i>
   </span>
