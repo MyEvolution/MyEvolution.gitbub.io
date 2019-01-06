@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="Learning From Data是研究生修的一门课，其实也就是机器学习的另一种叫法。第一门课中介绍了Linear Regression，Logistic Regression，Softmax Regression.虽然前两个都学过，但是还是有一些收获，比如另外的解释方法等等。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-06T07:13:44.716Z">
+<meta property="og:updated_time" content="2019-01-06T07:19:22.210Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Softmax Regression">
 <meta name="twitter:description" content="Learning From Data是研究生修的一门课，其实也就是机器学习的另一种叫法。第一门课中介绍了Linear Regression，Logistic Regression，Softmax Regression.虽然前两个都学过，但是还是有一些收获，比如另外的解释方法等等。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-06 15:13:44" itemprop="dateModified" datetime="2019-01-06T15:13:44+08:00">2019-01-06</time>
+                <time title="更新于：2019-01-06 15:19:22" itemprop="dateModified" datetime="2019-01-06T15:19:22+08:00">2019-01-06</time>
               
             
           </span>
@@ -486,10 +486,10 @@ h_W(X) = \frac 1 {1 - e^{-g_W(X)}}</script><script type="math/tex; mode=display"
 g_W(X) = W^TX</script><p>求梯度过程如下：</p>
 <script type="math/tex; mode=display">
 \begin{array}{l}
-\nabla f(W) &= -\sum _{i=1} ^N( (y_i log(h_W(X_i)) + (1-y_i) log(1-h_W(X_i))))\\
-&= -\sum_{i=1}^N( \left[ \frac {y_i}{h_W(X_i)} - \frac {1-y_i}{1-h_W(X_i)} \right] h_W'(x))\\
-&= -\sum_{i=1}^N(\left[y_i + \frac {1-y_i}{e^{-g_W(X_i)}} \right] \frac {e^{-g_W(X_i)}}{1 - e^{-g_W(X_i)}} g_W'(X_i)) \\\ 
-&= -\sum_{i=1}^N(\left[ \frac 1 {1 - e^{-g_W(X_i)}} - y_i \frac {1 - e^{-g_W(X_i)}}{1 - e^{-g_W(X_i)}} \right] g_W'(X_i))\\
+\nabla f(W) &= -\sum _{i=1} ^N( y_i logh_W(X_i) + (1-y_i) log(1-h_W(X_i)))\\
+&= -\sum_{i=1}^N \left[ \frac {y_i}{h_W(X_i)} - \frac {1-y_i}{1-h_W(X_i)} \right] h_W'(x)\\
+&= -\sum_{i=1}^N\left[y_i + \frac {1-y_i}{e^{-g_W(X_i)}} \right] \frac {e^{-g_W(X_i)}}{1 - e^{-g_W(X_i)}} g_W'(X_i) \\\ 
+&= -\sum_{i=1}^N\left[ \frac 1 {1 - e^{-g_W(X_i)}} - y_i \frac {1 - e^{-g_W(X_i)}}{1 - e^{-g_W(X_i)}} \right] g_W'(X_i)\\
 &=-\sum_{i=1}^N(y_i - h_W(X_i))X_i  
 \end{array}</script><p>而且这个cost function的好处是，利用梯度下降的时候它和线性回归的步骤是非常相似的,线性回归中：</p>
 <script type="math/tex; mode=display">
