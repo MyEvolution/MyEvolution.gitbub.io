@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/EM5.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/EM6.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/EM7.png">
-<meta property="og:updated_time" content="2019-01-02T12:35:12.858Z">
+<meta property="og:updated_time" content="2019-01-07T08:30:37.940Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Mixture of Gaussians &amp; EM">
 <meta name="twitter:description" content="这一周的内容是关于EM算法的，同时介绍了EM算法在混合高斯模型（Mixture of Gaussians）上的情况以及在因子分析上的用途。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-02 20:35:12" itemprop="dateModified" datetime="2019-01-02T20:35:12+08:00">2019-01-02</time>
+                <time title="更新于：2019-01-07 16:30:37" itemprop="dateModified" datetime="2019-01-07T16:30:37+08:00">2019-01-07</time>
               
             
           </span>
@@ -501,7 +501,7 @@ I(\theta) = \sum_{i=1}^m\log p(x;\theta) = \sum_{i=1}^m\log\sum_z p(x,z;\theta)<
 <p>$Q_i(z^{(i)} ):= p(z^{(i)} |x^{(i)} ; θ) \leftarrow $ Posterior distribution $z|x$ under $θ$</p>
 <p>(M - step ) Set</p>
 <script type="math/tex; mode=display">\begin{equation} 
-\theta = \arg\max_{\theta} \sum_i \sum_{z^{(i)}}Q_i(z^{(i)}\log \frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})})
+\theta = \arg\max_{\theta} \sum_i \sum_{z^{(i)}}Q_i(z^{(i)})\log \frac{p(x^{(i)},z^{(i)};\theta)}{Q_i(z^{(i)})}
 \end{equation}</script><p>$\leftarrow$ Update parameter θ<br>}</p>
 </blockquote>
 <h3 id="Proof-of-Correctness"><a href="#Proof-of-Correctness" class="headerlink" title="Proof of Correctness"></a>Proof of Correctness</h3><p>我们将会证明(1)等价于$\arg\max_\theta I(\theta)$，也就是等式(1)是$I(\theta)$的一个很紧下界。我们也将会证明这个算法最终会收敛。<br>定义：</p>
