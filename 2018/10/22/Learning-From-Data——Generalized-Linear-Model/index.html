@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这次数据学习课上，讲的是Generalized Linear Model。我心里想着是要概况线性模型，我应该都清楚吧。上课了之后才发现，这实际上是广义线性模型，有很多新东西。然而我还是睡着了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-02T14:38:44.000Z">
+<meta property="og:updated_time" content="2019-01-07T08:13:03.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Learning From Data——Generalized Linear Model">
 <meta name="twitter:description" content="这次数据学习课上，讲的是Generalized Linear Model。我心里想着是要概况线性模型，我应该都清楚吧。上课了之后才发现，这实际上是广义线性模型，有很多新东西。然而我还是睡着了。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-02 22:38:44" itemprop="dateModified" datetime="2018-11-02T22:38:44+08:00">2018-11-02</time>
+                <time title="更新于：2019-01-07 16:13:03" itemprop="dateModified" datetime="2019-01-07T16:13:03+08:00">2019-01-07</time>
               
             
           </span>
@@ -536,14 +536,14 @@ p(y;\lambda) = \frac {\lambda ^y e ^{- \lambda} }{y!}</script><ul>
 </ul>
 <p>广义线性模型形式化定义有下面几个假设：</p>
 <ol>
-<li>$y|x;\theta$ ~ Exponential Family(\eta),如高斯分布，伯努利分布，泊松分布等</li>
+<li>$y|x;\theta$ ~ Exponential Family($\eta$),如高斯分布，伯努利分布，泊松分布等</li>
 <li>假设目标函数是$h(x) = \mathbb{E}[T(y)|x]$</li>
 <li>自然常数$\eta$和输入$X$是线性相关的：$\eta = \theta^TX$ or $\eta_i = \theta_i^T X (\eta = \Theta^T X)$ </li>
 </ol>
 <p>将自然参数与分布平均值连接得到：$\mathbb{E}[T(y);\eta]$.</p>
 <p>权威响应函数（Canonical response function）g给出了分布平均值：$g(\eta) = \mathbb{E}[T(y);\eta]$.</p>
 <p>则 $\eta = g^{-1}(\mathbb{E}[T(y);\eta])$,被称为权威链接函数（canonical link function）。</p>
-<p>写成广义线性模型，可以得到：$\mathbb{E}(y;\eta)=\frac{d}{d\eta}a({\eta})$（证明较为复杂）。因此，可以很轻易得求出假设函数。</p>
+<p>写成广义线性模型，可以得到：$\mathbb{E}(T(y);\eta)=\frac{d}{d\eta}a({\eta})$（证明较为复杂）。因此，可以很轻易得求出假设函数。</p>
 <h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><h4 id="Ordinary-Least-Square"><a href="#Ordinary-Least-Square" class="headerlink" title="Ordinary Least Square"></a>Ordinary Least Square</h4><p>应用GLM到下面的假设：</p>
 <ol>
 <li><p>$y|X;\theta ~ N(\mu,1)$,则$\eta = \mu,T(y) = y$.</p>
@@ -597,7 +597,7 @@ p(y;\theta) = \prod_{i=1}^k \phi_i^{\mathbf{1}\{y = i\} }</script><p>然后需�
 </li>
 <li><p>Derive hypothesis function :</p>
 <script type="math/tex; mode=display">
-h_\theta(X) = \mathbb{E}[y|X;\theta] = \Phi =</script><script type="math/tex; mode=display">
+h_\theta(X) = \mathbb{E}[y|X;\theta] = \Phi = 
 \begin{bmatrix} 
 \frac {e^{\eta_1} }{\sum _{i=1}^k e^{\eta_i} }\\
 \frac {e^{\eta_2} }{\sum _{i=2}^k e^{\eta_i} }\\
