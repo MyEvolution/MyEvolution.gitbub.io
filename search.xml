@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>信息量——信息速率失真函数与熵压缩编码</title>
+      <link href="/2019/01/08/%E4%BF%A1%E6%81%AF%E9%87%8F%E2%80%94%E2%80%94%E4%BF%A1%E6%81%AF%E9%80%9F%E7%8E%87%E5%A4%B1%E7%9C%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E7%86%B5%E5%8E%8B%E7%BC%A9%E7%BC%96%E7%A0%81/"/>
+      <url>/2019/01/08/%E4%BF%A1%E6%81%AF%E9%87%8F%E2%80%94%E2%80%94%E4%BF%A1%E6%81%AF%E9%80%9F%E7%8E%87%E5%A4%B1%E7%9C%9F%E5%87%BD%E6%95%B0%E4%B8%8E%E7%86%B5%E5%8E%8B%E7%BC%A9%E7%BC%96%E7%A0%81/</url>
+      
+        <content type="html"><![CDATA[<p>之前我们研究的问题，冗余度压缩编码以及信道编码（增加信息冗余度，以对抗信道中的传输错误），目的都是对信息进行可靠无差错的传输，信息熵没有变化，也就是是保熵的。之后的内容，我们不再保证信息传输是无差错的。<br><a id="more"></a></p><p>在实际中，很多情况下我们是没有必要把信息的所有内容都保留下来的。比如看视频的时候，有高清标清的选择，对应于不同的网络情况。同样的还有图片的有损压缩等等。</p><h3 id="连续随机变量的量化"><a href="#连续随机变量的量化" class="headerlink" title="连续随机变量的量化"></a>连续随机变量的量化</h3><p>考察随机变量$X \sim N(0,\sigma^2)$，如果对该随机变量进行无失真编码是不可能的，假如我们需要用$R$比特来表示$X$。所以被表示的结果$\hat X$相对于原来的$X$一定是有失真的。而这个失真如何度量呢？最简单的方法是采用平方误差度量最小化：</p><script type="math/tex; mode=display">E(x - \hat X(x))^2 = \int_{-\infty}^{\infty} (x - \hat X(x))^2 p(x)dx.</script><p>现在假设$R=1$，比较显然的是该符号应该代表X的符号。为了最小化误差，恢复值应该为其代表区域的条件平均：</p><script type="math/tex; mode=display">\hat X(x) = \left \{\begin{matrix}\sqrt{\frac{2}{\pi}}&x = 1\\-\sqrt{\frac{2}{\pi}}& x=0\end{matrix}\right .</script><p>这个值是如何求得的？<br>首先我们要理解上面话的意思，最小化误差，其实也就是X的期望。对于整个分布来说，$X$的期望当然是0，现在我们只看右侧，希望能得到右侧的条件分布X的期望是多少。</p><script type="math/tex; mode=display">\begin{aligned}E(X) &= \int_{-\infty}^0 xf(x)dx\\&=\int_{-\infty}^0 2\sigma\cdot\frac{1}{\sigma^2 2\sqrt{2\pi}}exp(-\frac{x^2}{2\sigma^2})  f(x) d\frac{x^2}{2\sigma}\\&= -\frac{2\sigma}{\sqrt{2\pi}} exp (-\frac{x^2}{2\sigma^2})|_{-\infty}^{0}\\&=\frac{2\sigma}{\sqrt{2\pi}} = -\sqrt{\frac{2}{\pi}}\end{aligned}</script><p>如果$R &gt; 1$，又如何划分量化区间？如何选取这个$2^R$个$\hat X(x)$的取值？这个问题就没有上面那么简单了。</p><p>针对随机变量的最优（最小失真）量化准则：</p><ul><li>如果给定了一组$\hat X(x)$，那么将随机变量$x$映射到最近的$\hat X(x)$可以最小化量化失真。由这种映射形成的划分称为Voronoi（Dirichlet）划分。</li><li>$\hat X(x)$的选取可以最小化对应趋于中的条件预期失真。</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 信息论 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> information theory </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>信息论——信道及其容量（二）</title>
       <link href="/2019/01/02/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94%E4%BF%A1%E9%81%93%E5%8F%8A%E5%85%B6%E5%AE%B9%E9%87%8F%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
       <url>/2019/01/02/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94%E4%BF%A1%E9%81%93%E5%8F%8A%E5%85%B6%E5%AE%B9%E9%87%8F%EF%BC%88%E4%BA%8C%EF%BC%89/</url>
@@ -509,11 +532,11 @@
       
         <tags>
             
+            <tag> code </tag>
+            
             <tag> LFD class </tag>
             
             <tag> neural network </tag>
-            
-            <tag> code </tag>
             
             <tag> homework </tag>
             
@@ -1758,9 +1781,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> code </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> visualization </tag>
             
