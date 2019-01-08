@@ -118,7 +118,10 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1331.PNG">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1332.PNG">
-<meta property="og:updated_time" content="2019-01-08T13:22:35.873Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1333.PNG">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1334.PNG">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1336.PNG">
+<meta property="og:updated_time" content="2019-01-08T14:11:40.091Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息量——信息速率失真函数与熵压缩编码">
 <meta name="twitter:description" content="之前我们研究的问题，冗余度压缩编码以及信道编码（增加信息冗余度，以对抗信道中的传输错误），目的都是对信息进行可靠无差错的传输，信息熵没有变化，也就是是保熵的。之后的内容，我们不再保证信息传输是无差错的。">
@@ -393,7 +396,7 @@
                 
               
 
-              <time title="创建于：2019-01-08 17:09:46 / 更新于：21:22:35" itemprop="dateCreated datePublished" datetime="2019-01-08T17:09:46+08:00">2019-01-08</time>
+              <time title="创建于：2019-01-08 17:09:46 / 更新于：22:11:40" itemprop="dateCreated datePublished" datetime="2019-01-08T17:09:46+08:00">2019-01-08</time>
             
 
             
@@ -526,6 +529,29 @@ E[d(X^n,g_n(f_n(X^n)))] = \sum_{x^n} p(x^n)d(x^n,g_n(f_n(x^n)))</script><p>注�
 <h4 id="率失真定理（香农第三定理）"><a href="#率失真定理（香农第三定理）" class="headerlink" title="率失真定理（香农第三定理）"></a>率失真定理（香农第三定理）</h4><p>给定具有独立同分布$p(x)$的信源X和有界的失真度量$d(x,\hat x)$，率失真函数等于信息的率失真函数，即：</p>
 <script type="math/tex; mode=display">
 R(D) = R^{(I)}(D) = \min_{q(\hat x|x):\sum_{x,\hat x} p(x)q(\hat x|x )d(x,\hat x) \leq D} I(X;\hat X)</script><p>是在失真约束$D$下可以获得的最小信息传输速率。</p>
+<h3 id="R-I-D-的性质"><a href="#R-I-D-的性质" class="headerlink" title="$R^{(I)}(D)$的性质"></a>$R^{(I)}(D)$的性质</h3><p>直接思维中$R(D)$的形式：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1333.PNG" alt=""></p>
+<h4 id="单调减函数"><a href="#单调减函数" class="headerlink" title="单调减函数"></a>单调减函数</h4><p>$R^{(1)}(D)$是非增函数。这个不难理解，证明如下：</p>
+<p>如果$D_2 \ge D_1$，则：</p>
+<script type="math/tex; mode=display">
+{q(\hat x| x), E[d(x,\hat x)] \leq D_1} \subset {q(\hat x| x), E[d(x,\hat x)] \leq D_2}</script><p>由于在子集上取得的最小值不可能比全集更小，因此可以得到：</p>
+<script type="math/tex; mode=display">
+\min\{I(X;\hat X):E[d(x,hat x)] \leq D_2\} \leq \min\{I(X;\hat X):E[d(x,hat x)] \leq D_1\}</script><p>从而得到：$R(D_2) \leq R(D_1)$。</p>
+<h4 id="定义域"><a href="#定义域" class="headerlink" title="定义域"></a>定义域</h4><p>$R^{(I)}(D)$的定义域是$(D_{min},\infty)$，且存在$D_max$，当$D \ge D_{max}$时，$R^{(I)}(D) = 0$。</p>
+<p>这个在直觉上也是很好理解的。平均失真D是非负实函数$d(x,\hat x)$的期望，下限为0，则允许失真D的下限也为0，对应于不允许失真的情况。</p>
+<p>当信源$p(x)$给定时，失真取决于转移矩阵$q(\hat x|x)$的取值。因此$D$是有一个最小值的。</p>
+<p>如果允许失真大到一定值，错得太离谱，可以不用传输了，这时候就得到$R^{(I)}(D)=0$。</p>
+<p>下面是一个关于$D_{min}$的例子：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1334.PNG" alt=""></p>
+<h4 id="下凸性质"><a href="#下凸性质" class="headerlink" title="下凸性质"></a>下凸性质</h4><p>$R(D)$是$D$的下凸函数。下面是一个简单的证明：</p>
+<p>由于输入分布$p(x)$已知，所以输入与输出的互信息仅与转移概率矩阵$Q=q(\hat x|x)$决定，记为$I(Q)$。设$Q_1$是达到$R(D_1)$时的转移概率矩阵，$Q_2$是达到$R(D_2)$的转移概率矩阵。定义$Q$是达到$R(D)$的转移概率矩阵，$D = \lambda_1D_1 + \lambda_2D_2$。</p>
+<p>注意到：$I(Q_1) = R(D_1)$，$E[d(x,\hat x)] \leq D_1$，同理得到：$I(Q_2) = R(D_2)$，$E[d(x,\hat x)] \leq D_2$。</p>
+<p>在转移概率矩阵Q下，编码器的平均失真为：</p>
+<script type="math/tex; mode=display">
+E[d(x,\hat x)]|_Q = \lambda_1 E[d(x,\hat x)]|_{Q_1} + \lambda_2 E[d(x,\hat x)] |_{Q_2} \leq \lambda_1 D_1 + \lambda_2 D_2 = D.</script><p>因此，$Q$在可行区域中，$R(D) \leq I(Q)$。而互信息相对于转移概率矩阵Q是下凸函数，因此：</p>
+<script type="math/tex; mode=display">
+R(D)\leq I(Q) \leq \lambda_1 I(Q_1) + \lambda_2 I(Q_2) = \lambda_1 R(D_1) + \lambda_2 R(D_2)</script><p>由上面的性质，我们可以大约得到$R(D)$的图像：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1336.PNG" alt=""></p>
 
       
     </div>
@@ -843,7 +869,7 @@ R(D) = R^{(I)}(D) = \min_{q(\hat x|x):\sum_{x,\hat x} p(x)q(\hat x|x )d(x,\hat x
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#连续随机变量的量化"><span class="nav-number">1.</span> <span class="nav-text">连续随机变量的量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#率失真理论的基本概念"><span class="nav-number">2.</span> <span class="nav-text">率失真理论的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#平均失真"><span class="nav-number">2.1.</span> <span class="nav-text">平均失真</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真函数"><span class="nav-number">2.2.</span> <span class="nav-text">率失真函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真编码"><span class="nav-number">2.3.</span> <span class="nav-text">率失真编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真区域"><span class="nav-number">2.4.</span> <span class="nav-text">率失真区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真定理（香农第三定理）"><span class="nav-number">2.5.</span> <span class="nav-text">率失真定理（香农第三定理）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#连续随机变量的量化"><span class="nav-number">1.</span> <span class="nav-text">连续随机变量的量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#率失真理论的基本概念"><span class="nav-number">2.</span> <span class="nav-text">率失真理论的基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#平均失真"><span class="nav-number">2.1.</span> <span class="nav-text">平均失真</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真函数"><span class="nav-number">2.2.</span> <span class="nav-text">率失真函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真编码"><span class="nav-number">2.3.</span> <span class="nav-text">率失真编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真区域"><span class="nav-number">2.4.</span> <span class="nav-text">率失真区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#率失真定理（香农第三定理）"><span class="nav-number">2.5.</span> <span class="nav-text">率失真定理（香农第三定理）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#R-I-D-的性质"><span class="nav-number">3.</span> <span class="nav-text">$R^{(I)}(D)$的性质</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单调减函数"><span class="nav-number">3.1.</span> <span class="nav-text">单调减函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义域"><span class="nav-number">3.2.</span> <span class="nav-text">定义域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下凸性质"><span class="nav-number">3.3.</span> <span class="nav-text">下凸性质</span></a></li></ol></li></ol></div>
             
 
           </div>
