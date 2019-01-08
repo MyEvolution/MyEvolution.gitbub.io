@@ -9,8 +9,6 @@
 /home/wlsdzyzl/blog/source/code/feature_extraction/feature_extraction.cpp
 iostream
 -
-opencv2/core/core.hpp
--
 opencv2/features2d/features2d.hpp
 -
 opencv2/highgui/highgui.hpp
@@ -81,10 +79,6 @@ opencv2/core/check.hpp
 /usr/local/include/opencv4/opencv2/core/check.hpp
 opencv2/core/base.hpp
 -
-
-/usr/local/include/opencv4/opencv2/core/core.hpp
-opencv2/core.hpp
-/usr/local/include/opencv4/opencv2/core/opencv2/core.hpp
 
 /usr/local/include/opencv4/opencv2/core/cuda.hpp
 opencv2/core.hpp

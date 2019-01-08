@@ -8,7 +8,6 @@ CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/o
 CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/base.hpp
 CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/bufferpool.hpp
 CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/check.hpp
-CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/core.hpp
 CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/cuda.hpp
 CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/cuda.inl.hpp
 CMakeFiles/feature_extraction.dir/feature_extraction.cpp.o: /usr/local/include/opencv4/opencv2/core/cuda_types.hpp
