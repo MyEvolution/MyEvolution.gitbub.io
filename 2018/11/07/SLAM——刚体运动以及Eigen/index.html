@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这次主要介绍一些刚体运动中需要的数学知识以及Eigen库的基本使用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-08T15:00:00.000Z">
+<meta property="og:updated_time" content="2019-01-09T10:15:42.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——刚体运动以及Eigen">
 <meta name="twitter:description" content="这次主要介绍一些刚体运动中需要的数学知识以及Eigen库的基本使用。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-08 23:00:00" itemprop="dateModified" datetime="2018-11-08T23:00:00+08:00">2018-11-08</time>
+                <time title="更新于：2019-01-09 18:15:42" itemprop="dateModified" datetime="2019-01-09T18:15:42+08:00">2019-01-09</time>
               
             
           </span>
@@ -465,12 +465,12 @@
 <p>我们知道任何旋转都可以使用一个旋转轴和旋转角来描述。旋转向量是一个非常聪明的做法。它的方向代表了旋转轴，而它的长度代表了旋转的角度。</p>
 <p>那么旋转向量与旋转矩阵如何转换呢？如果旋转轴（单位向量）为$\mathbf{n}$，旋转角度为$\theta$，那么旋转向量为$\theta\mathbf{n}$，旋转矩阵可以使用Rodrigues公式来计算出来：</p>
 <script type="math/tex; mode=display">
-R = \cos \theta I + (1-\cos \theta)\mathbf{nn}^T + \sin \theta \mathbf{n}^\^</script><p>$\mathbf{n}^\^$为向量$\mathbf{n}$的对偶矩阵。这个公式也在之前的图形学博客中做过介绍了。</p>
+R = \cos \theta I + (1-\cos \theta)\mathbf{nn}^T + \sin \theta \mathbf{n}^\hat{}</script><p>$\mathbf{n}^\hat{}$为向量$\mathbf{n}$的对偶矩阵。这个公式也在之前的图形学博客中做过介绍了。</p>
 <p>如何从旋转矩阵得到旋转向量？</p>
 <p>首先，对于旋转角：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-tr(R) &= \cos\theta tr(I) +(1 - \cos \theta) tr(\mathbf{nn}^T) + \sin \theta tr (\mathbf{n}^\^)\\
+tr(R) &= \cos\theta tr(I) +(1 - \cos \theta) tr(\mathbf{nn}^T) + \sin \theta tr (\mathbf{n}^\hat{})\\
 &= 3\cos \theta + (1-\cos \theta)\\
 &= 1+ 2\cos\theta
 \end{aligned}</script><p>所以根据上式可以很简单求得：</p>
@@ -769,7 +769,7 @@ sR&\mathbf{t}\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">73</span>
+                    <span class="site-state-item-count">74</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -913,7 +913,9 @@ sR&\mathbf{t}\\
                     
                       
                     
-                    <span class="site-state-item-count">50</span>
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
