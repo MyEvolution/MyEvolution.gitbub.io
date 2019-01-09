@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上次介绍了特征，现在我们已经得到了特征匹配后的点对，现在我们需要用这些东西来估计相机运动。由于相机原理不同，估计的方法也不同。现在我们考虑的是单目相机，使用的方法为对极几何。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-09T11:28:56.495Z">
+<meta property="og:updated_time" content="2019-01-09T11:37:52.947Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（二）对极几何">
 <meta name="twitter:description" content="上次介绍了特征，现在我们已经得到了特征匹配后的点对，现在我们需要用这些东西来估计相机运动。由于相机原理不同，估计的方法也不同。现在我们考虑的是单目相机，使用的方法为对极几何。">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建于：2019-01-09 16:55:20 / 更新于：19:28:56" itemprop="dateCreated datePublished" datetime="2019-01-09T16:55:20+08:00">2019-01-09</time>
+              <time title="创建于：2019-01-09 16:55:20 / 更新于：19:37:52" itemprop="dateCreated datePublished" datetime="2019-01-09T16:55:20+08:00">2019-01-09</time>
             
 
             
@@ -478,7 +478,7 @@ x_2^T E x_1 = p_2^T F p_1 = 0</script><p>上式中：$E = t^{\hat{}}R,F = (K^{-1
 <li>根据E或者F求出R和t。</li>
 </ol>
 <p>由于E和F只相差一个相机内参，而内参一般来说是已知的。实践中往往使用形式更简单的E。</p>
-<h3 id="本质矩阵E"><a href="#本质矩阵E" class="headerlink" title="本质矩阵E"></a>本质矩阵E</h3><p>根据定义$E= t^{\hat{}}R，它是一个$3\times 3$矩阵，有9个元素。它有下面几个性质：</p>
+<h3 id="本质矩阵E"><a href="#本质矩阵E" class="headerlink" title="本质矩阵E"></a>本质矩阵E</h3><p>根据定义$E= t^{\hat{}}R$，它是一个$3\times 3$矩阵，有9个元素。它有下面几个性质：</p>
 <ul>
 <li>本质矩阵是由对极约束定义的，由于对极约束是等式为0的约束，因此对$E$乘以任意非0常数，对极约束依然满足，这说明$E$在不同尺度下是等价的。</li>
 <li>根据定义可以证明，$E$的奇异值必定是$[\sigma,\sigma,0]^T$的形式，这是本质矩阵的内在性质。</li>
