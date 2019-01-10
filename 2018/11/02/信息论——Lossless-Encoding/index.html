@@ -116,10 +116,12 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-11-23T05:08:30.000Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/Screenshot_2019-01-10%20Introduction%20pdf%20-%20Elements_of_Information_Theory_Elements%20pdf.png">
+<meta property="og:updated_time" content="2019-01-10T09:00:45.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Lossless Encoding">
 <meta name="twitter:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/Screenshot_2019-01-10%20Introduction%20pdf%20-%20Elements_of_Information_Theory_Elements%20pdf.png">
 
 
 
@@ -407,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-23 13:08:30" itemprop="dateModified" datetime="2018-11-23T13:08:30+08:00">2018-11-23</time>
+                <time title="更新于：2019-01-10 17:00:45" itemprop="dateModified" datetime="2019-01-10T17:00:45+08:00">2019-01-10</time>
               
             
           </span>
@@ -510,7 +512,8 @@
 1 - \epsilon &\leq Pr\{A_\epsilon ^{(n)}\}\\
 &\leq \sum_{x^n \in A_\epsilon ^{(n)}} 2 ^{-n(H(X) - \epsilon)}\\
 &= 2 ^{-n(H(X) - \epsilon)} \vert A_\epsilon ^{(n)}\vert 
-\end{aligned}</script><p>所有可能出现的序列一共有$|X|^n$种，大多数情况下，$ 2^{m(H(X)+\epsilon)} &lt;&lt; |X|^n$.所以典型序列集合只是所有可能集合的一个很小（尤其是原来分布远离均匀分布的时候）的子集。但是它几乎一定会出现，而且每个典型序列出现的概率几乎一样。这是很好的消息，为我们刚开始提出来的映射提供了很好的思路。</p>
+\end{aligned}</script><p>所有可能出现的序列一共有$|X|^n$种，大多数情况下，$ 2^{m(H(X)+\epsilon)} &lt;&lt; |X|^n$.所以典型序列集合只是所有可能集合的一个很小（尤其是原来分布远离均匀分布的时候）的子集。但是它几乎一定会出现，而且每个典型序列出现的概率几乎一样，如下图所示。这是很好的消息，为我们刚开始提出来的映射提供了很好的思路。</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/Screenshot_2019-01-10%20Introduction%20pdf%20-%20Elements_of_Information_Theory_Elements%20pdf.png" alt=""></p>
 <h2 id="定长编码定理-香农第一定理"><a href="#定长编码定理-香农第一定理" class="headerlink" title="定长编码定理(香农第一定理)"></a>定长编码定理(香农第一定理)</h2><p>假设$X^n$是由独立同分布离散随机变量$X\tilde{}p(X)$构成的序列。对于任意正数$\epsilon$，总有足够大的n，可以找到一个一一映射，将$X^n$映射到二进制序列，且满足:</p>
 <script type="math/tex; mode=display">
 E\left[\frac 1 n l(X^n) \right] \leq H(X)+\epsilon</script><p>上式中，$l(X^n)$表示的是编码需要的bit数。</p>
