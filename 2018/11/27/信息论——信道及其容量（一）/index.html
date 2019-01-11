@@ -137,7 +137,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0014it.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0005it.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0006it.jpg">
-<meta property="og:updated_time" content="2019-01-08T08:57:20.582Z">
+<meta property="og:updated_time" content="2019-01-11T08:52:57.756Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——信道及其容量（一）">
 <meta name="twitter:description" content="这次来介绍信道以及信道的容量。">
@@ -429,7 +429,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-08 16:57:20" itemprop="dateModified" datetime="2019-01-08T16:57:20+08:00">2019-01-08</time>
+                <time title="更新于：2019-01-11 16:52:57" itemprop="dateModified" datetime="2019-01-11T16:52:57+08:00">2019-01-11</time>
               
             
           </span>
@@ -527,10 +527,12 @@ q(y_{t_1t_2...t_n} | x_{t_1t_2...t_n}) = \prod_{i=1}^nq(y_i|x_i)</script></li>
 q(y_i|x_i) = q(y|x)</script></li>
 </ul>
 <h3 id="DMC-Discrete-Memoryless-Channel"><a href="#DMC-Discrete-Memoryless-Channel" class="headerlink" title="DMC(Discrete Memoryless Channel)"></a>DMC(Discrete Memoryless Channel)</h3><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/9LI8H%7DB%281P%5B_KI%409%5BRCI7%242.png" alt=""></p>
+<p>我们知道：</p>
 <script type="math/tex; mode=display">
 \begin{align}
 I(X^n;Y^n) = H(Y^n) - H(Y^n|X^n)
-\end{align}</script><script type="math/tex; mode=display">
+\end{align}</script><p>接下来分析$ H(Y^n),H(Y^n|X^n)$:</p>
+<script type="math/tex; mode=display">
 \begin{aligned}
 H(Y^n)&= H(Y_1) +H(Y_2|Y_1) +...+ H(Y_n|Y_1...Y_{n-1})\\
 &\leq \sum_{i=1}^n H(Y_i)
@@ -541,7 +543,7 @@ H(Y^n|X^n)&= -\mathbb{E}_{XY}\log q(y^n|x^n) \\
 &= - \mathbb{E}_{XY}\sum_{i=1}^n\log q(y_i|x_i)\\
 &= -\sum_{i=1}^n \mathbb{E}_{XY}\log q(y_i|x_i)\\
 &= \sum_{i=1}^n H(Y_i|X_i)
-\end{aligned}</script><p>综上我们得到：</p>
+\end{aligned}</script><p>将结果带入(1)，我们可以得到：</p>
 <script type="math/tex; mode=display">
 I(X^n;Y^n) \leq \sum_{i=1}^nI(X_i;Y_i)</script><p>这让我们想到，对一个序列的输入输出互信息，我们可以试图通过处理单个时刻的输入，然后让等号取得，也就得到序列输入输出互信息的最大值。</p>
 <p>为了让上面的等号取得，实际是比较简单，也就是当$Y_i$之间互相独立。下面我们来研究如何让单字母互信息得到最大值。</p>
@@ -575,7 +577,7 @@ C &= \max I(X;Y)\\
 &= \max(H(Y)-1)\\
 &= \log 26 - 1 = \log 13
 \end{aligned}</script><p>我们只是在互信息求得这个，但是我们不一定能找到一个实际的概率控制得到这个容量。而实际上，这个容量是可以达到的。</p>
-<p>我们要求输入端只能输入$A,C,E…$这些字母，从而退化成了一个输出不重叠噪声信道，这称为无重叠约化。通过这个方法，我们实现了$\log13$的容量。实际上香农告诉我们，任何一种混乱的信道，都可以看作是混乱打字机信道。</p>
+<p>我们要求输入端只能输入$A,C,E…$这些字母，它们均匀分布，而其他字符出现的概率为0，从而混乱打字机信道退化成了一个输出不重叠噪声信道，这称为无重叠约化。通过这个方法，我们实现了$\log13$的容量。实际上香农告诉我们，任何一种混乱的信道，都可以看作是混乱打字机信道。</p>
 <h4 id="BSC-Binary-Symmetric-Channel"><a href="#BSC-Binary-Symmetric-Channel" class="headerlink" title="BSC(Binary Symmetric Channel)"></a>BSC(Binary Symmetric Channel)</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int3.png" alt=""></p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -595,7 +597,7 @@ I(X;Y) &= H(Y) - H(Y|X)\\
 <script type="math/tex; mode=display">
 \begin{aligned}
 I(X;Y) &= H(Y) - H(p)\\
-&= H((\pi(1-p),p,(1-\pi)(1-p)))\\
+&= H((\pi(1-p),p,(1-\pi)(1-p))) - H(p)\\
 &= (1-p)H(\pi) + H(p) - H(p)\\
 &= (1-p)H(\pi)
 \end{aligned}</script><p>上式中用到了熵的可加性。这时候我们可以取到$H(\pi)=1$，因此得到$C = 1-p$.</p>
@@ -725,7 +727,7 @@ C(P_S) &= \max(h(Y) - h(Z)) = \frac 1 2 \log \frac{P_S+P_Z}{P_Z} \\
 <li>下界：<script type="math/tex; mode=display">
 \begin{aligned}
 C(P_S) &= \max_{P(X)} \{I(X;Y):\mathbb{E}[X^2] = P_S\}\\
-\ge I(X_G;Y)\ge I(X_G;Y_G) = \frac 1 2 \log(1 + \frac{P_S}{P_Z})
+&\ge I(X_G;Y)\ge I(X_G;Y_G) = \frac 1 2 \log(1 + \frac{P_S}{P_Z})
 \end{aligned}</script></li>
 </ul>
 <p>因为上面我们已经得到了。高斯噪声的破坏力是最大的。</p>
@@ -733,7 +735,7 @@ C(P_S) &= \max_{P(X)} \{I(X;Y):\mathbb{E}[X^2] = P_S\}\\
 <li>上界：<script type="math/tex; mode=display">
 \mathbb{E}[Z^2] = P_N,\mathbb{E}[X^2] = P_S,\mathbb{E}[Y^2] = P_S+P_N\\
 h(Y)\leq \frac{1}{2}\log [2\pi e (P_s +P_N)]\\
-C_(P_S) \leq h(Y) - h(Z) = \frac 1 2 \log[2\pi e \frac{P_S+P_N}{P_e}]\\</script>上式中：<script type="math/tex; mode=display">
+C(P_S) \leq h(Y) - h(Z) = \frac 1 2 \log[2\pi e \frac{P_S+P_N}{P_e}]\\</script>上式中：<script type="math/tex; mode=display">
 P_e \triangleq \frac 1 {2\pi e} \exp[2h(Z)]</script></li>
 </ul>
 <p>说实话，我并不知道这个定义是从何而来。而且$P_e$中还包含着$h(Z)$，又怎么能说是个上界呢？</p>

@@ -117,7 +117,7 @@
 <meta property="og:description" content="上次介绍了香农无损编码定理以及一些不同类别的编码。这次介绍kraft不等式以及huffman编码，并且说明霍夫曼编码的最优性。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/kraft.png">
-<meta property="og:updated_time" content="2019-01-11T07:52:21.016Z">
+<meta property="og:updated_time" content="2019-01-11T08:17:30.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Kraft不等式以及变长编码定理">
 <meta name="twitter:description" content="上次介绍了香农无损编码定理以及一些不同类别的编码。这次介绍kraft不等式以及huffman编码，并且说明霍夫曼编码的最优性。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-11 15:52:21" itemprop="dateModified" datetime="2019-01-11T15:52:21+08:00">2019-01-11</time>
+                <time title="更新于：2019-01-11 16:17:30" itemprop="dateModified" datetime="2019-01-11T16:17:30+08:00">2019-01-11</time>
               
             
           </span>
@@ -496,8 +496,7 @@ L - H_D(X) &= \sum P_i l_i - \sum P_i \log_D \frac 1 {P_i}\\
 <p>则（1）可以写为：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\sum P_i \log_D \frac{P_i}{D^{-l_i}} \\
-&=\sum P_i \log _D \frac{P_i}{r_i}\frac 1 {\Delta}\\
+\sum P_i \log_D \frac{P_i}{D^{-l_i}} &=\sum P_i \log _D \frac{P_i}{r_i}\frac 1 {\Delta}\\
 &=\sum P_i \log_D \frac{P_i}{r_i} - \log_D \Delta \sum P_i\\
 &=D(P\Vert r) + \log \frac 1 \Delta
 \end{aligned}</script><p>而$D(P\Vert r) + \log \frac 1 \Delta \ge 0$（由对数性质，鉴别信息性质以及Kraft不等式决定）.</p>
@@ -509,14 +508,14 @@ H_D(X) \leq L^* < H_D(X)+1</script><p>左侧是不用证明的，因为上个定
 <p>香农通过构造香农码来证明右侧：</p>
 <p>取$\lceil \log_D \frac 1{P_i} \rceil$为码字长度，这样的编码是满足kraft不等式的：</p>
 <script type="math/tex; mode=display">
-\sum D^{-\rceil \log_D \frac 1 {P_i}} \leq \sum D^{-\log_D \frac 1 {P_i}} = \sum P_i = 1</script><p>因此我们可以根据这个码长来构造出相应的前缀码。</p>
+\sum D^{-\lceil \log_D \frac 1 {P_i}\rceil} \leq \sum D^{-\log_D \frac 1 {P_i}} = \sum P_i = 1</script><p>因此我们可以根据这个码长来构造出相应的前缀码。</p>
 <p>我们知道：</p>
 <script type="math/tex; mode=display">
 \log _D \frac 1 {P_i} \leq l_i \leq \log_D \frac 1 {P_i}+1</script><p>如果对上述不等式的所有side求期望，得到：</p>
 <script type="math/tex; mode=display">
-H_D(X) \leq \sum p_il_i \leq H_D(X) + 1</script><p>这就是香农码。它不一定是最优，因此我们就完成了香农第一定理的证明。</p>
+H_D(X) \leq \sum p_il_i \leq H_D(X) + 1</script><p>这就是香农码,到这里我们就完成了香农第一定理的证明。要注意，香农码不一定是最优的，实际中一般来说它离最优还差很远。</p>
 <h2 id="分组前缀码"><a href="#分组前缀码" class="headerlink" title="分组前缀码"></a>分组前缀码</h2><p>定长编码定理告诉我们，$\epsilon$可以任意小，而变长编码告诉我们，我们付出的代价小于1。能不能让这个代价能保证比1更小呢？这就是分组编码。</p>
-<p>对于信源X进行分组前缀编码，得到的每消息符号数$L_n^*$满足不等式：</p>
+<p>对于信源X进行分组前缀编码，得到的编码长度$L_n^*$满足不等式：</p>
 <script type="math/tex; mode=display">
 \frac{H(X_1,X_2,...,X_n)}{n} \leq L_n^* \leq \frac{H(X_1,X_2,...,X_n)}{n}  + \frac 1 n</script><p>如果信源稳恒，则$L_n^* \rightarrow H(X)$.</p>
 <p>这要求我们对X进行分组，因此会有解码延迟，也需要缓冲区。但是通过这个，可以使得平均码长代价更小。天下没有免费的午餐。</p>
@@ -524,7 +523,7 @@ H_D(X) \leq \sum p_il_i \leq H_D(X) + 1</script><p>这就是香农码。它不�
 <p>Penalty分析：</p>
 <p>可以证明，对于服从p(x)信源X进行前缀编码，如果码字长度取$l(x) = \lceil \log \frac 1 {q(x)}\rceil$，则平均码长满足：</p>
 <script type="math/tex; mode=display">
-H(p) + D(p\Vert q) \leq E_{p}l(X) < H(p) + D(p\Vert q) +1</script><p>受到的惩罚中，互信息出来了。</p>
+H(p) + D(p\Vert q) \leq E_{p}l(X) < H(p) + D(p\Vert q) +1</script><p>很神奇的是，在penalty中kl divergence出来了。</p>
 
       
     </div>

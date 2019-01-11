@@ -117,10 +117,11 @@
 <meta property="og:description" content="到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa3.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa1.png">
-<meta property="og:updated_time" content="2019-01-08T08:58:40.662Z">
+<meta property="og:updated_time" content="2019-01-11T13:06:58.430Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——信道及其容量（二）">
 <meta name="twitter:description" content="到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。">
@@ -412,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-08 16:58:40" itemprop="dateModified" datetime="2019-01-08T16:58:40+08:00">2019-01-08</time>
+                <time title="更新于：2019-01-11 21:06:58" itemprop="dateModified" datetime="2019-01-11T21:06:58+08:00">2019-01-11</time>
               
             
           </span>
@@ -468,16 +469,17 @@
 <h2 id="信道编码"><a href="#信道编码" class="headerlink" title="信道编码"></a>信道编码</h2><p>这里我们先回忆一下之前的混乱打字机。之前说过，世界上任何一个数字信道，都可以直接或者间接地看作是混乱打字机模型。</p>
 <p>对于信道$\{X,q(y|x),Y\}$的信道编码包含以下要素：</p>
 <ul>
-<li>输入符号集合$\{1,2,…,2^{nR}\}$</li>
-<li>编码函数$X^n$:$\{1,2,…,2^{nR}\}\rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(2),…,X^n(m)$，这些码字构成的集合称为“码本”。</li>
-<li>解码函数$g$:$Y^n \rightarrow \{1,2,…,2^{nR}\}$，该函数为一个确定性判决函数，将每一个可能的接受向量映射到一个输入符号。</li>
+<li>输入符号集合$\{1,2,…,M\}$</li>
+<li>编码函数$X^n$:$\{1,2,…,M\} \rightarrow X^n$，该函数为每一个输入符号产生了相应的信道编码码字$X^n(1),X^n(2),…,X^n(M)$，这些码字构成的集合称为“码本”。</li>
+<li>解码函数$g$:$Y^n \rightarrow \{1,2,…,M\}$，该函数为一个确定性判决函数，将每一个可能的接受向量映射到一个输入符号。</li>
 </ul>
-<p>意思也就是，对于符号个数为$2^{nR}$的符号集，我们把它映射到一个长度为n的序列上,分n次传输。</p>
+<p>意思也就是，对于符号个数为$M$的符号集，我们把它映射到一个长度为n的序列上,分n次传输。</p>
 <h3 id="信道编码的码率"><a href="#信道编码的码率" class="headerlink" title="信道编码的码率"></a>信道编码的码率</h3><p>$(M,n)$码的码率Ｒ定义为：</p>
 <script type="math/tex; mode=display">
 R = \frac{\log M}{n} ,</script><p>单位为比特/传输。这是信道码的每个码字母所能携带的最大的信息量。</p>
-<p>如何理解？对于输入集合如果取等概分布，则它的信息量为$M$，这时候呢，$n$次传输才能传达这么多的信息量，所以每个传输的量就是$\frac{\log M}{n} = R$，则$M = 2^{nR}$。称这样的码为$(2^{nR},n)$码。</p>
+<p>如何理解？对于输入集合如果取等概分布，则它的信息量为$\log M$，这时候呢，$n$次传输才能传达这么多的信息量，所以每个传输的量就是$\frac{\log M}{n} = R$，则$M = 2^{nR}$。称这样的码为$(2^{nR},n)$码。</p>
 <h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><p><strong>重复码</strong>，输入字母数$M = 2$:$\{0,1\}$，重复n次，这个码率为$1/n$。</p>
+<p>直观来说，如果字符个数为$M$个，我们需要编码长度为$log M$就够了，这时候就可以保证码率为1。那为什么要进行这么复杂的定义？因为我们需要知道信道的传输是有噪声的。因此往往码率是要小于1，也就是n个长度本可以表示更大的字符集，但是我们选择它，增加码的冗余度，来降低错误率。比如下面的例子。</p>
 <p><strong>二进制奇偶校验码</strong>，输入字母数$M = 2^{n-1}:{x_1,x_2,…,x_{n-1}}$，信道编码方案为$C = x_1,x_2,…,x_{n-1}x_{\text{parity}}$，其中$x_{\text{parity}}$用于辨识码字中$1$的个数为奇数还是偶数，这个码率为：$\frac{n-1}{n}$。</p>
 <h3 id="信道编码的错误概率"><a href="#信道编码的错误概率" class="headerlink" title="信道编码的错误概率"></a>信道编码的错误概率</h3><p>输入为符号$i$时的条件错误概率为：</p>
 <script type="math/tex; mode=display">
@@ -511,10 +513,12 @@ c_8 = c_7 = c_6\\
 c_5 = c_4 = c_3\\
 c_2 = c_1 = c_0</script></li>
 <li>解码时，若$c_8 = c_6 \ne c_7$，则判定$c_7$位出错，采用简单多数法进行判定</li>
-<li>依据是：连续出现两个错误的概率远远小于出现一个错误的概率<br>如下图，如果我们将上述编码放进二进制对称信道，则想要得到无差错编码，$n \rightarrow 0$，而码率也趋近于0，这不是一个好消息。</li>
+<li>依据是：连续出现两个错误的概率远远小于出现一个错误的概率</li>
 </ul>
 </li>
 </ul>
+<p>如下图，如果我们将上述编码放进二进制对称信道，则想要得到无差错编码。误码率的大小是重复$2n+1$次，而至少出现了$n+1$次错误。为了让误码率取0,$n \rightarrow 0$，此时码率也趋近于0，这不是一个好消息。</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int3.png" alt=""></p>
 <p>但是，是否对于信息的无差错传输，就意味着码率为0呢？答案是否定的。</p>
 <p>现在我们考虑BSC信道，$W= \{1,2,…,2^k\}$,如下：</p>
 <script type="math/tex; mode=display">
@@ -526,7 +530,7 @@ nC &\ge nI(X;Y)\\
 &\ge I(W,\hat W)\\
 &=H(W) - H(W\vert \hat W)\\
 &\ge k - k H(P_e)
-\end{aligned}</script><p>上式中最后一步是有Fano不等式得到的。</p>
+\end{aligned}</script><p>上式中最后一步是由Fano不等式得到的（<font color="red">不知道怎么得到，实际上我只能得到的是：$\ge k - (H(P_e)+kP_e)$</font>）。</p>
 <p>则：<script type="math/tex">k \leq  \frac{nC}{1 - H(P_e)}</script></p>
 <p>而由于BSC信道的容量可以得到：$C = 1 - H(P)$，所以我们得到一个R的上界：</p>
 <script type="math/tex; mode=display">
