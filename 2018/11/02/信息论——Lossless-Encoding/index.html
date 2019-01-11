@@ -117,7 +117,7 @@
 <meta property="og:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/Screenshot_2019-01-10%20Introduction%20pdf%20-%20Elements_of_Information_Theory_Elements%20pdf.png">
-<meta property="og:updated_time" content="2019-01-10T09:00:45.801Z">
+<meta property="og:updated_time" content="2019-01-11T07:40:07.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Lossless Encoding">
 <meta name="twitter:description" content="信息论算是应用数学，因此我们希望用熵，互信息这些东西来解决一些实际的问题。首先介绍下无失真编码定理，它早已经被广泛用在我们生活当中了。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-10 17:00:45" itemprop="dateModified" datetime="2019-01-10T17:00:45+08:00">2019-01-10</time>
+                <time title="更新于：2019-01-11 15:40:07" itemprop="dateModified" datetime="2019-01-11T15:40:07+08:00">2019-01-11</time>
               
             
           </span>
@@ -469,10 +469,10 @@
 \forall N, \exists \epsilon >0,\sigma>0, \text{where }n > N,p(\vert \frac{s_n}{n} - p\vert \geq \epsilon) <\sigma.</script><p>另外一个大数定理（辛钦大数定律）：</p>
 <script type="math/tex; mode=display">
 \begin{align}
-\frac 1 n \sum_{i=1}^n X_i\underrightarrow{p} EX
+\frac 1 n \sum_{i=1}^n X_i\xrightarrow{p} EX
 \end{align}</script><p>渐进等同分割性质定义如下：</p>
 <p>如果$X_1,X_2,…$是独立同分布的离散随机变量，分布服从$p(x)$,则</p>
-<p>$-\frac 1 n \log p(X_1,X_2,…,X_n) \underrightarrow{p} H(X)$</p>
+<p>$-\frac 1 n \log p(X_1,X_2,…,X_n) \xrightarrow{p} H(X)$</p>
 <p>使用上面的更准确的写法如下：</p>
 <script type="math/tex; mode=display">
 \forall N, \exists \epsilon>0, \sigma >0, \text{where }n > N,p(\vert - \frac 1 n \log p(X_1,X_2,...,X_n) - H(X)\vert \geq \epsilon) <\sigma.</script><p>即$p(X_1,X_2,…,X_n)\approx 2^{-nH(X)}$.</p>
@@ -491,7 +491,7 @@
 \end{aligned}</script><p>这意味着，当n很大的时候，一个序列出现的概率是几乎相等的，这个概率为$2^{-nH(X)}$.</p>
 <h2 id="（弱）典型序列（Typical-Sequence）"><a href="#（弱）典型序列（Typical-Sequence）" class="headerlink" title="（弱）典型序列（Typical Sequence）"></a>（弱）典型序列（Typical Sequence）</h2><p>典型序列定义如下：<br>相对于分布$p(x)$和序列$(x_1,x_2,…,x_n) \in X_n$,典型序列集合$A_\epsilon ^ {(n)}$定义为满足下列不等式约束的所有序列$\mathbf{x}$的集合：</p>
 <script type="math/tex; mode=display">
-2^{-n(H(X)+\epsilon) \leq p(\mathbf{x}) = p(x_1,x_2,...,x_n) \leq 2^{-n(H(X)-\epsilon)}}</script><p>所以典型序列具有以下性质：</p>
+2^{-n(H(X)+\epsilon)} \leq p(\mathbf{x}) = p(x_1,x_2,...,x_n) \leq 2^{-n(H(X)-\epsilon)}</script><p>所以典型序列具有以下性质：</p>
 <ol>
 <li>若$\mathbf{x} \in A_\epsilon ^ {(n)}$,则$H(X)-\epsilon \leq -\frac 1 n \log p(\mathbf{x}) \leq H(X) + \epsilon$.</li>
 <li>若$n$足够大，$Pr(A_\epsilon ^{(n)}) \geq 1 - \epsilon $</li>
@@ -531,13 +531,13 @@ E(l(X^n)) &= \sum_{x \in \mathcal{X}} p(x) l(x)\\
 <p>但是，定长编码定理是无法应用到工业界的。因为它需要对序列长度为n来进行编码，由于精确度的要求，这个n往往很大（上亿），这在现实中是无法实现的。</p>
 <p>顺便我们证明一下，平均每个字符编码所需要的bit数一定是大于等于$H(X)$.</p>
 <p>假设$X^n \rightarrow M \in C = \underbrace{\{1,2,3,…,2^{nR}\}}_{need ~nR~ bits} \rightarrow \hat{X}^n$.</p>
-<p>意思就是，M为X^n编码后的结果，它一定是属于后面的某个数字。</p>
+<p>意思就是，$M$为$X^n$编码后的结果，它一定是属于后面的某个数字。</p>
 <p>如果我们想要$P_e = 0$,也就是无失真编码，那么根据Fano不等式：</p>
 <script type="math/tex; mode=display">
 H(X^n|M) = 0</script><p>因此：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-nH(X) &= H(X^n)...(Why?)\\
+nH(X) &= H(X^n)\\
 &=H(X^n) - H(X^n|M)\\
 &=I(X^n,M)\\
 &=H(M) - H(M|X^n)\\
@@ -548,7 +548,7 @@ nH(X) &= H(X^n)...(Why?)\\
 <script type="math/tex; mode=display">
 x \ne x' \rightarrow C(x) \ne C(x')</script><p>则该码为非奇异码。</p>
 <p>但是仅仅是非奇异码的序列可能会有歧义（很好笑）。$x_1 \rightarrow 0,x_2 \rightarrow 1,x_3 \rightarrow 01$，那么我收到$01$就不知道该如何介绍它了。</p>
-<h3 id="唯一可译码"><a href="#唯一可译码" class="headerlink" title="唯一可译码"></a>唯一可译码</h3><p>唯一可译码是非奇异码的子集。称码$C^<em>$为码$C$的扩展，当$C^</em>$是有限长X的序列到有限长D序列的映射，且满足：</p>
+<h3 id="唯一可译码"><a href="#唯一可译码" class="headerlink" title="唯一可译码"></a>唯一可译码</h3><p>唯一可译码是非奇异码的子集。称码$C^*$为码$C$的扩展，当$C^*$是有限长X的序列到有限长D序列的映射，且满足：</p>
 <script type="math/tex; mode=display">
 C(x_1,x_2,...,x_n) = C(x_1)C(x_2)...C(x_n)</script><p>则该码为唯一可译码。</p>
 <p>从另一方面来说，如果码的扩展为非奇异码，则该码为唯一可译码。</p>
