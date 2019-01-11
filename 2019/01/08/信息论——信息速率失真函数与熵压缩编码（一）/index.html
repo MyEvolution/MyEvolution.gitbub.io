@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion3.png">
-<meta property="og:updated_time" content="2019-01-09T08:51:39.836Z">
+<meta property="og:updated_time" content="2019-01-11T13:54:23.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——信息速率失真函数与熵压缩编码（一）">
 <meta name="twitter:description" content="之前我们研究的问题，冗余度压缩编码以及信道编码（增加信息冗余度，以对抗信道中的传输错误），目的都是对信息进行可靠无差错的传输，信息熵没有变化，也就是是保熵的。之后的内容，我们不再保证信息传输是无差错的。">
@@ -418,7 +418,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-09 16:51:39" itemprop="dateModified" datetime="2019-01-09T16:51:39+08:00">2019-01-09</time>
+                <time title="更新于：2019-01-11 21:54:23" itemprop="dateModified" datetime="2019-01-11T21:54:23+08:00">2019-01-11</time>
               
             
           </span>
@@ -520,7 +520,7 @@ d(x_i,x_j) = \left \{\begin{matrix}
 <h4 id="平均失真"><a href="#平均失真" class="headerlink" title="平均失真"></a>平均失真</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1331.PNG" alt=""></p>
 <p>失真函数在输入输出联合空间中取统计平均为</p>
 <script type="math/tex; mode=display">
-D \triangleq \sum_{x_i,\hat x_j} p(x_i)q(\hat x_j | x_i)d(x_i,\hat x_j) \triangleq Ed(X,\hat X)</script><p>在给定信源分布与转移概率分布时，上式为信道传输失真总体的平均度量。</p>
+D \triangleq \sum_{x_i,\hat x_j} p(x_i)q(\hat x_j | x_i)d(x_i,\hat x_j) \triangleq E[d(X,\hat X)]</script><p>在给定信源分布与转移概率分布时，上式为信道传输失真总体的平均度量。</p>
 <p>现在我们想做的事情如下图，$X$经过信道之后，得到$\hat X$，我们希望$I(X;\hat X)$尽可能小，以此来压缩比特的传输。当然，这个互信息是不能为0的，那一切就失去了意义。压缩下有个前提，就是对失真函数的约束。</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_1332.PNG" alt=""></p>
 <h4 id="率失真函数"><a href="#率失真函数" class="headerlink" title="率失真函数"></a>率失真函数</h4><p>针对信源$X$和失真度量$d(x,\hat x)$，信息的率失真函数$R^{(I)}(D)$定义为：</p>
@@ -538,8 +538,9 @@ E[d(X^n,g_n(f_n(X^n)))] = \sum_{x^n} p(x^n)d(x^n,g_n(f_n(x^n)))</script><p>注�
 <li>$g_n(1),g_n(2),…,g_n(2^{nR})$构成了一个码本，以$\hat X^n(1),…,\hat X^n(2^{nR})$表示</li>
 </ul>
 <ul>
-<li>$f^{-1}_n(1),…,f^{-1}_n(2^{nR})$，也就是f的反函数为对应的量化区间。<h4 id="率失真区域"><a href="#率失真区域" class="headerlink" title="率失真区域"></a>率失真区域</h4>如果存在一组率失真编码$(2^{nR},n)$，使得$\lim_{n \rightarrow \infty} E[d(X^n,g_n(f_n(X^n)))] \leq D$，则称率失真对$(R,D)$是可达的。</li>
+<li>$f^{-1}_n(1),…,f^{-1}_n(2^{nR})$，也就是f的反函数为对应的量化区间。</li>
 </ul>
+<h4 id="率失真区域"><a href="#率失真区域" class="headerlink" title="率失真区域"></a>率失真区域</h4><p>如果存在一组率失真编码$(2^{nR},n)$，使得$\lim_{n \rightarrow \infty} E[d(X^n,g_n(f_n(X^n)))] \leq D$，则称率失真对$(R,D)$是可达的。</p>
 <p>信源的率失真区域是对所有可行率失真对$(R,D)$的闭包。</p>
 <p>给定失真度量约束$D$，率失真函数$R(D)$是速率$R$跑遍率失真区域获得的下确界。</p>
 <p>这个率失真函数是实际可以实现的。而香农告诉我们（香农第三定理），这两个率失真函数的值是相等的。</p>
@@ -554,7 +555,7 @@ R(D) = R^{(I)}(D) = \min_{q(\hat x|x):\sum_{x,\hat x} p(x)q(\hat x|x )d(x,\hat x
 {q(\hat x| x), E[d(x,\hat x)] \leq D_1} \subset {q(\hat x| x), E[d(x,\hat x)] \leq D_2}</script><p>由于在子集上取得的最小值不可能比全集更小，因此可以得到：</p>
 <script type="math/tex; mode=display">
 \min\{I(X;\hat X):E[d(x,hat x)] \leq D_2\} \leq \min\{I(X;\hat X):E[d(x,hat x)] \leq D_1\}</script><p>从而得到：$R(D_2) \leq R(D_1)$。</p>
-<h4 id="定义域"><a href="#定义域" class="headerlink" title="定义域"></a>定义域</h4><p>$R^{(I)}(D)$的定义域是$(D_{min},\infty)$，且存在$D_max$，当$D \ge D_{max}$时，$R^{(I)}(D) = 0$。</p>
+<h4 id="定义域"><a href="#定义域" class="headerlink" title="定义域"></a>定义域</h4><p>$R^{(I)}(D)$的定义域是$(D_{min},\infty)$，且存在$D_{max}$，当$D \ge D_{max}$时，$R^{(I)}(D) = 0$。</p>
 <p>这个在直觉上也是很好理解的。平均失真D是非负实函数$d(x,\hat x)$的期望，下限为0，则允许失真D的下限也为0，对应于不允许失真的情况。</p>
 <p>当信源$p(x)$给定时，失真取决于转移矩阵$q(\hat x|x)$的取值。因此$D$是有一个最小值的。</p>
 <p>如果允许失真大到一定值，错得太离谱，可以不用传输了，这时候就得到$R^{(I)}(D)=0$。</p>
@@ -579,7 +580,7 @@ I(X;\hat X) &= H(X) - H(X|\hat X)\\
 &= H(p) - H(X \oplus \hat X |\hat X  )\\
 &\ge H(p) - H(X \oplus \hat X) \\
 &= H(p) - H(P_e)\\
-& \ge H(p) - H(D)
+& = H(p) - H(D)
 \end{aligned}\\
 \text{where }D \leq \frac 1 2</script><p>我们可以构造这样的信道，最后得到这个等号是可以取到的。如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion1.png" alt=""></p>

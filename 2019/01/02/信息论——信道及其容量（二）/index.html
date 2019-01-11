@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa3.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa1.png">
-<meta property="og:updated_time" content="2019-01-11T13:06:58.430Z">
+<meta property="og:updated_time" content="2019-01-11T13:31:30.711Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——信道及其容量（二）">
 <meta name="twitter:description" content="到目前为止，我们都只算出来了信道容量，没有讲过怎么编码能得到这些容量。接下来要做的就是说明，所有上面算出来的容量，都是可以实现的。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-11 21:06:58" itemprop="dateModified" datetime="2019-01-11T21:06:58+08:00">2019-01-11</time>
+                <time title="更新于：2019-01-11 21:31:30" itemprop="dateModified" datetime="2019-01-11T21:31:30+08:00">2019-01-11</time>
               
             
           </span>
@@ -539,7 +539,7 @@ R = \frac{k}{n} \ge \frac{1 - H(P)}{1 - H(P_e)}</script><p>通过变形，我们
 H(P_e) \ge 1 - \frac C R \rightarrow P_e \ge H^{-1}\left(1 - \frac C R\right)</script><p>这意味着，如果想要让$P_e\leq 0$，则$R \leq C$，如果$R &gt; C$，则$H(P_e)&gt;0$，所以我们一定可以得到$P_e&gt;0$，不可能进行可靠通信。</p>
 <p>那么无差错传输的情况下，码率最大能有多少？先给你看一个preview，很直白的内容，不过它被证明确实是正确的：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/capa3.jpg" alt=""></p>
-<p>想象信道将信源映射到一个球体里，而对每个输入符号也对应一个球。而这个球的体积就意味着噪声带来的体积，而大球中能容纳多少小球，正是这个信道编码在无错的情况下可以映射的符号数M。因为这个球的维度是n维的，我么可以得到：</p>
+<p>想象信道将信源映射到一个球体里，而对每个输入符号也对应一个球。而这个球的体积就意味着噪声带来的体积，而大球中能容纳多少小球，正是这个信道编码在无错的情况下可以映射的符号数M。因为这个球的维度是n维的，我们可以得到：</p>
 <script type="math/tex; mode=display">
 M = \frac{\left[\sqrt{P_S +P_N}\right]^n}{\left[\sqrt{P_N}\right]^n} = (1 + \frac{P_S}{P_N})^{\frac n 2}</script><p>由上式，可以计算得出：</p>
 <script type="math/tex; mode=display">
@@ -622,7 +622,7 @@ nR &= H(W)\\
 &= I(W;\hat W)\\
 &\leq I(X^n(W);Y^n)\\
 &= H(Y^n) - H(Y^n|X^n)\\
-&\leq \sum_{i} H(Y^i) - \sum_{i}H(Y_i|X_i)\\
+&\leq \sum_{i} H(Y_i) - \sum_{i}H(Y_i|X_i)\\
 &= \sum_{i} I(X_i;Y_i)\\
 &\leq nC
 \end{aligned}</script><p>由此我们证明了，要想实现无差错的传输，那么$R\leq C$是一定成立的。由此香农第二定理的证明就结束了。和无差错编码一样，随机编码在现实中由于码本巨大也是难以实现的。不过在信息论提出的60年中，人类一次次提出新的编码，像香农界不断逼近。看着这些进步，感觉自己的信息论虽然没什么用到过，但是也没有白学。</p>
