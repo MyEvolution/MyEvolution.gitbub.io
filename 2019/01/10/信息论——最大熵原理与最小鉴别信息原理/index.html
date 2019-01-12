@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这一节是信息论的最后一节（当然对于这门学科，这些东西只是冰山一角）。我们聊一聊信息论在压缩啊编码之外的一些作用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-10T08:54:01.228Z">
+<meta property="og:updated_time" content="2019-01-12T08:16:15.215Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——最大熵原理与最小鉴别信息原理">
 <meta name="twitter:description" content="这一节是信息论的最后一节（当然对于这门学科，这些东西只是冰山一角）。我们聊一聊信息论在压缩啊编码之外的一些作用。">
@@ -390,12 +390,24 @@
                 
               
 
-              <time title="创建于：2019-01-10 15:22:31 / 更新于：16:54:01" itemprop="dateCreated datePublished" datetime="2019-01-10T15:22:31+08:00">2019-01-10</time>
+              <time title="创建于：2019-01-10 15:22:31" itemprop="dateCreated datePublished" datetime="2019-01-10T15:22:31+08:00">2019-01-10</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-01-12 16:16:15" itemprop="dateModified" datetime="2019-01-12T16:16:15+08:00">2019-01-12</time>
               
             
           </span>
@@ -453,7 +465,7 @@
 <p>最大熵原理问题表述如下：</p>
 <p>设有某一离散随机变量$X$，其概率分布$p(x)$未知，已知其与若干函数的期望：</p>
 <script type="math/tex; mode=display">
-\sum_{x \in \mathcal{X}} p(x)f_m(x) = C_m,where m = 1,...,M</script><p>求最佳估计$\hat p(x)$</p>
+\sum_{x \in \mathcal{X}} p(x)f_m(x) = C_m,\text{where }m = 1,...,M</script><p>求最佳估计$\hat p(x)$</p>
 <p>按照最大熵原理求解该问题，可以表述为下面这样的约束优化问题：</p>
 <ul>
 <li>取概率分布的熵为目标函数$H(X) = -\sum_{x \in \mathcal{X}} p(x)\log p(x)$.</li>
@@ -473,7 +485,7 @@ p(x)\ge 0\text{ and }p(x)=0 \text{ when }x \in S\\
 \int_s p(x)dx = 1\\
 \int_s p(x)f_m(x)dx = C_m,m=1,...,M</script><p>最大熵原理告诉我们：满足约束条件且使微分熵达到最大值的分布为：</p>
 <script type="math/tex; mode=display">
-\hat p(x) = \exp[\lambda_0 + \sum_{m=1}^M \lambda_mf_m(x)].</script><h3 id="最小鉴别信息原理"><a href="#最小鉴别信息原理" class="headerlink" title="最小鉴别信息原理"></a>最小鉴别信息原理</h3><p>最大熵原理给出的是在没有任何先验信息前提下求解欠定问题的一种方法。如果存在一个先验的分布，如何求解最合理的分布？这时候我们需要用到最小鉴别信息原理。鉴别信息是度量两个分布之间差异的指标，而鉴别信息最小化指的是，在满足约束前提下，给出的分布距离先验分布最小，也就是鉴别信息最小。</p>
+\hat p(x) = \exp\left[\lambda_0 + \sum_{m=1}^M \lambda_mf_m(x)\right].</script><h3 id="最小鉴别信息原理"><a href="#最小鉴别信息原理" class="headerlink" title="最小鉴别信息原理"></a>最小鉴别信息原理</h3><p>最大熵原理给出的是在没有任何先验信息前提下求解欠定问题的一种方法。如果存在一个先验的分布，如何求解最合理的分布？这时候我们需要用到最小鉴别信息原理。鉴别信息是度量两个分布之间差异的指标，而鉴别信息最小化指的是，在满足约束前提下，给出的分布距离先验分布最小，也就是鉴别信息最小。</p>
 <p>最小鉴别信息院里的问题描述如下：</p>
 <p>某随机变量$X$，概率分布$q(x)$未知，已知其先验概率密度$p(x)$以及若干函数的期望</p>
 <script type="math/tex; mode=display">
