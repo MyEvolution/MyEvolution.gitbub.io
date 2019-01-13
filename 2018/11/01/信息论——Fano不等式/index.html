@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="从$X$到$Y$到$\hat{X}$，其中$\hat {X}$是对原有的$X$的估计,而Y可以看作是一个中间过程，可以想象类似于编码解码的过程。这之间有什么联系？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-11T07:10:08.207Z">
+<meta property="og:updated_time" content="2019-01-13T09:42:59.446Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——Fano不等式">
 <meta name="twitter:description" content="从$X$到$Y$到$\hat{X}$，其中$\hat {X}$是对原有的$X$的估计,而Y可以看作是一个中间过程，可以想象类似于编码解码的过程。这之间有什么联系？">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-11 15:10:08" itemprop="dateModified" datetime="2019-01-11T15:10:08+08:00">2019-01-11</time>
+                <time title="更新于：2019-01-13 17:42:59" itemprop="dateModified" datetime="2019-01-13T17:42:59+08:00">2019-01-13</time>
               
             
           </span>
@@ -459,10 +459,11 @@
 
       
         <p>从$X$到$Y$到$\hat{X}$，其中$\hat {X}$是对原有的$X$的估计,而Y可以看作是一个中间过程，可以想象类似于编码解码的过程。这之间有什么联系？<br><a id="more"></a></p>
+<p>实际上，$X\rightarrow Y \rightarrow \hat X$形成了一个Markov链。</p>
 <p>Fano不等式如下：</p>
 <script type="math/tex; mode=display">
 P_e = Pr(X \ne \hat{X})\\
-H(P_e) + P_e log|X| \geq H(X|\hat{X}) \geq H(X|Y)</script><p>证明如下：</p>
+H(P_e) + P_e \log|X| \geq H(X|\hat{X}) \geq H(X|Y)</script><p>证明如下：</p>
 <script type="math/tex; mode=display">
 E =
 \left \{
@@ -481,7 +482,12 @@ H(E,X|\hat {X}) &= H(X|\hat{X}) + H(E|X,\hat{X}) \\
 <script type="math/tex; mode=display">
 H(X|E,\hat{X}) = P_e H(X|X \ne \hat{X},\hat{X}) + (1-P_e) H(X|X = \hat{X},\hat{X}).</script><p>这步还是比较难懂的。</p>
 <p>上式中，$P_e H(X|X \ne \hat{X},\hat{X}) \leq P_e \log |X|,H(X|X = \hat{X},\hat{X}) = 0 $。</p>
-<p>因此组合起来： $H(X|\hat{X}) \leq  H(P_e) + \log |X|$。<br>这就得到了Fano不等式的第一个不等号。</p>
+<p>因此组合起来： $H(X|\hat{X}) \leq  H(P_e) + \log |X|$。</p>
+<p>这里注意下，如果$\hat X \in \mathcal{X}$，那么我们可以得到：</p>
+<script type="math/tex; mode=display">
+$P_e H(X|X \ne \hat{X},\hat{X}) \leq P_e \log (|X| - 1)</script><p>Fano不等式可以更紧一点：</p>
+<script type="math/tex; mode=display">
+H(P_e) + P_e \log(|X|-1) \geq H(X|\hat{X}) \geq H(X|Y)</script><p>这就得到了Fano不等式的第一个不等号。</p>
 <p>接下来证明$I(X;Y)\geq I(X;\hat{X})$。</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -495,6 +501,9 @@ I(X,Y) \geq I(X;\hat{X}).</script><p>这告诉我们编码过程中，原有信�
 H(X) - H(X|Y) \geq H(X) - H(X|\hat {X})\\
 H(X|\hat{X})\geq H(X|Y)</script><p>所以整个不等式就得到了：</p>
 <p>$H(P_e) + P_e \log|X| \geq  H(X|\hat {X}) \geq H(X|Y)$。</p>
+<p>最后，Fano不等式也有更松一点的形式：</p>
+<script type="math/tex; mode=display">
+1 + P_e \log|X| \geq \ H(X|\hat {X}) \geq H(X|Y)</script><p>这个很容易理解。因为形式简单，在平时解题中我们对这个不等式用的更多一点。</p>
 
       
     </div>
