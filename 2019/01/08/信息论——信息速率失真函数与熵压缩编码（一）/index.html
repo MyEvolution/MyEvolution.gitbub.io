@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rate_distortion3.png">
-<meta property="og:updated_time" content="2019-01-12T08:07:10.876Z">
+<meta property="og:updated_time" content="2019-01-14T05:20:20.332Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信息论——信息速率失真函数与熵压缩编码（一）">
 <meta name="twitter:description" content="之前我们研究的问题，冗余度压缩编码以及信道编码（增加信息冗余度，以对抗信道中的传输错误），目的都是对信息进行可靠无差错的传输，信息熵没有变化，也就是是保熵的。之后的内容，我们不再保证信息传输是无差错的。">
@@ -418,7 +418,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-12 16:07:10" itemprop="dateModified" datetime="2019-01-12T16:07:10+08:00">2019-01-12</time>
+                <time title="更新于：2019-01-14 13:20:20" itemprop="dateModified" datetime="2019-01-14T13:20:20+08:00">2019-01-14</time>
               
             
           </span>
@@ -473,7 +473,7 @@
 <p>在实际中，很多情况下我们是没有必要把信息的所有内容都保留下来的。比如看视频的时候，有高清标清的选择，对应于不同的网络情况。同样的还有图片的有损压缩等等。</p>
 <h3 id="连续随机变量的量化"><a href="#连续随机变量的量化" class="headerlink" title="连续随机变量的量化"></a>连续随机变量的量化</h3><p>考察随机变量$X \sim N(0,\sigma^2)$，如果对该随机变量进行无失真编码是不可能的，假如我们需要用$R$比特来表示$X$。所以被表示的结果$\hat X$相对于原来的$X$一定是有失真的。而这个失真如何度量呢？最简单的方法是采用平方误差度量最小化：</p>
 <script type="math/tex; mode=display">
-E(x - \hat X(x))^2 = \int_{-\infty}^{\infty} (x - \hat X(x))^2 p(x)dx.</script><p>现在假设$R=1$，比较显然的是该符号应该代表X的符号。为了最小化误差，恢复值应该为其代表区域的条件平均：</p>
+E(x - \hat X(x))^2 = \int_{-\infty}^{\infty} (x - \hat X(x))^2 p(x)dx.</script><p>现在假设$R=1$，比较显然的是该符号应该代表X的正负。为了最小化误差，恢复值应该为其代表区域的条件平均：</p>
 <script type="math/tex; mode=display">
 \hat X(x) = \left \{
 \begin{matrix}
@@ -526,7 +526,7 @@ D \triangleq \sum_{x_i,\hat x_j} p(x_i)q(\hat x_j | x_i)d(x_i,\hat x_j) \triangl
 <h4 id="率失真函数"><a href="#率失真函数" class="headerlink" title="率失真函数"></a>率失真函数</h4><p>针对信源$X$和失真度量$d(x,\hat x)$，信息的率失真函数$R^{(I)}(D)$定义为：</p>
 <script type="math/tex; mode=display">
 R^{(I)}(D) = \min_{q(\hat x|x):\sum_{x,\hat x} p(x)q(\hat x|x )d(x,\hat x) \leq D} I(X;\hat X)</script><p>这就是信息论意义下的率失真函数的定义，而$R$的上标$(I)$标识了这一点。</p>
-<p>注：我们无法操作信源，能做的是最小化针对所有可能的条件分布$q(\hat x | x)$，并且使得联合分布满足要求的失真约束$p(x,\hat x) = p(x)q(\hat x|x)$。这个函数求得的最小值，并不一定是可操作得到的，只是数学上的一个最小值。</p>
+<p>注：我们无法操作信源，能做的是最小化针对所有可能的条件分布$q(\hat x | x)$，并且使得联合分布满足要求的失真约束。这个函数求得的最小值，并不一定是可操作得到的，只是数学上的一个最小值。</p>
 <h4 id="率失真编码"><a href="#率失真编码" class="headerlink" title="率失真编码"></a>率失真编码</h4><p>率失真编码$(2^{nR},n)$包括一个编码函数</p>
 <script type="math/tex; mode=display">
 f_n:X^n \rightarrow \{1,2,...,2^{nR}\}</script><p>一个解码函数：</p>
