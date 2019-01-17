@@ -3,6 +3,60 @@
   
     
     <entry>
+      <title>ICP——迭代最近点</title>
+      <link href="/2019/01/17/ICP%E2%80%94%E2%80%94%E8%BF%AD%E4%BB%A3%E6%9C%80%E8%BF%91%E7%82%B9/"/>
+      <url>/2019/01/17/ICP%E2%80%94%E2%80%94%E8%BF%AD%E4%BB%A3%E6%9C%80%E8%BF%91%E7%82%B9/</url>
+      
+        <content type="html"><![CDATA[<p>ICP（iterative closest point）最广泛的应用应该就是点云的配准了。它的提出也是为了解决这个问题。</p><a id="more"></a><p>假设我们有两个点云，它们应该是一一配对的（或者说在SLAM中两个场景有较大的overlap），但是我们并不知道点的配对关系。现在我们希望根据这两个点云的位置求到相机的位姿变化，也就是旋转矩阵$R$与平移$t$。</p><p>假设这两个点云分别为$p,p’$，那么我们知道$p = Rp’ + t $。想要求得$R,t$，首先要做的是配对关系。而ICP非常简单，它选取距离最近（一般来说为欧几里得距离）的点作为配对的点。因此，现在我们有了两组配对点：</p><script type="math/tex; mode=display">P = \{p_1,p_2,...,p_n\}, P' = \{p'_1,p'_2,...,p'_n\}</script><p>我们希望做的是最小化下面这个代价：</p><script type="math/tex; mode=display">J = \sum_{i=1}^n\Vert p'_i - (Rp_i+t)\Vert^2</script><p>如何解这其中的$R$和$t$？比较容易想到的就是最小二乘法，下面我们推导介绍一下利用SVD来解决这个最小二乘问题。</p><p>首先定义点云的质心为：</p><script type="math/tex; mode=display">\overline p = \frac 1 n \sum_{i=1}^np_i, p' = \frac{1}{n} \sum_{i=1}^np'_i</script><p>则:</p><script type="math/tex; mode=display">\begin{aligned}\sum_{i=1}^n\Vert p'_i - (Rp_i + t) \Vert^2 &= \sum_{i=1}^n\Vert p'_i- Rp_i - t - p' + Rp + p' - Rp \Vert^2\\&=\sum_{i=1}^n\Vert (p'_i-p'-R(p_i-p)) + (p'-Rp - t) \Vert^2\\&= \sum_{i=1}^n(\Vert p'_i-p'-R(p_i-p)\Vert^2 + \Vert p'-Rp - t \Vert^2 + 2(p'_i-p'-R(p_i-p))^T(p'-Rp - t))\end{aligned}</script><p>值得注意的是：$p’_i-p’-R(p_i-p)$在求和之后为0，这是由质心的定义决定的。</p><p>因此原来的问题就简化为：</p><script type="math/tex; mode=display">\min_{R,t} J = \sum_{i=1}^n(\Vert p'_i-p'-R(p_i-p)\Vert^2 + \Vert p'-Rp - t \Vert^2</script><p>观察之后，我们发现第一个式子只和旋转有关，第二个式子和旋转平移都有关，不过另一方面它只和质心相关。如果我们求得了$R$，简单的令第二个式子为0就可以求得对应的$t$。所以现在ICP的算法表述如下：</p><p>令$q_i,q’_i$为原来点的去质心坐标：</p><script type="math/tex; mode=display">q_i = p_i - p,q'_i = p'_i - p'</script><p>计算最佳的$R$:</p><script type="math/tex; mode=display">R^\* = \arg\min_R \sum_{i=1}^n\Vert q'_i - Rq_i\Vert^2</script><p>最后，根据$R^*$计算$t$:</p><script type="math/tex; mode=display">t^\* = p' - R^{\*}p</script><p>因此求得$R$之后，$t$是非常容易得到的。</p><script type="math/tex; mode=display">\sum_{i=1}^n\Vert q'_i-Rq_i\Vert^2 = \sum_{i=1}^n( q'_i^Tq'_i + q_i^TR^TRq_i - 2q'_i^TRq_i)</script><p>第一项与$R$无关，而$R^TR=I$，因此第二项也无所谓。我们重点要做的是$\min_R \sum_{i=1}^n -q’_i^TRq_i$。</p><script type="math/tex; mode=display">\sum_{i=1}^n -q'_i^TRq_i = \sum_{i=1}^n -\text{tr}(Rq_iq'_ i^T) = -\text{tr}\left(R\sum_{i=1}^nq_iq'_i^T\right)</script><p>计算这个$R$可以使用SVD来解决。</p><p>定义$W = \sum_{i=1}^n q’_iq_i^T$，根据SVD得到：</p><script type="math/tex; mode=display">W = U\SigmaV^T</script><p>则$R^* = UV^T$。具体的证明比较复杂。这就求得了从$p$到$p’$的旋转，有了旋转矩阵，平移就非常容易得到了。</p><p>至于迭代的过程，就是我们根据求得的$R,t$进行转换后，重复上述的步骤。</p><p>最早的关于ICP的论文为<a href="http://www-evasion.inrialpes.fr/people/Franck.Hetroy/Teaching/ProjetsImage/2007/Bib/besl_mckay-pami1992.pdf" target="_blank" rel="noopener">A Method for Registration of 3-D Shapes</a>。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SLAM </tag>
+            
+            <tag> icp </tag>
+            
+            <tag> algorithm </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>RANSAC——随机采样一致</title>
+      <link href="/2019/01/17/RANSAC%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E9%87%87%E6%A0%B7%E4%B8%80%E8%87%B4/"/>
+      <url>/2019/01/17/RANSAC%E2%80%94%E2%80%94%E9%9A%8F%E6%9C%BA%E9%87%87%E6%A0%B7%E4%B8%80%E8%87%B4/</url>
+      
+        <content type="html"><![CDATA[<p>RANSAC（RANdom SAmple Consensus），随机采样一致，是一个比较简单，但是在SLAM，图像陪准中用得很多的算法。当然，在这里我们专注于算法的本身，至于它在其他的地方的应用要结合具体情况分析。<br><a id="more"></a></p><p>假如现在有一组采样得到的点，是由一条直线生成的。但是由于噪声的存在，它变得很乱。现在我们希望恢复这条直线。如果噪声比较小，或者是高斯噪声，我们使用最小二乘法（线性回归）就可以得到最佳的那条线，它们都用了least squares作为要优化的目标（可以看<a href="https://wlsdzyzl.top/2018/10/16/Learning-From-Data%E2%80%94%E2%80%94Softmax-Regression/" target="_blank" rel="noopener">数据学习第一篇</a>）。但是噪声比较大，而且我们也不知道噪声生成的规律，那么这个问题使用线性回归可能就得不到我们想要的那条线，因为此时least squares用作cost function不合适了。比如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ransac1.jpg" alt=""></p><p>我们可以很轻易的看出来这个线应该是什么样子，但是使用线性回归却得到了错误的结果。</p><p>RANSAC算法的思想非常简单，它认为，有更多的样本符合这个假设，这个假设就是正确的。但是如何让最多的样本符合这个假设应该是一个NP-hard的问题，正如PLA中，如何分类使得错误的个数最小。</p><p>RANSAC算法是这么做的，随机采取一定的点来确定这个模型，正如本例中，两个点就可以确定一条直线。当然，实际上我们不会只采两个点，而是采一组，用这一组点利用线性回归或者最小二乘法得到模型，然后定义一个distance的threhold，对于小于threhold的确定为局内点（inlier），对于大于的定为局外点（outlier）。根据inlier的个数来觉得这个模型的好坏，并且重新计算这个模型。</p><p>不断迭代上面的过程，进行随机采样，如果可以得到更好的模型，就用它来替换最好的模型，如果不行，就将其淘汰，算法过程如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ransac2.jpg" alt=""></p><p>可以看到的是，我们不能保证RANSAC收敛，因此会一般执行一定的步骤，得到最后的结果。在很大概率下，Ransac是可以得到不错的结果。实际上它的思想和Pocket PLA是非常相近的。</p><p>下面我们提一下Ransac在图像特征匹配中如何剔除误匹配。我们根据随机选取几组匹配点可以计算出一个位姿，也就是利用八点算法，或者五点算法。要知道一般来说误匹配的个数是相对正确的来说比较小的，因此理论上大部分的匹配点都应该满足这个位姿。接着我们看匹配点有多少是符合这个匹配的。不断迭代上面的过程，最后可以选取一个相对之前的多次迭代采样来说最正确的位姿，剔除掉不符合这个位姿的匹配点即可。在SLAM中的对于位姿的估计也是相似的做法。</p><p>paper：<a href="http://www.dtic.mil/dtic/tr/fulltext/u2/a460585.pdf" target="_blank" rel="noopener">Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated Cartography</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SLAM </tag>
+            
+            <tag> algorithm </tag>
+            
+            <tag> ransac </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>信息论——最大熵原理与最小鉴别信息原理</title>
       <link href="/2019/01/10/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94%E6%9C%80%E5%A4%A7%E7%86%B5%E5%8E%9F%E7%90%86%E4%B8%8E%E6%9C%80%E5%B0%8F%E9%89%B4%E5%88%AB%E4%BF%A1%E6%81%AF%E5%8E%9F%E7%90%86/"/>
       <url>/2019/01/10/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94%E6%9C%80%E5%A4%A7%E7%86%B5%E5%8E%9F%E7%90%86%E4%B8%8E%E6%9C%80%E5%B0%8F%E9%89%B4%E5%88%AB%E4%BF%A1%E6%81%AF%E5%8E%9F%E7%90%86/</url>
@@ -277,9 +331,9 @@
             
             <tag> SLAM </tag>
             
-            <tag> feature </tag>
-            
             <tag> computer vision </tag>
+            
+            <tag> feature </tag>
             
         </tags>
       
@@ -605,13 +659,13 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> LFD class </tag>
             
             <tag> neural network </tag>
             
             <tag> homework </tag>
+            
+            <tag> code </tag>
             
         </tags>
       
@@ -688,9 +742,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
         </tags>
       
@@ -761,9 +815,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
             <tag> sophus </tag>
             
@@ -1854,9 +1908,9 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> code </tag>
             
             <tag> visualization </tag>
             
