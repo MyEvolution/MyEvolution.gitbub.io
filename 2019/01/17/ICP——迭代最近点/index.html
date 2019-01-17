@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="ICP（iterative closest point）最广泛的应用应该就是点云的配准了。它的提出也是为了解决这个问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-17T12:01:53.948Z">
+<meta property="og:updated_time" content="2019-01-17T12:03:55.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ICP——迭代最近点">
 <meta name="twitter:description" content="ICP（iterative closest point）最广泛的应用应该就是点云的配准了。它的提出也是为了解决这个问题。">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建于：2019-01-17 15:39:17 / 更新于：20:01:53" itemprop="dateCreated datePublished" datetime="2019-01-17T15:39:17+08:00">2019-01-17</time>
+              <time title="创建于：2019-01-17 15:39:17 / 更新于：20:03:55" itemprop="dateCreated datePublished" datetime="2019-01-17T15:39:17+08:00">2019-01-17</time>
             
 
             
@@ -476,7 +476,7 @@ t^* = p' - R^{*}p</script><p>因此求得$R$之后，$t$是非常容易得到的
 <script type="math/tex; mode=display">
 \sum_{i=1}^n\Vert q'_i-Rq_i\Vert^2 = \sum_{i=1}^n( {q'}_i^Tq'_i + q_i^TR^TRq_i - 2{q'}_i^TRq_i)</script><p>第一项与$R$无关，而$R^TR=I$，因此第二项也无所谓。我们重点要做的是$\min_R \sum_{i=1}^n -{q’}_i^TRq_i$。</p>
 <script type="math/tex; mode=display">
-\sum_{i=1}^n -{q'}_i^TRq_i = \sum_{i=1}^n -\text{tr}(Rq_iq'_ i^T) = -\text{tr}\left(R\sum_{i=1}^nq_i{q'}_i^T\right)</script><p>计算这个$R$可以使用SVD来解决。</p>
+\sum_{i=1}^n -{q'}_i^TRq_i = \sum_{i=1}^n -\text{tr}(Rq_i{q'}_ i^T) = -\text{tr}\left(R\sum_{i=1}^nq_i{q'}_i^T\right)</script><p>计算这个$R$可以使用SVD来解决。</p>
 <p>定义$W = \sum_{i=1}^n q’_iq_i^T$，根据SVD得到：</p>
 <script type="math/tex; mode=display">
 W = U\Sigma V^T</script><p>则$R^* = UV^T$。具体的证明比较复杂。这就求得了从$p$到$p’$的旋转，有了旋转矩阵，平移就非常容易得到了。</p>
