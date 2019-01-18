@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-18T07:56:47.057Z">
+<meta property="og:updated_time" content="2019-01-18T08:03:08.288Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——李群和李代数">
 <meta name="twitter:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-18 15:56:47" itemprop="dateModified" datetime="2019-01-18T15:56:47+08:00">2019-01-18</time>
+                <time title="更新于：2019-01-18 16:03:08" itemprop="dateModified" datetime="2019-01-18T16:03:08+08:00">2019-01-18</time>
               
             
           </span>
@@ -561,7 +561,7 @@ J_l^{-1} = \frac{\theta}{2} \cot \frac{\theta}{2}I + (1 - \frac{\theta}{2}\cot\f
 &= \lim_{\delta \phi \rightarrow 0} \frac{-(\exp(\phi^{\hat{}})p)^{\hat{}}J_l\delta\phi}{\delta \phi}\\
 &= -(Rp)^{\hat{}} J_l
 \end{aligned}</script><p>上面的过程用到了BCH展开，泰勒近似，以及$\hat{}$的性质：$a^{\hat{}}b = -b^{\hat{}}a $.<br>这里有形式比较复杂的$J_l$,我们不想计算它。所以看看扰动模型。</p>
-<h4 id="扰动模型"><a href="#扰动模型" class="headerlink" title="扰动模型"></a>扰动模型</h4><p>扰动模型是在李群上左乘一个很小的矩阵$\Delta R$,假设它对应的李代数为$\theta$。通过扰动模型得到的导数为$-(Rp)^{\hat{}}$.<br>\begin{aligned}<br>\frac{\partial (Rp)} {\partial \phi}&amp;= \lim_{\theta \rightarrow 0} \frac{\exp(\theta^{\hat{}})\exp(\phi)^{\hat{}})p - \exp(\phi^{\hat{}})p} {\theta}\\<br>&amp;=-(Rp)^{\hat{}}<br>\end{aligned}<br>扰动模型求导和上面导数模型可以使用同样的套路，而且更简单。因此就不详细写出来了。</p>
+<h4 id="扰动模型"><a href="#扰动模型" class="headerlink" title="扰动模型"></a>扰动模型</h4><p>扰动模型是在李群上左乘一个很小的矩阵$\Delta R$,假设它对应的李代数为$\theta$。通过扰动模型得到的导数为$-(Rp)^{\hat{}}$.<br>\begin{aligned}<br>\frac{\partial (Rp)} {\partial \phi}&amp;= \lim_{\theta \rightarrow 0} \frac{\exp(\theta^{\hat{}})\exp(\phi^{\hat{}})p - \exp(\phi^{\hat{}})p} {\theta}\\<br>&amp;=-(Rp)^{\hat{}}<br>\end{aligned}<br>扰动模型求导和上面导数模型可以使用同样的套路，而且更简单。因此就不详细写出来了。</p>
 <p>可以看到扰动模型的比导数模型得到的结果更加简便一些。因此扰动模型相对于导数模型来说更加的实用。</p>
 <h3 id="se-3-求导"><a href="#se-3-求导" class="headerlink" title="se(3)求导"></a>se(3)求导</h3><p>对于se(3)的求导，我们直接给出扰动模型：</p>
 <script type="math/tex; mode=display">
