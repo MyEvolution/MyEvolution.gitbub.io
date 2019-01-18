@@ -119,7 +119,8 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/djjh1.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/djjh3.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/djjh2.jpg">
-<meta property="og:updated_time" content="2019-01-10T14:17:18.964Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/djjh4.jpg">
+<meta property="og:updated_time" content="2019-01-18T05:47:14.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（二）对极几何">
 <meta name="twitter:description" content="上次介绍了特征，现在我们已经得到了特征匹配后的点对，现在我们需要用这些东西来估计相机运动。由于相机原理不同，估计的方法也不同。现在我们考虑的是单目相机，使用的方法为对极几何。">
@@ -411,7 +412,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-10 22:17:18" itemprop="dateModified" datetime="2019-01-10T22:17:18+08:00">2019-01-10</time>
+                <time title="更新于：2019-01-18 13:47:14" itemprop="dateModified" datetime="2019-01-18T13:47:14+08:00">2019-01-18</time>
               
             
           </span>
@@ -605,7 +606,10 @@ Z_1x_1^{\hat{}} = Z_2x_1^{\hat{}}Rx_2 +x_1^{\hat{}}t = 0</script><p>因此我们
 </li>
 <li><p>在使用8点算法时候，由于噪声存在，往往构成超定问题。这是很可以通过最小二乘法来优化（SVD可以用来解最小二乘问题），当然误匹配情况下，也可以使用RANSAC来解决这个问题，实际上后者用得更多一点。</p>
 </li>
+<li><p>在使用3角测量时，由于像素的不确定性（可以认为是相机分辨率不够对定位的误差），会造成深度的不确定性。想要增大深度估计的精度，我们需要增加相机分辨率，但这样会导致计算量以及需要的内存过大，或者是增加平移的距离。而平移距离加大会导致外观变化较大，使得特征提取和匹配变得困难。因此这就导致了三角化的矛盾：平移过小，深度精度不够，平移过大，匹配失败。如下图：</p>
+</li>
 </ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/djjh4.jpg" alt=""></p>
 
       
     </div>
@@ -727,7 +731,7 @@ Z_1x_1^{\hat{}} = Z_2x_1^{\hat{}}Rx_2 +x_1^{\hat{}}t = 0</script><p>因此我们
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">77</span>
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
