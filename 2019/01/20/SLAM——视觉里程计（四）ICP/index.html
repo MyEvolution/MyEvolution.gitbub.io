@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="3D到3D之间的位姿匹配，我们要用到的方法就是ICP算法了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-20T07:46:46.057Z">
+<meta property="og:updated_time" content="2019-01-20T08:00:23.847Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——ICP">
 <meta name="twitter:description" content="3D到3D之间的位姿匹配，我们要用到的方法就是ICP算法了。">
@@ -390,7 +390,7 @@
                 
               
 
-              <time title="创建于：2019-01-20 15:04:43 / 更新于：15:46:46" itemprop="dateCreated datePublished" datetime="2019-01-20T15:04:43+08:00">2019-01-20</time>
+              <time title="创建于：2019-01-20 15:04:43 / 更新于：16:00:23" itemprop="dateCreated datePublished" datetime="2019-01-20T15:04:43+08:00">2019-01-20</time>
             
 
             
@@ -451,7 +451,7 @@
 <p>因此SLAM下的ICP算法非常简单，它也无需迭代，只需要构建最小二乘问题，最后用SVD分解得到$R$与$t$即可。</p>
 <p>而另外，我们可以使用非线性解法来解ICP问题，同样也就是利用优化器来解决。为了使用优化器，我们需要用到李群李代数，才能求得梯度，从而不断迭代求解。因此，在非线性条件下，我们的问题描述变成了：</p>
 <script type="math/tex; mode=display">
-\underset{\xi}{\min}=\frac{1}{2}\sum_{i=1}^{n}||p_i-Kexp(\xi^{\hat{}})P_i^{'}||_2^2</script><p>如果ICP已知匹配点，如果能找到极小值，那么它一定是全局最优值。因此对于ICP无需初始化，这是ICP算法的一个优点。</p>
+\underset{\xi}{\min}=\frac{1}{2}\sum_{i=1}^{n}||p_i-K\exp(\xi^{\hat{}})P_i^{'}||_2^2</script><p>如果ICP已知匹配点，如果能找到极小值，那么它一定是全局最优值。因此对于ICP无需初始化，这是ICP算法的一个优点。</p>
 <p>知道上面的问题，我们将其放入ceres或者g2o等库中优化即可。</p>
 
       
