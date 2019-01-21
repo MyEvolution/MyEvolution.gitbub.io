@@ -119,7 +119,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp3.png">
-<meta property="og:updated_time" content="2019-01-21T06:32:53.097Z">
+<meta property="og:updated_time" content="2019-01-21T06:36:53.905Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（三）PnP">
 <meta name="twitter:description" content="上篇文章的内容是关于对极几何约束的，它主要是用来解决2d-2d的情况，也就是我们只有两张不同角度的投影求空间点。现在假如我们已经知道了空间点的位置，接下来要的问题是3d-2d，这个时候我们可以用的方法是PnP来估计位姿。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-21 14:32:53" itemprop="dateModified" datetime="2019-01-21T14:32:53+08:00">2019-01-21</time>
+                <time title="更新于：2019-01-21 14:36:53" itemprop="dateModified" datetime="2019-01-21T14:36:53+08:00">2019-01-21</time>
               
             
           </span>
@@ -596,26 +596,26 @@ I&-(RP+t)^{\hat{}}\\
 \end{bmatrix}\\
 &\triangleq (TP)^{\bigodot}\\
 &=\begin{bmatrix}
-I&-(P\')^{\hat{}}\\
+I&-(P')^{\hat{}}\\
 0&0
 \end{bmatrix}
-\end{aligned}</script><p>而$P\’ = TP$，如果只取前3维，从而我们可以得到：</p>
+\end{aligned}</script><p>而$P’ = TP$，如果只取前3维，从而我们可以得到：</p>
 <script type="math/tex; mode=display">
 \begin{equation}
-\frac{\partial P\'}{\partial \delta \xi} = [I,-{P\'}^{\hat{}}]
+\frac{\partial P'}{\partial \delta \xi} = [I,-{P'}^{\hat{}}]
 \end{equation}</script><p>将$(1),(2)$相乘可以得到：</p>
 <script type="math/tex; mode=display">
 \frac{\partial e}{\partial \delta \xi} = -\begin{bmatrix}
-\frac{f_x}{Z\'} & 0 & -\frac{f_xX\'}{Z\'^2} & -\frac{f_xX\'Y\'}{Z\'^2} & f_x + \frac{f_xX^2}{Z\'^2} & -\frac{f_xY\'}\\
-0 & \frac{f_y}{Z\'} & -\frac{f_yY\'}{Z\'^2} &-f_y - \frac{f_yY\'}{Z\'^2} & \frac{f_yX\'Y\'}{Z\'^2} & \frac{f_yX\'}{Z\'}
+\frac{f_x}{Z'} & 0 & -\frac{f_xX'}{Z'^2} & -\frac{f_xX'Y'}{Z'^2} & f_x + \frac{f_xX^2}{Z'^2} & -\frac{f_xY'}\\
+0 & \frac{f_y}{Z'} & -\frac{f_yY'}{Z'^2} &-f_y - \frac{f_yY'}{Z'^2} & \frac{f_yX'Y'}{Z'^2} & \frac{f_yX'}{Z'}
 \end{bmatrix}</script><p>这个之前有负号，是因为我们对$e$的定义是观测值减去预测值，而观测值是常数。如果对于se(3)的定义是旋转在前，平移在后，只要将前3列与后3列对调即可。由此我们得到了一阶雅可比矩阵。</p>
 <p>此外，除了对相机位姿的优化，就像我们最开始说的，我们可以对空间点的位置也进行优化。所以需要求的是误差关于$P$的导数。这个导数相对来说会简单很多：</p>
 <script type="math/tex; mode=display">
-\frac{\partial e}{\partial P} = \frac{\partial e}{\partial P\'}\frac{\partial P\'}{\partial P}</script><p>第一项已经知道了。至于第二项，按照定义：$P\’ = RP+t$，因此这个导数为$R$。因此：</p>
+\frac{\partial e}{\partial P} = \frac{\partial e}{\partial P'}\frac{\partial P'}{\partial P}</script><p>第一项已经知道了。至于第二项，按照定义：$P’ = RP+t$，因此这个导数为$R$。因此：</p>
 <script type="math/tex; mode=display">
 \frac{\partial e}{\partial P} =-\begin{bmatrix}
-\frac{f_x}{Z\'} & 0 & -\frac{f_xX\'}{Z\'^2}\\
-0 & \frac{f_y}{Z\'} & -\frac{f_yY\'}{Z\'^2}
+\frac{f_x}{Z'} & 0 & -\frac{f_xX'}{Z'^2}\\
+0 & \frac{f_y}{Z'} & -\frac{f_yY'}{Z'^2}
 \end{bmatrix}</script><p>这两个雅可比矩阵（分别是误差关于位姿的和关于空间点位置的）非常重要，是Bundle Adjustment的关键。说了这么多，这些东西在g2o库中已经实现，不过理解它们对于日后的研究工作是非常重要的，这也是学习的意义。</p>
 
       
