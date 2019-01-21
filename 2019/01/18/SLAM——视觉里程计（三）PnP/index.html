@@ -119,7 +119,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp3.png">
-<meta property="og:updated_time" content="2019-01-21T06:14:24.546Z">
+<meta property="og:updated_time" content="2019-01-21T06:32:53.097Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（三）PnP">
 <meta name="twitter:description" content="上篇文章的内容是关于对极几何约束的，它主要是用来解决2d-2d的情况，也就是我们只有两张不同角度的投影求空间点。现在假如我们已经知道了空间点的位置，接下来要的问题是3d-2d，这个时候我们可以用的方法是PnP来估计位姿。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-21 14:14:24" itemprop="dateModified" datetime="2019-01-21T14:14:24+08:00">2019-01-21</time>
+                <time title="更新于：2019-01-21 14:32:53" itemprop="dateModified" datetime="2019-01-21T14:32:53+08:00">2019-01-21</time>
               
             
           </span>
@@ -552,15 +552,15 @@ s_ip_i = K\exp(\xi ^{\hat{}})P_i</script><p>当然，上述过程中包含了齐
 <p>因为这个重投影误差要考虑很多的点，因此最后到每个相机的重投影误差可能都不会精确为0。使用齐次坐标的话，误差的维度是3维，但是最后一维我们设定为1，因此不应该考虑它的误差项。因此我们一般在优化时候使用非齐次坐标，因此误差项维二维。最小二乘法的优化问题我们之前讨论过了，可以使用高斯牛顿法。列文伯格——马夸尔特法等进行求解。不过，我们首先要求的是每个误差项关于优化变量的导数，求导数的过程其实也是线性化的过程：</p>
 <script type="math/tex; mode=display">
 e(x + \Delta x) \approx e(x) + J\Delta X</script><p>假如$e$为误差项，它的维度为2维，而$x$为相机位姿（李代数）为6维，这时候的雅可比矩阵$J$为$2\times 6$的矩阵。现在我们来推导$J$的形式。下面的推导需要用到之前关于<a href="https://wlsdzyzl.top/2018/11/09/SLAM%E2%80%94%E2%80%94%E6%9D%8E%E7%BE%A4%E5%92%8C%E6%9D%8E%E4%BB%A3%E6%95%B0/" target="_blank" rel="noopener">李群李代数</a>的讲解。</p>
-<p>假如，我们假设相机坐标系下的坐标为${P’}$，则：</p>
+<p>假如，我们假设相机坐标系下的坐标为$P’$，则：</p>
 <script type="math/tex; mode=display">
-{P'} = (\exp(\xi^{\hat{}})P) = [{X'},{Y'},Z']^T</script><p>则它的投影为：</p>
+P' = (\exp(\xi^{\hat{}})P) = [X',Y',Z']^T</script><p>则它的投影为：</p>
 <script type="math/tex; mode=display">
-s{u'} = K{P'}</script><p>展开得到：</p>
+su' = KP'</script><p>展开得到：</p>
 <script type="math/tex; mode=display">
 \begin{bmatrix}
-s{u'}\\
-s{v'}\\
+su'\\
+sv'\\
 s
 \end{bmatrix} = 
 \begin{bmatrix}
@@ -568,23 +568,55 @@ f_x & 0 & c_x\\
 0 & f_y & c_y\\
 0&0&1
 \end{bmatrix}\begin{bmatrix}
-{X'}\\
-{Y'}\\
+X'\\
+Y'\\
 Z'\\
 \end{bmatrix}</script><p>消去$s = Z’$，我们可以得到：</p>
 <script type="math/tex; mode=display">
-{u'} = f_x \frac{Z'} + c_x, {v'} = f_y \frac{Z'} + c_y, {P'} = [{u'},{v'}]^T</script><p>实际上上面的内容就是对于针孔相机模型的回顾。而这个${u’},{v’}$正是重投影得到的，误差就是它和实际像素坐标的值，即$e(x) = (p - {P’})$。接下来，我们来求$J$。这里我们使用左乘扰动模型。根据求导的链式法则：</p>
+u' = f_x \frac{X'}{Z'} + c_x, v' = f_y \frac{Y'}{Z'} + c_y, p' = [u',v']^T</script><p>实际上上面的内容就是对于针孔相机模型的回顾。而这个$u’,v’$正是重投影得到的，误差就是它和实际像素坐标的值，即$e(x) = (p - p’)$。接下来，我们来求$J$。这里我们使用左乘扰动模型。根据求导的链式法则：</p>
 <script type="math/tex; mode=display">
-\frac{\partial e}{\partial \delta \xi} = \lim_{\delta\xi \rightarrow 0} \frac{e(\delta \xi \oplus \xi)}{\delta \xi} = \frac{\partial e}{\partial {P'}}\frac{\partial {P'}}{\delta\xi}</script><p>在这里$\oplus$指的是对$\xi$左乘扰动模型的操作。因为左乘扰动模型是在李群上进行的，在李代数上的形式会比单纯的相加更复杂一点。</p>
-<p>我们很容易得到的是$\frac{\partial e}{\partial {P’}}$：</p>
+\frac{\partial e}{\partial \delta \xi} = \lim_{\delta\xi \rightarrow 0} \frac{e(\delta \xi \oplus \xi)}{\delta \xi} = \frac{\partial e}{\partial P'}\frac{\partial P'}{\delta\xi}</script><p>在这里$\oplus$指的是对$\xi$左乘扰动模型的操作。因为左乘扰动模型是在李群上进行的，在李代数上的形式会比单纯的相加更复杂一点。</p>
+<p>我们很容易得到的是$\frac{\partial e}{\partial P’}$：</p>
 <script type="math/tex; mode=display">
-</script><p>而在之前的推导中，我们知道：</p>
-<p>而${P’} = TP$，如果只取前3维，从而我们可以得到：</p>
-<p>将$(1),(2)$相乘可以得到：</p>
-<p>这个之前有负号，是因为我们对$e$的定义是观测值减去预测值，而观测值是常数。如果对于se(3)的定义是旋转在前，平移在后，只要将前3列与后3列对调即可。由此我们得到了一阶雅可比矩阵。</p>
+\begin{equation}
+\frac{\partial e}{\partial P\'} = - \begin{bmatrix}
+\frac{\partial u\'}{X\'_i} & \frac{\partial u\'}{Y\'_i} & \frac{\partial u\'}{Z\'_i}\\
+\frac{\partial v\'}{X\'_i} & \frac{\partial v\'}{Y\'_i} & \frac{\partial v\'}{Z\'_i}      
+\end{bmatrix}
+\end{equation}</script><p>而在之前的推导中，我们知道：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial (TP)}{\partial \delta \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
+\delta \phi^{\hat{}}(RP+t) + \delta P\\
+0
+\end{bmatrix}}{\delta \xi}\\
+&= \begin{bmatrix}
+I&-(RP+t)^{\hat{}}\\
+0&0
+\end{bmatrix}\\
+&\triangleq (TP)^{\bigodot}\\
+&=\begin{bmatrix}
+I&-(P\')^{\hat{}}\\
+0&0
+\end{bmatrix}
+\end{aligned}</script><p>而$P\’ = TP$，如果只取前3维，从而我们可以得到：</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\frac{\partial P\'}{\partial \delta \xi} = [I,-{P\'}^{\hat{}}]
+\end{equation}</script><p>将$(1),(2)$相乘可以得到：</p>
+<script type="math/tex; mode=display">
+\frac{\partial e}{\partial \delta \xi} = -\begin{bmatrix}
+\frac{f_x}{Z\'} & 0 & -\frac{f_xX\'}{Z\'^2} & -\frac{f_xX\'Y\'}{Z\'^2} & f_x + \frac{f_xX^2}{Z\'^2} & -\frac{f_xY\'}\\
+0 & \frac{f_y}{Z\'} & -\frac{f_yY\'}{Z\'^2} &-f_y - \frac{f_yY\'}{Z\'^2} & \frac{f_yX\'Y\'}{Z\'^2} & \frac{f_yX\'}{Z\'}
+\end{bmatrix}</script><p>这个之前有负号，是因为我们对$e$的定义是观测值减去预测值，而观测值是常数。如果对于se(3)的定义是旋转在前，平移在后，只要将前3列与后3列对调即可。由此我们得到了一阶雅可比矩阵。</p>
 <p>此外，除了对相机位姿的优化，就像我们最开始说的，我们可以对空间点的位置也进行优化。所以需要求的是误差关于$P$的导数。这个导数相对来说会简单很多：</p>
-<p>第一项已经知道了。至于第二项，按照定义：${P’} = RP+t$，因此这个导数为$R$。因此：</p>
-<p>这两个雅可比矩阵（分别是误差关于位姿的和关于空间点位置的）非常重要，是Bundle Adjustment的关键。说了这么多，这些东西在g2o库中已经实现，不过理解它们对于日后的研究工作是非常重要的，这也是学习的意义。</p>
+<script type="math/tex; mode=display">
+\frac{\partial e}{\partial P} = \frac{\partial e}{\partial P\'}\frac{\partial P\'}{\partial P}</script><p>第一项已经知道了。至于第二项，按照定义：$P\’ = RP+t$，因此这个导数为$R$。因此：</p>
+<script type="math/tex; mode=display">
+\frac{\partial e}{\partial P} =-\begin{bmatrix}
+\frac{f_x}{Z\'} & 0 & -\frac{f_xX\'}{Z\'^2}\\
+0 & \frac{f_y}{Z\'} & -\frac{f_yY\'}{Z\'^2}
+\end{bmatrix}</script><p>这两个雅可比矩阵（分别是误差关于位姿的和关于空间点位置的）非常重要，是Bundle Adjustment的关键。说了这么多，这些东西在g2o库中已经实现，不过理解它们对于日后的研究工作是非常重要的，这也是学习的意义。</p>
 
       
     </div>
