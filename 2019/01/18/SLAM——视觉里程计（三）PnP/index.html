@@ -118,7 +118,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp2.png">
-<meta property="og:updated_time" content="2019-01-20T06:54:17.127Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp3.png">
+<meta property="og:updated_time" content="2019-01-21T06:03:44.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（三）PnP">
 <meta name="twitter:description" content="上篇文章的内容是关于对极几何约束的，它主要是用来解决2d-2d的情况，也就是我们只有两张不同角度的投影求空间点。现在假如我们已经知道了空间点的位置，接下来要的问题是3d-2d，这个时候我们可以用的方法是PnP来估计位姿。">
@@ -410,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-20 14:54:17" itemprop="dateModified" datetime="2019-01-20T14:54:17+08:00">2019-01-20</time>
+                <time title="更新于：2019-01-21 14:03:44" itemprop="dateModified" datetime="2019-01-21T14:03:44+08:00">2019-01-21</time>
               
             
           </span>
@@ -529,7 +530,76 @@ y^2 + 1 - 2y \cos \langle b,c\rangle = wu</script><p>将第一个式子带入后
 <script type="math/tex; mode=display">
 w,v,\cos \langle a,c\rangle,\cos \langle b,c\rangle,\cos\langle a,b\rangle,</script><p>因为剩余的未知量只剩两个，因此我们可以求得$x,y$。不过这个方程为二元二次方程，求解较为复杂，需要使用吴消元法。最后求出来的有四组解。为了得到正确的解，我们还需要一个额外的点来检验，选取重投影误差最小的点。</p>
 <p>现在知道了$x,y$的值，我们可以进一步解方程，求得$OA,OB,OC$的值。为了求得坐标，我们只需要将$a$的坐标$(u,v,1)$归一化后得到向量，乘以$OA$的长度即可。这个利用了经过原点的一条直线上的点在各个坐标轴的投影三角形相似的原理。</p>
-
+<h3 id="Bundle-Adjustment"><a href="#Bundle-Adjustment" class="headerlink" title="Bundle Adjustment"></a>Bundle Adjustment</h3><p>PnP问题同样也能使用万金油式的Bundle Adjustment（BA）来解决。为了使用Bundle Adjustment，我们需要把PnP问题构建成一个定义于李代数上得非线性最小二乘问题。之前说的方法，我们都是先求相机位姿再求得空间点，或者先求空间点，从而得到相机位姿。而在BA问题中，我们可以将它们都看成优化变量，放在一起优化。这是非常通用得求解方式，实际上BA在后端做全局优化的时候使用得更多。不过目前我们就讨论Bundle Adjustment如何被用来解决PnP问题。</p>
+<p>在PnP问题中，BA主要是一个最小化重投影误差（reprojection errpr）的过程。考虑n各三维空间点$P$以及其投影$p$，我们希望计算的是相机的位姿$R,t$，它们的李代数表达为$\xi$。假设某空间点坐标为$P_i = [X_i,Y_i,Z_i]^T$，其像素坐标为$p_i = [u_i,v_i]^T$。我们知道像素位置与空间点位置的关系如下：</p>
+<script type="math/tex; mode=display">
+s_i\begin{bmatrix}
+u_i\\
+v_i\\
+1
+\end{bmatrix} = K \exp(\xi ^{\hat{}})
+\begin{bmatrix}
+X_i\\
+Y_i\\
+Z_i\\
+1
+\end{bmatrix}</script><p>即:</p>
+<script type="math/tex; mode=display">
+s_ip_i = K\exp(\xi ^{\hat{}})P_i</script><p>当然，上述过程中包含了齐次坐标到非齐次坐标的转换。现实世界中，我们采集到的数据往往存在着噪声，因此我们要把误差求和，并使其最小化，也就是最理想的位姿为：</p>
+<script type="math/tex; mode=display">
+\xi ^* = \arg\min_{\xi} \frac{1}{2}\sum_{i=1}^n \left\Vert p_i - \frac 1 {s_i}K\exp(\xi^{\hat{}})P_i \right\Vert^2</script><p>如果我们观察上式，$ \frac{1}{2}\sum_{i=1}^n \left\Vert p_i - \frac 1 {s_i}K\exp(\xi^{\hat{}})P_i$可以说是$P_i$的重投影，所以这个误差被称为重投影误差。如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp3.png" alt=""></p>
+<p>因为这个重投影误差要考虑很多的点，因此最后到每个相机的重投影误差可能都不会精确为0。使用齐次坐标的话，误差的维度是3维，但是最后一维我们设定为1，因此不应该考虑它的误差项。因此我们一般在优化时候使用非齐次坐标，因此误差项维二维。最小二乘法的优化问题我们之前讨论过了，可以使用高斯牛顿法。列文伯格——马夸尔特法等进行求解。不过，我们首先要求的是每个误差项关于优化变量的导数，求导数的过程其实也是线性化的过程：</p>
+<script type="math/tex; mode=display">
+e(x + \Delta x) \approx e(x) + J\Delta X</script><p>假如$e$为误差项，它的维度为2维，而$x$为相机位姿（李代数）为6维，这时候的雅可比矩阵$J$为$2\times 6$的矩阵。现在我们来推导$J$的形式。下面的推导需要用到之前关于<a href="https://wlsdzyzl.top/2018/11/09/SLAM%E2%80%94%E2%80%94%E6%9D%8E%E7%BE%A4%E5%92%8C%E6%9D%8E%E4%BB%A3%E6%95%B0/" target="_blank" rel="noopener">李群李代数</a>的讲解。</p>
+<p>假如，我们假设相机坐标系下的坐标为$P’$，则：</p>
+<script type="math/tex; mode=display">
+P' = (\exp(\xi^{\hat{}})P) = [X',Y',Z']^T</script><p>则它的投影为：</p>
+<script type="math/tex; mode=display">
+su' = KP'</script><p>展开得到：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+su'\\
+sv'\\
+s
+\end{bmatrix} = 
+\begin{bmatrix}
+f_x & 0 & c_x\\
+0 & f_y & c_y\\
+0&0&1
+\end{bmatrix}\begin{bmatrix}
+X'\\
+Y'\\
+Z'\\
+\end{bmatrix}</script><p>消去$s = Z’$，我们可以得到：</p>
+<script type="math/tex; mode=display">
+u' = f_x \frac{X'}{Z'} + c_x, v' = f_y \frac{Y'}{Z'} + c_y, p' = [u',v']^T</script><p>实际上上面的内容就是对于针孔相机模型的回顾。而这个$u’,v’$正是重投影得到的，误差就是它和实际像素坐标的值，即$e(x) = (p - p’)$。接下来，我们来求$J$。这里我们使用左乘扰动模型。根据求导的链式法则：</p>
+<script type="math/tex; mode=display">
+\frac{\partial e}{\partial \delta \xi} = \lim_{\delta\xi \rightarrow 0} \frac{e(\delta \xi \oplus \xi)}{\delta \xi} = \frac{\partial e}{\partial P'}\frac{\partial P'}{\delta\xi}</script><p>在这里$\oplus$指的是对$\xi$左乘扰动模型的操作。因为左乘扰动模型是在李群上进行的，在李代数上的形式会比单纯的相加更复杂一点。</p>
+<p>我们很容易得到的是$\frac{\partial e}{\partial P’}$：</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\frac{\partial e}{\partial P'} = - \begin{bmatrix}
+\frac{\partial u'}{X'_i} & \frac{\partial u'}{Y'_i} & \frac{\partial u'}{Z'_i}\\
+\frac{\partial v'}{X'_i} & \frac{\partial v'}{Y'_i} & \frac{\partial v'}{Z'_i}      
+\end{bmatrix}
+\end{equation}</script><p>而在之前的推导中，我们知道：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\frac{\partial (TP)}{\partial \delta \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
+\delta \phi^{\hat{}}(RP+t) + \delta P\\
+0
+\end{bmatrix}}{\delta \xi}\\
+&= \begin{bmatrix}
+I&-(RP+t)^{\hat{}}\\
+0&0
+\end{bmatrix}\\
+&\triangleq (TP)^{\bigodot}\\
+&=\begin{bmatrix}
+I&-{P'}^{\hat{}}\\
+0&0
+\end{bmatrix}
+\end{aligned}</script>
       
     </div>
 
@@ -856,7 +926,7 @@ w,v,\cos \langle a,c\rangle,\cos \langle b,c\rangle,\cos\langle a,b\rangle,</scr
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接线性变换"><span class="nav-number">1.</span> <span class="nav-text">直接线性变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P3P"><span class="nav-number">2.</span> <span class="nav-text">P3P</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接线性变换"><span class="nav-number">1.</span> <span class="nav-text">直接线性变换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P3P"><span class="nav-number">2.</span> <span class="nav-text">P3P</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bundle-Adjustment"><span class="nav-number">3.</span> <span class="nav-text">Bundle Adjustment</span></a></li></ol></div>
             
 
           </div>
