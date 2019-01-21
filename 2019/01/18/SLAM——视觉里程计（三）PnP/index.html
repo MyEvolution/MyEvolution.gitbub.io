@@ -119,7 +119,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp3.png">
-<meta property="og:updated_time" content="2019-01-21T06:39:15.665Z">
+<meta property="og:updated_time" content="2019-01-21T06:42:12.985Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（三）PnP">
 <meta name="twitter:description" content="上篇文章的内容是关于对极几何约束的，它主要是用来解决2d-2d的情况，也就是我们只有两张不同角度的投影求空间点。现在假如我们已经知道了空间点的位置，接下来要的问题是3d-2d，这个时候我们可以用的方法是PnP来估计位姿。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-21 14:39:15" itemprop="dateModified" datetime="2019-01-21T14:39:15+08:00">2019-01-21</time>
+                <time title="更新于：2019-01-21 14:42:12" itemprop="dateModified" datetime="2019-01-21T14:42:12+08:00">2019-01-21</time>
               
             
           </span>
@@ -547,7 +547,7 @@ Z_i\\
 <script type="math/tex; mode=display">
 s_ip_i = K\exp(\xi ^{\hat{}})P_i</script><p>当然，上述过程中包含了齐次坐标到非齐次坐标的转换。现实世界中，我们采集到的数据往往存在着噪声，因此我们要把误差求和，并使其最小化，也就是最理想的位姿为：</p>
 <script type="math/tex; mode=display">
-\xi ^* = \arg\min_{\xi} \frac{1}{2}\sum_{i=1}^n \left\Vert p_i - \frac 1 {s_i}K\exp(\xi^{\hat{}})P_i \right\Vert^2</script><p>如果我们观察上式，$ \frac{1}{2}\sum_{i=1}^n \left\Vert p_i - \frac 1 {s_i}K\exp(\xi^{\hat{}})P_i$可以说是$P_i$的重投影，所以这个误差被称为重投影误差。如下图：</p>
+\xi ^* = \arg\min_{\xi} \frac{1}{2}\sum_{i=1}^n \left\Vert p_i - \frac 1 {s_i}K\exp(\xi^{\hat{}})P_i \right\Vert^2</script><p>如果我们观察上式，$ \frac 1 {s_i}K\exp(\xi^{\hat{}})P_i$可以说是$P_i$的重投影，所以这个误差被称为重投影误差。如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pnp3.png" alt=""></p>
 <p>因为这个重投影误差要考虑很多的点，因此最后到每个相机的重投影误差可能都不会精确为0。使用齐次坐标的话，误差的维度是3维，但是最后一维我们设定为1，因此不应该考虑它的误差项。因此我们一般在优化时候使用非齐次坐标，因此误差项维二维。最小二乘法的优化问题我们之前讨论过了，可以使用高斯牛顿法。列文伯格——马夸尔特法等进行求解。不过，我们首先要求的是每个误差项关于优化变量的导数，求导数的过程其实也是线性化的过程：</p>
 <script type="math/tex; mode=display">
