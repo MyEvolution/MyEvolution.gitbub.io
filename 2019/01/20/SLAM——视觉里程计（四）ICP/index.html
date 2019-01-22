@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="3D到3D之间的位姿匹配，我们要用到的方法就是ICP算法了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-22T04:37:28.529Z">
+<meta property="og:updated_time" content="2019-01-22T04:49:46.593Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（四）ICP">
 <meta name="twitter:description" content="3D到3D之间的位姿匹配，我们要用到的方法就是ICP算法了。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-22 12:37:28" itemprop="dateModified" datetime="2019-01-22T12:37:28+08:00">2019-01-22</time>
+                <time title="更新于：2019-01-22 12:49:46" itemprop="dateModified" datetime="2019-01-22T12:49:46+08:00">2019-01-22</time>
               
             
           </span>
@@ -463,7 +463,7 @@
 <p>因此SLAM下的ICP算法非常简单，它也无需迭代，只需要构建最小二乘问题，最后用SVD分解得到$R$与$t$即可。</p>
 <p>而另外，我们可以使用非线性解法来解ICP问题，同样也就是利用优化器来解决。为了使用优化器，我们需要用到李群李代数，才能求得梯度，从而不断迭代求解。因此，在非线性条件下，我们的问题描述变成了：</p>
 <script type="math/tex; mode=display">
-\xi^*=\underset{\xi}{\min}\frac{1}{2}\sum_{i=1}^{n}||p_i-K\exp(\xi^{\hat{}})P_i^{'}||_2^2</script><p>为了使用非线性优化，与之前的BA问题一样，我们需要找到误差对优化变量的雅科比矩阵。在这个题目中，这个问题变得很简单，我们已经知道：</p>
+\xi^*=\underset{\xi}{\arg\min}\frac{1}{2}\sum_{i=1}^{n}||P_i-K\exp(\xi^{\hat{}})P_i^{'}||_2^2</script><p>为了使用非线性优化，与之前的BA问题一样，我们需要找到误差对优化变量的雅科比矩阵。在这个题目中，这个问题变得很简单，我们已经知道：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 \frac{\partial (TP)}{\partial \delta \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
@@ -474,11 +474,7 @@
 I&-(RP+t)^{\hat{}}\\
 0&0
 \end{bmatrix}\\
-&\triangleq (TP)^{\odot}\\
-&=\begin{bmatrix}
-I&-(P')^{\hat{}}\\
-0&0
-\end{bmatrix}
+&\triangleq (TP)^{\odot}
 \end{aligned}</script><p>因此可以得到：</p>
 <script type="math/tex; mode=display">
 \frac{\partial e}{\partial \delta \xi} = -(\exp(\xi^{\hat{}})P_i^{'})^{\odot}</script><p>根据上面的雅科比矩阵我们可以找到梯度，从而走向极小值。如果ICP已知匹配点，如果能找到极小值，那么它一定是全局最优值。因此对于ICP无需初始化，这是ICP算法的一个优点。</p>

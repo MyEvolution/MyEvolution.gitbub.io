@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-18T08:03:08.288Z">
+<meta property="og:updated_time" content="2019-01-22T08:37:15.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——李群和李代数">
 <meta name="twitter:description" content="在SLAM中，我们需要对姿态进行估计和优化。但是旋转矩阵自身是有约束的，增加优化难度。因此我们需要引入李群和李代数，可以将位姿估计转换为无约束的优化问题。">
@@ -407,7 +407,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-18 16:03:08" itemprop="dateModified" datetime="2019-01-18T16:03:08+08:00">2019-01-18</time>
+                <time title="更新于：2019-01-22 16:37:15" itemprop="dateModified" datetime="2019-01-22T16:37:15+08:00">2019-01-22</time>
               
             
           </span>
@@ -566,7 +566,7 @@ J_l^{-1} = \frac{\theta}{2} \cot \frac{\theta}{2}I + (1 - \frac{\theta}{2}\cot\f
 <h3 id="se-3-求导"><a href="#se-3-求导" class="headerlink" title="se(3)求导"></a>se(3)求导</h3><p>对于se(3)的求导，我们直接给出扰动模型：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\frac{\partial (Tp)}{\partial \delta \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
+\frac{\partial (Tp)}{\partial \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
 \delta \phi^{\hat{}}(Rp+t) + \delta p\\
 0
 \end{bmatrix}}{\delta \xi}\\
