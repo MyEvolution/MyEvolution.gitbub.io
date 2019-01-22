@@ -117,7 +117,7 @@
 <meta property="og:description" content="特征点法是提取特征，根据稀疏特征点的对应点来计算相机的位姿变换。但是它是有比较明显的缺点的：1.特征点的提取比较耗时，限制了SLAM的运行速度，2. 特征点过于稀疏，可能会浪费很多有用信息 3. 我们在生活中总会遇到纹理特征缺失的情况，比如一面白墙，这时候我们找不到足够的特征点来得到相机的运动。所以我们来讨论另外的两种方法，叫做光流法和直接法。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hdbb.jpg">
-<meta property="og:updated_time" content="2019-01-22T08:45:19.679Z">
+<meta property="og:updated_time" content="2019-01-22T08:49:45.028Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（五）光流法和直接法">
 <meta name="twitter:description" content="特征点法是提取特征，根据稀疏特征点的对应点来计算相机的位姿变换。但是它是有比较明显的缺点的：1.特征点的提取比较耗时，限制了SLAM的运行速度，2. 特征点过于稀疏，可能会浪费很多有用信息 3. 我们在生活中总会遇到纹理特征缺失的情况，比如一面白墙，这时候我们找不到足够的特征点来得到相机的运动。所以我们来讨论另外的两种方法，叫做光流法和直接法。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-22 16:45:19" itemprop="dateModified" datetime="2019-01-22T16:45:19+08:00">2019-01-22</time>
+                <time title="更新于：2019-01-22 16:49:45" itemprop="dateModified" datetime="2019-01-22T16:49:45+08:00">2019-01-22</time>
               
             
           </span>
@@ -517,20 +517,20 @@ v_2\\
 <script type="math/tex; mode=display">
 e = I_1(p_1) - I_2(p_2)</script><p>当然我们对优化目标依然取二范数。</p>
 <script type="math/tex; mode=display">
-\xi^* = \arg\min_{\xi} J(\xi) = \sum_{i=1}^n\vert e \vert^2</script><p>不过现在先关注$e$的导数。使用李代数上的扰动模型，则：</p>
+\xi^* = \arg\min_{\xi} J(\xi) = \sum_{i=1}^n\Vert e \Vert^2</script><p>不过现在先关注$e$的导数。使用李代数上的扰动模型，则：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 e(\xi \oplus \delta \xi) &= I_1\left(\frac 1 {Z_1}KP\right) -I_2\left(\frac 1 {Z_2} K \exp(\delta \xi ^{\hat{}}) \exp(\xi ^{\hat{}})P\right) \\
 &\approx I_1\left(\frac 1 {Z_1} K P\right) - I_2\left(\frac{1}{Z_2}K(1+\delta\xi^{\hat{}})\exp(\xi^{\hat{}})P\right)\\
-=I_1\left(\frac 1 {Z_1}KP\right) - I_2\left(\frac 1 {Z_2} K \exp (\xi^{\hat{}})P + \frac 1 {Z_2}K\delta\xi^{\hat{}}\exp(\xi^{\hat{}})P\right)
+&=I_1\left(\frac 1 {Z_1}KP\right) - I_2\left(\frac 1 {Z_2} K \exp (\xi^{\hat{}})P + \frac 1 {Z_2}K\delta\xi^{\hat{}}\exp(\xi^{\hat{}})P\right)
 \end{aligned}</script><p>记：</p>
 <script type="math/tex; mode=display">
 q = \delta \xi ^{\hat{}} \exp(\xi^{\hat{}})P, u = \frac 1 {Z_2}Kq</script><p>这里的$q$为扰动分量在第二个相机坐标系下的坐标，$u$为它的像素坐标。利用一阶泰勒展开，可以得到：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 e(\xi \oplus \delta \xi) &= I_1\left(\frac 1 {Z_1}KP\right) - I_2\left(\frac 1 {Z_2} K \exp(\xi^{\hat{}})P + u \right)\\
-&\approx I_1\left(\frac{1}{Z_1}KP\right) - I_2\left(\frac{1}{Z_2}K\exp(\xi^{\hat{}})P \right) - \frac{\partial I_2}{\partial u}\frac{\partial u}{\partial q} \frac{\partial q}{\partial \delta \xi}\delta\xi\\
-&= e(\xi) - \frac{\partial I_2}{\partial u}\frac{\partial u}{\partial q} \frac{\partial q}{\partial \delta \xi}\delta\xi
+&\approx I_1\left(\frac{1}{Z_1}KP\right) - I_2\left(\frac{1}{Z_2}K\exp(\xi^{\hat{}})P \right) - \frac{\partial I_2}{\partial u}\frac{\partial u}{\partial q} \frac{\partial q}{\partial \xi}\delta\xi\\
+&= e(\xi) - \frac{\partial I_2}{\partial u}\frac{\partial u}{\partial q} \frac{\partial q}{\partial \xi}\delta\xi
 \end{aligned}</script><p>可以看到一阶导数由于链式法则分成了3层。而这3层都是比较容易计算的：</p>
 <ol>
 <li>$\frac{\partial I_2}{\partial u}$为$u$处的像素梯度</li>
@@ -551,7 +551,7 @@ e(\xi \oplus \delta \xi) &= I_1\left(\frac 1 {Z_1}KP\right) - I_2\left(\frac 1 {
 0 & \frac{f_y}{Z'} & -\frac{f_yY'}{Z'^2} &-f_y - \frac{f_yY'}{Z'^2} & \frac{f_yX'Y'}{Z'^2} & \frac{f_yX'}{Z'}
 \end{bmatrix}</script><p>这个矩阵在之前的pnp中也出现过。因此：</p>
 <script type="math/tex; mode=display">
-J =\lim_{\delta\xi \rightarrow 0}\frac{e(\xi \oplus \delta \xi)-e(\xi) }{\delta \xi}= -\frac{\partial I_2}{\partial u}\frac{\partial u}{\partial \delta \xi}</script><p>这就是直接法的雅科比矩阵。</p>
+J =\lim_{\delta\xi \rightarrow 0}\frac{e(\xi \oplus \delta \xi)-e(\xi) }{\delta \xi}= -\frac{\partial I_2}{\partial u}\frac{\partial u}{\partial \xi}</script><p>这就是直接法的雅科比矩阵。</p>
 <p>不过直接法有明显的优点，但也有明显的缺点。由于图像的非凸性，直接法往往找到的是极小值。单个像素没有区分度，因此我们计算的是像素块。最重要的是灰度不变是很强的假设，这意味着直接法只有在特定的条件下才能有比较好的效果。</p>
 
       
