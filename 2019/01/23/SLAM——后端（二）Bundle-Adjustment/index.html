@@ -119,7 +119,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/h1.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/h2.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/huber.gif">
-<meta property="og:updated_time" content="2019-02-15T13:06:12.897Z">
+<meta property="og:updated_time" content="2019-02-15T13:10:00.818Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——后端（二）Bundle Adjustment">
 <meta name="twitter:description" content="Bundle Adjustment近些年在SLAM的研究中起到了非常重要的作用。Bundle Adjustment是将特征点与相机位姿一起作为优化变量，使得整体误差尽量变小。因为是非线性优化，不一定能找到全局最小值，因此对初始值的依赖比较大。另外，可以想象的到，BA需要计算的矩阵维度非常大，但是因为它特殊的结构，使得BA的计算简化了不少。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-15 21:06:12" itemprop="dateModified" datetime="2019-02-15T21:06:12+08:00">2019-02-15</time>
+                <time title="更新于：2019-02-15 21:10:00" itemprop="dateModified" datetime="2019-02-15T21:10:00+08:00">2019-02-15</time>
               
             
           </span>
@@ -473,7 +473,7 @@ P' = Rp+t = [X',Y',Z']^T</script></li>
 P_c = [u_c,v_c,1]^T = [\frac{X'}{Z'},\frac{Y'}{Z'},1]</script></li>
 <li><p>考虑径向畸变：</p>
 <script type="math/tex; mode=display">
-\left{
+\left\{
  \begin{matrix}
  u'_c = u_c(1+k_1r_c^2 + k_2r_c^4)\\
  v'_c = v_c(1+k_1r_c^2 + k_2r_c^4)
@@ -481,7 +481,7 @@ P_c = [u_c,v_c,1]^T = [\frac{X'}{Z'},\frac{Y'}{Z'},1]</script></li>
 \right.</script></li>
 <li><p>根据相机内参，得到像素坐标：</p>
 <script type="math/tex; mode=display">
-\left{
+\left\{
  \begin{matrix}
 u_s = f_xu'_c + c_x\\
 v_s = f_yv'_c+c_y
@@ -585,12 +585,15 @@ w
 [B-EC^{-1}E^T]\Delta x_c = v - EC^{-1}w.
 \end{equation}</script><p>通过上述方程求解得到$\Delta x_c$，代入原方程求解得到$\Delta x_p$。这个过程被称为Marginalization，或者Schur消元。它的优势在于利用了对角块矩阵的逆更好求，加速了求解过程。</p>
 <p>至于方程$(1)$，它的求解没有什么特殊的办法。我们记此方程稀疏为$S$矩阵，它的维度和$B$一致。$S$矩阵的稀疏性是不规则的，它的物理意义为，如果在S矩阵非对角线上存在非零矩阵块，那么意味着该处对应的两个相机位姿有共同观测的路标。因此$S$矩阵的稀疏性主要与实际场景相关。以上就是对于$H$矩阵稀疏结构的应用。</p>
+<p>从概率的角度来说，我们将对于$(\Delta x_c,\Delta x_p)$的求解转化成了先求$\Delta x_c$再求$\Delta x_p$，相当于做了条件概率的展开：</p>
+<script type="math/tex; mode=display">
+P(x_c,x_p) = P(x_c)\cdot P(x_p\vert x_c).</script><p>因此相当于求了边缘分布，所以被称为边缘化。</p>
 <h3 id="Robust-Kernel-function"><a href="#Robust-Kernel-function" class="headerlink" title="Robust Kernel function"></a>Robust Kernel function</h3><p>此外，我们在介绍一个鲁棒的核函数。因为我们在用二范数误差时候，假设的是特征点匹配都是正确的。而实际中，经常出现误匹配的现象。在优化时候，我们依然当成了正确的匹配，这时候为了满足这个错误项，就会朝着错误的方向去走了。其中一个原因是二范数的增长太快。因此研究者提出了一些比二范数增长更慢的核函数，用的最多的是Huber norm：</p>
 <script type="math/tex; mode=display">
-H(e) = \begin{matrix}
+H(e) = \left \{\begin{matrix}
 \frac 1 2 e^2 & \vert e\vert \leq \sigma\\
 \sigma(\vert e\vert - \frac{1}{2}\sigma) & \text{otherwise}
-\end{matrix}</script><p>可以看到的是当误差大于某个阈值之后，函数增长变成了一次形式，同时还方便求导。相对于二范数度量，它有更好的鲁棒性。它的图像如下：</p>
+\end{matrix} \right.</script><p>可以看到的是当误差大于某个阈值之后，函数增长变成了一次形式，同时还方便求导。相对于二范数度量，它有更好的鲁棒性。它的图像如下：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/huber.gif" alt=""></p>
 
       
