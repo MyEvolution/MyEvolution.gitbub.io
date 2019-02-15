@@ -117,7 +117,7 @@
 <meta property="og:description" content="实际上从上次介绍的东西，我们理论上已经知道了SLAM是怎么运作的了。从深度图和颜色图，估计相机位姿，通过相机位姿，以及深度图和颜色图，我们实际上就可以去拼接点云或者三维建模了。不过现实往往没有那么容易，如果这么简单SLAM也没什么好研究的了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/g2o.jpg">
-<meta property="og:updated_time" content="2018-12-13T16:39:54.000Z">
+<meta property="og:updated_time" content="2019-02-15T07:03:03.319Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——非线性优化">
 <meta name="twitter:description" content="实际上从上次介绍的东西，我们理论上已经知道了SLAM是怎么运作的了。从深度图和颜色图，估计相机位姿，通过相机位姿，以及深度图和颜色图，我们实际上就可以去拼接点云或者三维建模了。不过现实往往没有那么容易，如果这么简单SLAM也没什么好研究的了。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-12-14 00:39:54" itemprop="dateModified" datetime="2018-12-14T00:39:54+08:00">2018-12-14</time>
+                <time title="更新于：2019-02-15 15:03:03" itemprop="dateModified" datetime="2019-02-15T15:03:03+08:00">2019-02-15</time>
               
             
           </span>
@@ -481,9 +481,9 @@ sz_{k,j} = K \exp(\xi\hat{})y_j.</script><p>上式中$K$为相机内参，而$s$
 <script type="math/tex; mode=display">
 P(x,y|z,u) = \frac{P(z,u|x,y)P(x,y)}{P(z,u)}</script><p>贝叶斯左侧为后验概率，而右侧中$P(x,y)为$先验，$P(z,u|x,y)$为似然。直接求后验分布往往是困难的，而求一个状态最优估计，使得该状态下后验概率最大化(Maximizae a Posterior, MAP)是可行的：</p>
 <script type="math/tex; mode=display">
-{x^\*,y^\*}_{MAP} = argmax_{x,y}P(x,y|z,u) = argmax_{x,y}P(z,u|x,y)P(x,y)</script><p>进一步，如果我们不在乎先验，得到的就是x,y的最大似然估计(Maximize Likelihood Estimation, MLE)：</p>
+{x^{*},y^\*}_{MAP} = argmax_{x,y}P(x,y|z,u) = argmax_{x,y}P(z,u|x,y)P(x,y)</script><p>进一步，如果我们不在乎先验，得到的就是x,y的最大似然估计(Maximize Likelihood Estimation, MLE)：</p>
 <script type="math/tex; mode=display">
-{x^\*,y^\*}_{MLE} = argmax P(z,u|x,y)</script><p>后验的意思是在当前的观测数据下可能出现什么样的状态，而似然的意思是在这个的状态下，出现当前观测数据的概率，因此最大似然的直观意思就是什么样的状态下最可能产生现在的观测数据。最大后验是当前的观测数据下最可能出现什么样的状态。这两者并不是完全等价的。</p>
+{x^*,y^\*}_{MLE} = argmax P(z,u|x,y)</script><p>后验的意思是在当前的观测数据下可能出现什么样的状态，而似然的意思是在这个的状态下，出现当前观测数据的概率，因此最大似然的直观意思就是什么样的状态下最可能产生现在的观测数据。最大后验是当前的观测数据下最可能出现什么样的状态。这两者并不是完全等价的。</p>
 <h2 id="引出最小二乘法"><a href="#引出最小二乘法" class="headerlink" title="引出最小二乘法"></a>引出最小二乘法</h2><p>如何求最大似然估计？在高斯分布的假设下，最大似然有比较简单的形式。对于某一次观测：</p>
 <script type="math/tex; mode=display">
 z_{k,j} = h(y_j,x_k)+v_{k,j},</script><p>由于我们假设噪声$v_{k,j} \tilde N(0,Q_{k,j})$，所以观测数据的条件概率为：</p>
@@ -494,7 +494,7 @@ P(x) = \frac{1}{\sqrt{(2\pi)^N det(\Sigma)}}\exp\left(-\frac 1 2 (x - \mu)^T \Si
 <script type="math/tex; mode=display">
 -\log P(x) = \frac{1}{2}\log \left( (2\pi)^N det(\Sigma)\right) + \frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu).</script><p>对原式求最大化也就是对上式求最小化。上式中第一项与x无关，可以忽略。带入SLAM的观测方程得到：</p>
 <script type="math/tex; mode=display">
-x^* = argmin \left((z_{k,j} - h(x_k,y_j))^T Q_{k,j}^{-1}(z_{k,j} - h(x_k,y_j)) \right).</script><p>我们发现上式等价与最小化噪声项的平方($\Sigma$范数意义下)。因此对于所有的运动和任意的观测，我们定义数据与估计值之间的误差为：</p>
+x^* = \arg\min \left((z_{k,j} - h(x_k,y_j))^T Q_{k,j}^{-1}(z_{k,j} - h(x_k,y_j)) \right).</script><p>我们发现上式等价与最小化噪声项的平方($\Sigma$范数意义下)。因此对于所有的运动和任意的观测，我们定义数据与估计值之间的误差为：</p>
 <script type="math/tex; mode=display">
 e_{v,k} = x_k - f(x_{k-1},u_k)\\
 e_{y,j,k} = z_{k,j} - h(x_k,y_j),</script><p>该误差的平方和如下：</p>
@@ -511,7 +511,7 @@ J(x) = \sum_k e_{v,k}^T R_k^{-1}e_{v,k} + \sum_k \sum_j e_{y,k,j}^T Q_{k,j}^{-1}
 \delta x = -J^T(x)</script><p>实际上这就是梯度下降算法。</p>
 <h4 id="二阶梯度法"><a href="#二阶梯度法" class="headerlink" title="二阶梯度法"></a>二阶梯度法</h4><p>对于二阶梯度法：</p>
 <script type="math/tex; mode=display">
-\delta x^* = argmin (\Vert f(x)\Vert_2^2 + J(x)\delta x+\frac 1 2 \delta x^T H \delta x)</script><p>上式对$\delta $求导，得到：</p>
+\delta x^* = \arg\min (\Vert f(x)\Vert_2^2 + J(x)\delta x+\frac 1 2 \delta x^T H \delta x)</script><p>上式对$\delta $求导，得到：</p>
 <script type="math/tex; mode=display">
 H\delta x = -J^T</script><p>这个方法称为牛顿法。实际上呢，它就是牛顿迭代法，可以看另外一种解释：<a href="https://wlsdzyzl.top/2018/10/16/%E6%95%B0%E5%AD%A6%E2%80%94%E2%80%94Newton-Method/" target="_blank" rel="noopener">Newton Method</a></p>
 <p>无论是一介导数还是二阶导数都是非常直观的，不过梯度下降因为策略是贪心，最后经常走出锯齿路线，使得迭代次数过多，而牛顿法对于海森矩阵的求解，在大规模的情况下是非常耗时的。我们希望能够避免$H$的求解，下面介绍两个SLAM中用的更多的方法。</p>
@@ -519,7 +519,7 @@ H\delta x = -J^T</script><p>这个方法称为牛顿法。实际上呢，它就�
 <script type="math/tex; mode=display">
 f(x+\delta x) \approx f(x) + J(x)\delta x</script><p>然后最小化$\Vert f(x) + J(x)\delta x  \Vert_2^2$：</p>
 <script type="math/tex; mode=display">
-\delta x^* = argmin _{\delta x} \frac 1 2 \Vert f(x) + J(x)\delta x \Vert_2^2</script><p>由于泰勒展开，让上面的形式已经比较简单了，所以我们无需再次泰勒展开了。为了方便，我们将上面的形式写成：</p>
+\delta x^* = \arg\min _{\delta x} \frac 1 2 \Vert f(x) + J(x)\delta x \Vert_2^2</script><p>由于泰勒展开，让上面的形式已经比较简单了，所以我们无需再次泰勒展开了。为了方便，我们将上面的形式写成：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 \frac 1 2 \Vert f(x) + J(x)\delta x \Vert_2^2 &= \frac{1}{2}( f(x) + J(x)\delta x)^T ( f(x) + J(x)\delta x)\\
