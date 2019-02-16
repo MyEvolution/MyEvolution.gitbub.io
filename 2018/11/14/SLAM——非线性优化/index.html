@@ -117,7 +117,7 @@
 <meta property="og:description" content="实际上从上次介绍的东西，我们理论上已经知道了SLAM是怎么运作的了。从深度图和颜色图，估计相机位姿，通过相机位姿，以及深度图和颜色图，我们实际上就可以去拼接点云或者三维建模了。不过现实往往没有那么容易，如果这么简单SLAM也没什么好研究的了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/g2o.jpg">
-<meta property="og:updated_time" content="2019-02-15T07:04:44.547Z">
+<meta property="og:updated_time" content="2019-02-16T05:52:20.465Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——非线性优化">
 <meta name="twitter:description" content="实际上从上次介绍的东西，我们理论上已经知道了SLAM是怎么运作的了。从深度图和颜色图，估计相机位姿，通过相机位姿，以及深度图和颜色图，我们实际上就可以去拼接点云或者三维建模了。不过现实往往没有那么容易，如果这么简单SLAM也没什么好研究的了。">
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-15 15:04:44" itemprop="dateModified" datetime="2019-02-15T15:04:44+08:00">2019-02-15</time>
+                <time title="更新于：2019-02-16 13:52:20" itemprop="dateModified" datetime="2019-02-16T13:52:20+08:00">2019-02-16</time>
               
             
           </span>
@@ -502,57 +502,57 @@ e_{y,j,k} = z_{k,j} - h(x_k,y_j),</script><p>该误差的平方和如下：</p>
 J(x) = \sum_k e_{v,k}^T R_k^{-1}e_{v,k} + \sum_k \sum_j e_{y,k,j}^T Q_{k,j}^{-1}e_{y,k,j}</script><p>这样就得到了一个总体意义下的最小二乘问题。它的最优解等价于状态的最大似然估计。</p>
 <h2 id="非线性最小二乘"><a href="#非线性最小二乘" class="headerlink" title="非线性最小二乘"></a>非线性最小二乘</h2><p>对于简单的最小二乘问题，假设：</p>
 <script type="math/tex; mode=display">
-\min_x \frac 1 2 \Vert f(x)\Vert_2^2.</script><p>如果$f(x)$形式比较简单，我们可以通过导数为0得到最优解，也就是求极值。不过往往我们需要求解的这个问题函数形式并不简单。这时候要使用的就是迭代的方法一步步向着最优解走。也就是$x_{i+1} = x_{i} + \delta x_i$。当$\Delta x_i$很小的时候迭代停止。这个过程中，比较难的地方在于如何确定这个$\delta x_i$，使得优化问题有很多方法。</p>
+\min_x \frac 1 2 \Vert f(x)\Vert_2^2.</script><p>如果$f(x)$形式比较简单，我们可以通过导数为0得到最优解，也就是求极值。不过往往我们需要求解的这个问题函数形式并不简单。这时候要使用的就是迭代的方法一步步向着最优解走。也就是$x_{i+1} = x_{i} + \Delta x_i$。当$\Delta x_i$很小的时候迭代停止。这个过程中，比较难的地方在于如何确定这个$\Delta x_i$，使得优化问题有很多方法。</p>
 <h3 id="一阶梯度法和二阶梯度法"><a href="#一阶梯度法和二阶梯度法" class="headerlink" title="一阶梯度法和二阶梯度法"></a>一阶梯度法和二阶梯度法</h3><p>求解增量解最直观的方式是将目标函数在$x$附近进行泰勒展开：</p>
 <script type="math/tex; mode=display">
-\Vert f(x+\delta x)\Vert_2^2 \approx \Vert f(x)\Vert_2^2 + J(x)\delta x+\frac 1 2 \delta x^T H \delta x.</script><p>上式中$J$是$\Vert f(x)\Vert_2^2$关于ｘ的导数(雅科比矩阵)，而$H$为二阶导数(海森矩阵)。我们可以选择保留一阶项或者二阶项，分别得到一阶和二阶梯度法。</p>
+\Vert f(x+\Delta x)\Vert_2^2 \approx \Vert f(x)\Vert_2^2 + J(x)\Delta x+\frac 1 2 \Delta x^T H \Delta x.</script><p>上式中$J$是$\Vert f(x)\Vert_2^2$关于ｘ的导数(雅科比矩阵)，而$H$为二阶导数(海森矩阵)。我们可以选择保留一阶项或者二阶项，分别得到一阶和二阶梯度法。</p>
 <h4 id="一阶梯度法"><a href="#一阶梯度法" class="headerlink" title="一阶梯度法"></a>一阶梯度法</h4><p>保留一阶项，比较好理解，为了朝最低的点走，就是朝着导数的反方向，实际上这个走不能走得太多，一阶展开后最小值是无穷小的，不过走得太多泰勒展开是不成立的，因此一般需要一个学习率：</p>
 <script type="math/tex; mode=display">
-\delta x = -J^T(x)</script><p>实际上这就是梯度下降算法。</p>
+\Delta x = -J^T(x)</script><p>实际上这就是梯度下降算法。</p>
 <h4 id="二阶梯度法"><a href="#二阶梯度法" class="headerlink" title="二阶梯度法"></a>二阶梯度法</h4><p>对于二阶梯度法：</p>
 <script type="math/tex; mode=display">
-\delta x^* = \arg\min (\Vert f(x)\Vert_2^2 + J(x)\delta x+\frac 1 2 \delta x^T H \delta x)</script><p>上式对$\delta $求导，得到：</p>
+\Delta x^* = \arg\min (\Vert f(x)\Vert_2^2 + J(x)\Delta x+\frac 1 2 \Delta x^T H \Delta x)</script><p>上式对$\Delta $求导，得到：</p>
 <script type="math/tex; mode=display">
-H\delta x = -J^T</script><p>这个方法称为牛顿法。实际上呢，它就是牛顿迭代法，可以看另外一种解释：<a href="https://wlsdzyzl.top/2018/10/16/%E6%95%B0%E5%AD%A6%E2%80%94%E2%80%94Newton-Method/" target="_blank" rel="noopener">Newton Method</a></p>
+H\Delta x = -J^T</script><p>这个方法称为牛顿法。实际上呢，它就是牛顿迭代法，可以看另外一种解释：<a href="https://wlsdzyzl.top/2018/10/16/%E6%95%B0%E5%AD%A6%E2%80%94%E2%80%94Newton-Method/" target="_blank" rel="noopener">Newton Method</a></p>
 <p>无论是一介导数还是二阶导数都是非常直观的，不过梯度下降因为策略是贪心，最后经常走出锯齿路线，使得迭代次数过多，而牛顿法对于海森矩阵的求解，在大规模的情况下是非常耗时的。我们希望能够避免$H$的求解，下面介绍两个SLAM中用的更多的方法。</p>
-<h3 id="高斯牛顿法"><a href="#高斯牛顿法" class="headerlink" title="高斯牛顿法"></a>高斯牛顿法</h3><p>我们想要最小化$\Vert f(x + \delta x)\Vert_2^2$，一种策略是像上面一样，对他进行泰勒展开，另一种，我们可以先在内部进行泰勒展开：</p>
+<h3 id="高斯牛顿法"><a href="#高斯牛顿法" class="headerlink" title="高斯牛顿法"></a>高斯牛顿法</h3><p>我们想要最小化$\Vert f(x + \Delta x)\Vert_2^2$，一种策略是像上面一样，对他进行泰勒展开，另一种，我们可以先在内部进行泰勒展开：</p>
 <script type="math/tex; mode=display">
-f(x+\delta x) \approx f(x) + J(x)\delta x</script><p>然后最小化$\Vert f(x) + J(x)\delta x  \Vert_2^2$：</p>
+f(x+\Delta x) \approx f(x) + J(x)\Delta x</script><p>然后最小化$\Vert f(x) + J(x)\Delta x  \Vert_2^2$：</p>
 <script type="math/tex; mode=display">
-\delta x^* = \arg\min _{\delta x} \frac 1 2 \Vert f(x) + J(x)\delta x \Vert_2^2</script><p>由于泰勒展开，让上面的形式已经比较简单了，所以我们无需再次泰勒展开了。为了方便，我们将上面的形式写成：</p>
+\Delta x^* = \arg\min _{\Delta x} \frac 1 2 \Vert f(x) + J(x)\Delta x \Vert_2^2</script><p>由于泰勒展开，让上面的形式已经比较简单了，所以我们无需再次泰勒展开了。为了方便，我们将上面的形式写成：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\frac 1 2 \Vert f(x) + J(x)\delta x \Vert_2^2 &= \frac{1}{2}( f(x) + J(x)\delta x)^T ( f(x) + J(x)\delta x)\\
-&= \frac{1}{2}\left(\Vert f(x) \Vert_2^2 +2f(x)^TJ(x)\delta x + \delta x^TJ^T(x)J(x)\delta x\right)
+\frac 1 2 \Vert f(x) + J(x)\Delta x \Vert_2^2 &= \frac{1}{2}( f(x) + J(x)\Delta x)^T ( f(x) + J(x)\Delta x)\\
+&= \frac{1}{2}\left(\Vert f(x) \Vert_2^2 +2f(x)^TJ(x)\Delta x + \Delta x^TJ^T(x)J(x)\Delta x\right)
 \end{aligned}</script><p>对上式求导令其为0：</p>
 <script type="math/tex; mode=display">
-2J^T(x)f(x) + 2J^T(x)J(x)\delta x = 0</script><p>得到：</p>
+2J^T(x)f(x) + 2J^T(x)J(x)\Delta x = 0</script><p>得到：</p>
 <script type="math/tex; mode=display">
-J^T(x)J(x) \delta x = -J^T(x)f(x)</script><p>我们要求的是$\delta x$，这是一个线性方程组，我们称为增量方程，或者高斯牛顿方程，也叫正规方程。将上式中左侧定义为$H$,右侧定义为$g$，得到：</p>
+J^T(x)J(x) \Delta x = -J^T(x)f(x)</script><p>我们要求的是$\Delta x$，这是一个线性方程组，我们称为增量方程，或者高斯牛顿方程，也叫正规方程。将上式中左侧定义为$H$,右侧定义为$g$，得到：</p>
 <script type="math/tex; mode=display">
-H\delta x = g,</script><p>因此，我们在利用$J^TJ$作为海森矩阵的近似。原则上，我们的近似$H$矩阵是可逆且正定，但是实际中经常出现$J^TJ$为半正定矩阵，使用高斯牛顿法时候可能得到奇异矩阵或者病态的情况，此时稳定性较差，导致算法不一定会收敛。有时候得到的$\delta x$过大，导致结果不减反增。</p>
+H\Delta x = g,</script><p>因此，我们在利用$J^TJ$作为海森矩阵的近似。原则上，我们的近似$H$矩阵是可逆且正定，但是实际中经常出现$J^TJ$为半正定矩阵，使用高斯牛顿法时候可能得到奇异矩阵或者病态的情况，此时稳定性较差，导致算法不一定会收敛。有时候得到的$\Delta x$过大，导致结果不减反增。</p>
 <p>尽管高斯牛顿法有缺点，但是它是很多更先进算法(如线搜索方法，line search method)的基础。</p>
 <h3 id="列文伯格-马夸尔特法"><a href="#列文伯格-马夸尔特法" class="headerlink" title="列文伯格-马夸尔特法"></a>列文伯格-马夸尔特法</h3><p>列文伯格-马夸尔特法在一定程度上修正了这些问题，它比高斯牛顿更为健壮，不过它的收敛速度更慢，被称为阻尼牛顿法。</p>
-<p>高斯牛顿中的问题之所以会出现，一定程度上是因为$\delta$过大的时候，偏离了泰勒近似，所以可以想到的是找一个信赖区间，在区间内我们认为结果可以接受，超过了区间我们认为可能会出问题。</p>
+<p>高斯牛顿中的问题之所以会出现，一定程度上是因为$\Delta$过大的时候，偏离了泰勒近似，所以可以想到的是找一个信赖区间，在区间内我们认为结果可以接受，超过了区间我们认为可能会出问题。</p>
 <p>如何确定信赖区间的范围？一种办法是比较真实减小值和近似减小值的差距：</p>
 <script type="math/tex; mode=display">
-\rho = \frac{f(x + \delta x) - f(x)}{J(x)\delta x}.</script><p>$\rho$的分子是真实减少值，而分母是近似减少值。如果$\rho$比较大，意味这相差不多，可以继续增大范围，如果$rho$近似于１，表示近似一致，而$rho$过小，则表示近似减少的太多了，需要缩小近似范围。</p>
+\rho = \frac{f(x + \Delta x) - f(x)}{J(x)\Delta x}.</script><p>$\rho$的分子是真实减少值，而分母是近似减少值。如果$\rho$比较大，意味这相差不多，可以继续增大范围，如果$rho$近似于１，表示近似一致，而$rho$过小，则表示近似减少的太多了，需要缩小近似范围。</p>
 <p>因此我们可以想象这样一个过程：</p>
 <script type="math/tex; mode=display">
-\min_{\delta x_k} \frac 1 2 \Vert f(x_k)+J(x_k)\delta x_k\Vert^2, s.t. \Vert  D \delta x_k\Vert^2 \leq \mu.</script><p>这里$\mu$是信赖区域的半径。</p>
+\min_{\Delta x_k} \frac 1 2 \Vert f(x_k)+J(x_k)\Delta x_k\Vert^2, s.t. \Vert  D \Delta x_k\Vert^2 \leq \mu.</script><p>这里$\mu$是信赖区域的半径。</p>
 <ul>
 <li>计算$\rho$:<ul>
 <li>如果$\rho &gt; \frac 3 4$，则：$\mu = 2\mu$,</li>
-<li>如果$\rho &lt; \frac 1 4$，则：$\mu = 0.5\mu$,<br>如果$\rho$大于某个阈值表示是可以接受的，令$x_{k+1} = x_k + \delta x_k$.</li>
+<li>如果$\rho &lt; \frac 1 4$，则：$\mu = 0.5\mu$,<br>如果$\rho$大于某个阈值表示是可以接受的，令$x_{k+1} = x_k + \Delta x_k$.</li>
 </ul>
 </li>
 </ul>
 <p>这里扩大的倍数等都是经验值，如果没有D，则表示范围是一个球，有了D可以是一个椭球，$D$是一个非负对角阵，一般来说使用$J^TJ$的对角元素平方根，使得在梯度小的维度上约束范围更大一些。</p>
 <p>实际上，这个操作就是正则化的一种，不过用到了优化过程中。利用拉格朗日乘子，我们可以将有约束的优化转化称为无约束的优化：</p>
 <script type="math/tex; mode=display">
-\min _{\delta x_k} \frac 1 2 \Vert f(x_k)+J(x_k) \delta x_k\Vert^2 + \frac{\lambda}{2} \Vert D \delta x \Vert ^2.</script><p>更大的$\mu$（信赖范围），对应着更小的$\lambda$。对上式求导，得到：</p>
+\min _{\Delta x_k} \frac 1 2 \Vert f(x_k)+J(x_k) \Delta x_k\Vert^2 + \frac{\lambda}{2} \Vert D \Delta x \Vert ^2.</script><p>更大的$\mu$（信赖范围），对应着更小的$\lambda$。对上式求导，得到：</p>
 <script type="math/tex; mode=display">
-(H + \lambda D^T D)\delta x = g</script><p>如果取$D=I$，那么当$\lambda$较小的时候（信赖半径较大），采用的就是高斯牛顿方法，如果$\lambda$比较大（信赖半径较小），那么更像是在用普通的梯度下降方法。</p>
+(H + \lambda D^T D)\Delta x = g</script><p>如果取$D=I$，那么当$\lambda$较小的时候（信赖半径较大），采用的就是高斯牛顿方法，如果$\lambda$比较大（信赖半径较小），那么更像是在用普通的梯度下降方法。</p>
 <p>由此可以看到列文伯格-马夸尔特法在一定程度上可以减少奇异以及病态问题。</p>
 <p>这几种方法是最基本的优化方法。一般来说分为两类：line search与trust region，line search是确定方向找步长，如一二阶梯度法，高斯牛顿法，而trust region是确定范围，在范围内找到更合适的点，如列文伯格-马夸尔特法。</p>
 <p>在求解$J^TJ$的时候，由于SLAM中这个矩阵具有稀疏性，简化了计算，使得这种优化方法被广为采纳。此外，在优化时候初始值也很重要，否则这些优化算法往往陷入局部最小值。一般来说，我们会利用ICP,PnP等算法提供一个较好的初始值。</p>
