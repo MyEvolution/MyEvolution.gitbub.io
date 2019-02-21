@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/corner.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ssv.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/inter.jpg">
-<meta property="og:updated_time" content="2019-02-21T13:09:25.318Z">
+<meta property="og:updated_time" content="2019-02-21T13:11:23.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Flashfusion">
 <meta name="twitter:description" content="对于论文的阅读是我的弱项，这是导致我学习过程总是恍恍惚惚一脸懵比的一个重要的原因。出来混总是要还的。大学时候的浪荡带来的后果现在就得到了体现。">
@@ -396,7 +396,7 @@
                 
               
 
-              <time title="创建于：2019-02-21 14:52:48 / 更新于：21:09:25" itemprop="dateCreated datePublished" datetime="2019-02-21T14:52:48+08:00">2019-02-21</time>
+              <time title="创建于：2019-02-21 14:52:48 / 更新于：21:11:23" itemprop="dateCreated datePublished" datetime="2019-02-21T14:52:48+08:00">2019-02-21</time>
             
 
             
@@ -482,10 +482,12 @@ J(\xi)^Tr(\xi) = \sum_{i=0}^{N-1}\sum_{j \in \Phi(i)}\sum_{k=0}^{\vert C_{i,j}\v
 d^* = D_t(\pi(KT_tp)) - [T_tp]_z</script><p>上式中，$K$为相机内参，$T_t$为此刻的相机位姿，而p为体素，$\pi$得到了重投影，我们通过$D_t$来表示取深度值，$[p]_z$表示z轴坐标。</p>
 <p>为了截断，我们还需要用下面这样的截断函数：</p>
 <script type="math/tex; mode=display">
-d = \left \{\begin{matrix}
+d = \left\{
+\begin{matrix}
 \frac{d^\*}{d_{\max}} & \frac{d^\*}{d_{\max}}<1\\
 1&\frac{d^*}{d_{\max}}\ge 1
-\end{\matrix}\right.</script><p>其中，$d_{\max}$为截断值。</p>
+\end{\matrix}
+\right.</script><p>其中，$d_{\max}$为截断值。</p>
 <p>另外，TSDF fusion中一点是权重。因为对于不同的位姿得到的同一个voxel下的TSDF值是不同的，因此在integrate的时候需要有权重。在本篇文章中，对于sdf和权重的更新：</p>
 <script type="math/tex; mode=display">
 sdf_n = \frac{sdf_0 * w_0 + sdf_i * w_i}{w_i + w_0}, w_n = w_i + w_0 .</script><p>其中$w_0$为原来的，$w_i$为新来的，$w_n$为融合之后的。</p>
