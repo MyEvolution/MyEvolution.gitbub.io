@@ -109,7 +109,7 @@
 
 
   <meta name="description" content="最近做的工作是三维重建的，需要解决的问题是submap中tsdf的re-integrate与de-ingegrate。现在先搞明白整个TSDF fusion是怎么回事。我们从一个简单的例子：从多张输入帧中重建出三维模型。">
-<meta name="keywords" content="3D recpnstruction,TSDF">
+<meta name="keywords" content="3D reconstruction,TSDF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="3D Reconstruction——TSDF volume reconstruction">
 <meta property="og:url" content="http://wlsdzyzl.com/2019/01/25/3D-Reconstruction——TSDF-volume-reconstruction/index.html">
@@ -120,10 +120,10 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf7.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf3.png">
-<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf5.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf6.png">
-<meta property="og:updated_time" content="2019-01-25T08:21:52.508Z">
+<meta property="og:updated_time" content="2019-02-21T08:35:55.189Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="3D Reconstruction——TSDF volume reconstruction">
 <meta name="twitter:description" content="最近做的工作是三维重建的，需要解决的问题是submap中tsdf的re-integrate与de-ingegrate。现在先搞明白整个TSDF fusion是怎么回事。我们从一个简单的例子：从多张输入帧中重建出三维模型。">
@@ -398,12 +398,24 @@
                 
               
 
-              <time title="创建于：2019-01-25 15:16:22 / 更新于：16:21:52" itemprop="dateCreated datePublished" datetime="2019-01-25T15:16:22+08:00">2019-01-25</time>
+              <time title="创建于：2019-01-25 15:16:22" itemprop="dateCreated datePublished" datetime="2019-01-25T15:16:22+08:00">2019-01-25</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-02-21 16:35:55" itemprop="dateModified" datetime="2019-02-21T16:35:55+08:00">2019-02-21</time>
               
             
           </span>
@@ -465,10 +477,10 @@
 <h3 id="TSDF"><a href="#TSDF" class="headerlink" title="TSDF"></a>TSDF</h3><p>接下来就到了TSDF的介绍了。TSDF（Truncated Signed Distance Function）是截断符号距离函数的缩写，各个体素的截断符号距离组成了TSDF field。这个TSDF是如何计算的？</p>
 <p>首先我们需要介绍什么是SDF值。一个体素的SDF值，是它到最近的表面的距离，如果它在表面前（也就是距离相机更近），它是正值，如果在表面后，则为负值。对于这个值的计算，我们首先将在视锥内的体素投影到像素坐标，然后用该像素坐标的深度值减去这个体素的实际z值。在相机运动的过程中，空间voxel的sdf值可能会更新的。</p>
 <p>而TSDF就是规定了一个最远距离。因为我们知道，三维重建我们关注的是重建的表面，如果一个体素距离表面太远，它对表面重建不会有什么实际贡献。因此TSDF规定一个最远距离，如果距离比这个更大，它的TSDF值就是无效的，也就是用SDF值除以$d_{\max}$，只保留区间$[-1,1]$的值。下面这幅图形象地解释了什么是TSDF。</p>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf4.png" alt=""></p>
-<p>在相机运动的过程中，同一个voxel对应的color与depth值是不一样的，因此在integrate的时候对于不同的值我们需要加上权重，来表示它的可信赖程度。如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf5.png" alt=""></p>
-<p>可以看到，入射角更小，则是比较好的情况，由于相机实际中的情况没有理论中那么理想，入射角越大，带来的结果也相对更不可靠。因此实际中的权重，应该给入射角小的相机位置采集到的帧率更大的权重。具体的实现，可以将voxel位置向量（相机坐标系下）与它的法向量相称，入射角小的时候，根据向量乘，我们知道它能得到更大的乘积结果。</p>
+<p>在相机运动的过程中，同一个voxel对应的color与depth值是不一样的，因此在integrate的时候对于不同的值我们需要加上权重，来表示它的可信赖程度。如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/tsdf4.png" alt=""></p>
+<p>可以看到，入射角更小，则是比较好的情况，入射角越大，带来的结果也相对更不可靠，因为很明显它不应该是距离表面最近的距离。因此实际中的权重，应该给入射角小的相机位置采集到的帧率更大的权重。具体的实现，可以将voxel位置向量（相机坐标系下）与它的法向量相称，入射角小的时候，根据向量乘，我们知道它能得到更大的乘积结果。</p>
 <h3 id="Adaptive-Raycasting"><a href="#Adaptive-Raycasting" class="headerlink" title="Adaptive Raycasting"></a>Adaptive Raycasting</h3><p>Raycasting是从TSDF场中恢复出表面的过程。我们可以这样想象，从一个地方射出一条线过去，如果它经过了表面，那么这个光线经过的体素的TSDF值一定有一个从正变负，或者从负变正（如果是实时重建，那么只有从正到负）的过程。这个射出的方向，就是相机坐标系z轴的。而正负交接点0点，我们称为zero-crossing，就是表面所在的voxel。我们要做的就是找到这个地方，当然有时候可能不会有哪个的体素大小直接是0,这时候就需要进行三线性插值（trilineal interpolation），找到逼近0的哪个地方。距离操作中，我们为了加速，可能会开始已一个比较大的步长，找到了zero-crossing，换成更小的步长，直到得到要求的精度，使得选取点的TSDF值尽量接近于0。得到这个点之后，再同样根据线性插值，写入color（实际中color可能是包含在TSDF场中的，以及权重）。</p>
 <p>上面的算法没有包含光线和阴影的部分。</p>
 <p>接下来的就是mesh生成与法向量的提取。这个就是另外的部分了，现在我们已经简单介绍了一般的实时三维重建的步骤，这里都是非常通俗的语言，没有包含任何公式。实际中的工程遵循上面的思想，还会遇到各种各样的实际问题。总之希望能有所帮助吧。</p>
@@ -493,7 +505,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/3D-recpnstruction/" rel="tag"># 3D recpnstruction</a>
+            <a href="/tags/3D-reconstruction/" rel="tag"># 3D reconstruction</a>
           
             <a href="/tags/TSDF/" rel="tag"># TSDF</a>
           
@@ -592,7 +604,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">85</span>
+                    <span class="site-state-item-count">86</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -625,7 +637,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">10</span>
+                      
+                    
+                    <span class="site-state-item-count">11</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
