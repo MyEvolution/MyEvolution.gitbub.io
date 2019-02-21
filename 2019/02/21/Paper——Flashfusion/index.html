@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/corner.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ssv.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/inter.jpg">
-<meta property="og:updated_time" content="2019-02-21T13:05:39.277Z">
+<meta property="og:updated_time" content="2019-02-21T13:09:25.318Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Flashfusion">
 <meta name="twitter:description" content="对于论文的阅读是我的弱项，这是导致我学习过程总是恍恍惚惚一脸懵比的一个重要的原因。出来混总是要还的。大学时候的浪荡带来的后果现在就得到了体现。">
@@ -396,7 +396,7 @@
                 
               
 
-              <time title="创建于：2019-02-21 14:52:48 / 更新于：21:05:39" itemprop="dateCreated datePublished" datetime="2019-02-21T14:52:48+08:00">2019-02-21</time>
+              <time title="创建于：2019-02-21 14:52:48 / 更新于：21:09:25" itemprop="dateCreated datePublished" datetime="2019-02-21T14:52:48+08:00">2019-02-21</time>
             
 
             
@@ -479,12 +479,12 @@ J(\xi)^Tr(\xi) = \sum_{i=0}^{N-1}\sum_{j \in \Phi(i)}\sum_{k=0}^{\vert C_{i,j}\v
 <h3 id="TSDF-Fusion"><a href="#TSDF-Fusion" class="headerlink" title="TSDF Fusion"></a>TSDF Fusion</h3><p>关于TSDF的介绍，之前<a href="https://wlsdzyzl.top/2019/01/25/3D-Reconstruction%E2%80%94%E2%80%94TSDF-volume-reconstruction/" target="_blank" rel="noopener">TSDF</a>也提了，虽然没有涉及到具体的公式，但是还是能够有个大概的了解。下面我们用一些数学表达，介绍一下原本的TSDF的具体实现。</p>
 <p>TSDF将空间分成若干个voxel，voxel的个数依赖于重建的分辨率，而TSDF值就是每个voxel中心距离最近的表面的距离。这个TSDF值如何得到？我们将体素根据当前的相机位姿，转换到相机坐标系下，然后投影到成像平面上。然后对于该投影坐标（二维），我们有一个对应的深度值，使用该深度值减去体素在相机坐标下的z值，我们就可以得到它到这个平面的距离。</p>
 <script type="math/tex; mode=display">
-d* = D_t(\pi(KT_tp)) - [T_tp]_z</script><p>上式中，$K$为相机内参，$T_t$为此刻的相机位姿，而p为体素，$\pi$得到了重投影，我们通过$D_t$来表示取深度值，$[p]_z$表示z轴坐标。</p>
+d^* = D_t(\pi(KT_tp)) - [T_tp]_z</script><p>上式中，$K$为相机内参，$T_t$为此刻的相机位姿，而p为体素，$\pi$得到了重投影，我们通过$D_t$来表示取深度值，$[p]_z$表示z轴坐标。</p>
 <p>为了截断，我们还需要用下面这样的截断函数：</p>
 <script type="math/tex; mode=display">
 d = \left \{\begin{matrix}
-\frac{d*}{d_{\max}} & \frac{d*}{d_{\max}}<1\\
-1&\frac{d*}{d_{\max}}\ge 1
+\frac{d^\*}{d_{\max}} & \frac{d^\*}{d_{\max}}<1\\
+1&\frac{d^*}{d_{\max}}\ge 1
 \end{\matrix}\right.</script><p>其中，$d_{\max}$为截断值。</p>
 <p>另外，TSDF fusion中一点是权重。因为对于不同的位姿得到的同一个voxel下的TSDF值是不同的，因此在integrate的时候需要有权重。在本篇文章中，对于sdf和权重的更新：</p>
 <script type="math/tex; mode=display">
