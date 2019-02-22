@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/lcd.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pipe.png">
-<meta property="og:updated_time" content="2019-02-22T13:18:21.754Z">
+<meta property="og:updated_time" content="2019-02-22T13:19:59.603Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——RLSD 3D Reconstruction with LCD">
 <meta name="twitter:description" content="这次介绍的论文是牛津大学的一篇文章，全文名为Real-time Large-Scale Dense 3D Reconstruction with Loop Closure。这是一篇16年ECCV的文章，我主要希望借鉴的是文章中关于submap的一些做法和想法。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-22 21:18:21" itemprop="dateModified" datetime="2019-02-22T21:18:21+08:00">2019-02-22</time>
+                <time title="更新于：2019-02-22 21:19:59" itemprop="dateModified" datetime="2019-02-22T21:19:59+08:00">2019-02-22</time>
               
             
           </span>
@@ -497,9 +497,9 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
 <h3 id="回环检测和重定位"><a href="#回环检测和重定位" class="headerlink" title="回环检测和重定位"></a>回环检测和重定位</h3><p>实际上就我来说，submap中比较难把握的部分就是回环检测了。如果不是基于关键帧的，你可能需要将所有的帧都进行相似度的度量。现在我们看看本篇论文中的回环检测。</p>
 <p>本文中的回环检测是基于关键帧的。毕竟对所有的帧都进行回环检测是不现实的。在本篇文章中，tracking和mapping都是运行在GPU上的，而loop closure和重定位是运行在CPU上的，说明loop closure与重定位需要较少的计算量。</p>
 <p>loop closure关键的部分在于图片的相似度衡量。本篇paper中输入只有深度图，因此对于相似度的度量不能在基于RGB图的特征匹配。它是这么做的：</p>
-<p>对于每一个输入的深度图进行窗口采样，窗口大小为$40 \times 30$，并且用$\sigma = 2.5$进行高斯滤波，得到的结果为$\slide D_t$。然后使用fern conservatory来计算该图片的简化编码。在我们的实现中，每个conservatory由$n_F=500$个ferns组成，每个fern计算$n_B = 4$个二项决策。每个二项决策都根据$\slide D_t$中的像素根据阈值$\slide D_t(x_i) &lt; v_i$来确定一个布尔值，这其中$x_i,v_i$在最开始是被随机选择的。连接一个fern中的二进制码$f_i=\{0,1\}$得到一个编码块$b_j = (f_1,…,f_{n_B})$。使用$\ne$操作来返回一个布尔值，通过这种方法得到一个高效的方法来计算非相似性：</p>
+<p>对于每一个输入的深度图进行窗口采样，窗口大小为$40 \times 30$，并且用$\sigma = 2.5$进行高斯滤波，得到的结果为$\tilde D_t$。然后使用fern conservatory来计算该图片的简化编码。在我们的实现中，每个conservatory由$n_F=500$个ferns组成，每个fern计算$n_B = 4$个二项决策。每个二项决策都根据$\tilde D_t$中的像素根据阈值$\tilde D_t(x_i) &lt; v_i$来确定一个布尔值，这其中$x_i,v_i$在最开始是被随机选择的。连接一个fern中的二进制码$f_i=\{0,1\}$得到一个编码块$b_j = (f_1,…,f_{n_B})$。使用$\ne$操作来返回一个布尔值，通过这种方法得到一个高效的方法来计算非相似性：</p>
 <script type="math/tex; mode=display">
-\text{BlockHD}(\slide D_{t_1},\slide D_{t_2}) = \frac{1}{n_F} \sum_{j}(b_j(\slide D_{t_1}) \ne b_j(\slide D_{t_1})).</script><p>我们对所有关键帧维护这样的编码，如果某个帧与所有关键帧的最小不相似分数大于某个阈值，将它看作一个新的关键帧。</p>
+\text{BlockHD}(\tilde D_{t_1},\tilde D_{t_2}) = \frac{1}{n_F} \sum_{j}(b_j(\tilde D_{t_1}) \ne b_j(\tilde D_{t_1})).</script><p>我们对所有关键帧维护这样的编码，如果某个帧与所有关键帧的最小不相似分数大于某个阈值，将它看作一个新的关键帧。</p>
 <p>这个过程其实就是计算相似度的过程，与FlashFusion的mild类似。这部分的内容讲得也不够清楚，不清楚这样度量相似度背后的原理。不过，有很多别的闭环检测的算法，因此如果不是使用这种，我们可以跳过这一部分。下图为submap以及回环检测前和回环检测后的对比。</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/lcd.png" alt=""></p>
 <h3 id="控制逻辑以及闭环验证"><a href="#控制逻辑以及闭环验证" class="headerlink" title="控制逻辑以及闭环验证"></a>控制逻辑以及闭环验证</h3><p>闭环检测过程仅仅返回关键帧的ID。它们可以很容易地联系到位姿以及submap的索引。</p>
