@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/lcd.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pipe.png">
-<meta property="og:updated_time" content="2019-02-22T13:19:59.603Z">
+<meta property="og:updated_time" content="2019-02-22T13:21:04.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——RLSD 3D Reconstruction with LCD">
 <meta name="twitter:description" content="这次介绍的论文是牛津大学的一篇文章，全文名为Real-time Large-Scale Dense 3D Reconstruction with Loop Closure。这是一篇16年ECCV的文章，我主要希望借鉴的是文章中关于submap的一些做法和想法。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-22 21:19:59" itemprop="dateModified" datetime="2019-02-22T21:19:59+08:00">2019-02-22</time>
+                <time title="更新于：2019-02-22 21:21:04" itemprop="dateModified" datetime="2019-02-22T21:21:04+08:00">2019-02-22</time>
               
             
           </span>
@@ -477,7 +477,7 @@ x\\
 \epsilon_{ICP} (T_t) = \sum_x \rho\left((T_t^{-1}P(x) - V_{t-1}(\overline P(x)))^T N_{t-1}(\overline P(x))\right)</script><p>上式中，$\rho$是一个鲁棒的错误范数（比如huber），而$\overline P(x) = \pi(KT_{t-1}T_t^{-1}P(x))$。上式看起来比较复杂，但是细心分解一下还是不难理解的。$\pi$表示从齐次到非齐次的转换，也就是取前两维，使得三维变为二维坐标。$\overline P(x)$求的是$x$对应的点在$t-1$时刻的相机下的2维投影位置。而$V_{t-1}(x)$得到了$t-1$时刻像素位置$x$对应的三维点坐标，这个坐标是世界坐标系下的坐标。因此，$T_t^{-1}P(x) - V_{t-1}(\overline P(x))$理论应该是为0的，也就是我们需要优化的部分。而乘上法向量的部分我就不是很明白了，不知道有什么优点。论文中通过列文伯格-马夸尔特法来求得极值点。</p>
 <p>为了将深度$D_t$融合到TSDF中，对于空间点集$\{T_t^{-1}P(x)\}$以及在它们截断距离内的点，我们在Hash表中分配对应的voxel block，并且将它们设定为可见集合$\mathbb{V}$的一部分。然后我们对可见集合中所有的voxel进行下面的更新：</p>
 <script type="math/tex; mode=display">
-d \leftarrow \frac{wd+d^*}{w+1},c\leftarrow \frac{wc + c^ *}{w+1}, w\leftarrow w+1,</script><p>上式中，$d^* = D_t(\pi(KT_tX)) - [T_tX]_(z)$，也就是一个空间点投影到像素位置后，用该位置的深度减去该空间点的z值，从而得到了该点到表面的距离。如果颜色也是可用的，那么$c^* = C_t(\pi (KT_tX))$，也就是简单的取了投影像素位置的颜色值。</p>
+d \leftarrow \frac{wd+d^*}{w+1},c\leftarrow \frac{wc + c^ *}{w+1}, w\leftarrow w+1,</script><p>上式中，$d^* = D_t(\pi(KT_tX)) - [T_tX]_{(z)}$，也就是一个空间点投影到像素位置后，用该位置的深度减去该空间点的z值，从而得到了该点到表面的距离。如果颜色也是可用的，那么$c^* = C_t(\pi (KT_tX))$，也就是简单的取了投影像素位置的颜色值。</p>
 <p>对于当前时刻的$V,N$地图我们可以通过raycasting来获得。关于raycasting论文中介绍的不多，和<a href="https://wlsdzyzl.top/2019/01/25/3D-Reconstruction%E2%80%94%E2%80%94TSDF-volume-reconstruction/" target="_blank" rel="noopener">TSDF</a>中的差距也不大。</p>
 <h3 id="Tracking准确率的评估"><a href="#Tracking准确率的评估" class="headerlink" title="Tracking准确率的评估"></a>Tracking准确率的评估</h3><p>这篇文章中一个创新的地方是利用SVM对tracking是否成功进行评估。大多数现有的系统对于tracking失败的问题都不会做特殊的处理，但是在本文中，知道tracking是否失败对于建立一个鲁棒的建图系统以及建立submap之间的constraint都非常关键。</p>
 <p>一般来说对于tracking是否失败的检测，会手动设定一个阈值，然后根据tracking过程中得到的指标来判断。这有一些额外的要求，比如residual不应该比某个阈值更大。而在本篇文章中，作者训练一个分类器来分开tracking成功与tracking失败的情况。对于每个$\epsilon_{ICP}$的优化，衡量inlier的百分比，Hessian矩阵的行列式以及最后的residual。接着，使用一个$x^2$的kernel函数将这三个特征推展为20维的描述子。最后，使用SVM来进行tracking成功和tracking失败进行分类。这个训练过程是在7 scenes数据集上进行的，从而获得需要的参数。通过训练，分类器分类的正确率达到95%，如果不使用kernel，成功率会下降到92.4%。具体的训练细节在这里就不多说了，我们主要是关注这个paper中的思想。</p>
