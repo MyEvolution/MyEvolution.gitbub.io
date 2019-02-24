@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/corner.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ssv.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/inter.jpg">
-<meta property="og:updated_time" content="2019-02-22T07:05:09.493Z">
+<meta property="og:updated_time" content="2019-02-24T08:34:29.734Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Flashfusion">
 <meta name="twitter:description" content="对于论文的阅读是我的弱项，这是导致我学习过程总是恍恍惚惚一脸懵比的一个重要的原因。出来混总是要还的。大学时候的浪荡带来的后果现在就得到了体现。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-22 15:05:09" itemprop="dateModified" datetime="2019-02-22T15:05:09+08:00">2019-02-22</time>
+                <time title="更新于：2019-02-24 16:34:29" itemprop="dateModified" datetime="2019-02-24T16:34:29+08:00">2019-02-24</time>
               
             
           </span>
@@ -473,7 +473,7 @@
 <p>如果当前帧被识别为关键帧，则就会进行一次全局注册，对所有的关键帧的位姿进行一次优化，也就是进入了optimization线程，用于维持global consistency。为了说明这个优化过程，我们先来看看一对帧之间的代价函数：</p>
 <script type="math/tex; mode=display">
 \begin{equation}
-E_{i,j}(T_{i,j}\vert T_{i,j} \in SE(3)) = \sum_{k=0}^{\vert C_{i,j} \vert - 1}\Vert p_i^k T_{i,j}p_j^k \Vert^2
+E_{i,j}(T_{i,j}\vert T_{i,j} \in SE(3)) = \sum_{k=0}^{\vert C_{i,j} \vert - 1}\Vert p_i^k- T_{i,j}p_j^k \Vert^2
 \end{equation}</script><p>上式中，$T_{i,j}$是第i帧与第j帧之间的相对转换，$C_{i,j} = \{(p_i^k,p_j^k)\vert k = 0,1,…,\vert C_{i,j} \vert-1\}$是第i帧与第j帧之间的所有对应的特征点对的集合，由于有深度图，所以我们也就直接得到了特征点的相机坐标，通过转换后，属于一对的特征点坐标应当一致。因此上面的误差也算是重投影误差的一种吧。</p>
 <p>而全局误差就是对所有的关键帧对应的局部帧上述误差的总和：</p>
 <script type="math/tex; mode=display">
