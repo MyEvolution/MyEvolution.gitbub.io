@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/lcd.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pipe.png">
-<meta property="og:updated_time" content="2019-02-22T13:21:04.679Z">
+<meta property="og:updated_time" content="2019-02-24T06:17:15.065Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——RLSD 3D Reconstruction with LCD">
 <meta name="twitter:description" content="这次介绍的论文是牛津大学的一篇文章，全文名为Real-time Large-Scale Dense 3D Reconstruction with Loop Closure。这是一篇16年ECCV的文章，我主要希望借鉴的是文章中关于submap的一些做法和想法。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-22 21:21:04" itemprop="dateModified" datetime="2019-02-22T21:21:04+08:00">2019-02-22</time>
+                <time title="更新于：2019-02-24 14:17:15" itemprop="dateModified" datetime="2019-02-24T14:17:15+08:00">2019-02-24</time>
               
             
           </span>
@@ -508,12 +508,26 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
 <p>我们会一直维持一个active submaps的集合，当tracking和raycasting在所有的active submap中进行时，新的深度信息会被融合到一个主要submap。如果tracking失败了，我们就不融合这个信息，并且继续tracking这个过程。如果在任何一个submap都没有tracking成功，就丢掉。</p>
 <p>当相机移开了主要submap的中心（由之前的submap的构造中定义的标准），我们就初始化一个新的submap。因为这个submap最开始是空的，所以需要融合深度信息用来进行raycasting和tracking。我们累积主要地图和新的地图之间的constraint，一旦得到了一个稳定的相对的位姿估计，有$N_{stable}$个inlier帧，则新的submap就初始化成功。</p>
 <p>同时，闭环检测系统也在运行着。如果新进的帧对主要的场景我们有一个稳定的tracking结果，而且闭环检测结果建议插入一个关键帧，我们就更新关键帧的数据库。</p>
-<p>另外，如果闭环检测在数据库中找到了一个相似的深度图，在之前的某个当前不活跃的submap中，我们初始化一个新的闭环attempt。意思是我们将该submap激活并且开始raycasting和tracking。因为我们试图在当前主要submap与该submap中track一序列帧，我们又能够在这两个submap之间建立constraint。我们还需要验证闭环检测，因此除了鲁棒地估计这两个submap之间的位姿，还需要验证之前得到的位姿constraint的聚合。一旦我们得到了$N_{stable}$个inlier帧，就认为闭环检测成功，否则丢弃这个闭环检测。</p>
+<p>另外，如果闭环检测在数据库中找到了一个相似的深度图，在之前的某个当前不活跃的submap中，我们初始化一个新的闭环attempt。意思是我们将该submap激活并且开始raycasting和tracking。因为我们试图在当前主要submap与该submap中track一序列帧，我们又能够在这两个submap之间建立constraint。我们还需要验证闭环检测，因此除了鲁棒地估计这两个submap之间的相对位姿constraint，还需要验证得到的位姿constraint的正确性。一旦我们得到了$N_{stable}$个inlier帧，就认为闭环检测成功，否则丢弃这个闭环检测，认为这并不是一个回环。</p>
 <p>很明显，如果对于所有活跃的场景的tracking都失败了，我们不能建立相对位姿的constraint，而是需要重定位。在这种情况下，如果$N_{stable}$个tracking attemps成功了我们任务重定位成功，否则我们认为重定位失败。</p>
 <p>在这个过程最后，我们维护一个active submap的集合，删除那些不再被track以及闭环检测和重定位失败的submap。如果有多个候选，我们通过检测submap的可见度限制来选择一个新的主要场景并且选择当前课件比例最大的submap作为主要submap。如果有新的场景或者闭环attempt成功验证了，我们会开启一个新的进程来进行图优化。图优化的结果不仅对整个过程非常重要，对之后的可视化也非常关键。</p>
 <h3 id="submap图优化"><a href="#submap图优化" class="headerlink" title="submap图优化"></a>submap图优化</h3><p>上面在讨论的是我们获得一系列submap之间的constraint，可以用来优化每个submap在全局坐标下的位姿。如果没有回环，那么计算确切的submap位姿是无关紧要的，而这时候全局的位姿优化问题就产生了。</p>
-<h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h3><p>对于submap的构建实际上有多种办法，一种是SLAM中常见的，他们只是局部建立位姿和稀疏特征点的submap，而不会分割TSDF场。通过上述的SLAM再根据全局的map来建立TSDF也是可以的，但是不会减少TSDF占用的内存。另外一种是对TSDF也进行分割，visualize的时候我们可以将部分TSDF放入外存，从而减少内存占用，但是各个TSDF的融合是一个稍微复杂一点的问题。</p>
+<p>用$\tilde q(T)$来表示四元数的三个虚分量，表示欧几里得变换$T$的旋转部分。用$t(T)$来表示平移，用$v(T) = (\tilde q(T),t(T))^T$将旋转和平移连接起来。如果用$P_i$来表示submap $i$的位姿，而$T_{i,j}$表示的是两个submap的相对constraint，那么我们想最小化的代价函数为：</p>
+<script type="math/tex; mode=display">
+\epsilon_{graph} = \sum_{i,j \in \mathbb T}\Vert v(P_iP_j^{-1}T_{i,j}) \Vert ^2</script><p>上式中，$mathbb T$表示的所有的submap之间配对关系的总和。</p>
+<p>上面的部分有点难以理解。我的理解是这样的：首先$T_{i,j}$是一个优化得到的submap之间的位姿转换，因为各个时刻的相同的帧在不同submap中的位姿应该是一致的，或者即使位姿不一致，它们应该也是存在一个刚性的转换。而由于噪声的存在，往往无法保证一致，因此我们会从多个对应帧中找到这两个submap之间的相对位姿。</p>
+<p>这时候$$</p>
+<p>而$P_iP_j^{-1}T_{i,j}$得到的应该是一个没有转换的向量，因此它的范数作为了优化变量。使用四元数这种表述方法是因为旋转矩阵没有转换的话是非零的，是一个单位矩阵，不便于作为代价函数。</p>
+<p>通过上面的代价函数，我们可以得到各个submap的位姿$P$。</p>
+<p>上述函数依然使用非线性优化来得到最小值。在本文中，为了方便计算，使用四元数来代表导数$\Delta \tilde q$。另外一个值得注意的点是海森矩阵$\Delta ^2 \epsilon _{graph}$或者他的估计是稀疏矩阵。对2到100个submap进行上述优化并没有显著的计算区别，建议使用稀疏和超节点矩阵因子分解方法。在实际中，这个优化仅仅偶尔会进行，而且它比较低的计算量使得它可以运行在后端的CPU线程上。</p>
+<h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h3><p>对于submap的构建实际上有多种办法，一种是SLAM中常见的，他们只是局部建立位姿和稀疏特征点的submap，而不会分割TSDF场。通过上述的SLAM再根据全局的map来建立TSDF也是可以的，但是不会减少TSDF占用的内存。另外一种是对TSDF也进行分割，visualize的时候我们可以将部分TSDF放入外存，从而减少内存占用。</p>
 <p>本篇文章中会对TSDF也进行分割，这时候对多个submap进行可视化就需要对各个submap的TSDF进行融合。</p>
+<p>要明白，submap的图优化和局部submap的在线更新对于实时的可视化是非常重要的。将局部submap表示为TSDF的优点在于在呈现全局映射的时候可以动态的融合各个子映射。文章中定义了一个新的TSDF：</p>
+<script type="math/tex; mode=display">
+\hat F(X) = \sum_{i}F_w(P_iX)F(P_iX).</script><p>上式中$P_i$为submap $i$的位姿，使用$F_w$来表示从$F$中取出来$w$项，也就是权重。可视化通过全局的TSDF，也就是$\hat F$来进行raycasting等等得到模型表面法向。</p>
+<p>上面的内容就是论文的主要思路。还有一些不明白的地方可以查看原文，或者在实践中找到答案。</p>
+<p>其实我比较疑惑的部分在于闭环检测时候，对于多个submap进行track。因为这时候序列是不同的了，因此它们的位姿也就不同，这时候又如何根据原来的帧的位姿求得$T_{i,j}$?</p>
+<p>答：在submap中track得到的理论上是当前的位姿，因此在多个submap中track同一个帧一样得到的应该是相同的位姿。我之前理解错误了。注意track是得到位姿的过程。</p>
 
       
     </div>
@@ -631,7 +645,7 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-count">85</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -666,7 +680,7 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
                     
                       
                     
-                    <span class="site-state-item-count">11</span>
+                    <span class="site-state-item-count">10</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -791,7 +805,7 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
                     
                       
                     
-                    <span class="site-state-item-count">56</span>
+                    <span class="site-state-item-count">55</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
