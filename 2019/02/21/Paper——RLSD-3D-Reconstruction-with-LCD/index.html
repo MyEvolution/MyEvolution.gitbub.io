@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/lcd.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pipe.png">
-<meta property="og:updated_time" content="2019-02-24T06:17:15.065Z">
+<meta property="og:updated_time" content="2019-02-25T06:27:38.549Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——RLSD 3D Reconstruction with LCD">
 <meta name="twitter:description" content="这次介绍的论文是牛津大学的一篇文章，全文名为Real-time Large-Scale Dense 3D Reconstruction with Loop Closure。这是一篇16年ECCV的文章，我主要希望借鉴的是文章中关于submap的一些做法和想法。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-24 14:17:15" itemprop="dateModified" datetime="2019-02-24T14:17:15+08:00">2019-02-24</time>
+                <time title="更新于：2019-02-25 14:27:38" itemprop="dateModified" datetime="2019-02-25T14:27:38+08:00">2019-02-25</time>
               
             
           </span>
@@ -514,10 +514,9 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
 <h3 id="submap图优化"><a href="#submap图优化" class="headerlink" title="submap图优化"></a>submap图优化</h3><p>上面在讨论的是我们获得一系列submap之间的constraint，可以用来优化每个submap在全局坐标下的位姿。如果没有回环，那么计算确切的submap位姿是无关紧要的，而这时候全局的位姿优化问题就产生了。</p>
 <p>用$\tilde q(T)$来表示四元数的三个虚分量，表示欧几里得变换$T$的旋转部分。用$t(T)$来表示平移，用$v(T) = (\tilde q(T),t(T))^T$将旋转和平移连接起来。如果用$P_i$来表示submap $i$的位姿，而$T_{i,j}$表示的是两个submap的相对constraint，那么我们想最小化的代价函数为：</p>
 <script type="math/tex; mode=display">
-\epsilon_{graph} = \sum_{i,j \in \mathbb T}\Vert v(P_iP_j^{-1}T_{i,j}) \Vert ^2</script><p>上式中，$mathbb T$表示的所有的submap之间配对关系的总和。</p>
-<p>上面的部分有点难以理解。我的理解是这样的：首先$T_{i,j}$是一个优化得到的submap之间的位姿转换，因为各个时刻的相同的帧在不同submap中的位姿应该是一致的，或者即使位姿不一致，它们应该也是存在一个刚性的转换。而由于噪声的存在，往往无法保证一致，因此我们会从多个对应帧中找到这两个submap之间的相对位姿。</p>
-<p>这时候$$</p>
-<p>而$P_iP_j^{-1}T_{i,j}$得到的应该是一个没有转换的向量，因此它的范数作为了优化变量。使用四元数这种表述方法是因为旋转矩阵没有转换的话是非零的，是一个单位矩阵，不便于作为代价函数。</p>
+\epsilon_{graph} = \sum_{i,j \in \mathbb T}\Vert v(P_iP_j^{-1}T_{i,j}) \Vert ^2</script><p>上式中，$\mathbb T$表示的所有的submap之间配对关系的总和。</p>
+<p>上面的部分有点难以理解。我的理解是这样的：首先$T_{i,j}$是一个优化得到的submap之间的位姿转换，因为各个时刻的相同的帧在不同submap中的位姿应该是一致的，或者即使位姿不一致，它们应该也是存在一个刚性的转换。而由于噪声的存在，往往无法保证一致或者转换后一致，因此我们会从多个对应帧中找到这两个submap之间的相对位姿。</p>
+<p>而$P_iP_j^{-1}T_{i,j}$得到的应该是一个没有平移没有旋转的转换矩阵，因此它的范数作为了优化变量。使用四元数这种表述方法是因为旋转矩阵没有转换的话是非零的，是一个单位矩阵，不便于作为代价函数。</p>
 <p>通过上面的代价函数，我们可以得到各个submap的位姿$P$。</p>
 <p>上述函数依然使用非线性优化来得到最小值。在本文中，为了方便计算，使用四元数来代表导数$\Delta \tilde q$。另外一个值得注意的点是海森矩阵$\Delta ^2 \epsilon _{graph}$或者他的估计是稀疏矩阵。对2到100个submap进行上述优化并没有显著的计算区别，建议使用稀疏和超节点矩阵因子分解方法。在实际中，这个优化仅仅偶尔会进行，而且它比较低的计算量使得它可以运行在后端的CPU线程上。</p>
 <h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h3><p>对于submap的构建实际上有多种办法，一种是SLAM中常见的，他们只是局部建立位姿和稀疏特征点的submap，而不会分割TSDF场。通过上述的SLAM再根据全局的map来建立TSDF也是可以的，但是不会减少TSDF占用的内存。另外一种是对TSDF也进行分割，visualize的时候我们可以将部分TSDF放入外存，从而减少内存占用。</p>
