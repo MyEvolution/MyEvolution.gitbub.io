@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/corner.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ssv.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/inter.jpg">
-<meta property="og:updated_time" content="2019-02-26T07:32:19.517Z">
+<meta property="og:updated_time" content="2019-02-27T11:23:51.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Flashfusion">
 <meta name="twitter:description" content="对于论文的阅读是我的弱项，这是导致我学习过程总是恍恍惚惚一脸懵比的一个重要的原因。出来混总是要还的。大学时候的浪荡带来的后果现在就得到了体现。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-26 15:32:19" itemprop="dateModified" datetime="2019-02-26T15:32:19+08:00">2019-02-26</time>
+                <time title="更新于：2019-02-27 19:23:51" itemprop="dateModified" datetime="2019-02-27T19:23:51+08:00">2019-02-27</time>
               
             
           </span>
@@ -486,7 +486,7 @@ E(\xi) = \sum_{i=0}^{N-1}\sum_{j \in \Phi(i)} E_{i,j} = \sum_{i=0}^{N-1}\sum_{j 
 \delta = -(J(\xi)^TJ(\xi))^{-1}J(\xi)^Tr(\xi),</script><p>这里和高斯牛顿中推导的方法是一致的。而雅科比矩阵的求解：</p>
 <script type="math/tex; mode=display">
 J(\xi)^TJ(\xi) = \sum_{i=0}^{N-1}\sum_{j \in \Phi(i)}\sum_{k=0}^{\vert C_{i,j}\vert-1}(J_{i,j}^k)^TJ_{i,j}^k,\\
-J(\xi)^Tr(\xi) = \sum_{i=0}^{N-1}\sum_{j \in \Phi(i)}\sum_{k=0}^{\vert C_{i,j}\vert-1}(J_{i,j}^k)^Tr_l,</script><p>我们不会直接求$J(xi)$，因为需要的是上面两个矩阵，而他们的求法甚至比直接求单独的雅科比矩阵更加容易。从<a href="http://www.luvision.net/img/FlashFusion/FastGO.pdf" target="_blank" rel="noopener">FastGO</a>中，我们可以更加详细地了解解决上面优化话题的快速算法。同时，为了提高鲁棒性，Flashfusion对于cost funstion选择了Huber norm，为了实现实时减少计算量，也不会对所有的frame pair进行计算，而是选取变化最大的10个frame pair。</p>
+J(\xi)^Tr(\xi) = \sum_{i=0}^{N-1}\sum_{j \in \Phi(i)}\sum_{k=0}^{\vert C_{i,j}\vert-1}(J_{i,j}^k)^Tr_l,</script><p>我们不会直接求$J(\xi)$，因为需要的是上面两个矩阵，而他们的求法甚至比直接求单独的雅科比矩阵更加容易。从<a href="http://www.luvision.net/img/FlashFusion/FastGO.pdf" target="_blank" rel="noopener">FastGO</a>中，我们可以更加详细地了解解决上面优化话题的快速算法。同时，为了提高鲁棒性，Flashfusion对于cost funstion选择了Huber norm，为了实现实时减少计算量，也不会对所有的frame pair进行计算，而是选取变化最大的10个frame pair。</p>
 <p>这里有一个细节，在观看demo的时候，我们看到作者捂住了镜头，换到了之前扫描过的场景，而重建的视野也直接回到了之前扫描的场景。对于这个帧，插入的一定是新的关键帧，甚至有可能会tracking failed。而该帧的位姿，就是通过global optimization得到的。可以看到FlashFusion是非常强大的。</p>
 <h3 id="TSDF-Fusion"><a href="#TSDF-Fusion" class="headerlink" title="TSDF Fusion"></a>TSDF Fusion</h3><p>关于TSDF的介绍，之前<a href="https://wlsdzyzl.top/2019/01/25/3D-Reconstruction%E2%80%94%E2%80%94TSDF-volume-reconstruction/" target="_blank" rel="noopener">TSDF</a>也提了，虽然没有涉及到具体的公式，但是还是能够有个大概的了解。下面我们用一些数学表达，介绍一下原本的TSDF的具体实现。</p>
 <p>TSDF将空间分成若干个voxel，voxel的个数依赖于重建的分辨率，而TSDF值就是每个voxel中心距离最近的表面的距离。这个TSDF值如何得到？我们将体素根据当前的相机位姿，转换到相机坐标系下，然后投影到成像平面上。然后对于该投影坐标（二维），我们有一个对应的深度值，使用该深度值减去体素在相机坐标下的z值，我们就可以得到它到这个平面的距离。</p>
@@ -529,7 +529,7 @@ n = \begin{bmatrix}
 s_{i+1,j,k} - s_{i-1,j,k}\\
 s_{i,j+1,k} -s_{i,j-1,k}\\
 s_{i,j,k+1} - s_{i,j,k-1}
-\end{bmatrix},</script><p>上面的法向计算过程其实不难理解，是对该点的法向的粗略估计，需要6个临近的voxel（有效的）。对于本文章中mesh的生成我了解得还不是太清楚，因为介绍的比较简单。不过这也不是我想了解的重点，因此暂时就先不深究了。</p>
+\end{bmatrix},</script><p>上面的法向计算过程其实不难理解，是对该点的法向的粗略估计，需要6个临近的voxel（有效的）。在FlashFusion中，每个chunk中还维护了一个查找表，用来记录它相邻的chunk的地址，这样就避免了在多边形生成与法向提取中对总的查找表（chunkList）的查询。对于本文章中mesh的生成我了解得还不是太清楚，因为介绍的比较简单。不过这也不是我想了解的重点，因此暂时就先不深究了。</p>
 <h3 id="Re-integrate"><a href="#Re-integrate" class="headerlink" title="Re-integrate"></a>Re-integrate</h3><p>reintegrate是只将关键帧对应的局部帧融合进去。对于每个关键帧，我们只融合它对应的前10个局部帧，因为如果局部帧过多，只能说明相机没有移动或者移动过慢，而这些局部帧大多提供了相似的信息，并不会有多大的贡献。因此选取前10个既保证了速度，又保证了效果。</p>
 <p>上述就是FlashFusion的关键部分介绍。下面是一个FlashFusion重建的demo：</p>
 <video id="video" controls preload="none">
