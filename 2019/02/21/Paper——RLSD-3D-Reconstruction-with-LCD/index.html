@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/lcd.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/pipe.png">
-<meta property="og:updated_time" content="2019-02-25T06:27:38.549Z">
+<meta property="og:updated_time" content="2019-03-01T01:58:04.736Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——RLSD 3D Reconstruction with LCD">
 <meta name="twitter:description" content="这次介绍的论文是牛津大学的一篇文章，全文名为Real-time Large-Scale Dense 3D Reconstruction with Loop Closure。这是一篇16年ECCV的文章，我主要希望借鉴的是文章中关于submap的一些做法和想法。">
@@ -410,7 +410,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-25 14:27:38" itemprop="dateModified" datetime="2019-02-25T14:27:38+08:00">2019-02-25</time>
+                <time title="更新于：2019-03-01 09:58:04" itemprop="dateModified" datetime="2019-03-01T09:58:04+08:00">2019-03-01</time>
               
             
           </span>
@@ -527,6 +527,7 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
 <p>上面的内容就是论文的主要思路。还有一些不明白的地方可以查看原文，或者在实践中找到答案。</p>
 <p>其实我比较疑惑的部分在于闭环检测时候，对于多个submap进行track。因为这时候序列是不同的了，因此它们的位姿也就不同，这时候又如何根据原来的帧的位姿求得$T_{i,j}$?</p>
 <p>答：在submap中track得到的理论上是当前的位姿，因此在多个submap中track同一个帧一样得到的应该是相同的位姿。我之前理解错误了。注意track是得到位姿的过程。</p>
+<h3 id="source-code"><a href="#source-code" class="headerlink" title="source code"></a>source code</h3><p>这篇论文有一个相关的项目，叫做<a href="https://github.com/victorprad/InfiniTAM/" target="_blank" rel="noopener">InfiniTAM</a>，可以点击阅读源码，了解详细的实现过程。</p>
 
       
     </div>
@@ -860,7 +861,7 @@ v(\hat T_{i,j}) = \sum_{t}w_t v(T_{t,i,j}) + wv(T_{i,j})\sum_{t} w_t + w,</scrip
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#融合深度图"><span class="nav-number">1.</span> <span class="nav-text">融合深度图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tracking准确率的评估"><span class="nav-number">2.</span> <span class="nav-text">Tracking准确率的评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Submap的构造"><span class="nav-number">3.</span> <span class="nav-text">Submap的构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Submap之间的constraints"><span class="nav-number">4.</span> <span class="nav-text">Submap之间的constraints</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#P-S"><span class="nav-number">4.1.</span> <span class="nav-text">P.S.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回环检测和重定位"><span class="nav-number">5.</span> <span class="nav-text">回环检测和重定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#控制逻辑以及闭环验证"><span class="nav-number">6.</span> <span class="nav-text">控制逻辑以及闭环验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#submap图优化"><span class="nav-number">7.</span> <span class="nav-text">submap图优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化"><span class="nav-number">8.</span> <span class="nav-text">可视化</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#融合深度图"><span class="nav-number">1.</span> <span class="nav-text">融合深度图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tracking准确率的评估"><span class="nav-number">2.</span> <span class="nav-text">Tracking准确率的评估</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Submap的构造"><span class="nav-number">3.</span> <span class="nav-text">Submap的构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Submap之间的constraints"><span class="nav-number">4.</span> <span class="nav-text">Submap之间的constraints</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#P-S"><span class="nav-number">4.1.</span> <span class="nav-text">P.S.</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回环检测和重定位"><span class="nav-number">5.</span> <span class="nav-text">回环检测和重定位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#控制逻辑以及闭环验证"><span class="nav-number">6.</span> <span class="nav-text">控制逻辑以及闭环验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#submap图优化"><span class="nav-number">7.</span> <span class="nav-text">submap图优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化"><span class="nav-number">8.</span> <span class="nav-text">可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#source-code"><span class="nav-number">9.</span> <span class="nav-text">source code</span></a></li></ol></div>
             
 
           </div>
