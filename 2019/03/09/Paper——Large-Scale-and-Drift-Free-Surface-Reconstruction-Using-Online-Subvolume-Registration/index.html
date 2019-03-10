@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这次周末再读一篇文章，希望能从中得到一些启发，来做好现在的相关的工作。这篇文章为Large-Scale and Drift-Free Surface ReconstructionUsing Online Subvolume Registration，是2015年CVPR的一篇文章。">
+<meta name="keywords" content="3D reconstruction,SLAM,paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paper——Large-Scale and Drift-Free Surface Reconstruction Using Online Subvolume Registration">
+<meta property="og:url" content="http://wlsdzyzl.com/2019/03/09/Paper——Large-Scale-and-Drift-Free-Surface-Reconstruction-Using-Online-Subvolume-Registration/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="这次周末再读一篇文章，希望能从中得到一些启发，来做好现在的相关的工作。这篇文章为Large-Scale and Drift-Free Surface ReconstructionUsing Online Subvolume Registration，是2015年CVPR的一篇文章。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv3.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv2.png">
+<meta property="og:updated_time" content="2019-03-10T08:30:12.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Paper——Large-Scale and Drift-Free Surface Reconstruction Using Online Subvolume Registration">
+<meta name="twitter:description" content="这次周末再读一篇文章，希望能从中得到一些启发，来做好现在的相关的工作。这篇文章为Large-Scale and Drift-Free Surface ReconstructionUsing Online Subvolume Registration，是2015年CVPR的一篇文章。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv3.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2019/03/09/Paper——Large-Scale-and-Drift-Free-Surface-Reconstruction-Using-Online-Subvolume-Registration/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Paper——Large-Scale and Drift-Free Surface Reconstruction Using Online Subvolume Registration | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/03/09/Paper——Large-Scale-and-Drift-Free-Surface-Reconstruction-Using-Online-Subvolume-Registration/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Paper——Large-Scale and Drift-Free Surface Reconstruction Using Online Subvolume Registration
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-03-09 20:35:07" itemprop="dateCreated datePublished" datetime="2019-03-09T20:35:07+08:00">2019-03-09</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-03-10 16:30:12" itemprop="dateModified" datetime="2019-03-10T16:30:12+08:00">2019-03-10</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/论文/" itemprop="url" rel="index"><span itemprop="name">论文</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这次周末再读一篇文章，希望能从中得到一些启发，来做好现在的相关的工作。这篇文章为<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Fioraio_Large-Scale_and_Drift-Free_2015_CVPR_paper.pdf" target="_blank" rel="noopener">Large-Scale and Drift-Free Surface ReconstructionUsing Online Subvolume Registration</a>，是2015年CVPR的一篇文章。<br><a id="more"></a><br>关于TSDF，我们已经知道的很多了。在这篇文章中也是同样的。文章中，$\mathbf{u}$代表空间中的三维点，而$F(\mathbf{u})$代表该点的SDF值，$W(\mathbf{u})$表示的是SDF值的信心度量（可以理解为权重）。不同的地方是，文章中还定义了一个归一化梯度：</p>
+<script type="math/tex; mode=display">
+\hat{nabla}F(\mathbf{u}) \triangleq \frac{\nabla F(\mathbf{u})}{\Vert \nabla F(\mathbf{u}) \Vert}</script><p>当$F$是常数时，也就是梯度为0,返回一个未定义值。</p>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>为了进行depth fusion，每个voxel都被投影到二维平面中，并且和传感器获得的深度值对比：</p>
+<script type="math/tex; mode=display">
+\Delta _z(\mathbf{u},t) = D_t(\pi (T^{-1}_t \times \mathbf{u})) - \zeta(T^{-1}_t\times \mathbf{u})</script><p>上式中，$\pi$是一个$\mathbb R^3 \rightarrow \mathbb R^2$的投影过程，也就是从三维到二维的转换，而$\zeta$提取了$z$坐标，也就是$\zeta(x,y,z) = z$。当$\Delta_z &gt; -\sigma$时候更新TSDF值，而$\sigma$指的是截断距离。新的TSDF$(F^{new},W^{new})$为：</p>
+<script type="math/tex; mode=display">
+F^{new}(\mathbf{u}) = \frac{F(\mathbf{u})W(\mathbf{u})+ \min\left(1,\frac{\Delta_z(u,t)}{\sigma}\right)}{W(\mathbf{u})+1},\\
+W^{new}(\mathbf{u}) = W(\mathbf{u})+1</script><p>值得注意的是，这里依然保留的是截断距离，只不过用了另一种方法，选取和1比较的最小值。另外，对于权重的分配，有很多种方法，论文中采取的是最简单的，也就是平均分配，每次$W = W+1$。</p>
+<p>这篇文章的模型是在KinectFusion的基础上进行的，而KinectFusion之所以不能很好的在large scale上应用，主要有两个原因，一是drift累积，二是global TSDF会需要较大的内存。</p>
+<h3 id="Low-Drift局部模型"><a href="#Low-Drift局部模型" class="headerlink" title="Low-Drift局部模型"></a>Low-Drift局部模型</h3><p>这篇文章在解决Drift问题上，采取了submap的形式。在本文中，称为subvolume。每K帧会建立一个submap。这篇文章提出了一个比较有趣的方法，来做integrate，为了避免每一步都进行K次integrate，也就是对F，W的更新，每次得到新的帧时，它将该帧以及对应的位姿push进一个队列中（FIFO），同时将$t-K$帧pop出去，对TSDF volume进行腐蚀（erosion）：</p>
+<script type="math/tex; mode=display">
+F^{new}(\mathbf{u}) = \frac{F(\mathbf{u})W(\mathbf{u})-\min\left(1,\frac{\Delta_z(u,t-K)}{\sigma}\right)}{W(\mathbf{u})-1},\\
+W^{new}(\mathbf{u}) = W(\mathbf{u})-1</script><p>当处理的帧数量少于K帧时，不会发生腐蚀。当到达K帧时，队列也满了，将volumen从GPU拷贝到主机中，作为一个新的subvolume，然后腐蚀操作开始。其实我是真的不知道这样做有什么吊用。。。或者我理解有误？总之，这不是关注的重点。</p>
+<p>这一部分还包含了对有效Block的筛选，也是比较常规的做法，就不多说了。</p>
+<p>本文中$K=50$。</p>
+<h3 id="Subvolume注册"><a href="#Subvolume注册" class="headerlink" title="Subvolume注册"></a>Subvolume注册</h3><p>我比较想借鉴的是，如何将各个submap融合，因为每个submap在融合到global的情况下，需要进行optimize，会对每个submap求出位姿，或者说各个submap之间有相对的位姿，知道这个位姿后，如何对各个submap的TSDF进行transform？</p>
+<p>在本文中，每K帧形成一个新的subvolume$(F_j,W_j)$，被存储在主机上，下面会将各个subvolume的位姿表示为$V_j$。尽管每个subvolume的局部位姿都很小，但是将它们直接简单收集起来会产生较大的drift和misalignment。本篇文章中通过全局优化各个subvolume的位姿来解决这个问题，当得到一个新的subvolume时，会通过一个创新的volume混合方案来进行非刚性变换。一个比较显著的点是，这个优化过程不需要相机tracking模块，因此它可以使得操作实时进行，并且在把新的subvolume放入一个共享缓存区，允许位姿优化作为一个并行运行的过程。</p>
+<p>提出的优化过程是受到了ICP算法的启发。优化需要的cost function是这样得到的：</p>
+<ol>
+<li>对于每个subvolume，提取出zero-level的点的集合，并且得到它们的法向量</li>
+<li>对于每个subvolume，考虑它的边界框，并且找到与其他subvolume之间的overlap</li>
+<li>对于每个subvolume得到的点集，通过距离函数的梯度来找到与它有overlap的subvolume中的对应</li>
+<li>每个有效的对应都会带来一个点到平面的距离约束，用来优化</li>
+<li>如果有一个位姿超出约束，至少有一个位姿错误项被添加，来保证全局一致</li>
+</ol>
+<p>接着，通过最小化一个合适的cost function来优化subvolume的位姿。在添加subvolume时候，上一个创建的subvolume的位姿保持固定，来得到tracked相机的最终估计。相对应的，下一个subvolume也能很快根据之前的subvolume得到一个合适的位姿，在相机track成功的情况下。cost funtion会最小化直到收敛，当得到新的对应时，继续最小化。下面会详细介绍一下point matching和优化问题。</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv3.png" alt=""></p>
+<h4 id="The-Correspondence-Set"><a href="#The-Correspondence-Set" class="headerlink" title="The Correspondence Set"></a>The Correspondence Set</h4><p>给定subvolume$(F_j, W_j)$，以及zero-level点集：$\left\{ \mathbf p_i^{(j)} \right\}$以及计算的法向量$\mathbf{n_i^{(j)}} = \hat{\nabla}F_j\left(p_i^{(j)}\right)$。我们定义最小的边界框（bounding box）包围了它所有的有效voxel。接着，找到subvolume的子集$S^{(j)}$，它们之间有重叠的边界框。接着，对于每个点$\mathbf p_i^{(j)}$，我们遍历候选集，对于每个$k \in S^{(j)}$，计算插值距离函数以及它在$V_k^{-1} \times V_j *\mathbf p_i^{(j)}$的梯度。如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv1.png" alt=""></p>
+<p>一个点的match为下：</p>
+<script type="math/tex; mode=display">
+\mathbf q_k^{ij} = V_k^{-1} \times V_j \times \mathbf p_i^{(j)} - F_k\left(V_k^{-1} \times V_j \times \mathbf p_i^{(j)}\right)\hat \nabla F_k\left(V_k^{-1}\times V_j \times  \mathbf p_i^{(j)} \right).</script><p>对于所有的subvolume中所有的采样点进行上面的过程，有点类似于ICP算法匹配的过程。我还不是很明白这里梯度那一项的作用，也许可以增加鲁棒。</p>
+<h4 id="The-Opitimization-Problem"><a href="#The-Opitimization-Problem" class="headerlink" title="The Opitimization Problem"></a>The Opitimization Problem</h4><p>假设通过上面的过程，我们已经成功找到了对应。我们可以根据这些对应建立cost funstion。对于每个点对$\left( \mathbf p_i^{(j)},\mathbf q_k^{ji} \right)$，我们对$F_k$在$\mathbf q_k^{ji}$处的形状是没有保证的。我们已经估计了$F_j$中$p_i^{(j)}$处的法向量，因此我们可以得到一个点与平面之间的constraint：</p>
+<script type="math/tex; mode=display">
+e_k^{ji} = \left(\mathbf p_i^{(j)} - V_j^{-1}\times V_k \times \mathbf q_k^{ji}\right)\cdot \mathbf n_i^{(j)}.</script><p>cost function的形式为：</p>
+<script type="math/tex; mode=display">
+\arg \min_{V_1,...,V_N} \sum_j \sum_i \sum_k\Vert e_k^{ji} \Vert^2</script><p>在本文中，通过Ceres中的列文伯格-马夸尔特方法来优化。</p>
+<p>在这个过程中，有可能会出现一些别的情况，比如subvolume $F_h$是空的，或者有很少的基数，使得约束不成立，或者得到很差的位姿估计，在这种情况下可以引入位姿之间的约束来增强相机追踪得到的估计。当这个位姿引用的两帧分别在两个subvolume上，如$Z_{h-1,h}$，则估计的错误项可以描述为下：</p>
+<script type="math/tex; mode=display">
+e^{h-1,h} = \Phi\log (Z_{h-1,h} \times V_h^{-1} \times V_{h-1})</script><p>上式中$\log$将$SE(3)$转换到$\mathcal{se}(3)$，而$\Phi$是一个$6\times 6$的刚性矩阵。按照经验将$\Phi$设置为单位矩阵。</p>
+<h3 id="融合Subvolume"><a href="#融合Subvolume" class="headerlink" title="融合Subvolume"></a>融合Subvolume</h3><p>对于融合Subvolume，文章中没有过多介绍。如何融到一个global volume中？</p>
+<script type="math/tex; mode=display">
+F_G(\mathbf u)=\frac{\sum_j F_j(V_j^{-1}\times \mathbf u)W_j(V_j^{-1}\times \mathbf u)}{\sum_{j}W_j(V_j^{-1}\times \mathbf u)}.</script><p>这个过程并没有太多的不同。而困扰我的，当TSDF旋转之后，原来的体素乘以transform矩阵得到的位置不是一个体素的中心位置，这时候的sdf距离会有误差，在文章中并没有过多提到。也许即时直接旋转也不会有太多的不同。</p>
+<p>文章中，如何融合global volume，是通过对一个全局的位置依次扫描，对每个位置$\mathbf u$进行上述的操作。这样的采样，如果subvolume分布比较广，会导致大量的无用计算。如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv2.png" alt=""></p>
+<p>因此，它会根据有overlap的subvolume来进行：</p>
+<script type="math/tex; mode=display">
+F_j(\mathbf u) = \frac{\sum_k F_k(V_k^{-1} \times V_j \times \mathbf u) W_k(V_k^{-1} \times V_j \times \mathbf u)}{\sum_kW_k(V_k^{-1}\times V_j \times \mathbf u)}.</script><p>上式中$k \in S^{(j)}$，也就是与subvolume j有重叠的subvolume的集合。</p>
+<p>上述就是这个文章的主要内容。其实读完了我觉得没什么特别新颖的点。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/3D-reconstruction/" rel="tag"># 3D reconstruction</a>
+          
+            <a href="/tags/SLAM/" rel="tag"># SLAM</a>
+          
+            <a href="/tags/paper/" rel="tag"># paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/04/Paper——Real-time-3D-Reconstruction-at-Scale-using-Voxel-Hashing/" rel="next" title="Paper——Real-time 3D Reconstruction at Scale using Voxel Hashing">
+                <i class="fa fa-chevron-left"></i> Paper——Real-time 3D Reconstruction at Scale using Voxel Hashing
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">87</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Low-Drift局部模型"><span class="nav-number">2.</span> <span class="nav-text">Low-Drift局部模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Subvolume注册"><span class="nav-number">3.</span> <span class="nav-text">Subvolume注册</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#The-Correspondence-Set"><span class="nav-number">3.1.</span> <span class="nav-text">The Correspondence Set</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#The-Opitimization-Problem"><span class="nav-number">3.2.</span> <span class="nav-text">The Opitimization Problem</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#融合Subvolume"><span class="nav-number">4.</span> <span class="nav-text">融合Subvolume</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
