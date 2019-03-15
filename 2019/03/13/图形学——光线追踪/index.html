@@ -125,7 +125,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking6.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking7.jpg">
-<meta property="og:updated_time" content="2019-03-15T09:07:50.206Z">
+<meta property="og:updated_time" content="2019-03-15T11:51:13.281Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——光线追踪">
 <meta name="twitter:description" content="之前我们重视的是镜面反射和漫反射的效果，对于折射却提到很少。这意味着只能显示非透明的东西。想要显示比如透明的水晶球，还有更复杂的，比如镜面中的场景，就需要光线追踪。">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-15 17:07:50" itemprop="dateModified" datetime="2019-03-15T17:07:50+08:00">2019-03-15</time>
+                <time title="更新于：2019-03-15 19:51:13" itemprop="dateModified" datetime="2019-03-15T19:51:13+08:00">2019-03-15</time>
               
             
           </span>
@@ -485,14 +485,14 @@ P(t) = R_0+t\cdot R_d\\
 n\cdot P(t) + D = 0</script><p>解得：$t = -(D+n\cdot R_0)/(n\cdot R_d)$，最后验算$t&gt;0$。</p>
 </li>
 </ul>
-<h3 id="光线与三角形求交"><a href="#光线与三角形求交" class="headerlink" title="光线与三角形求交"></a>光线与三角形求交</h3><p>首先求与三角形平面交点，再检查交点是否在三角形内。三角形中的点有多种表示方法。</p>
+<h3 id="光线与三角形求交"><a href="#光线与三角形求交" class="headerlink" title="光线与三角形求交"></a>光线与三角形求交</h3><p>首先求与三角形平面交点，再检查交点是否在三角形内。不过对于三角形中的点有多种表示方法，因此我们可以使用更简单的操作。</p>
 <ul>
 <li>重心坐标：</li>
 </ul>
 <p>三角形$P_0P_1P_2$内部一点$P$可以表示为：</p>
 <script type="math/tex; mode=display">
 P = \alpha P_0 + \beta P_1 + \gamma P_2</script><p>这里的$(\alpha,\beta,\gamma)$被称为重心坐标。满足$0\leq\alpha,\beta,\gamma \leq 1,\alpha+\beta+\gamma=1$。<br>重心坐标有很多应用，纹理映射，法向插值，颜色插值等等。</p>
-<p>通过将三角形坐标带入方程组，得到点的重心坐标。这个都是很容易计算的。</p>
+<p>通过将重心坐标与射线方程联立：</p>
 <script type="math/tex; mode=display">
 P = (1 - \beta - \gamma)P_0+\beta P_1 + \gamma P_2 = R_0+tR_d</script><p>也就是：</p>
 <script type="math/tex; mode=display">
@@ -500,7 +500,7 @@ P = (1 - \beta - \gamma)P_0+\beta P_1 + \gamma P_2 = R_0+tR_d</script><p>也就�
 t\\
 \beta\\
 \gamma
-\end{pmatrix} = P_0 - R_0</script><p>最后需要检查$t,\alpha,\beta,\gamma$的有效值。</p>
+\end{pmatrix} = P_0 - R_0</script><p>最后需要检查$t,\alpha,\beta,\gamma$的有效性。</p>
 <h3 id="光线与多边形求交"><a href="#光线与多边形求交" class="headerlink" title="光线与多边形求交"></a>光线与多边形求交</h3><p>与多边形求交也非常重要。思路为求与多边形平面交点，再检查交点是否在多边形内。为了判断第二个，首先我们需要将平面和交点投影到XY，XZ或者YZ面，然后判断在这个平面上的关系。这时候需要使用交点检测算法，属于计算几何的范畴。交点检测算法的原理如下：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking2.jpg" alt=""></p>
 <p>很简单，如果一个点是多边形的内点，那么从它射出去的一条射线，与多边形边的交点是奇数个。如果是外点，则交点为0或者为偶数个。但是这检测的过程中会有一些有歧义的地方，比如射线和边重叠了，或者射线和多边形顶点重叠了，需要进行额外的判断。</p>
@@ -577,6 +577,7 @@ t^{(1)}_{max},t^{(1)}_{min}, t^{(2)}_{max},t^{(2)}_{min},t^{(3)}_{max},t^{(3)}_{
 t_{max} = \min\{t^{(1)}_{max},t^{(2)}_{max},t^{(3)}_{max}\}\\
 t_{min} = \max\{t^{(1)}_{min},t^{(2)}_{min},t^{(3)}_{min}\}</script><p>如果$t_{max} \ge t_{min}$，则这两个就是光线与长方体的交点。对于这个算法的原理解释，我们可以在二维的情况下画图理解，这个思路是非常巧妙的，如下：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking6.jpg" alt=""></p>
+<p>实际上，这个不光是长方体，只要有一组组平行面组成的多面体（凸的）都可以。</p>
 <h2 id="计算阴影"><a href="#计算阴影" class="headerlink" title="计算阴影"></a>计算阴影</h2><p>在交点向着光源发出一条射线，如果有遮挡，那说明该点位于阴影区域。在计算阴影区域时，我们只需关注是否与物体相交，而不用关注哪个是最近交点。</p>
 <h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>光线追踪算法从提出到现在，依然在广泛使用。而近些年在光线追踪方面的改进，也是主要用于加速求交等等。思考光线追踪的过程，从人眼出发，反向去找交点从而得到各个效果，是非常聪明的做法。</p>
 <p>首先，我们初中就学过，在宏观世界里，光逆向之后可以回到原点。因此这个方法是符合常识的。第二个，如果我们从光源出发，那么一个光源应该射出多少条射线？光源理论上发出来无数条光线，而在计算机中，我们不能做到无数，只能均匀发出一系列光线，而这些光线最后能弹射到人眼中的只占了一小部分，既浪费了计算量，也无法保证每个像素都能被光线弹射到，这样使得效果也差，算是费力不讨好，如下图：</p>
@@ -626,6 +627,10 @@ t_{min} = \max\{t^{(1)}_{min},t^{(2)}_{min},t^{(3)}_{min}\}</script><p>如果$t_
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/15/图形学——空间数据结构/" rel="prev" title="图形学——空间数据结构">
+                图形学——空间数据结构 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -697,7 +702,7 @@ t_{min} = \max\{t^{(1)}_{min},t^{(2)}_{min},t^{(3)}_{min}\}</script><p>如果$t_
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">91</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -853,7 +858,9 @@ t_{min} = \max\{t^{(1)}_{min},t^{(2)}_{min},t^{(3)}_{min}\}</script><p>如果$t_
                     
                       
                     
-                    <span class="site-state-item-count">55</span>
+                      
+                    
+                    <span class="site-state-item-count">56</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
