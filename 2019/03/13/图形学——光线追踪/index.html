@@ -125,7 +125,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking6.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/light_tracking7.jpg">
-<meta property="og:updated_time" content="2019-03-15T09:01:33.630Z">
+<meta property="og:updated_time" content="2019-03-15T09:02:40.246Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——光线追踪">
 <meta name="twitter:description" content="之前我们重视的是镜面反射和漫反射的效果，对于折射却提到很少。这意味着只能显示非透明的东西。想要显示比如透明的水晶球，还有更复杂的，比如镜面中的场景，就需要光线追踪。">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-15 17:01:33" itemprop="dateModified" datetime="2019-03-15T17:01:33+08:00">2019-03-15</time>
+                <time title="更新于：2019-03-15 17:02:40" itemprop="dateModified" datetime="2019-03-15T17:02:40+08:00">2019-03-15</time>
               
             
           </span>
@@ -490,10 +490,8 @@ n\cdot P(t) + D = 0</script><p>解得：$t = -(D+n\cdot R_0)/(n\cdot R_d)$，最
 <li>重心坐标：</li>
 </ul>
 <p>三角形$P_0P_1P_2$内部一点$P$可以表示为：</p>
-<pre><code>$$
-P = \alpha P_0 + \beta P_1 + \gamma P_2
-$$
-</code></pre><p>这里的$(\alpha,\beta,\gamma)$被称为重心坐标。满足$0\leq\alpha,\beta,\gamma \leq 1,\alpha+\beta+\gamma=1$。<br>重心坐标有很多应用，纹理映射，法向插值，颜色插值等等。</p>
+<script type="math/tex; mode=display">
+P = \alpha P_0 + \beta P_1 + \gamma P_2</script><p>这里的$(\alpha,\beta,\gamma)$被称为重心坐标。满足$0\leq\alpha,\beta,\gamma \leq 1,\alpha+\beta+\gamma=1$。<br>重心坐标有很多应用，纹理映射，法向插值，颜色插值等等。</p>
 <p>通过将三角形坐标带入方程组，得到点的重心坐标。这个都是很容易计算的。</p>
 <script type="math/tex; mode=display">
 P = (1 - \beta - \gamma)P_0+\beta P_1 + \gamma P_2 = R_0+tR_d</script><p>也就是：</p>
