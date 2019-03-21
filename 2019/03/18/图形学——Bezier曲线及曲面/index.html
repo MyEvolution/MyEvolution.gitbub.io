@@ -125,7 +125,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier1.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier7.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier8.jpg">
-<meta property="og:updated_time" content="2019-03-19T11:50:47.312Z">
+<meta property="og:updated_time" content="2019-03-20T10:48:45.444Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——Bezier曲线及曲面">
 <meta name="twitter:description" content="在图形学中，经常设计一个场景，然后通过渲染方程产生具有真实感的图像，因此需要引入几何造型（geometric modeling）技术来设计场景。如何在计算机中表示模型？这里我们介绍Bezier曲线和曲面。Bezier曲线曲面是非常重要的图形学理论，由法国工程师Bezier最初提出。">
@@ -417,7 +417,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-19 19:50:47" itemprop="dateModified" datetime="2019-03-19T19:50:47+08:00">2019-03-19</time>
+                <time title="更新于：2019-03-20 18:48:45" itemprop="dateModified" datetime="2019-03-20T18:48:45+08:00">2019-03-20</time>
               
             
           </span>
@@ -578,7 +578,7 @@ P_i^k = \left\{
     \right.</script><p>当$n=3$时，递推过程如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier4.jpg" alt=""></p>
 <p>当我们需要知道某个$t$对应点的位置的时，最终需要知道的是$P_0^n$。需要注意，这里不是$P_0$的$n$次方，它的值是根据$t$计算出来的。</p>
-<h3 id="几何连续性"><a href="#几何连续性" class="headerlink" title="几何连续性"></a>几何连续性</h3><p>在CAD应用中，通常不鼓励通过高阶Bezier曲线来表达曲线，二使用光滑链接的低阶Bezier曲线。但是在Bezier曲线上，传统概念上的连续性不适用于图形学中几何的连续性。<br>比如两个点$V_0,V_1$分别定义下面的方程：</p>
+<h3 id="几何连续性"><a href="#几何连续性" class="headerlink" title="几何连续性"></a>几何连续性</h3><p>在CAD应用中，通常不鼓励通过高阶Bezier曲线来表达曲线，而使用光滑链接的低阶Bezier曲线。但是在Bezier曲线上，传统概念上的连续性不适用于图形学中几何的连续性。<br>比如两个点$V_0,V_1$分别定义下面的方程：</p>
 <script type="math/tex; mode=display">
 \Phi(t) = \left\{
     \begin{matrix}
@@ -732,6 +732,10 @@ P_{i,j,k} = uP_{i+1,j,k} + vP_{i,j+1,k} + w P_{i,j,k+1}</script></li>
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/03/19/图形学——B样条曲线和曲面/" rel="prev" title="图形学——B样条曲线和曲面">
+                图形学——B样条曲线和曲面 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -802,7 +806,7 @@ P_{i,j,k} = uP_{i+1,j,k} + vP_{i,j+1,k} + w P_{i,j,k+1}</script></li>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">92</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -960,7 +964,9 @@ P_{i,j,k} = uP_{i+1,j,k} + vP_{i,j+1,k} + w P_{i,j,k+1}</script></li>
                     
                       
                     
-                    <span class="site-state-item-count">56</span>
+                      
+                    
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
