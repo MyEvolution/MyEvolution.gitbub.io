@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt10.jpg">
-<meta property="og:updated_time" content="2019-03-24T07:11:28.348Z">
+<meta property="og:updated_time" content="2019-03-24T07:17:24.842Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——B样条曲线和曲面">
 <meta name="twitter:description" content="Bezier曲线虽然有很多优点，但是有一些明显的缺点。上次也提到了，在CAD中通常不鼓励使用高阶的Bezier基函数来画曲线，而使用低阶拼接。但是在低阶中拼接，要保证几何连续性又是非常困难的一件事情。对于Bezier曲线，如果控制点过多，无法进行局部调控。改变一个控制点，就会改变整个曲线，这里介绍B样条。">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-24 15:11:28" itemprop="dateModified" datetime="2019-03-24T15:11:28+08:00">2019-03-24</time>
+                <time title="更新于：2019-03-24 15:17:24" itemprop="dateModified" datetime="2019-03-24T15:17:24+08:00">2019-03-24</time>
               
             
           </span>
@@ -485,20 +485,20 @@ N_{i,0}(t) = \left\{\begin{matrix}
 N_{i,k} = \frac{t - t_i}{t_{i+k} - t_{i}}N_{i,k-1}(t) + \frac{t_{i+k+1} - t}{t_{i+k+1} - t_{i+1}} N_{i+1,k-1}(t)</script><p>而$t$为节点向量，非减的实数序列：</p>
 <script type="math/tex; mode=display">
 t_0,t_1,...,t_{k-1},t_k,...,t_n,t_{n+1},...,t_{n+k-1},t_{n+k+1}.</script><p>现在考虑几个B样条基函数的问题：</p>
-<ol>
+<ul>
 <li>B样条基函数$N_{i,k}(t)$的非零区间是什么？<br>从上述可以看到，当$k=0$时，$N_{i,0}(t)$的非零区间为：$(t_i - t_{i+1})$。根据递推公式，可以得到：<script type="math/tex; mode=display">
-N_{i,1} = \frac{t-t_i}{t_{i+1} - t{i}} N_{i,0}(t) + \frac{t_{i+2} - t}{t_{i+2}-t_{i+1}}N_{i+1,0}(t)</script></li>
-</ol>
-<p>这时候，只要$N_{i,0},N_{i+1,0}$有一个不为0，那么$N_{i,1}$就不为0，因此它的非零区间为：$(t_i,t_{i+1})\cup(t_{i+1},t_{i+2})$,也就是：$(t_{i},t+{i+2})$。</p>
-<p>依次类推，我们得到$N_{i,2}$的非零区间为：$(t_i,t_{i+2})\cup(t_{i+1},t_{i+3})$，也就是$(t_{i},t+{i+3})$。</p>
+N_{i,1} = \frac{t-t_i}{t_{i+1} - t_{i}} N_{i,0}(t) + \frac{t_{i+2} - t}{t_{i+2}-t_{i+1}}N_{i+1,0}(t)</script></li>
+</ul>
+<p>这时候，只要$N_{i,0},N_{i+1,0}$有一个不为0，那么$N_{i,1}$就不为0，因此它的非零区间为：$(t_i,t_{i+1})\cup(t_{i+1},t_{i+2})$,也就是：$(t_{i},t_{i+2})$。</p>
+<p>依次类推，我们得到$N_{i,2}$的非零区间为：$(t_i,t_{i+2})\cup(t_{i+1},t_{i+3})$，也就是$(t_{i},t_{i+3})$。</p>
 <p>最终得到$N_{i,k}$的非零区间为：$(t_{i},t_{i+k+1})$。</p>
-<ol>
+<ul>
 <li>一共需要多少个节点？</li>
-</ol>
+</ul>
 <p>$N_{i,k}(t)$的非零区间是$(t_{i},t_{i+k+1})$，共有$n$个控制节点，因此所有的非零区间为：$(t_{0},t_{k+1})\cup (t_{1},t_{k+2})\cup…\cup (t_{n},t_{n+k+1})$。因此需要的节点个数为$n+k+2$。</p>
-<ol>
+<ul>
 <li>B样条插值得到的曲线定义区间是什么？<br>这个也很容易得到：$(0,t_{n+k+1})$。</li>
-</ol>
+</ul>
 <p>以$k=3,n=4$为例：$P_{t} = \sum_{i=0}^4P_iN_{i,3}(t)$，则求解$N_{i,3}$的过程如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt2.jpg" alt=""></p>
 <h3 id="B样条基函数性质"><a href="#B样条基函数性质" class="headerlink" title="B样条基函数性质"></a>B样条基函数性质</h3><p>B样条基函数有很多性质与Bezier曲线类似。</p>
@@ -549,9 +549,9 @@ N'_{i,k}(t) = \frac{k-1}{t_{i+k-1} - t_i}N_{i,k-1}(t)+\frac{k-1}{t_{i+k}- t_{i+1
 </li>
 <li>导数公式：<script type="math/tex; mode=display">
 \begin{aligned}
-P'(t) &= \left(\sum_{i=0}^n P_i N_{i,k}(t) \right)^' \\
+P'(t) &= \left(\sum_{i=0}^n P_i N_{i,k}(t) \right)' \\
 &= \sum_{i = 0}^n P_i N_{i,k}'(t)\\
-&= (k-1)\sum_{i=0}^n \left(\frac{P_i - P_{i-1}}{t_{i+k} - t} \right)N_{i,k-1}(t), t\in[t_k,t_{n}]
+&= (k-1)\sum_{i=0}^n \left(\frac{P_i - P_{i-1}}{t_{i+k} - t} \right)N_{i,k-1}(t), t\in[t_k,t_{n} ]
 \end{aligned}</script></li>
 <li>变差缩减性：任何一条直线与B样条曲线的交点个数不会超过该直线与B样条曲线的控制多边形的交点数目</li>
 <li>几何不变性：曲线的形状和相对于控制点的位置不取决于坐标系的选择</li>
@@ -571,8 +571,8 @@ P(t) &= \sum_{i=0}^nP_i N_{i,k}(t) = \sum_{i = j-k}^j P_iN_{i,k}(t)\\
 <script type="math/tex; mode=display">
 P_i^{[r]}(t) = \left\{
 \begin{matrix}
-P_i, r = 0, i = j-k,..,j;\\
-\frac{t - t_i}{t_{i+k+1-r} - t_i}P_i^{[r-1]}(t) + \frac{t_{i+k+1-r} - t}{t_{i+k+1-r} - t_i} P_{i-1}^{[r-1]}(t),\\
+P_i& r = 0, i = j-k,..,j;\\
+\frac{t - t_i}{t_{i+k+1-r} - t_i}P_i^{[r-1]}(t) + \frac{t_{i+k+1-r} - t}{t_{i+k+1-r} - t_i} P_{i-1}^{[r-1]}(t)&
 r = 1,2,...,k-1; i = j-k+r,...,j
 \end{matrix}
     \right.</script><p>则：</p>
@@ -582,8 +582,8 @@ P(t) &= \sum_{i=j-k}^jP_iN_{i,k}(t)\\
  &= \sum_{i=  j -k+ 1}^j P_i^{[1]}(t)N_{i,k}(t) \\
     &= \sum_{i=j-k+2}^jP_i^{[2]}(t)N_{i,k-2}(t)\\
     &= ...\\
-    &= P_i^{[k]}N_{i,0}(t)\\
-\end{aligned}</script><p>这就是de Boor算法。de Boor算法的递推也就是$P_i^{[k]}(t)$的过程。为了求这个，需要的递归方式如下图（下图的k表示的是阶数，因此是从$j-k+1$到$j$，需要的是$k$个控制点点，也就是次数里$k+1$个控制点）：</p>
+    &= P_i^{[ti
+\end{aligned}ti</script><p>这就是de Boor算法。de Boor算法的递推也就是$P_i^{[k]}(t)$的过程。为了求这个，需要的递归方式如下图（下图的k表示的是阶数，因此是从$j-k+1$到$j$，需要的是$k$个控制点点，也就是次数里$k+1$个控制点）：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt11.jpg" alt=""></p>
 <p>对于de Boor算法有比较直观的几何解释，也就是割角。因此它也被称为割角算法。下图的k依然是阶数。</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt7.jpg" alt=""></p>
