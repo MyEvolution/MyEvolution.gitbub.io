@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt10.jpg">
-<meta property="og:updated_time" content="2019-03-24T07:17:24.842Z">
+<meta property="og:updated_time" content="2019-03-24T07:26:16.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——B样条曲线和曲面">
 <meta name="twitter:description" content="Bezier曲线虽然有很多优点，但是有一些明显的缺点。上次也提到了，在CAD中通常不鼓励使用高阶的Bezier基函数来画曲线，而使用低阶拼接。但是在低阶中拼接，要保证几何连续性又是非常困难的一件事情。对于Bezier曲线，如果控制点过多，无法进行局部调控。改变一个控制点，就会改变整个曲线，这里介绍B样条。">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-24 15:17:24" itemprop="dateModified" datetime="2019-03-24T15:17:24+08:00">2019-03-24</time>
+                <time title="更新于：2019-03-24 15:26:16" itemprop="dateModified" datetime="2019-03-24T15:26:16+08:00">2019-03-24</time>
               
             
           </span>
@@ -551,7 +551,7 @@ N'_{i,k}(t) = \frac{k-1}{t_{i+k-1} - t_i}N_{i,k-1}(t)+\frac{k-1}{t_{i+k}- t_{i+1
 \begin{aligned}
 P'(t) &= \left(\sum_{i=0}^n P_i N_{i,k}(t) \right)' \\
 &= \sum_{i = 0}^n P_i N_{i,k}'(t)\\
-&= (k-1)\sum_{i=0}^n \left(\frac{P_i - P_{i-1}}{t_{i+k} - t} \right)N_{i,k-1}(t), t\in[t_k,t_{n} ]
+&= (k-1)\sum_{i=0}^n \left(\frac{P_i - P_{i-1}}{t_{i+k} - t} \right)N_{i,k-1}(t), t\in[t_k,t_{n+1} ]
 \end{aligned}</script></li>
 <li>变差缩减性：任何一条直线与B样条曲线的交点个数不会超过该直线与B样条曲线的控制多边形的交点数目</li>
 <li>几何不变性：曲线的形状和相对于控制点的位置不取决于坐标系的选择</li>
