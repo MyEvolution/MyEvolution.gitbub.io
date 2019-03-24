@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt10.jpg">
-<meta property="og:updated_time" content="2019-03-24T08:23:53.199Z">
+<meta property="og:updated_time" content="2019-03-24T08:26:11.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——B样条曲线和曲面">
 <meta name="twitter:description" content="Bezier曲线虽然有很多优点，但是有一些明显的缺点。上次也提到了，在CAD中通常不鼓励使用高阶的Bezier基函数来画曲线，而使用低阶拼接。但是在低阶中拼接，要保证几何连续性又是非常困难的一件事情。对于Bezier曲线，如果控制点过多，无法进行局部调控。改变一个控制点，就会改变整个曲线，这里介绍B样条。">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-24 16:23:53" itemprop="dateModified" datetime="2019-03-24T16:23:53+08:00">2019-03-24</time>
+                <time title="更新于：2019-03-24 16:26:11" itemprop="dateModified" datetime="2019-03-24T16:26:11+08:00">2019-03-24</time>
               
             
           </span>
@@ -582,7 +582,7 @@ P(t) &= \sum_{i=j-k}^jP_iN_{i,k}(t)\\
  &= \sum_{i=  j -k+ 1}^j P_i^{[1]}(t)N_{i,k}(t) \\
     &= \sum_{i=j-k+2}^jP_i^{[2]}(t)N_{i,k-2}(t)\\
     &= ...\\
-    &= P_i^{[i+k]}(t)N_{i,0}(t)
+    &= P_i^{[k]}(t)N_{i,0}(t)
 \end{aligned}</script><p>这就是de Boor算法。de Boor算法的递推也就是$P_i^{[k]}(t)$的过程。为了求这个，需要的递归方式如下图（下图的k表示的是阶数，因此是从$j-k+1$到$j$，需要的是$k$个控制点点，也就是次数里$k+1$个控制点）：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt11.jpg" alt=""></p>
 <p>对于de Boor算法有比较直观的几何解释，也就是割角。因此它也被称为割角算法。下图的k依然是阶数。</p>
