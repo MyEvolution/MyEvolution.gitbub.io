@@ -116,10 +116,22 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="Bezier曲线虽然有很多优点，但是有一些明显的缺点。上次也提到了，在CAD中通常不鼓励使用高阶的Bezier基函数来画曲线，而使用低阶拼接。但是在低阶中拼接，要保证几何连续性又是非常困难的一件事情。对于Bezier曲线，如果控制点过多，无法进行局部调控。改变一个控制点，就会改变整个曲线，这里介绍B样条。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-24T06:25:36.632Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt1.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt2.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt3.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt4.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt5.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt6.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt11.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt7.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt10.jpg">
+<meta property="og:updated_time" content="2019-03-24T07:11:28.348Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——B样条曲线和曲面">
 <meta name="twitter:description" content="Bezier曲线虽然有很多优点，但是有一些明显的缺点。上次也提到了，在CAD中通常不鼓励使用高阶的Bezier基函数来画曲线，而使用低阶拼接。但是在低阶中拼接，要保证几何连续性又是非常困难的一件事情。对于Bezier曲线，如果控制点过多，无法进行局部调控。改变一个控制点，就会改变整个曲线，这里介绍B样条。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt1.jpg">
 
 
 
@@ -407,7 +419,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-24 14:25:36" itemprop="dateModified" datetime="2019-03-24T14:25:36+08:00">2019-03-24</time>
+                <time title="更新于：2019-03-24 15:11:28" itemprop="dateModified" datetime="2019-03-24T15:11:28+08:00">2019-03-24</time>
               
             
           </span>
@@ -463,7 +475,7 @@
 <p>样条函数的插值，可以通过求解一个三对角方程来进行，可能就是对几个点做一个空间曲线（比如二次三次）的假设，求解曲线的参数。而对于一个给定的区间划分，可以类似地计算样条曲线的插值。给定区间上的所有样条函数组成一个线性空间，这个线性空间的基函数就叫做B样条基函数。</p>
 <h2 id="B样条曲线及其性质"><a href="#B样条曲线及其性质" class="headerlink" title="B样条曲线及其性质"></a>B样条曲线及其性质</h2><script type="math/tex; mode=display">
 P(t) = \sum_{i=0}^nP_iN_{i,k}(t).</script><p>上式中，$P_{i}(i=0,…,n)$是控制点，$N_{i,k}(i=0,…,n)$是第$i$个$k$阶B样条基函数。B样条基函数是分段$k$次（$k+1$阶）多项式，它们由节点向量唯一决定，节点向量则是一串非减的实数序列。要注意这里的阶比次多一，但是实际上是一样的，只是由于历史原因叫法不同。次是从0开始，而阶从1开始。</p>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt1.jpg" alt=""></p>
 <p>B样条基函数定义有多种解释，最简单的是由de Boor-Cox递推公式定义的：</p>
 <script type="math/tex; mode=display">
 N_{i,0}(t) = \left\{\begin{matrix}
@@ -488,7 +500,7 @@ N_{i,1} = \frac{t-t_i}{t_{i+1} - t{i}} N_{i,0}(t) + \frac{t_{i+2} - t}{t_{i+2}-t
 <li>B样条插值得到的曲线定义区间是什么？<br>这个也很容易得到：$(0,t_{n+k+1})$。</li>
 </ol>
 <p>以$k=3,n=4$为例：$P_{t} = \sum_{i=0}^4P_iN_{i,3}(t)$，则求解$N_{i,3}$的过程如下图：</p>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt2.jpg" alt=""></p>
 <h3 id="B样条基函数性质"><a href="#B样条基函数性质" class="headerlink" title="B样条基函数性质"></a>B样条基函数性质</h3><p>B样条基函数有很多性质与Bezier曲线类似。</p>
 <ul>
 <li>非负性和局部支撑性<br>$N_{i,k}(t)$是非负的，$N_{i,k}(t)$是$[t_i,t_{i+k+1}]$上的分段非零多项式：<script type="math/tex; mode=display">
@@ -510,15 +522,15 @@ N'_{i,k}(t) = \frac{k-1}{t_{i+k-1} - t_i}N_{i,k-1}(t)+\frac{k-1}{t_{i+k}- t_{i+1
 <ul>
 <li>均匀B样条。节点成等差数列均匀分布，这样的节点分布对应的是均匀B样条基函数。</li>
 </ul>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt3.jpg" alt=""></p>
 <ul>
 <li>准均匀B样条。准均匀B样条的起始节点和终止节点都具有$k+1$的重复度,其他的节点和均匀B样条一致。均匀B样条不保持Bezier曲线的断电性质，起始点和终止点不在控制端点上。而准均匀B样条具有端点性质。</li>
 </ul>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt4.jpg" alt=""></p>
 <ul>
 <li>分段Bezier曲线。<br>除了终点和起始节点具有k+1个重复度，其他的节点具有$k$个重复度，这样得到的实际上是分段的Bezier曲线。此时需要节点个数满足：$(n+k+2-2)%k=0$。</li>
 </ul>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt5.jpg" alt=""></p>
 <p>对于分段的Bezier曲线，不同的曲线段相对独立。移动控制点只会影响其所在的Bezier曲线段，而其他的Bezier曲线段不会改变，但是分段Bezier曲线需要更多的参数和变量来进行控制，更多的控制点和更多的节点信息。</p>
 <ul>
 <li>非均匀B样条。最一般的B样条，我们主要介绍这个。它的起始节点和终止节点的重复度小于等于$k+1$，而其他节点重复度小于$k$。</li>
@@ -545,9 +557,9 @@ P'(t) &= \left(\sum_{i=0}^n P_i N_{i,k}(t) \right)^' \\
 <li>几何不变性：曲线的形状和相对于控制点的位置不取决于坐标系的选择</li>
 <li>仿射不变性：将仿射变换用于控制点，变换后的控制点得到的曲线就是仿射变换后的曲线。</li>
 <li>直线保持性：如果控制多边形退化成一条直线，那么B样条曲线在这条直线上</li>
-<li>灵活性：使用B样条可以方便构成线段，尖点，切线等等特殊效果。对于灵活性有下面几个例子：</li>
+<li>灵活性：使用B样条可以方便构成线段，尖点，切线等等特殊效果。对于灵活性有下面几个3次B样条基函数的例子：</li>
 </ul>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt6.jpg" alt=""></p>
 <h3 id="de-Boor算法"><a href="#de-Boor算法" class="headerlink" title="de Boor算法"></a>de Boor算法</h3><p>计算B样条曲线的一点可以直接使用B样条的公式，但是de Boor算法是一个更有效的算法。首先，我们知道：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
@@ -572,9 +584,9 @@ P(t) &= \sum_{i=j-k}^jP_iN_{i,k}(t)\\
     &= ...\\
     &= P_i^{[k]}N_{i,0}(t)\\
 \end{aligned}</script><p>这就是de Boor算法。de Boor算法的递推也就是$P_i^{[k]}(t)$的过程。为了求这个，需要的递归方式如下图（下图的k表示的是阶数，因此是从$j-k+1$到$j$，需要的是$k$个控制点点，也就是次数里$k+1$个控制点）：</p>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt11.jpg" alt=""></p>
 <p>对于de Boor算法有比较直观的几何解释，也就是割角。因此它也被称为割角算法。下图的k依然是阶数。</p>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt7.jpg" alt=""></p>
 <h3 id="节点插入"><a href="#节点插入" class="headerlink" title="节点插入"></a>节点插入</h3><p>节点插入可以增加曲线的可控度。为了增加节点而且保持原有的曲线形状以及原来的次数，需要改变控制顶点的个数。节点插入可以被描述为下面的过程：</p>
 <ul>
 <li>插入新的节点$t$到节点区间$[t_i,t_{i+1}]$</li>
@@ -594,13 +606,13 @@ P_j^1 = P_{j-1} & j=i-r+1,...,n+1
     \right.</script><p>上式中：</p>
 <script type="math/tex; mode=display">
 \beta_j = \frac{t - t_j}{t_{j+k} - t_j},</script><p>$r$是新插入的节点$t$在节点序列中的重复度。如下图（图中k为阶数）：</p>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg" alt=""></p>
 <h3 id="B样条曲面"><a href="#B样条曲面" class="headerlink" title="B样条曲面"></a>B样条曲面</h3><p>给定$U,V$轴上的节点向量：</p>
 <script type="math/tex; mode=display">
 U = [u_0,u_1,...,u_{m+p}]\\
 V = [v_0,v_1,...,v_{n+q}]</script><p>阶为$p \times q$的B样条曲面可以定义为：</p>
 <script type="math/tex; mode=display">
-P(u,v) = \sum_{i=0}^m \sum_{j=0}^n P_{ij}N_{i,p}(u)N_{j,q}(v)</script><p><img src="" alt=""></p>
+P(u,v) = \sum_{i=0}^m \sum_{j=0}^n P_{ij}N_{i,p}(u)N_{j,q}(v)</script><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg" alt=""></p>
 <h3 id="NURBS曲线-曲面"><a href="#NURBS曲线-曲面" class="headerlink" title="NURBS曲线/曲面"></a>NURBS曲线/曲面</h3><p>B样条和Bezier都有缺点，不能精确表示圆锥曲线。而NURBS（非均匀有理B样条）目的在于找到能精确描述圆锥曲线以及二次曲面的方法。在这里简单介绍一下NURBS。</p>
 <p>NURBS有下面几个优势：</p>
 <ul>
@@ -626,7 +638,7 @@ P(t) = \frac{(1-t^2)\omega_0P_0 + 2t(1-t)\omega_1P_1 + t^2 \omega_2P_2}{(1-t^2)\
 <ul>
 <li>$C_{sf} = \frac{\omega_1^2}{\omega_0\omega_2} $是形状因子，决定了圆锥曲线的类型。当$C_{sf}=1$时，曲线为抛物线。而对于$C_{sf}<1$，曲线为椭圆，当$c_{sf}=0$，曲线退化为一条直线，当$c_{sf}>1$，曲线为双曲线，当$C_{sf} \rightarrow \infty$，曲线退化为两条直线。</1$，曲线为椭圆，当$c_{sf}=0$，曲线退化为一条直线，当$c_{sf}></li>
 </ul>
-<p><img src="" alt=""></p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt10.jpg" alt=""></p>
 <h4 id="NURBS的修改"><a href="#NURBS的修改" class="headerlink" title="NURBS的修改"></a>NURBS的修改</h4><p>我们可以通过修改权重，控制点以及节点来修改NURBS曲线。对于权重，如果增加或者减少一个控制点的权重，曲线会向控制点靠近或远离。如果希望一个点$S$朝着控制点$P_i$靠近或原理距离$d$，可以修改权重:</p>
 <script type="math/tex; mode=display">
 \omega^* = \omega_i\left[ 1 + \frac{d}{R_{i,k}(t)(P_iS - d)}\right].</script><p>对于控制点的修改，也会改变NURBS曲线的形状。我们还可以通过带约束的优化方法，来求解对于每个控制点的修改量，以得到最佳的修改量（比如需要经过空间中的某个点）。</p>
