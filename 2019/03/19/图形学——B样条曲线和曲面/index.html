@@ -127,7 +127,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt10.jpg">
-<meta property="og:updated_time" content="2019-03-24T08:26:11.616Z">
+<meta property="og:updated_time" content="2019-03-24T08:29:32.457Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——B样条曲线和曲面">
 <meta name="twitter:description" content="Bezier曲线虽然有很多优点，但是有一些明显的缺点。上次也提到了，在CAD中通常不鼓励使用高阶的Bezier基函数来画曲线，而使用低阶拼接。但是在低阶中拼接，要保证几何连续性又是非常困难的一件事情。对于Bezier曲线，如果控制点过多，无法进行局部调控。改变一个控制点，就会改变整个曲线，这里介绍B样条。">
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-24 16:26:11" itemprop="dateModified" datetime="2019-03-24T16:26:11+08:00">2019-03-24</time>
+                <time title="更新于：2019-03-24 16:29:32" itemprop="dateModified" datetime="2019-03-24T16:29:32+08:00">2019-03-24</time>
               
             
           </span>
@@ -607,13 +607,13 @@ P_j^1 = P_{j-1} & j=i-r+1,...,n+1
 <script type="math/tex; mode=display">
 \beta_j = \frac{t - t_j}{t_{j+k} - t_j},</script><p>$r$是新插入的节点$t$在节点序列中的重复度。如下图（图中k为阶数）：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt8.jpg" alt=""></p>
-<h3 id="B样条曲面"><a href="#B样条曲面" class="headerlink" title="B样条曲面"></a>B样条曲面</h3><p>给定$U,V$轴上的节点向量：</p>
+<h2 id="B样条曲面"><a href="#B样条曲面" class="headerlink" title="B样条曲面"></a>B样条曲面</h2><p>给定$U,V$轴上的节点向量：</p>
 <script type="math/tex; mode=display">
 U = [u_0,u_1,...,u_{m+p}]\\
 V = [v_0,v_1,...,v_{n+q}]</script><p>阶为$p \times q$的B样条曲面可以定义为：</p>
 <script type="math/tex; mode=display">
 P(u,v) = \sum_{i=0}^m \sum_{j=0}^n P_{ij}N_{i,p}(u)N_{j,q}(v)</script><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/Byt9.jpg" alt=""></p>
-<h3 id="NURBS曲线-曲面"><a href="#NURBS曲线-曲面" class="headerlink" title="NURBS曲线/曲面"></a>NURBS曲线/曲面</h3><p>B样条和Bezier都有缺点，不能精确表示圆锥曲线。而NURBS（非均匀有理B样条）目的在于找到能精确描述圆锥曲线以及二次曲面的方法。在这里简单介绍一下NURBS。</p>
+<h2 id="NURBS曲线-曲面"><a href="#NURBS曲线-曲面" class="headerlink" title="NURBS曲线/曲面"></a>NURBS曲线/曲面</h2><p>B样条和Bezier都有缺点，不能精确表示圆锥曲线。而NURBS（非均匀有理B样条）目的在于找到能精确描述圆锥曲线以及二次曲面的方法。在这里简单介绍一下NURBS。</p>
 <p>NURBS有下面几个优势：</p>
 <ul>
 <li>它提供了一个更一般更精确的方法来表达并对自由曲线/曲面进行设计。</li>
@@ -980,7 +980,7 @@ R_{i,p;j,q}(u,v) = \frac{ \omega_{ij} N_{i,p}(u)N_{j,q}(v)}{\sum_{r=0}^m\sum_{s=
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引出B样条"><span class="nav-number">1.</span> <span class="nav-text">引出B样条</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B样条曲线及其性质"><span class="nav-number">2.</span> <span class="nav-text">B样条曲线及其性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#B样条基函数性质"><span class="nav-number">2.1.</span> <span class="nav-text">B样条基函数性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B样条分类"><span class="nav-number">2.2.</span> <span class="nav-text">B样条分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非均匀B样条"><span class="nav-number">2.3.</span> <span class="nav-text">非均匀B样条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#de-Boor算法"><span class="nav-number">2.4.</span> <span class="nav-text">de Boor算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点插入"><span class="nav-number">2.5.</span> <span class="nav-text">节点插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B样条曲面"><span class="nav-number">2.6.</span> <span class="nav-text">B样条曲面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NURBS曲线-曲面"><span class="nav-number">2.7.</span> <span class="nav-text">NURBS曲线/曲面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#圆锥曲线的NURBS表示"><span class="nav-number">2.7.1.</span> <span class="nav-text">圆锥曲线的NURBS表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NURBS的修改"><span class="nav-number">2.7.2.</span> <span class="nav-text">NURBS的修改</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引出B样条"><span class="nav-number">1.</span> <span class="nav-text">引出B样条</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B样条曲线及其性质"><span class="nav-number">2.</span> <span class="nav-text">B样条曲线及其性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#B样条基函数性质"><span class="nav-number">2.1.</span> <span class="nav-text">B样条基函数性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B样条分类"><span class="nav-number">2.2.</span> <span class="nav-text">B样条分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非均匀B样条"><span class="nav-number">2.3.</span> <span class="nav-text">非均匀B样条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#de-Boor算法"><span class="nav-number">2.4.</span> <span class="nav-text">de Boor算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点插入"><span class="nav-number">2.5.</span> <span class="nav-text">节点插入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B样条曲面"><span class="nav-number">3.</span> <span class="nav-text">B样条曲面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NURBS曲线-曲面"><span class="nav-number">4.</span> <span class="nav-text">NURBS曲线/曲面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#圆锥曲线的NURBS表示"><span class="nav-number">4.0.1.</span> <span class="nav-text">圆锥曲线的NURBS表示</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NURBS的修改"><span class="nav-number">4.0.2.</span> <span class="nav-text">NURBS的修改</span></a></li></ol></li></ol></div>
             
 
           </div>
