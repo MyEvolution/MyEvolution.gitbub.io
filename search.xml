@@ -3,6 +3,56 @@
   
     
     <entry>
+      <title>图形学——网格简化</title>
+      <link href="/2019/03/25/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94%E7%BD%91%E6%A0%BC%E7%AE%80%E5%8C%96/"/>
+      <url>/2019/03/25/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94%E7%BD%91%E6%A0%BC%E7%AE%80%E5%8C%96/</url>
+      
+        <content type="html"><![CDATA[<p>上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。<br><a id="more"></a></p><p>话说到前面，网格简化有很多方法，这里介绍的多种方法，我也不是都明白，以后有机会的话会对其进行各个算法复现。对于一些复杂的算法，可能需要查阅相关论文才能明白其中的数学道理，在本文也会给出一些复杂的简化算法的论文链接。</p><p>网格简化更宽泛，具体的细节一般为层次细节简化（LOD：Level of Details）。它主要用于简化采样密集的多面体网格，以及三维场景的存储，传输和绘制。它主要目标是在不影响画面视觉效果的条件下，通过逐次简化景物的表面细节来减少场景的几何复杂度，从而提高绘制算法的效率。</p><p>在层次细节简化时候，我们会对一个原始的多面体模型建立几个不同逼近程度的几何模型。从近处观察物体，采用精细模型，从远处观察物体，采用较为粗糙的模型，当视点连续变化时，在两个不同层次的模型间会有明显的跳跃，为了追求完美应该要一个平滑的过渡，因此还需要几何形状过渡。</p><p>因此层次细节简化技术的研究主要集中在：</p><ol><li>建立不同层次细节的模型。对任意给定的复杂多边形网格$M$，由精细到粗糙建立一系列模型序列：$M_0,M_1,…,M_n, M_0 = M$。</li><li>建立相邻层次的多边形网格$M_i,M_{i+1}$的几何形状过渡：$\Phi: M_i \rightarrow M_{i+1}$。</li></ol><p>层次细节简化第一步说到底就是不同程度的网格简化。下面介绍几个简化的基本操作，和上篇文章相似。</p><ul><li>顶点删除操作L删除网格中的一个顶点，对它的相邻三角形形成的空洞做三角剖分</li></ul><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s1.jpg" alt=""></p><ul><li>边压缩操作：网格上一条边压缩为一个顶点，与该边相邻的两个三角形退化为边</li></ul><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s2.jpg" alt=""></p><ul><li>面片收缩操作：网格上的一个面片收缩为一个顶点，该三角形本身退化为点，其相邻的三个三角形都退化为边</li></ul><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s3.jpg" alt=""></p><p>下面会介绍几个具体的算法，他们策略不同，但是最后都是上面3种操作的组合。</p><h3 id="基于长方体滤波的多面体简化"><a href="#基于长方体滤波的多面体简化" class="headerlink" title="基于长方体滤波的多面体简化"></a>基于长方体滤波的多面体简化</h3><p>基于长方体滤波的多面体简化是最简单的一种简化方法，它的思想是，将多个聚集在一起的顶点聚合为一个顶点，这个操作实际上是采样的一种。具体步骤如下：</p><ul><li>给定一个多面体$M$，记$K$为其拓扑，假设$M$已三角化。算法首先建立$M$的长方体包围盒，并将该包围盒所包围的空间均匀剖分成一系列的小长方体子空间，然后将各个子空间中的顶点聚合为一个代表顶点，如果子空间中无顶点则不考虑。一般来说聚合的这个顶点位于子空间的中心，子空间也是被均匀分割的。这些代表顶点为原多面体所示景物的重新采样。基于原多面体的拓扑结构和这些采样点可以重新产生多面体，所得多面体即为保持一定层次细节的模型。剖分的子空间越小，得到的层次模型就越逼近原多面体。</li></ul><p>在二维空间中，长方体滤波的示意如下：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s6.png" alt=""></p><p>长方体滤波的主要缺点是会导致一些重要的高频细节的丢失。</p><p><strong>下面两个算法是利用顶点删除技术的代表。顶点删除技术比较难的部分在于，删除哪些顶点？随机采样不能得到很好的效果。在网格中，近似平面的顶点可以删除，而对于尖锐部分的顶点删除后会使得模型大大折扣。因此下面介绍两个局部判别准则，用来决定删除哪些顶点比较合适。</strong></p><h3 id="基于相邻面片和边界的局部平坦性原则"><a href="#基于相邻面片和边界的局部平坦性原则" class="headerlink" title="基于相邻面片和边界的局部平坦性原则"></a>基于相邻面片和边界的局部平坦性原则</h3><p>由Schroeder提出。该判别分两种情况：</p><ul><li>对于网格内部顶点$V$，记其周围相邻面片集为$S$，则该点的平坦性标准由下述的距离来描述：<script type="math/tex; mode=display">d = \vert\mathbf N \cdot(v - C) \vert</script>其中$N$为向量$\frac{\sum_{f\in S}\mathbf n (f)A(f)}{\sum_{f\in S} A(f)}$的单位向量，$C = \frac{\sum_{f\in S}c(f)A(f)}{A(f)}$,这里$A(f),c(f),\mathbf{n}(f)$分别为三角面片的面积，中心和法向量。<br>这种度量方式某种程度上反映了该顶点的突出程度。</li><li>对于边界顶点$v$，记与它相邻的两个边界顶点为$v_1,v_2$，则其平坦性标准定义为$v$到$v_1v_2$连线的距离。</li></ul><h3 id="采用等距面来限定简化模型顶点的变化范围"><a href="#采用等距面来限定简化模型顶点的变化范围" class="headerlink" title="采用等距面来限定简化模型顶点的变化范围"></a>采用等距面来限定简化模型顶点的变化范围</h3><p>由Cohen提出，这个算法相对于上述会更复杂一点。</p><p>首先介绍一个概念，叫包络（envelope）。多边形网格表面$P$可以看作一张分片线性参数曲面：</p><script type="math/tex; mode=display">r(u,v) = (r_x(u,v),r_y(u,v),r_z(u,v))</script><p>其单位法向量为：</p><script type="math/tex; mode=display">\mathbf n(u,v) = (n_x(u,v), n_y(u,v),n_z(u,v)).</script><p>对于给定的$\epsilon &gt; 0$，$P$的三维$\epsilon$等距面定义为：</p><script type="math/tex; mode=display">r^{\epsilon}(u,v) = r(u,v) + \epsilon \mathbf{n}(u,v)</script><p>近似定义原始多边形网格$P$沿正负发现的$\epsilon$等距面$P(+\epsilon),P(- \epsilon)$。$\epsilon$等距面$P(+\epsilon)$和$P(-\epsilon)$上对应顶点$v_i^+,v_i^-$及其法向量可表示为：</p><script type="math/tex; mode=display">v_i^+ = v_i + \epsilon\mathbf{n}_i, v_i^- = v_i - \epsilon \mathbf{n}_i, \mathbf{n}_i^+ = \mathbf{n}_i^- = \mathbf{n}</script><p>上述方法产生的$P_{\pm \epsilon}$可能出现自交的现象。</p><p>我们用解析法计算$\epsilon$。现在来考察$P$上任意三角形$\delta v_1v_2v_3$：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg" alt=""></p><p>对$P$上每个与三角形$\delta v_1v_2v_3$不相邻的三角面片$\delta_j$，判断$\delta_j$是否与$\delta v_1v_2v_3$的基本柱体相交。可计算得到$q_j$到$\delta v_1v_2v_3$的距离$\sigma_j$。</p><p>这两个等距面构成了表面的包络。Cohen顶点删除的过程如下：</p><ul><li>利用贪婪搜索策略，将原表面$P$的所有顶点列入带处理的顶点队列。</li><li>对当前待处理顶点队列中的一顶点，算法尝试从$P$上删除该顶点及该顶点直接相邻的三角面片，并试图用某种类型的三角剖分法来填补顶点删除后在表面$P$上形成的空洞。</li><li>若空洞位于$P$的包络内且能成功地被填补，则从当前队列中删除该顶点，简化表面$P$模型并重构原来与该顶点相连接的各顶点的拓扑关系，否则，该顶点从当前的待处理队列中退出，表面$P$保持不变。上述过程知道待处理顶点队列变空为止。</li></ul><p>这个算法的相关论文为：<a href="http://gamma.cs.unc.edu/ENVELOPES/ENVELOPES.pdf" target="_blank" rel="noopener">envelopes</a>。</p><h3 id="Hoppe-渐进的网格简化技术"><a href="#Hoppe-渐进的网格简化技术" class="headerlink" title="Hoppe-渐进的网格简化技术"></a>Hoppe-渐进的网格简化技术</h3><p>由Hoppe提出。这个算法比较难以理解，定义了很多新的东西去讲解这个算法。在渐进网格算法中，任一网格$\hat M$可表示为一粗网格以及$n$个逐步细化网格$M^i(i=1,…,n)$的变换，且有$\hat M = M^n$。一张网格可以定义为一个二元组：$(K,V)$。其中$K$是一个单纯复形（simplicical complex），它表示了$M$的顶点，边和面的邻接关系。</p><p>$V = {v_i \in R^3\vert i=1,…,m}$是$M$的顶点位置向量集，它定义了网格$M$在$R^3$中的形状。而单纯复形$K$由顶点集以及称之为单形的非空子集组成：</p><p>0-单形$\{i\} \in K$，即为顶点，1-单形$\{i,j\} \in K$是一条边，2-单形$\{i,j,k\}\in K$为一个面。需要注意的是单纯复形$K$并不包含$V$的所有成员，只包含了构造网格$M$所需要的所有面，边和顶点的子集。为了在结构上刻画单纯复形，我们引进<strong>拓扑实现</strong>(topological realization)$\vert K\vert$的概念。</p><p>若将顶点$\{i\}(i=1,2,…,m)$看成为$R^m$中的基向量$e_{i} = \{0,…,0,i,0,…,0\}$，则定义在$R^m$中的集合$\vert K \vert$为$K$的拓扑实现：</p><script type="math/tex; mode=display">\vert K \vert = \bigcup_{\s \ in K}\vert s\vert</script><p>其中$s$为$K$的一个单形，$\vert s \vert$为s在$R^m$空间中的顶点的凸包。</p><p>我们记$\phi_v = \phi_{\vert K\vert}$，称为$\delta v_1v_2v_3$在$R^3$中的<strong>几何实现</strong>（geometric realization）。若$\phi_v(\vert K\vert)$不自交，则$\phi_v$为1-1映射。此时，$\phi_v$为一嵌入映射，即对$\forall p \in \phi_v(\vert K \vert)$，存在唯一$m$维向量$b \in \vert K\vert$，使得$p = \phi_v(b)$。我们称$b$为$p$关于单纯复形的重心坐标向量。实际上，$b$可表示为：</p><script type="math/tex; mode=display">b = \sum_{i=1}^mb_ie_i</script><p>容易知道，当$M$为一三角网格时，$\phi_v(\ert K\vert)$上任一点的重心坐标向量$b$中至多只有三个分量非零。</p><p>有了上述定义，Hoppe采用<strong>显示能量函数</strong>$E(M)$来度量简化网格与原始网格的逼近度：</p><script type="math/tex; mode=display">E(M) = E_{dist}(M) + E_{spring} (M) + E_{scalar}(M) + E_{disc}(M).</script><p>上式中，$E(M)$为$M$的距离度量，定义为点集$X = \{x_1,…,x_n\}$到网格$M$的距离平方：</p><script type="math/tex; mode=display">E_{dist}(M) = \sum_{i=1}^n d^2(x_i,\phi_v(\vert K \vert))</script><p>$E_{spring}$为$M$的弹性能量，这相当于在$M$的每条边上均匀放置一条弹性系数为$k$的弹簧，即：</p><script type="math/tex; mode=display">E_{spring} (M) = \sum_{(i,j) \in K}k\Vert v_i,v_j \Vert^2</script><p>$E_{scalar}(M)$度量M的标量属性的精度，而$E_{disc}(M)$则度量了$M$上视觉不连续的特征线（如边界线，侧影轮廓线等）的几何精度。</p><p>Hoppe利用边收缩变换来逐步迭代计算上述能量的优化过程。下面是一个边收缩变换的例子：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s5.jpg" alt=""></p><p>因此，初始网格$\hat M = M^n$可经过$n$组的边收缩变形后简化为$M^0$：</p><script type="math/tex; mode=display">\hat M = M^n\rightarrow ... \rightarrow M^0</script><p>边收缩变换的逆变换被称为顶点分裂变换，也就是将顶点分裂成一条边。</p><p>这个简化技术的过程我不是很清楚，而老师上课的时候说的也不清楚，很多符号之前并没有定义。我去查找了这篇文章，把链接放在这里，如果想要详细了解请戳：<a href="http://hhoppe.com/pm.pdf" target="_blank" rel="noopener">Progress Meshes</a></p><h3 id="基于二次误差度量的简化技术"><a href="#基于二次误差度量的简化技术" class="headerlink" title="基于二次误差度量的简化技术"></a>基于二次误差度量的简化技术</h3><p>Hoppe的边收缩操作可推广为一般的顶点合并变换来描述$(v_1,v_2)\rightarrow v$。而Garland和Heckbert引进了二次误差度量来刻画每一个顶点移动后引起的误差，对表面上的每一个顶点$v_a$均有许多三角面片与之相邻，记$plane(v_a)$为这些三角形所在平面所构成的集合，即：</p><script type="math/tex; mode=display">plane(v_a) = \left\{(a,b,c,d)\vert ax+by+cz+d = 0,(a^2 +b^2 +c^2 =1) \text{is the coefficients of the adjacent plane of v_a} \right\}</script><p>我们采用如下的二次函数来度量$v_a$移动$v$时产生的误差:</p><script type="math/tex; mode=display">\Delta(v_a \rightarrow v) = \sum_{p \in plane(v_a)}(pv^T)^2</script><p>其中$v = (x,y,z,1)$为齐次坐标，展开上式可以得到：</p><script type="math/tex; mode=display">\begin{aligned}\Delta(v_a \rightarrow v) &= \sum_{p \in plane(v_a)}(pv^T)^2\\v \left(\sum_{p \in plane(v_a) K_p}\right)v^T = vQ(v_a)v^T\end{aligned}</script><p>式中：</p><script type="math/tex; mode=display">K_p = p^Tp \begin{bmatrix}a^2 & ab &ac & ad\\ab & b^2 &bc & bd\\ac & bc & c^2 & cd\\ad& bd & cd & d^2\end{bmatrix},\\Q(v_a) = \sum_{p \in plane(v_a)} K_p</script><p>这样，每一顶点$v_a$，在预处理时，可以用上述方法计算矩阵$Q(v_a)$，从而计算移动误差。而合并顶点每次需要移动两个顶点，因此需要考虑同时移动后形成的误差。而Garland和Heckbert简单地采用加法来刻画多点移动形成的误差，对于$(v_1,v_2) \rightarrow v$，其误差为：</p><script type="math/tex; mode=display">\Delta (v) = \Delta (v_1 \rightarrow v) + \Delta (v_2 \rightarrow v) = v(Q(v_1) + Q(v_2))v^T = vQv^T。</script><p>因此应该选取$v$使得误差达到最小。一般想法是采取优化方法如梯度下降等等，但是在这个式子里，一般$v$的值是有解析解的，正如线性回归一样，我们可以得到唯一解，或者伪逆技术(pseudo-inverse)求出解。如果伪逆技术失败，简单选取$v$为$v_1,v_2$或者$\frac{v_1 + v_2}{2}$。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图形学 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> computer graphics </tag>
+            
+            <tag> mesh </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>图形学——网格</title>
+      <link href="/2019/03/24/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94%E7%BD%91%E6%A0%BC/"/>
+      <url>/2019/03/24/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94%E7%BD%91%E6%A0%BC/</url>
+      
+        <content type="html"><![CDATA[<p>网格有多种，三角形，四边形或者其他的多边形。但是目前使用最多的，也是本文着重介绍的是三角网格。三角网格是计算机中表示三维模型最重要的方法。这篇文章主要介绍一下网格的相关概念以及技术算法。</p><a id="more"></a><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>网格就是使用多边形来表示物体的表面。一个网格模型的描述之前也说到过，它包含一系列的面片和顶点。</p><p>面片$F = (f_1,…,f_n)$，对于三角网格，每个面片都是三角形。</p><p>顶点$V = (v_1,…,v_m)$。其中，每个面片又是由3个顶点构成的三角形，因此:</p><script type="math/tex; mode=display">f_i = (v_{i1},v_{i2},v_{i3});v_{i1},v_{i2},v_{i3} \in V.</script><h3 id="网格的由来"><a href="#网格的由来" class="headerlink" title="网格的由来"></a>网格的由来</h3><p>计算机生成的三维模型和实际获取的数据表示模式是不同的。计算机生成的模型可能是平滑曲线曲面，而实际获取的数据，如激光扫描得到的，一般都是以点云的形式存在。图形学中需要一个统一的表示方式，同时要求视觉精度和处理速度都在可以接受的范围内。于是就选择了网格，用多边形来近似曲面，三角网格最为简单高效，再加上图形硬件的快速发展，三角网格和光栅化已经可以嵌入到硬件中去渲染。</p><h3 id="三维数据的来源"><a href="#三维数据的来源" class="headerlink" title="三维数据的来源"></a>三维数据的来源</h3><p>一般来说，获取三维模型数据的方法有多种。我们可以直接在几何文件中输入，也可以通过程序创建，比较高级的建模软件有3Ds/max，maya等。第二种就是通过激光扫描，结构光技术等等获取深度，得到点云模型。也有一些别的方法，如SFM，从多视图（多张照片）中构建三维模型。</p><p>三维模型又可以分为实体模型和表面模型。</p><ul><li>实体模型，多用于CAD领域，通常强调对应实际工业生产中的加工过程，如切割，钻孔等。它是实心的而非空心，在显示过程中需要考虑很多的东西，占用内存较大，因此不利于显示。</li><li>表面模型，我们平时见到的模型多是表面模型，只考虑物体的表面细节并直接进行处理，这种模型易于显示。</li></ul><h3 id="网格化"><a href="#网格化" class="headerlink" title="网格化"></a>网格化</h3><p>网格化是指将模型（点云，多边形等等）分割称为更容易处理的图元，如凸多边形，三角形或者四边形。如果分割成三角形，被称为三角化。我们先看看2D网格化，而3D空间中的网格化也和2D中类似。</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh1.jpg" alt=""></p><p>如上图，最左侧的多边形不能被称作网格化，第二个是凸多边形网格化，第三个是三角化，最右侧是被均匀分割。</p><p>这里介绍两个三角网格化的非常简单的算法。</p><ul><li>基本的网格化算法</li></ul><p>给定多边形，检验其任意两个顶点之间的线段是否与该多边形的边相交或者部分重叠。如果是，则不能用于分割三角形，否则，用该线段来将多边形分成两个多边形，对每个部分继续上述算法。</p><ul><li>割耳（ear clipping）算法</li></ul><p>首先找到多边形的ear：查看所有具有顶点序列$i,i+1,i+2 (\mod n)$的三角形，称这个三角形为顶点为$i+1$的三角形$，检查线段$i,i_2$是不是没有与任何边相交。如果是，则这个三角形构成一个ear，去掉该ear，检查顶点$i$和$i+2$处的三角形是不是构成ear。重复上述过程。这个算法每次都会分出一个新的三角形。</p><p>上述两种算法对凹多边形进行三角化，会使得其变成凸多边形的样子。原本不是面的部分由于三角化而多了面片。</p><p>除此之外，我们还需要注意一种特殊的情况叫T型顶点：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh2.jpg" alt=""></p><p>它最常出现在网格细分或者网格简化过程中，使得一个顶点出现在了某个面片的边上。理论上这个点是完全在边上，但是实际渲染中顶点的位置可能不会那么精确。当一个模型中有T顶点存在，一些算法可能会失败。</p><h2 id="网格简化"><a href="#网格简化" class="headerlink" title="网格简化"></a>网格简化</h2><p>网格的简化有很多好处。比如当前我做的项目中，就需要网格简化来节省内存。同时，网格简化还有很多好处。</p><ul><li>减少几何冗余：如果一个具有很多共面小三角形的平坦区域，可以将这些小三角形合并成大的多边形来降低模型复杂度。</li><li>减小模型大小</li><li>提高运行性能</li></ul><p>而且有时候，对于网格的简化，并不会引起多大的感官差异，例如我们可以对较远的场景进行网格简<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8的东西看不清，复杂的网格和简化之后的网格差别不大。这也是当前很多游戏能实时运行的一个重要的技术，叫做生成场景中物体的层次细分。" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8的东西看不清，复杂的网格和简化之后的网格差别不大。这也是当前很多游戏能实时运行的一个重要的技术，叫做生成场景中物体的层次细分。</a></p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh7.jpg" alt=""></p><h3 id="拓扑结构"><a href="#拓扑结构" class="headerlink" title="拓扑结构"></a>拓扑结构</h3><p>拓扑结构指的是多边形网格的连接结构。有一些专业术语需要了解一下，对于网格简化，细分等会用到。</p><ul><li>亏格（genus）<br>亏格指的是网格表面孔洞的数目。如下：</li></ul><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh4.png" alt=""></p><ul><li>面片，边或顶点的拓扑结构，指相邻元素的局部连接关系。如下图：</li></ul><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh3.png" alt=""></p><p><font style="color:purple"> 临界边</font>只接一个三角形，<font style="color:yellow"> 普通边</font>接两个三角形，<font style="color:green"> 奇异边</font>接三个三角形。对于没有临界边的网格称为closed mesh。</p><ul><li>二维流形（2-manifold）</li></ul><p>二维流行网格定义如下：</p><ol><li>一条网格边为一个或两个网格三角面<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8</a></li><li>一个网格顶点的一环邻域三角片构成<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8</a></li></ol><p>看上去不好理解，看图片就比较好明白。<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8</a></p><p>非流形网格：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh2.png" alt=""></p><p>流形网格：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh1.png" alt=""></p><p>很显然，流形网格只包含临界边和普通边。</p><p>网格简化的方法有很多，但是不外乎是下面四种的改进或者组合。</p><ul><li><p>采样（sample）。很好理解，简单的选取模型表面上的点进行几何采样，编程较为复杂。这种方法对高频特征难以精确采样，通常在没有尖角的光滑表面上能取得最好的效果。</p></li><li><p>自适应细分（adaptive subdivision）通过寻找一个可以递归细分逼近最初模型的基网格，该算法在基模型容易获取的情况下能取到很好的效果，但是它会保持表面拓扑细节，因此对模型进行大规模简化的能力不足。</p></li><li><p>去除（decimation）。去除方法迭代地去除网格上的顶点或者面片，并三角化每次去除后的空洞。这类方法比较简单，易于编程实现而且运行效率也较高，且通常保持原有的亏格，尤其适用于处理像共面多边形这种冗余的几何。</p></li><li>顶点合并（vertex merging）。顶点合并一般将多个顶点合并成一个顶点，该算法也比较好实现，但是需要采用多种技术来确定哪些点被合并以及合并次序。<br>有一个例子是边坍塌算法，将共边的两个顶点合并为一个点，该算法通常保持局部拓扑，但也允许修改拓扑。</li></ul><h3 id="细分"><a href="#细分" class="headerlink" title="细分"></a>细分</h3><p>网格的细分和简化相反。对于一个给定的原始网格，通过网格细分产生更光滑的效果。细分广泛应用于电影行业，实际上算法提出者之一Catmull还是皮克斯和迪士尼的总裁。</p><p>下面是几个细分的例子：</p><p>一维细分，原本是4个点的线段，通过向中间插入点得到下一张图，不断迭代得到圆滑曲线。</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh3.jpg" alt=""></p><p>三维网格细分，根据特定细分规则，每次细分每一个三角形被细分成4个小的三角形。</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh4.jpg" alt=""></p><p>细分可以看做是一个两阶段过程，最初的网格被称为控制网格。</p><ol><li>细化阶段，创建新的顶点并与先前顶点相连，产生新的更小的三角形</li><li>平滑阶段，计算新顶点的位置</li></ol><p>这两步的细节决定了不同的细分方案，在第一步中一个三角形可以以不同的形式进行分割，第二部新顶点的位置可以以不同的方式插值产生。</p><h3 id="Loop细分"><a href="#Loop细分" class="headerlink" title="Loop细分"></a>Loop细分</h3><p>Loop细分是第一个基于三角网格的细分方案。它更新每个已有的顶点，并对每条边创建一个新的顶点，这样每个三角形被分割成4个新的三角形。经过n步细分，一个三角形被分割成$4^n$个三角形。</p><p>下图为一个loop细分的例子，新的顶点以黑色显示。</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh8.jpg" alt=""></p><p>为了更好说明Loop细分的步骤，现在进行下面的符号定义：</p><p>$p^k$是当前已存在的顶点，其中$k$是已经进行的细分步数，$p^0$表示控制网格的顶点。一般来说，细分的过程可以表示为：</p><script type="math/tex; mode=display">p^0\rightarrow p^1\rightarrow p^2 \rightarrow p^3 \rightarrow...</script><p>如果$p^k$的度是n，那么$p^k$有n个相邻顶点，记做：</p><script type="math/tex; mode=display">p_i^k,i \in \{0,1,...,n-1\}</script><p>则Loop细分规则如下，第一个公式是将每个顶点$p^k$升级为$p^{k+1}$的准则，第二个公式是在边$p^kp_i^k$创建新顶点$p_i^{k+1}$的准则：</p><script type="math/tex; mode=display">p^{k+1} = (1 - n\beta)p^k + \beta(p_0^k +...+p_{n-1}^k)\\p_i^{k+1} = \frac{3p_k + 3p_i^k + p_{i-1}^k + p_{i+1}^k}{8},i=0,...,n-1</script><p>下图中左侧给出了第二个公式的相关点，右侧给出了第一个公式的相关点：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh5.jpg" alt=""></p><p>$\beta$是n的函数：</p><script type="math/tex; mode=display">\beta = \frac{1}{n}(\frac{5}{8} - (\frac{3}{8} + \frac{1}{4}\cos \frac{2\pi}{n})^2)</script><h3 id="sqrt-3-细分"><a href="#sqrt-3-细分" class="headerlink" title="$\sqrt{3}$细分"></a>$\sqrt{3}$细分</h3><p>另外有一种细分方法，被称为$\sqrt 3$细分。和Loop细分不同的地方在于，Loop把每个三角形划分成4个三角形，而$\sqrt 3$细分把每个三角形细分成3个三角形。这意味着新增加的顶点在原三角形内部。不过，很明显内部点直接与各个点连线构成的三角形很奇怪，如下图中的第二张。而$\sqrt 3$在连线之后，会做一个边翻转，把原来的边删掉，而连接新的顶点的作为边，像是把原来的边进行了一个翻转，如下图中最后一张：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh6.jpg" alt=""></p><p>细分规则与Loop细分类似，下面第一行公式中，$p_m$表示中间顶点（新的顶点），由计算三角形三个顶点$p_a,p_b,p_c$的平均值得来。而$p_i^k$依然表示$p^k$的相邻顶点，$n$代表顶点的度，这个和之前类似。第一个公式计算新的中心顶点，第二个公式更新旧顶点。</p><script type="math/tex; mode=display">p_m^{k+1} = \frac{p_a^k + p_b^k + p_c^k}{3}\\p^{k+1} = (1-n\beta)p^k + \beta\sum_{i=0}^{n-1}p_i^k</script><p>可以看到，对于旧顶点的更新与Loop一致。进一步，$\beta$是一个度数为$n$的函数，选择下面的$\beta(n)$最终可以产生至少为$C^1$连续的曲面：</p><script type="math/tex; mode=display">\beta (n) = \frac{4 - 2 \cos\frac{2\pi}{n}}{9n}</script><p>这里$C^1$表示是1阶连续，也就是数学上的可微分连续，而$G^i$则表示的是几何连续性。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 图形学 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> computer graphics </tag>
+            
+            <tag> mesh </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>图形学——B样条曲线和曲面</title>
       <link href="/2019/03/19/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF%E5%92%8C%E6%9B%B2%E9%9D%A2/"/>
       <url>/2019/03/19/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94B%E6%A0%B7%E6%9D%A1%E6%9B%B2%E7%BA%BF%E5%92%8C%E6%9B%B2%E9%9D%A2/</url>
@@ -622,9 +672,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -649,9 +699,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -676,9 +726,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -728,9 +778,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -761,9 +811,9 @@
             
             <tag> SLAM </tag>
             
-            <tag> computer vision </tag>
-            
             <tag> feature </tag>
+            
+            <tag> computer vision </tag>
             
         </tags>
       
@@ -842,9 +892,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> ACE </tag>
             
@@ -871,9 +921,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> softmax regression </tag>
             
@@ -948,9 +998,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -979,9 +1029,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1008,9 +1058,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1035,9 +1085,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1093,9 +1143,9 @@
             
             <tag> LFD class </tag>
             
-            <tag> homework </tag>
-            
             <tag> neural network </tag>
+            
+            <tag> homework </tag>
             
         </tags>
       
@@ -1118,9 +1168,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -1324,9 +1374,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -1353,9 +1403,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -1503,9 +1553,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -1630,9 +1680,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -1659,9 +1709,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> regression </tag>
             
@@ -2124,11 +2174,11 @@
     </entry>
     
     <entry>
-      <title>机器学习——linear regression</title>
+      <title>机器学习——Linear Regression</title>
       <link href="/2018/08/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94linear-regression/"/>
       <url>/2018/08/19/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E2%80%94%E2%80%94linear-regression/</url>
       
-        <content type="html"><![CDATA[<p>终于完成了机器学习基石相对理论的部分，可以开始一些具体的算法的学习了。首先学习的第一个算法就是线性回归（linear regression）。<br><a id="more"></a><br>线性回归想做到的事情是，给出一堆点，使用一条直线（平面或者其他）来拟合这个dataset。而在之前的noise and error中提到了，它用来衡量错误的办法是$(y - y’)^2$。</p><p>和之前的机器学习算法也一致，因为VC bound在线性回归的例子中也一样适用，所以我们想做的是保证$E_{in}$越小越好。</p><p>对于线性回归的H集合是 $y’ = W^TX$，当然$X$，$W$都是列向量，向量的维度是d+1（d为特征量的个数）.为了minimize $E_{in}$，首先我们应该写出来$E_{in}$的表达式：</p><script type="math/tex; mode=display">E_{in} = \frac 1 n \sum _{i = 1} (h(X_n) - y)^2 =  \frac 1 n \sum _{i = 1} (W^TX_n - y_n)^2</script><p>这个表达式看着还比较复杂，有个求和符号在里面。首先，这后面有N个平方和，我们可以很轻松的想到向量的范数求法。因此，我们可以将原式写成对向量求范数的形式：</p><script type="math/tex; mode=display">E_{in} = \frac 1 n || XW - Y||^2</script><p>上式中</p><script type="math/tex; mode=display">X = \begin{bmatrix}...X_1^T... \\...X_2^T... \\..........\\...X_n ^T ...\end{bmatrix}</script><p>X是一个n*（d+1）的矩阵，n是样本个数，d是特征量个数。</p><p>因此$E_{in}$可以说是一个关于W的函数，而且可以证明的是，这个函数是连续的（continuous），可导的（differentiable）,并且是凸函数（convex）。因此我们一定可以求得最低点，也就是$E_{in}$的最小值。与实数的函数一样（实际上求的是W的各个方向的偏导数），在取最小值的那个点的时候，$E_{in}$关于$W$的导数是0，表明取得是极值，也就是梯度是0。</p><p>将上式展开可以得到：</p><script type="math/tex; mode=display">E_{in} = \frac 1 n (W^TX^TXW -2Y^TXW +Y^TY)，</script><p>将除了W之外的矩阵或者数字看成常量，则可以得到：</p><script type="math/tex; mode=display">E_{in} =  \frac 1 n (W^TAW-2BW+c)</script><p>为了求关于$W$的导数，我们首先想象一下如果是$W$一维的话的样子。</p><script type="math/tex; mode=display">E_{in} = aW^2-2bW+c ; \frac {dE_{in}} {dW} = 2aW-2b</script><p>对应到矩阵上来说:</p><script type="math/tex; mode=display">\frac {dE_{in}} {dW} = \frac 1 n 2AW-2B</script><p>可以看到的是梯度是一个向量。</p><p>为了使得$E_{in}$取得最小值，那么$X^TXW = X^TY$,如果$(X^TX)$的反矩阵存在，那么很简单:</p><script type="math/tex; mode=display">W = (X^TX)^{-1}X^TY</script><p>我们称$(X^TX)^{-1}X^T$为pseudo-inverse $X^{+}$。而且大多数时候我们遇到的都是可逆的，因为$n&gt;&gt;d+1$，这意味着首先对于X矩阵来说，它的秩很可能就是等于d+1的.这样它们相乘的秩很大可能也是d+1，也就是可逆。</p><p>但是如果遇到另外的情况，如不可逆，我们可以使用其他的方式来定义$X^{+}$，具体的数学原理需要更详细的线性代数知识，但是我们知道很多程序包里都实现了这些东西，用它一样可以得到比较好的结果。</p><p>综上，$W = X^{+}Y$,$Y’ = XW = XX^{+}Y$.</p><p>最后，这个算法之所以可以学习，我们可以使用VC bound来证明。但是还有另一种方法，也可以证明它泛化能力不错，可以取得良好的学习效果，当然，与VC bound一样，严格的证明需要更严密的数学推导，下面只是简要介绍。</p><p>首先，我们推导$\overline {E_{in}}$是很接近噪声的（噪声意味着我们无法通过学习进行改善的部分），而同样的步骤可以用在对$\overline {E_{out}}$的分析上，这样就说明了，平均来说我们的算法是可以取得很好的学习效果的。</p><p>首先，我们应该定义一下$\overline {E_{in}}$：</p><script type="math/tex; mode=display">\overline {E_{in}} = \epsilon _{D~P^N}\left\{\ E_{in}(W_{LIN} w.r.t. D)  \right\} = noise  level \cdot (1-\frac {d+1}{N})</script><p>具体的含义就是多个样本的$E_{in}$平均值，大概看起来会接近noise level，而当样本量越大，与noise level越接近。</p><p>首先，我们应该将线性回归得到的结果带入$E_{in}$的表达式中：</p><script type="math/tex; mode=display">E_{in} = \frac 1 N ||Y - \hat Y||^2 = \frac 1 N ||Y - XX^{+}Y ||^2 = \frac 1 N ||(I - X X^{+})Y||^2</script><p>我们称$XX^{+}$为hat matrix。</p><p>这里我们思考$\hat Y = XW$在做什么。Y是一个N维向量，而X可以看做是m个N维向量构成的矩阵，而实际上W的作用，是给每个矩阵中的N维向量分配一个参数，让他们做线性组合，最终得到一个新的N维向量。为了使得$\hat Y$尽量接近于$Y$，从另一个方面来说，就是让$Y - \hat Y \bot X’s span$，也就是让他们的差尽量垂直于X所展开的空间，当垂直时，$\hat Y$等于Y在X上的投影，这时候二者相差是最小的.</p><p>实际上，Y一般不可能被X完美表示，因为一般来讲$N&gt;&gt;d$.所以我们能做的就是上面说的。</p><p>所以，Hat的作用就是将Y投影到X上。而$(I-Hat)$就是将Y转换为$(Y-\hat Y)$的矩阵。<br>而且我们可以计算出来$trace (I - Hat) = n - (d+1)$，意味着$(I- Hat)$有$N - d- 1$个自由度。</p><p>如果$Y$来自与一些理想的$f(X)$与噪声的组合，那么如果只是理想的函数，则上述得到的差距实际上是由噪声造成的，因此：</p><script type="math/tex; mode=display">E_{in} = \frac 1 N ||Y - \hat Y||^2  = \frac 1 N ||(I - Hat)noise||^2 = \frac 1 N (N - d - 1)||noise||^2</script><p>而$\overline {E_{in}} = ( 1 - \frac{d+1}{N})noise level$<br>利用类似的办法，可以推断出来，$\overline {E_{out}} = ( 1 + \frac{d+1}{N})noise level$.</p><p>也就是平均来说，我们通过拟合样本，可以得到更小的错误率，但是泛化之后的错误率往往更大一点。</p><p>因此平均来说，我们可以将$E_{in}$与$E_{out}$画在一张图上：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/8P%292%25K%7DDKX0VSSRIW5WS%29JU.png" alt=""></p><p>如果对应到实际的机器学习，对于一些很少的样本量的机器学习过程，很容易拟合成功，得到很好的$E_{in}$，甚至是0，但是这时候泛化能力却很差。机器学习，不是一味地增加特征量减少$E_{in}$，而纠正过拟合的一种办法，就是增加样本量。</p><p>最后，我想说的是，上面的”证明”非常不严格，甚至有些地方让人费解。对于机器学习，理论部分严格的证明更多是数学和统计的事情，而学习计算机的人更多的是掌握各种算法，学习利用它来解决问题。即使这样，尽可能多地了解理论部分，对于实际的应用有很大的帮助。这个世界很复杂，永远保持一个好奇心吧。</p>]]></content>
+        <content type="html"><![CDATA[<p>终于完成了机器学习基石相对理论的部分，可以开始一些具体的算法的学习了。首先学习的第一个算法就是线性回归（linear regression）。<br><a id="more"></a><br>线性回归想做到的事情是，给出一堆点，使用一条直线（平面或者其他）来拟合这个dataset。而在之前的noise and error中提到了，它用来衡量错误的办法是$(y - y’)^2$。</p><p>和之前的机器学习算法也一致，因为VC bound在线性回归的例子中也一样适用，所以我们想做的是保证$E_{in}$越小越好。</p><p>对于线性回归的H集合是 $y’ = W^TX$，当然$X$，$W$都是列向量，向量的维度是d+1（d为特征量的个数）.为了minimize $E_{in}$，首先我们应该写出来$E_{in}$的表达式：</p><script type="math/tex; mode=display">E_{in} = \frac 1 n \sum _{i = 1} (h(X_n) - y)^2 =  \frac 1 n \sum _{i = 1} (W^TX_n - y_n)^2</script><p>这个表达式看着还比较复杂，有个求和符号在里面。首先，这后面有N个平方和，我们可以很轻松的想到向量的范数求法。因此，我们可以将原式写成对向量求范数的形式：</p><script type="math/tex; mode=display">E_{in} = \frac 1 n \Vert XW - Y\Vert^2</script><p>上式中</p><script type="math/tex; mode=display">X = \begin{bmatrix}...X_1^T... \\...X_2^T... \\..........\\...X_n ^T ...\end{bmatrix}</script><p>X是一个n*（d+1）的矩阵，n是样本个数，d是特征量个数。</p><p>因此$E_{in}$可以说是一个关于W的函数，而且可以证明的是，这个函数是连续的（continuous），可导的（differentiable）,并且是凸函数（convex）。因此我们一定可以求得最低点，也就是$E_{in}$的最小值。与实数的函数一样（实际上求的是W的各个方向的偏导数），在取最小值的那个点的时候，$E_{in}$关于$W$的导数是0，表明取得是极值，也就是梯度是0。</p><p>将上式展开可以得到：</p><script type="math/tex; mode=display">E_{in} = \frac 1 n (W^TX^TXW -2Y^TXW +Y^TY)，</script><p>将除了W之外的矩阵或者数字看成常量，则可以得到：</p><script type="math/tex; mode=display">E_{in} =  \frac 1 n (W^TAW-2BW+c)</script><p>为了求关于$W$的导数，我们首先想象一下如果$W$是一维时候的情况：</p><script type="math/tex; mode=display">E_{in} = aW^2-2bW+c ; \frac {dE_{in}} {dW} = 2aW-2b</script><p>对应到矩阵上来说:</p><script type="math/tex; mode=display">\frac {dE_{in}} {dW} = \frac 1 n 2AW-2B</script><p>可以看到的是梯度是一个向量。</p><p>为了使得$E_{in}$取得最小值，那么$X^TXW = X^TY$,如果$(X^TX)$的反矩阵存在，那么很简单:</p><script type="math/tex; mode=display">W = (X^TX)^{-1}X^TY</script><p>我们称$(X^TX)^{-1}X^T$为pseudo-inverse $X^{+}$。而且大多数时候我们遇到的都是可逆的，因为$n&gt;&gt;d+1$，这意味着首先对于X矩阵来说，它的秩很可能就是等于d+1的.这样它们相乘的秩很大可能也是d+1，也就是可逆。</p><p>但是如果遇到另外的情况，如不可逆，我们可以使用其他的方式来定义$X^{+}$，具体的数学原理需要更详细的线性代数知识，但是我们知道很多程序包里都实现了这些东西，用它一样可以得到比较好的结果。</p><p>综上，$W = X^{+}Y$,$Y’ = XW = XX^{+}Y$.</p><p>最后，这个算法之所以可以学习，我们可以使用VC bound来证明。但是还有另一种方法，也可以证明它泛化能力不错，可以取得良好的学习效果，当然，与VC bound一样，严格的证明需要更严密的数学推导，下面只是简要介绍。</p><p>首先，我们推导$\overline {E_{in}}$是很接近噪声的（噪声意味着我们无法通过学习进行改善的部分），而同样的步骤可以用在对$\overline {E_{out}}$的分析上，这样就说明了，平均来说我们的算法是可以取得很好的学习效果的。</p><p>首先，我们应该定义一下$\overline {E_{in}}$：</p><script type="math/tex; mode=display">\overline {E_{in}} = \epsilon _{D~P^N}\left\{\ E_{in}(W_{LIN} w.r.t. D)  \right\} = noise  level \cdot (1-\frac {d+1}{N})</script><p>具体的含义就是多个样本的$E_{in}$平均值，大概看起来会接近noise level，而当样本量越大，与noise level越接近。</p><p>首先，我们应该将线性回归得到的结果带入$E_{in}$的表达式中：</p><script type="math/tex; mode=display">E_{in} = \frac 1 N \VertY - \hat Y\Vert^2 = \frac 1 N \VertY - XX^{+}Y \Vert^2 = \frac 1 N \Vert(I - X X^{+})Y\Vert^2</script><p>我们称$XX^{+}$为hat matrix。</p><p>这里我们思考$\hat Y = XW$在做什么。Y是一个N维向量，而X可以看做是m个N维向量构成的矩阵，而实际上W的作用，是给每个矩阵中的N维向量分配一个参数，让他们做线性组合，最终得到一个新的N维向量。为了使得$\hat Y$尽量接近于$Y$，从另一个方面来说，就是让$Y - \hat Y \bot X’s span$，也就是让他们的差尽量垂直于X所展开的空间，当垂直时，$\hat Y$等于Y在X上的投影，这时候二者相差是最小的.</p><p>实际上，Y一般不可能被X完美表示，因为一般来讲$N&gt;&gt;d$.所以我们能做的就是上面说的。</p><p>所以，Hat的作用就是将Y投影到X上。而$(I-Hat)$就是将Y转换为$(Y-\hat Y)$的矩阵。<br>而且我们可以计算出来$trace (I - Hat) = n - (d+1)$，意味着$(I- Hat)$有$N - d- 1$个自由度。</p><p>如果$Y$来自与一些理想的$f(X)$与噪声的组合，那么如果只是理想的函数，则上述得到的差距实际上是由噪声造成的，因此：</p><script type="math/tex; mode=display">E_{in} = \frac 1 N \VertY - \hat Y\Vert^2  = \frac 1 N \Vert(I - Hat)noise\Vert^2 = \frac 1 N (N - d - 1)\Vertnoise\Vert^2</script><p>而$\overline {E_{in}} = ( 1 - \frac{d+1}{N})noise level$<br>利用类似的办法，可以推断出来，$\overline {E_{out}} = ( 1 + \frac{d+1}{N})noise level$.</p><p>也就是平均来说，我们通过拟合样本，可以得到更小的错误率，但是泛化之后的错误率往往更大一点。</p><p>因此平均来说，我们可以将$E_{in}$与$E_{out}$画在一张图上：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/8P%292%25K%7DDKX0VSSRIW5WS%29JU.png" alt=""></p><p>如果对应到实际的机器学习，对于一些很少的样本量的机器学习过程，很容易拟合成功，得到很好的$E_{in}$，甚至是0，但是这时候泛化能力却很差。机器学习，不是一味地增加特征量减少$E_{in}$，而纠正过拟合的一种办法，就是增加样本量。</p><p>最后，我想说的是，上面的”证明”非常不严格，甚至有些地方让人费解。对于机器学习，理论部分严格的证明更多是数学和统计的事情，而学习计算机的人更多的是掌握各种算法，学习利用它来解决问题。即使这样，尽可能多地了解理论部分，对于实际的应用有很大的帮助。这个世界很复杂，永远保持一个好奇心吧。</p>]]></content>
       
       
       <categories>

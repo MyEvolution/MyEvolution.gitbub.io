@@ -111,15 +111,15 @@
   <meta name="description" content="终于完成了机器学习基石相对理论的部分，可以开始一些具体的算法的学习了。首先学习的第一个算法就是线性回归（linear regression）。">
 <meta name="keywords" content="machine learning,regression">
 <meta property="og:type" content="article">
-<meta property="og:title" content="机器学习——linear regression">
+<meta property="og:title" content="机器学习——Linear Regression">
 <meta property="og:url" content="http://wlsdzyzl.com/2018/08/19/机器学习——linear-regression/index.html">
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="终于完成了机器学习基石相对理论的部分，可以开始一些具体的算法的学习了。首先学习的第一个算法就是线性回归（linear regression）。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/8P%292%25K%7DDKX0VSSRIW5WS%29JU.png">
-<meta property="og:updated_time" content="2018-11-02T14:40:26.000Z">
+<meta property="og:updated_time" content="2019-03-27T12:41:31.880Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习——linear regression">
+<meta name="twitter:title" content="机器学习——Linear Regression">
 <meta name="twitter:description" content="终于完成了机器学习基石相对理论的部分，可以开始一些具体的算法的学习了。首先学习的第一个算法就是线性回归（linear regression）。">
 <meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/8P%292%25K%7DDKX0VSSRIW5WS%29JU.png">
 
@@ -138,7 +138,7 @@
   };
 </script>
 
-  <title>机器学习——linear regression | wlsdzyzl</title>
+  <title>机器学习——Linear Regression | wlsdzyzl</title>
   
 
 
@@ -367,7 +367,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">机器学习——linear regression
+          <h1 class="post-title" itemprop="name headline">机器学习——Linear Regression
               
             
           </h1>
@@ -409,7 +409,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-11-02 22:40:26" itemprop="dateModified" datetime="2018-11-02T22:40:26+08:00">2018-11-02</time>
+                <time title="更新于：2019-03-27 20:41:31" itemprop="dateModified" datetime="2019-03-27T20:41:31+08:00">2019-03-27</time>
               
             
           </span>
@@ -467,7 +467,7 @@
 E_{in} = \frac 1 n \sum _{i =
  1} (h(X_n) - y)^2 =  \frac 1 n \sum _{i = 1} (W^TX_n - y_n)^2</script><p>这个表达式看着还比较复杂，有个求和符号在里面。首先，这后面有N个平方和，我们可以很轻松的想到向量的范数求法。因此，我们可以将原式写成对向量求范数的形式：</p>
 <script type="math/tex; mode=display">
-E_{in} = \frac 1 n || XW - Y||^2</script><p>上式中</p>
+E_{in} = \frac 1 n \Vert XW - Y\Vert^2</script><p>上式中</p>
 <script type="math/tex; mode=display">
 X = \begin{bmatrix}
 ...X_1^T... \\
@@ -480,7 +480,7 @@ X = \begin{bmatrix}
 <script type="math/tex; mode=display">
 E_{in} = \frac 1 n (W^TX^TXW -2Y^TXW +Y^TY)，</script><p>将除了W之外的矩阵或者数字看成常量，则可以得到：</p>
 <script type="math/tex; mode=display">
-E_{in} =  \frac 1 n (W^TAW-2BW+c)</script><p>为了求关于$W$的导数，我们首先想象一下如果是$W$一维的话的样子。</p>
+E_{in} =  \frac 1 n (W^TAW-2BW+c)</script><p>为了求关于$W$的导数，我们首先想象一下如果$W$是一维时候的情况：</p>
 <script type="math/tex; mode=display">
 E_{in} = aW^2-2bW+c ; \frac {dE_{in}} {dW} = 2aW-2b</script><p>对应到矩阵上来说:</p>
 <script type="math/tex; mode=display">
@@ -497,13 +497,13 @@ W = (X^TX)^{-1}X^TY</script><p>我们称$(X^TX)^{-1}X^T$为pseudo-inverse $X^{+}
 \overline {E_{in}} = \epsilon _{D~P^N}\left\{\ E_{in}(W_{LIN} w.r.t. D)  \right\} = noise  level \cdot (1-\frac {d+1}{N})</script><p>具体的含义就是多个样本的$E_{in}$平均值，大概看起来会接近noise level，而当样本量越大，与noise level越接近。</p>
 <p>首先，我们应该将线性回归得到的结果带入$E_{in}$的表达式中：</p>
 <script type="math/tex; mode=display">
-E_{in} = \frac 1 N ||Y - \hat Y||^2 = \frac 1 N ||Y - XX^{+}Y ||^2 = \frac 1 N ||(I - X X^{+})Y||^2</script><p>我们称$XX^{+}$为hat matrix。</p>
+E_{in} = \frac 1 N \VertY - \hat Y\Vert^2 = \frac 1 N \VertY - XX^{+}Y \Vert^2 = \frac 1 N \Vert(I - X X^{+})Y\Vert^2</script><p>我们称$XX^{+}$为hat matrix。</p>
 <p>这里我们思考$\hat Y = XW$在做什么。Y是一个N维向量，而X可以看做是m个N维向量构成的矩阵，而实际上W的作用，是给每个矩阵中的N维向量分配一个参数，让他们做线性组合，最终得到一个新的N维向量。为了使得$\hat Y$尽量接近于$Y$，从另一个方面来说，就是让$Y - \hat Y \bot X’s span$，也就是让他们的差尽量垂直于X所展开的空间，当垂直时，$\hat Y$等于Y在X上的投影，这时候二者相差是最小的.</p>
 <p>实际上，Y一般不可能被X完美表示，因为一般来讲$N&gt;&gt;d$.所以我们能做的就是上面说的。</p>
 <p>所以，Hat的作用就是将Y投影到X上。而$(I-Hat)$就是将Y转换为$(Y-\hat Y)$的矩阵。<br>而且我们可以计算出来$trace (I - Hat) = n - (d+1)$，意味着$(I- Hat)$有$N - d- 1$个自由度。</p>
 <p>如果$Y$来自与一些理想的$f(X)$与噪声的组合，那么如果只是理想的函数，则上述得到的差距实际上是由噪声造成的，因此：</p>
 <script type="math/tex; mode=display">
-E_{in} = \frac 1 N ||Y - \hat Y||^2  = \frac 1 N ||(I - Hat)noise||^2 = \frac 1 N (N - d - 1)||noise||^2</script><p>而$\overline {E_{in}} = ( 1 - \frac{d+1}{N})noise level$<br>利用类似的办法，可以推断出来，$\overline {E_{out}} = ( 1 + \frac{d+1}{N})noise level$.</p>
+E_{in} = \frac 1 N \VertY - \hat Y\Vert^2  = \frac 1 N \Vert(I - Hat)noise\Vert^2 = \frac 1 N (N - d - 1)\Vertnoise\Vert^2</script><p>而$\overline {E_{in}} = ( 1 - \frac{d+1}{N})noise level$<br>利用类似的办法，可以推断出来，$\overline {E_{out}} = ( 1 + \frac{d+1}{N})noise level$.</p>
 <p>也就是平均来说，我们通过拟合样本，可以得到更小的错误率，但是泛化之后的错误率往往更大一点。</p>
 <p>因此平均来说，我们可以将$E_{in}$与$E_{out}$画在一张图上：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/8P%292%25K%7DDKX0VSSRIW5WS%29JU.png" alt=""></p>
 <p>如果对应到实际的机器学习，对于一些很少的样本量的机器学习过程，很容易拟合成功，得到很好的$E_{in}$，甚至是0，但是这时候泛化能力却很差。机器学习，不是一味地增加特征量减少$E_{in}$，而纠正过拟合的一种办法，就是增加样本量。</p>
@@ -618,7 +618,7 @@ E_{in} = \frac 1 N ||Y - \hat Y||^2  = \frac 1 N ||(I - Hat)noise||^2 = \frac 1 
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">93</span>
+                    <span class="site-state-item-count">95</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -778,7 +778,9 @@ E_{in} = \frac 1 N ||Y - \hat Y||^2  = \frac 1 N ||(I - Hat)noise||^2 = \frac 1 
                     
                       
                     
-                    <span class="site-state-item-count">57</span>
+                      
+                    
+                    <span class="site-state-item-count">58</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
