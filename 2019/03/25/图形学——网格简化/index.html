@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s6.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s5.jpg">
-<meta property="og:updated_time" content="2019-03-27T13:06:01.673Z">
+<meta property="og:updated_time" content="2019-03-27T13:12:10.131Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——网格简化">
 <meta name="twitter:description" content="上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。">
@@ -414,7 +414,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-27 21:06:01" itemprop="dateModified" datetime="2019-03-27T21:06:01+08:00">2019-03-27</time>
+                <time title="更新于：2019-03-27 21:12:10" itemprop="dateModified" datetime="2019-03-27T21:12:10+08:00">2019-03-27</time>
               
             
           </span>
@@ -527,10 +527,10 @@ v_i^+ = v_i + \epsilon\mathbf{n}_i, v_i^- = v_i - \epsilon \mathbf{n}_i, \mathbf
 <p>0-单形$\{i\} \in K$，即为顶点，1-单形$\{i,j\} \in K$是一条边，2-单形$\{i,j,k\}\in K$为一个面。需要注意的是单纯复形$K$并不包含$V$的所有成员，只包含了构造网格$M$所需要的所有面，边和顶点的子集。为了在结构上刻画单纯复形，我们引进<strong>拓扑实现</strong>(topological realization)$\vert K\vert$的概念。</p>
 <p>若将顶点$\{i\}(i=1,2,…,m)$看成为$R^m$中的基向量$e_{i} = \{0,…,0,i,0,…,0\}$，则定义在$R^m$中的集合$\vert K \vert$为$K$的拓扑实现：</p>
 <script type="math/tex; mode=display">
-\vert K \vert = \bigcup_{\s \ in K}\vert s\vert</script><p>其中$s$为$K$的一个单形，$\vert s \vert$为s在$R^m$空间中的顶点的凸包。</p>
+\vert K \vert = \bigcup_{s \ in K}\vert s\vert</script><p>其中$s$为$K$的一个单形，$\vert s \vert$为s在$R^m$空间中的顶点的凸包。</p>
 <p>我们记$\phi_v = \phi_{\vert K\vert}$，称为$\delta v_1v_2v_3$在$R^3$中的<strong>几何实现</strong>（geometric realization）。若$\phi_v(\vert K\vert)$不自交，则$\phi_v$为1-1映射。此时，$\phi_v$为一嵌入映射，即对$\forall p \in \phi_v(\vert K \vert)$，存在唯一$m$维向量$b \in \vert K\vert$，使得$p = \phi_v(b)$。我们称$b$为$p$关于单纯复形的重心坐标向量。实际上，$b$可表示为：</p>
 <script type="math/tex; mode=display">
-b = \sum_{i=1}^mb_ie_i</script><p>容易知道，当$M$为一三角网格时，$\phi_v(\ert K\vert)$上任一点的重心坐标向量$b$中至多只有三个分量非零。</p>
+b = \sum_{i=1}^mb_ie_i</script><p>容易知道，当$M$为一三角网格时，$\phi_v(\vert K\vert)$上任一点的重心坐标向量$b$中至多只有三个分量非零。</p>
 <p>有了上述定义，Hoppe采用<strong>显示能量函数</strong>$E(M)$来度量简化网格与原始网格的逼近度：</p>
 <script type="math/tex; mode=display">
 E(M) = E_{dist}(M) + E_{spring} (M) + E_{scalar}(M) + E_{disc}(M).</script><p>上式中，$E(M)$为$M$的距离度量，定义为点集$X = \{x_1,…,x_n\}$到网格$M$的距离平方：</p>

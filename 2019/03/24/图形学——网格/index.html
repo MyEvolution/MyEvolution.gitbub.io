@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh8.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh5.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh6.jpg">
-<meta property="og:updated_time" content="2019-03-27T12:58:50.214Z">
+<meta property="og:updated_time" content="2019-03-27T13:11:22.403Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——网格">
 <meta name="twitter:description" content="网格有多种，三角形，四边形或者其他的多边形。但是目前使用最多的，也是本文着重介绍的是三角网格。三角网格是计算机中表示三维模型最重要的方法。这篇文章主要介绍一下网格的相关概念以及技术算法。">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-27 20:58:50" itemprop="dateModified" datetime="2019-03-27T20:58:50+08:00">2019-03-27</time>
+                <time title="更新于：2019-03-27 21:11:22" itemprop="dateModified" datetime="2019-03-27T21:11:22+08:00">2019-03-27</time>
               
             
           </span>
@@ -495,7 +495,7 @@ f_i = (v_{i1},v_{i2},v_{i3});v_{i1},v_{i2},v_{i3} \in V.</script><h3 id="网格�
 <ul>
 <li>割耳（ear clipping）算法</li>
 </ul>
-<p>首先找到多边形的ear：查看所有具有顶点序列$i,i+1,i+2 (\mod n)$的三角形，称这个三角形为顶点为$i+1$的三角形$，检查线段$i,i_2$是不是没有与任何边相交。如果是，则这个三角形构成一个ear，去掉该ear，检查顶点$i$和$i+2$处的三角形是不是构成ear。重复上述过程。这个算法每次都会分出一个新的三角形。</p>
+<p>首先找到多边形的ear：查看所有具有顶点序列$i,i+1,i+2 (\mod n)$的三角形，称这个三角形为顶点为$i+1$的三角形，检查线段$i,i_2$是不是没有与任何边相交。如果是，则这个三角形构成一个ear，去掉该ear，检查顶点$i$和$i+2$处的三角形是不是构成ear。重复上述过程。这个算法每次都会分出一个新的三角形。</p>
 <p>上述两种算法对凹多边形进行三角化，会使得其变成凸多边形的样子。原本不是面的部分由于三角化而多了面片。</p>
 <p>除此之外，我们还需要注意一种特殊的情况叫T型顶点：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh2.jpg" alt=""></p>
@@ -523,10 +523,10 @@ f_i = (v_{i1},v_{i2},v_{i3});v_{i1},v_{i2},v_{i3} \in V.</script><h3 id="网格�
 </ul>
 <p>二维流行网格定义如下：</p>
 <ol>
-<li>一条网格边为一个或两个网格三角面<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8</a></li>
-<li>一个网格顶点的一环邻域三角片构成<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8</a></li>
+<li>一条网格边为一个或两个网格三角面片共享；</li>
+<li>一个网格顶点的一环邻域三角片构成一个闭合或者开放的扇面。</li>
 </ol>
-<p>看上去不好理解，看图片就比较好明白。<a href="https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8" target="_blank" rel="noopener">https://www.baidu.com/baidu?wd=163&amp;tn=ubuntuu_cb&amp;ie=utf-8</a></p>
+<p>看上去不好理解，看图片就比较好明白。</p>
 <p>非流形网格：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh2.png" alt=""></p>
 <p>流形网格：</p>
