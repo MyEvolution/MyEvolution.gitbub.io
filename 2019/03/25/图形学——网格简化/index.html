@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s6.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s5.jpg">
-<meta property="og:updated_time" content="2019-03-28T05:49:40.483Z">
+<meta property="og:updated_time" content="2019-03-28T05:50:21.220Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——网格简化">
 <meta name="twitter:description" content="上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。">
@@ -414,7 +414,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-28 13:49:40" itemprop="dateModified" datetime="2019-03-28T13:49:40+08:00">2019-03-28</time>
+                <time title="更新于：2019-03-28 13:50:21" itemprop="dateModified" datetime="2019-03-28T13:50:21+08:00">2019-03-28</time>
               
             
           </span>
@@ -512,9 +512,9 @@ r(u,v) = (r_x(u,v),r_y(u,v),r_z(u,v))</script><p>其单位法向量为：</p>
 r^{\epsilon}(u,v) = r(u,v) + \epsilon \mathbf{n}(u,v)</script><p>近似定义原始多边形网格$P$沿正负发现的$\epsilon$等距面$P(+\epsilon),P(- \epsilon)$。$\epsilon$等距面$P(+\epsilon)$和$P(-\epsilon)$上对应顶点$v_i^+,v_i^-$及其法向量可表示为：</p>
 <script type="math/tex; mode=display">
 v_i^+ = v_i + \epsilon\mathbf{n}_i, v_i^- = v_i - \epsilon \mathbf{n}_i, \mathbf{n}_i^+ = \mathbf{n}_i^- = \mathbf{n}</script><p>上述方法产生的$P_{\pm \epsilon}$可能出现自交的现象。</p>
-<p>我们用解析法计算$\epsilon$。现在来考察$P$上任意三角形$\bigtriangleup v_1v_2v_3$：</p>
+<p>我们用解析法计算$\epsilon$。现在来考察$P$上任意三角形$\triangle v_1v_2v_3$：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg" alt=""></p>
-<p>对$P$上每个与三角形$\bigtriangleup v_1v_2v_3$不相邻的三角面片$\bigtriangleup_j$，判断$\bigtriangleup_j$是否与$\bigtriangleup v_1v_2v_3$的基本柱体相交。可计算得到$q_j$到$\bigtriangleup v_1v_2v_3$的距离$\sigma_j$。</p>
+<p>对$P$上每个与三角形$\triangle v_1v_2v_3$不相邻的三角面片$\triangle_j$，判断$\triangle_j$是否与$\triangle v_1v_2v_3$的基本柱体相交。可计算得到$q_j$到$\triangle v_1v_2v_3$的距离$\sigma_j$。</p>
 <p>这两个等距面构成了表面的包络。Cohen顶点删除的过程如下：</p>
 <ul>
 <li>利用贪婪搜索策略，将原表面$P$的所有顶点列入带处理的顶点队列。</li>
@@ -528,7 +528,7 @@ v_i^+ = v_i + \epsilon\mathbf{n}_i, v_i^- = v_i - \epsilon \mathbf{n}_i, \mathbf
 <p>若将顶点$\{i\}(i=1,2,…,m)$看成为$R^m$中的基向量$e_{i} = \{0,…,0,i,0,…,0\}$，则定义在$R^m$中的集合$\vert K \vert$为$K$的拓扑实现：</p>
 <script type="math/tex; mode=display">
 \vert K \vert = \bigcup_{s \ in K}\vert s\vert</script><p>其中$s$为$K$的一个单形，$\vert s \vert$为s在$R^m$空间中的顶点的凸包。</p>
-<p>我们记$\phi_v = \phi_{\vert K\vert}$，称为$\bigtriangleup v_1v_2v_3$在$R^3$中的<strong>几何实现</strong>（geometric realization）。若$\phi_v(\vert K\vert)$不自交，则$\phi_v$为1-1映射。此时，$\phi_v$为一嵌入映射，即对$\forall p \in \phi_v(\vert K \vert)$，存在唯一$m$维向量$b \in \vert K\vert$，使得$p = \phi_v(b)$。我们称$b$为$p$关于单纯复形的重心坐标向量。实际上，$b$可表示为：</p>
+<p>我们记$\phi_v = \phi_{\vert K\vert}$，称为$\triangle v_1v_2v_3$在$R^3$中的<strong>几何实现</strong>（geometric realization）。若$\phi_v(\vert K\vert)$不自交，则$\phi_v$为1-1映射。此时，$\phi_v$为一嵌入映射，即对$\forall p \in \phi_v(\vert K \vert)$，存在唯一$m$维向量$b \in \vert K\vert$，使得$p = \phi_v(b)$。我们称$b$为$p$关于单纯复形的重心坐标向量。实际上，$b$可表示为：</p>
 <script type="math/tex; mode=display">
 b = \sum_{i=1}^mb_ie_i</script><p>容易知道，当$M$为一三角网格时，$\phi_v(\vert K\vert)$上任一点的重心坐标向量$b$中至多只有三个分量非零。</p>
 <p>有了上述定义，Hoppe采用<strong>显示能量函数</strong>$E(M)$来度量简化网格与原始网格的逼近度：</p>
