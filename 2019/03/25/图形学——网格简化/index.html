@@ -122,7 +122,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s6.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s5.jpg">
-<meta property="og:updated_time" content="2019-03-27T13:12:10.131Z">
+<meta property="og:updated_time" content="2019-03-28T05:22:10.851Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——网格简化">
 <meta name="twitter:description" content="上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。">
@@ -414,7 +414,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-27 21:12:10" itemprop="dateModified" datetime="2019-03-27T21:12:10+08:00">2019-03-27</time>
+                <time title="更新于：2019-03-28 13:22:10" itemprop="dateModified" datetime="2019-03-28T13:22:10+08:00">2019-03-28</time>
               
             
           </span>
@@ -564,6 +564,7 @@ ad& bd & cd & d^2
 Q(v_a) = \sum_{p \in plane(v_a)} K_p</script><p>这样，每一顶点$v_a$，在预处理时，可以用上述方法计算矩阵$Q(v_a)$，从而计算移动误差。而合并顶点每次需要移动两个顶点，因此需要考虑同时移动后形成的误差。而Garland和Heckbert简单地采用加法来刻画多点移动形成的误差，对于$(v_1,v_2) \rightarrow v$，其误差为：</p>
 <script type="math/tex; mode=display">
 \Delta (v) = \Delta (v_1 \rightarrow v) + \Delta (v_2 \rightarrow v) = v(Q(v_1) + Q(v_2))v^T = vQv^T。</script><p>因此应该选取$v$使得误差达到最小。一般想法是采取优化方法如梯度下降等等，但是在这个式子里，一般$v$的值是有解析解的，正如线性回归一样，我们可以得到唯一解，或者伪逆技术(pseudo-inverse)求出解。如果伪逆技术失败，简单选取$v$为$v_1,v_2$或者$\frac{v_1 + v_2}{2}$。</p>
+<p>二次误差度量简化算法的论文是：<a href="https://www.ri.cmu.edu/pub_files/pub2/garland_michael_1997_1/garland_michael_1997_1.pdf" target="_blank" rel="noopener">Surface Simplification Using Quadric Error Metrics</a>。</p>
 
       
     </div>
@@ -608,6 +609,10 @@ Q(v_a) = \sum_{p \in plane(v_a)} K_p</script><p>这样，每一顶点$v_a$，在
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/27/图形学——纹理/" rel="prev" title="图形学——纹理">
+                图形学——纹理 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -679,7 +684,7 @@ Q(v_a) = \sum_{p \in plane(v_a)} K_p</script><p>这样，每一顶点$v_a$，在
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">95</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
