@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="到目前为止介绍的并发过程都是类似于去“争夺”控制，也就是只要有机会就去上，但是有时候我们会遇到那种等待的情况，达到某个条件了才能运行，这时候就需要用条件变量（condition_variable）。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-31T13:47:14.373Z">
+<meta property="og:updated_time" content="2019-04-01T05:37:16.509Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CPP——并发编程（四）condition_variable">
 <meta name="twitter:description" content="到目前为止介绍的并发过程都是类似于去“争夺”控制，也就是只要有机会就去上，但是有时候我们会遇到那种等待的情况，达到某个条件了才能运行，这时候就需要用条件变量（condition_variable）。">
@@ -390,12 +390,24 @@
                 
               
 
-              <time title="创建于：2019-03-31 19:59:23 / 更新于：21:47:14" itemprop="dateCreated datePublished" datetime="2019-03-31T19:59:23+08:00">2019-03-31</time>
+              <time title="创建于：2019-03-31 19:59:23" itemprop="dateCreated datePublished" datetime="2019-03-31T19:59:23+08:00">2019-03-31</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-04-01 13:37:16" itemprop="dateModified" datetime="2019-04-01T13:37:16+08:00">2019-04-01</time>
               
             
           </span>
@@ -466,7 +478,26 @@
 <p>唤醒所有的等待线程。</p>
 <h3 id="std-condition-variable-any"><a href="#std-condition-variable-any" class="headerlink" title="std::condition_variable_any"></a>std::condition_variable_any</h3><p>condition_variable_any和condition_variable的区别是wait接受的锁是任意的，而condition_variable只能接受unique_lock。</p>
 <h3 id="std-cv-status"><a href="#std-cv-status" class="headerlink" title="std::cv_status"></a>std::cv_status</h3><p>这个枚举类型仅仅枚举了两个状态，标志着wait_for或者wait_until是否是因为超时解除阻塞的。</p>
-<p>—-|—-<br>cv_status::no_timeout |    wait_for 或者 wait_until 没有超时，即在规定的时间段内线程收到了通知。<br>cv_status::timeout |    wait_for 或者 wait_until 超时。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cv_status::no_timeout</td>
+<td>wait_for 或者 wait_until 没有超时，即在规定的时间段内线程收到了通知</td>
+</tr>
+<tr>
+<td>cv_status::timeout</td>
+<td>wait_for 或者 wait_until 超时</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h3 id="std-notify-all-at-thread-exit"><a href="#std-notify-all-at-thread-exit" class="headerlink" title="std::notify_all_at_thread_exit"></a>std::notify_all_at_thread_exit</h3><p>notify_all_at_thread_exit是一个函数，原型如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">notify_all_at_thread_exit</span> <span class="params">(condition_variable&amp; cond, unique_lock&lt;mutex&gt; lck)</span></span>;</span><br></pre></td></tr></table></figure></p>
 <p>当调用该函数的线程结束时，所有在cond上等待的线程都会收到通知。</p>
 <p>总体来说，条件变量的相关内容还是很容易理解的。现在研究一下下面的代码：</p>
