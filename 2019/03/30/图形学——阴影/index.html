@@ -131,7 +131,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/shadow13.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/shadow14.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/shadow15.jpg">
-<meta property="og:updated_time" content="2019-04-02T11:26:50.436Z">
+<meta property="og:updated_time" content="2019-04-02T11:27:54.147Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——阴影">
 <meta name="twitter:description" content="阴影是图形学中显示真实感图像非常重要的一部分。我们在画画时候也知道，简单的话加上了一点阴影效果会大大增加，仿佛瞬间一幅画变得立体。这篇文章简单介绍一下图形学中的阴影部分。">
@@ -423,7 +423,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-04-02 19:26:50" itemprop="dateModified" datetime="2019-04-02T19:26:50+08:00">2019-04-02</time>
+                <time title="更新于：2019-04-02 19:27:54" itemprop="dateModified" datetime="2019-04-02T19:27:54+08:00">2019-04-02</time>
               
             
           </span>
@@ -519,10 +519,10 @@ n\cdot p + d = 0</script><p>类似于$y=0$的情况，可以计算出对应的�
 <script type="math/tex; mode=display">
 M = \begin{bmatrix}
 n\cdot l + d - l_xn_x & -lxn_y & -l_xn_z & -l_x d \\
--l_yn_x & \n \cdot l + d - l_yn_y & -l_yn_z & - l_yd\\
+-l_yn_x & n \cdot l + d - l_yn_y & -l_yn_z & - l_yd\\
 -l_zn_x & -l_zn_y & n \cdot l +d - l_zn_z & -l_zd\\
 -n_x & -n_y & -n_z & n\cdot l
-\end{bmatrix}</script><p>也就是：Mv = p.</p>
+\end{bmatrix}</script><p>求阴影点位置时：$Mv = p$，$v$是遮挡物上的点。</p>
 <p>绘制平面投影很简单，对投影处的点使用暗色并进行去光照绘制即可。投影算法的局限性在于只能做平面阴影。</p>
 <h3 id="曲面上的阴影"><a href="#曲面上的阴影" class="headerlink" title="曲面上的阴影"></a>曲面上的阴影</h3><p>对于曲面上的阴影，简单的使用投影矩阵就不可行了。</p>
 <p>有一个非常聪明的做法是将阴影图像作为纹理贴到物体表面。这种方法被称为阴影纹理。我们可以将光源作为视点，绘制处这个视角下的图像，白色背景，但是遮挡物画成黑色。得到的图像作为纹理图，然后对遮挡物后的曲面进行纹理映射。纹理映射上一篇内容介绍了，以此实现绘制阴影的效果。</p>
