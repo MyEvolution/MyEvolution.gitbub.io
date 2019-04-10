@@ -133,7 +133,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/animation14.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/animation16.jpg">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/animation17.jpg">
-<meta property="og:updated_time" content="2019-04-10T09:43:51.619Z">
+<meta property="og:updated_time" content="2019-04-10T10:21:17.381Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——计算机动画">
 <meta name="twitter:description" content="计算机图形学中比较重要的一个应用就是动画。除了用于电影，游戏等制作，动画在军事模拟，实景演示也有非常重要的地位。这一篇文章将简单说一下计算机图形学中动画的发展还有一些算法。">
@@ -425,7 +425,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-04-10 17:43:51" itemprop="dateModified" datetime="2019-04-10T17:43:51+08:00">2019-04-10</time>
+                <time title="更新于：2019-04-10 18:21:17" itemprop="dateModified" datetime="2019-04-10T18:21:17+08:00">2019-04-10</time>
               
             
           </span>
@@ -507,7 +507,7 @@ X' = w_1 X_1' +w_2 X_2' + ... + w_k X_k'.</script><p>这里比较复杂的问题
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/animation6.jpg" alt=""></p>
 <p>他们提出的权重计算方法如下：</p>
 <script type="math/tex; mode=display">
-w_i = \left\frac{len^p(P_iQ_i)  }{a + dist}\right^b</script><p>其中$len(P_iQ_i)$是$P_iQ_i$的长度，dist是$X$到$P_iQ_i$的距离，而$a,b,q$都是正常数。</p>
+w_i = \left(\frac{len^p(P_iQ_i)  }{a + dist}\right)^b</script><p>其中$len(P_iQ_i)$是$P_iQ_i$的长度，dist是$X$到$P_iQ_i$的距离，而$a,b,q$都是正常数。</p>
 <p>因此，使用Beier &amp; Neely算法可以进行较为容易而且自然的图像变形，步骤如下：</p>
 <ul>
 <li>要计算S和D之间的任一中间帧图像M，首先插值出M中所有的控制向量（使用naive的插值方法得到）</li>
@@ -591,8 +591,10 @@ T &= \sum_{i,j,k = 0}^{l,m,n}(P_{i,j,k} +\delta_{i,j,k} )R_{i,j,k}(u_s,v_s,w_s)\
 <p>使用DFFD进行连续变形的时与路径无关，也就是变回来之后，控制顶点还是原来的位置。</p>
 <p>如果我们想要改变多个点，现在希望改变$h$个点，这时候就会有$h$个方程组。这时候的求解过程就没有显示解了。对于每个点，都有：</p>
 <script type="math/tex; mode=display">
+\begin{aligned}
 T_f &= \sum_{i,j,k = 0}^{l,m,n}(P_{i,j,k} +\delta_{i,j,k} )R_{i,j,k}(u_f,v_f,w_f)\\
-&= S_f+ \sum_{i,j,k = 0}^{l,m,n}\delta_{i,j,k}R_{i,j,k}(u_f,v_f,w_f)</script><p>这时候构造拉格朗日乘数，就会需要$h$个$\lambda$:</p>
+&= S_f+ \sum_{i,j,k = 0}^{l,m,n}\delta_{i,j,k}R_{i,j,k}(u_f,v_f,w_f)
+\end{aligned}</script><p>这时候构造拉格朗日乘数，就会需要$h$个$\lambda$:</p>
 <script type="math/tex; mode=display">
 L = \sum_{i,j,k = 0}^{l,m,n} \Vert \delta_{i,j,k} \Vert^2 + \sum_{f=1}^h\left( T_f - S_f - \sum_{i,j,k = 0}^{l,m,n}\delta_{i,j,k}R_{i,j,k}(u_f,v_f,w_f) \right)</script><p>当然，我们不希望求解这样方程，希望有那样一种方法，可以将多个点的改变转化成一连串单个点的转换，这个做法被称为多点约束条件的分解。有这样一个定理，一个包含了$h$个点约束条件下的DFFD问题，可以依次分解为$h$个单点约束条件下的DFFD问题串接而成，这个定理可以帮助我们做出多点约束条件下DFFD问题的显式解。下面是多点改变的DFFD示例：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/animation16.jpg" alt=""></p>
