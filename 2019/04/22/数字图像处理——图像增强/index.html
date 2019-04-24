@@ -112,7 +112,7 @@
 <meta name="keywords" content="digital image processing,image enhancement">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数字图像处理——图像增强">
-<meta property="og:url" content="http://wlsdzyzl.com/2019/04/22/数字图像处理——Enhancement/index.html">
+<meta property="og:url" content="http://wlsdzyzl.com/2019/04/22/数字图像处理——图像增强/index.html">
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="从这周开始进行数字图像处理这门课程。实际上图像处理，也是计算机图形学的一个分支。我们生活中使用的各种美图ps等等都是属于图像处理的范畴。这次介绍图像处理中图像增强的部分。">
 <meta property="og:locale" content="zh-Hans">
@@ -138,7 +138,19 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/enhancement18.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/enhancement19.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/enhancement20.png">
-<meta property="og:updated_time" content="2019-04-23T12:55:55.982Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/image_black.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/image_original.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/image_he.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object1.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/result_1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object2.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/result_2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_3.png">
+<meta property="og:updated_time" content="2019-04-24T06:38:00.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字图像处理——图像增强">
 <meta name="twitter:description" content="从这周开始进行数字图像处理这门课程。实际上图像处理，也是计算机图形学的一个分支。我们生活中使用的各种美图ps等等都是属于图像处理的范畴。这次介绍图像处理中图像增强的部分。">
@@ -149,7 +161,7 @@
 
 
 
-  <link rel="canonical" href="http://wlsdzyzl.com/2019/04/22/数字图像处理——Enhancement/">
+  <link rel="canonical" href="http://wlsdzyzl.com/2019/04/22/数字图像处理——图像增强/">
 
 
 
@@ -371,7 +383,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/04/22/数字图像处理——Enhancement/">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/04/22/数字图像处理——图像增强/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="wlsdzyzl">
@@ -430,7 +442,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-04-23 20:55:55" itemprop="dateModified" datetime="2019-04-23T20:55:55+08:00">2019-04-23</time>
+                <time title="更新于：2019-04-24 14:38:00" itemprop="dateModified" datetime="2019-04-24T14:38:00+08:00">2019-04-24</time>
               
             
           </span>
@@ -593,11 +605,37 @@ r = T^{-1}(s)</script><p>由于目标图像和原始图像都进行了均值化�
 <script type="math/tex; mode=display">
 p_s(s) = p_v(v)</script><p>因此可以使用目标图像均值化后的结果来得到原始图像规定化的样子：</p>
 <script type="math/tex; mode=display">
-z = G^{-1}(v) = G^{-1}(s)</script><p>上面就是直方图规定化的内容，可以看到均值化是规定化的基础。</p>
+z = G^{-1}(v) = G^{-1}(s)</script><p>在离散情况下，这个问题更好解决，只要根据映射反向回去即可。但是需要注意的是，映射并不是一一对应的，原来的多个值映射到一个值，因此反向的时候，可能有多个值找不到对应的映射，这时候只要简单的找附近的值对应的映射就可以了。</p>
+<p>上面就是直方图规定化的内容，可以看到均值化是规定化的基础。</p>
 <p>除了上面介绍的之外，还有图像之间的and，or以及sub等等操作，都是非常简单的内容。下面是几个例子：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/enhancement19.png" alt=""></p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/enhancement20.png" alt=""></p>
-<p>下次将学习一些图像的滤波算法。</p>
+<p>下面会用python的代码实现一下直方图均衡化和直方图规定化：<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python histogram equalization and specification</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> pylab <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">equalization</span><span class="params">(im)</span>:</span></span><br><span class="line">    obj = im.flatten()</span><br><span class="line">    sta = [<span class="number">0</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">256</span>)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> obj:</span><br><span class="line">        sta[i] = sta[i]+<span class="number">1</span></span><br><span class="line">    sta = [i /len(obj) <span class="keyword">for</span> i <span class="keyword">in</span> sta ]</span><br><span class="line"></span><br><span class="line">    updated = []</span><br><span class="line">    integral=<span class="number">0.0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> sta:</span><br><span class="line">        integral += i</span><br><span class="line">        updated.append(int(integral * <span class="number">255</span>))</span><br><span class="line">    nim = np.array(im)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(im)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(im[i])):</span><br><span class="line">            nim[i][j] = updated[im[i][j]]</span><br><span class="line">    <span class="keyword">return</span> nim,updated</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">specification</span><span class="params">(im,im_s)</span>:</span></span><br><span class="line">    nim,updated1 = equalization(im)</span><br><span class="line"></span><br><span class="line">    nim_s,updated2 = equalization(im_s)</span><br><span class="line">    updated = [<span class="number">-1</span> <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">256</span>)]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">256</span>):</span><br><span class="line">        <span class="keyword">if</span> updated[updated2[i]]==<span class="number">-1</span>:</span><br><span class="line">            updated[updated2[i]] = i</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">256</span>):</span><br><span class="line">        j=<span class="number">1</span></span><br><span class="line">        <span class="keyword">while</span> updated[i] == <span class="number">-1</span>:</span><br><span class="line">            updated[i] = updated[(i+j)%<span class="number">256</span>]</span><br><span class="line">            <span class="keyword">if</span> updated[i] == <span class="number">-1</span>:</span><br><span class="line">                updated[i] = updated[((i-j)+<span class="number">256</span>)%<span class="number">256</span>]</span><br><span class="line">            j+=<span class="number">1</span></span><br><span class="line">    final = np.array(im)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(im)):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(len(im[i])):</span><br><span class="line">            <span class="keyword">if</span> updated[im[i][j]]!= <span class="number">-1</span>:</span><br><span class="line">                final[i][j] = updated[im[i][j]]</span><br><span class="line">    <span class="keyword">return</span> final</span><br><span class="line"></span><br><span class="line">im = np.array(Image.open(<span class="string">"./image_black.jpg"</span>).convert(<span class="string">"L"</span>))</span><br><span class="line">nim = equalization(im)[<span class="number">0</span>]</span><br><span class="line">im_s = np.array(Image.open(<span class="string">"./object1.jpg"</span>).convert(<span class="string">"L"</span>))</span><br><span class="line">final = specification(im,im_s)</span><br><span class="line"></span><br><span class="line"><span class="string">'''Image.fromarray(im).show()</span></span><br><span class="line"><span class="string">Image.fromarray(nim).show()</span></span><br><span class="line"><span class="string">Image.fromarray(im_s).show()</span></span><br><span class="line"><span class="string">Image.fromarray(final).show()'''</span></span><br><span class="line">figure()</span><br><span class="line"><span class="comment">#hist(im.flatten(),256)</span></span><br><span class="line"><span class="comment">#hist(nim.flatten(),256)</span></span><br><span class="line">hist(im_s.flatten(),<span class="number">256</span>)</span><br><span class="line">hist(final.flatten(),<span class="number">256</span>)</span><br><span class="line">show()</span><br></pre></td></tr></table></figure></p>
+<p>原始图像为：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/image_black.jpg" alt=""></p>
+<p>它的灰度图为：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/image_original.png" alt=""></p>
+<p>经过直方图均衡化之后的效果:</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/image_he.png" alt=""></p>
+<p>均衡化前后的直方图对比（原来的直方图为蓝色，均衡化后的为黄色）：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_1.png" alt=""></p>
+<p>对于规定化，需要选择目标图像。为了更好地显示效果，我选了两个目标图像来分别作规定化。第一个目标图原图为：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object1.jpg" alt=""></p>
+<p>第一个目标图灰度图如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object1.png" alt=""></p>
+<p>经过规定化之后，效果如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/result_1.png" alt=""></p>
+<p>可以看到的是，由于我选了宇宙图，黑色占了大多数，因此整个图的色调会变暗很多。而目标图的直方图（蓝）和规定化后的直方图（黄）对比如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_2.png" alt=""></p>
+<p>对于第二个规定化，我选择了蓝天白云的风景图，可以看到，这个应该会让整个图的色调变亮。第二个目标图原图为：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object2.jpg" alt=""></p>
+<p>第二个目标图灰度图为：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object2.png" alt=""></p>
+<p>经过规定化后，效果为：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/result_2.png" alt=""></p>
+<p>目标图的直方图（蓝）和规定化后的直方图（黄）对比如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_3.png" alt=""></p>
+<p>到这里这篇文章内容已经不少了，下次会介绍滤波的相关内容。</p>
 
       
     </div>

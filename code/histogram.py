@@ -1,4 +1,4 @@
-# python histogram equalization
+# python histogram equalization and specification
 import math
 import numpy as np
 from PIL import Image
@@ -21,14 +21,22 @@ def equalization(im):
         for j in range(len(im[i])):
             nim[i][j] = updated[im[i][j]]
     return nim,updated
+
 def specification(im,im_s):
     nim,updated1 = equalization(im)
 
     nim_s,updated2 = equalization(im_s)
     updated = [-1 for i in range(256)]
     for i in range(256):
-        if updated[updated2[i]]!=-1:
+        if updated[updated2[i]]==-1:
             updated[updated2[i]] = i
+    for i in range(256):
+        j=1
+        while updated[i] == -1:
+            updated[i] = updated[(i+j)%256]
+            if updated[i] == -1:
+                updated[i] = updated[((i-j)+256)%256]
+            j+=1
     final = np.array(im)
     for i in range(len(im)):
         for j in range(len(im[i])):
@@ -38,20 +46,21 @@ def specification(im,im_s):
 
 
 
-im = np.array(Image.open("./object.jpg").convert("L"))
+im = np.array(Image.open("./image_black.jpg").convert("L"))
 nim = equalization(im)[0]
-im_s = np.array(Image.open("./image.jpg").convert("L"))
+im_s = np.array(Image.open("./object1.jpg").convert("L"))
 final = specification(im,im_s)
 
-Image.fromarray(im).show()
-#Image.fromarray(nim).show()
-#Image.fromarray(im_s).show()
+'''Image.fromarray(im).show()
+Image.fromarray(nim).show()
+Image.fromarray(im_s).show()'''
 Image.fromarray(final).show()
 figure()
-hist(im.flatten(),256)
+#hist(im.flatten(),256)
+#hist(nim.flatten(),256)
 hist(im_s.flatten(),256)
 hist(final.flatten(),256)
 show()
-# python histogram specification
+
 
 
