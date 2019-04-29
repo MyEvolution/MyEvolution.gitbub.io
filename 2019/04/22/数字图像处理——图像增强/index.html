@@ -150,7 +150,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/object2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/result_2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_3.png">
-<meta property="og:updated_time" content="2019-04-24T06:38:00.338Z">
+<meta property="og:updated_time" content="2019-04-29T06:27:00.036Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字图像处理——图像增强">
 <meta name="twitter:description" content="从这周开始进行数字图像处理这门课程。实际上图像处理，也是计算机图形学的一个分支。我们生活中使用的各种美图ps等等都是属于图像处理的范畴。这次介绍图像处理中图像增强的部分。">
@@ -442,7 +442,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-04-24 14:38:00" itemprop="dateModified" datetime="2019-04-24T14:38:00+08:00">2019-04-24</time>
+                <time title="更新于：2019-04-29 14:27:00" itemprop="dateModified" datetime="2019-04-29T14:27:00+08:00">2019-04-29</time>
               
             
           </span>
@@ -495,6 +495,7 @@
       
         <p>从这周开始进行数字图像处理这门课程。实际上图像处理，也是计算机图形学的一个分支。我们生活中使用的各种美图ps等等都是属于图像处理的范畴。这次介绍图像处理中图像增强的部分。</p>
 <a id="more"></a>
+<p>图像获取是将模拟连续信号转化成数字信号的过程，而在采样过程中，有一个著名的定律：奈奎斯特采样定律。它要求采样的频率是原始信号频率的2倍以上，才能保证不丢失信息。获取到图像后，就有很多后续的操作了。</p>
 <p>实际上，图像增强是一个很大的范畴。简单来说，是因为我们的目的不同，所以增强的方法也不同。简单的来说，图像增强在空间域上分为3类：点操作，全局操作，以及块操作（更熟悉的名字，叫滤波），除了空间域，在频域上也有很多相关的算法。图像增强经常应用到各种特征提取的预处理阶段，也常常应用到生活中，下图是图像增强的几个例子：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/enhancement1.png" alt=""></p>
 <p>在这里介绍几个很重要的图像增强相关算法。对于空间域上的操作，我们可以用下面的式子来表示：</p>
@@ -635,7 +636,7 @@ z = G^{-1}(v) = G^{-1}(s)</script><p>在离散情况下，这个问题更好解�
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/result_2.png" alt=""></p>
 <p>目标图的直方图（蓝）和规定化后的直方图（黄）对比如下：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/h_3.png" alt=""></p>
-<p>到这里这篇文章内容已经不少了，下次会介绍滤波的相关内容。</p>
+<h2 id="图像的放大缩小（resize）"><a href="#图像的放大缩小（resize）" class="headerlink" title="图像的放大缩小（resize）"></a>图像的放大缩小（resize）</h2><p>图像的放大和缩小也是一个图像的基本操作。图像的缩小和放大会有比较多的插值方法。最简单的就是不做差值，直接复制原来的像素或者采样。这样效果很差。而比较有名的插值方法有最邻近插值（nearest），双线性插值（bilinear），双立方插值（bicubic）等等，一般来说这些方法都会被直接实现在各个程序包中了。比如在matlab的imresize函数以及PIL中Image的resize函数，我们可以选择不同的插值方法来达到不同的效果。这些算法背后就是数学的插值方法，这里就不多介绍了。</p>
 
       
     </div>
@@ -680,6 +681,10 @@ z = G^{-1}(v) = G^{-1}(s)</script><p>在离散情况下，这个问题更好解�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/29/数字图像处理——空间域滤波/" rel="prev" title="数字图像处理——空间域滤波">
+                数字图像处理——空间域滤波 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -751,7 +756,7 @@ z = G^{-1}(v) = G^{-1}(s)</script><p>在离散情况下，这个问题更好解�
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">104</span>
+                    <span class="site-state-item-count">106</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -933,7 +938,9 @@ z = G^{-1}(v) = G^{-1}(s)</script><p>在离散情况下，这个问题更好解�
                     
                       
                     
-                    <span class="site-state-item-count">66</span>
+                      
+                    
+                    <span class="site-state-item-count">67</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -993,7 +1000,7 @@ z = G^{-1}(v) = G^{-1}(s)</script><p>在离散情况下，这个问题更好解�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#点操作（point-operation）"><span class="nav-number">1.</span> <span class="nav-text">点操作（point operation）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#裁剪和阈值化（clipping-and-thresholding）"><span class="nav-number">1.1.</span> <span class="nav-text">裁剪和阈值化（clipping and thresholding）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像反转（image-negatives）"><span class="nav-number">1.2.</span> <span class="nav-text">图像反转（image negatives）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log转换"><span class="nav-number">1.3.</span> <span class="nav-text">Log转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指数转换"><span class="nav-number">1.4.</span> <span class="nav-text">指数转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分段线性转换（piecewise-linear-transformation）"><span class="nav-number">1.5.</span> <span class="nav-text">分段线性转换（piecewise linear transformation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#灰度级切片操作（gray-level-slicing）"><span class="nav-number">1.6.</span> <span class="nav-text">灰度级切片操作（gray level slicing）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bit平面的切片操作-bit-plane-slicing"><span class="nav-number">1.7.</span> <span class="nav-text">bit平面的切片操作(bit plane slicing)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局操作"><span class="nav-number">2.</span> <span class="nav-text">全局操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直方图均衡化（histogram-equalization）"><span class="nav-number">2.1.</span> <span class="nav-text">直方图均衡化（histogram equalization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直方图规定化（histogram-specification）"><span class="nav-number">2.2.</span> <span class="nav-text">直方图规定化（histogram specification）</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#点操作（point-operation）"><span class="nav-number">1.</span> <span class="nav-text">点操作（point operation）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#裁剪和阈值化（clipping-and-thresholding）"><span class="nav-number">1.1.</span> <span class="nav-text">裁剪和阈值化（clipping and thresholding）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#图像反转（image-negatives）"><span class="nav-number">1.2.</span> <span class="nav-text">图像反转（image negatives）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log转换"><span class="nav-number">1.3.</span> <span class="nav-text">Log转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指数转换"><span class="nav-number">1.4.</span> <span class="nav-text">指数转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分段线性转换（piecewise-linear-transformation）"><span class="nav-number">1.5.</span> <span class="nav-text">分段线性转换（piecewise linear transformation）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#灰度级切片操作（gray-level-slicing）"><span class="nav-number">1.6.</span> <span class="nav-text">灰度级切片操作（gray level slicing）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bit平面的切片操作-bit-plane-slicing"><span class="nav-number">1.7.</span> <span class="nav-text">bit平面的切片操作(bit plane slicing)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局操作"><span class="nav-number">2.</span> <span class="nav-text">全局操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直方图均衡化（histogram-equalization）"><span class="nav-number">2.1.</span> <span class="nav-text">直方图均衡化（histogram equalization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#直方图规定化（histogram-specification）"><span class="nav-number">2.2.</span> <span class="nav-text">直方图规定化（histogram specification）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图像的放大缩小（resize）"><span class="nav-number">3.</span> <span class="nav-text">图像的放大缩小（resize）</span></a></li></ol></div>
             
 
           </div>
