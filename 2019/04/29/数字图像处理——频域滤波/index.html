@@ -144,7 +144,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f22.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f23.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f24.png">
-<meta property="og:updated_time" content="2019-04-30T13:31:09.195Z">
+<meta property="og:updated_time" content="2019-04-30T13:39:31.290Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字图像处理——频域滤波">
 <meta name="twitter:description" content="空间域的算法很多，也容易理解，但是有时候却很难设计。而有时候一些问题，转化到频域上，就变得迎刃而解了。">
@@ -436,7 +436,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-04-30 21:31:09" itemprop="dateModified" datetime="2019-04-30T21:31:09+08:00">2019-04-30</time>
+                <time title="更新于：2019-04-30 21:39:31" itemprop="dateModified" datetime="2019-04-30T21:39:31+08:00">2019-04-30</time>
               
             
           </span>
@@ -519,7 +519,43 @@ u[m, n]=\sum_{k=0}^{N-1} \sum_{l=0}^{N-1} v[k, l] a_{k /}^{*}[m, n]</script><p>�
 <p>可以看到这里任何一个系数估计都是全局计算，需要$N^2$个乘法以及$N^2-1$个加法。而所有系数计算需要$N^4$的复杂度。这个复杂度是难以接受的。因此我们需要快速傅里叶变换（FFT），对于快速傅里叶变换的具体算法这里就不多介绍了，但是它已经被嵌入到各种各样的程序包中了，可以随时调用。</p>
 <h3 id="常见的傅里叶变换"><a href="#常见的傅里叶变换" class="headerlink" title="常见的傅里叶变换"></a>常见的傅里叶变换</h3><p>为了介绍离散傅里叶变换的性质，我们先认识下面一些函数：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f0.png" alt=""></p>
-<p>对于傅里叶变换：$f(x,y) \rightarrow F(x,y)$，那么一些常见的函数的傅里叶变换有（$\delta(x, y )$为冲激函数）：<br>$f(x,y)$|$F(x,y)$<br>:—:|:—:<br>$\delta(x, y)$|$1$<br>$\delta\left(x \pm x_{0}, y \pm y_{0}\right)$| $e^{ \pm j 2 \pi\left(x_{0} \xi_{1}+y_{0} \xi_{2}\right)}$<br>$e^{-\pi\left(x^{2}+y^{2}\right)}$ | $e^{-\pi\left(\xi_{1}^{2}+\xi_{2}^{2}\right)}$<br>$\operatorname{rect}(x, y)=\operatorname{rect}(x) \operatorname{rect}(y)$ | $\operatorname{sinc}\left(\xi_{1}, \xi_{2}\right)=\operatorname{sinc}\left(\xi_{1}\right) \operatorname{sinc}\left(\xi_{2}\right)$<br>$\operatorname{tri}(x, y)$ | $\sin c^{2}\left(\xi_{1}, \xi_{2}\right)$<br>$\operatorname{comb}(x, y)$ | $\operatorname{comb}\left(\xi_{1}, \xi_{2}\right)$</p>
+<p>对于傅里叶变换：$f(x,y) \rightarrow F(x,y)$，那么一些常见的函数的傅里叶变换有（$\delta(x, y )$为冲激函数）：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>$f(x,y)$</th>
+<th>$F(x,y)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\delta(x, y)$</td>
+<td>$1$</td>
+</tr>
+<tr>
+<td>$\delta\left(x \pm x_{0}, y \pm y_{0}\right)$</td>
+<td>$e^{ \pm j 2 \pi\left(x_{0} \xi_{1}+y_{0} \xi_{2}\right)}$</td>
+</tr>
+<tr>
+<td>$e^{-\pi\left(x^{2}+y^{2}\right)}$</td>
+<td>$e^{-\pi\left(\xi_{1}^{2}+\xi_{2}^{2}\right)}$</td>
+</tr>
+<tr>
+<td>$\operatorname{rect}(x, y)=\operatorname{rect}(x) \operatorname{rect}(y)$</td>
+<td>$\operatorname{sinc}\left(\xi_{1}, \xi_{2}\right)=\operatorname{sinc}\left(\xi_{1}\right) \operatorname{sinc}\left(\xi_{2}\right)$</td>
+</tr>
+<tr>
+<td>$\operatorname{tri}(x, y)$</td>
+<td>$\sin c^{2}\left(\xi_{1}, \xi_{2}\right)$</td>
+</tr>
+<tr>
+<td>$\operatorname{comb}(x, y)$</td>
+<td>$\operatorname{comb}\left(\xi_{1}, \xi_{2}\right)$</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h3 id="Translation"><a href="#Translation" class="headerlink" title="Translation"></a>Translation</h3><ul>
 <li>${f(x, y) \rightarrow F(u, v)}$</li>
 <li>${f(x, y) e^{\left(j u_{0} x+j v_{0} y\right)} \rightarrow F\left(u-u_{0}, v-v_{0}\right)}$</li>
