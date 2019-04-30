@@ -124,6 +124,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f25.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f5.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f26.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f6.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f7.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f8.png">
@@ -144,7 +145,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f22.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f23.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f24.png">
-<meta property="og:updated_time" content="2019-04-30T13:39:31.290Z">
+<meta property="og:updated_time" content="2019-04-30T13:43:09.199Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数字图像处理——频域滤波">
 <meta name="twitter:description" content="空间域的算法很多，也容易理解，但是有时候却很难设计。而有时候一些问题，转化到频域上，就变得迎刃而解了。">
@@ -436,7 +437,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-04-30 21:39:31" itemprop="dateModified" datetime="2019-04-30T21:39:31+08:00">2019-04-30</time>
+                <time title="更新于：2019-04-30 21:43:09" itemprop="dateModified" datetime="2019-04-30T21:43:09+08:00">2019-04-30</time>
               
             
           </span>
@@ -591,7 +592,9 @@ H(u, v)=\left\{\begin{array}{ll}{1} & {\text { if } D(u, v) \leq D_{0}} \\ {0} &
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f3.png" alt=""></p>
 <p>这里$D_0$是截断频率，如果确定截断频率是非常重要的一件事，它和我们想滤掉多少频分以及图像的分布有关。下面是一个低通滤波的例子：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f5.png" alt=""></p>
-<p>低通滤波很明显可以模糊图像，但是它会带来振铃效应（ringing effect）。<br><strong>高斯低通滤波（Gaussian Low-Pass Filter）</strong>的做法是用$D_0$代替高斯滤波中的$\delta$：</p>
+<p>低通滤波很明显可以模糊图像，但是它会带来振铃效应（ringing effect）:</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f26.png" alt=""></p>
+<p><strong>高斯低通滤波（Gaussian Low-Pass Filter）</strong>的做法是用$D_0$代替高斯滤波中的$\delta$：</p>
 <script type="math/tex; mode=display">
 H(u, v)=e^{-\frac{D^{2}(u, v)}{2 D_{0}^{2}}}</script><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/filter_f6.png" alt=""></p>
 <p>高斯低通滤波的好处在于它在空间域内也容易得到解析形式，而不需要傅里叶变换，而且与理想的低通滤波器相比，在空间域它没有振铃效应。</p>
