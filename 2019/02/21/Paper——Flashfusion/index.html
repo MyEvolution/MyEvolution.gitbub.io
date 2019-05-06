@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/corner.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ssv.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/inter.jpg">
-<meta property="og:updated_time" content="2019-02-27T11:23:51.103Z">
+<meta property="og:updated_time" content="2019-05-06T14:24:06.321Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Flashfusion">
 <meta name="twitter:description" content="对于论文的阅读是我的弱项，这是导致我学习过程总是恍恍惚惚一脸懵比的一个重要的原因。出来混总是要还的。大学时候的浪荡带来的后果现在就得到了体现。">
@@ -413,7 +413,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-02-27 19:23:51" itemprop="dateModified" datetime="2019-02-27T19:23:51+08:00">2019-02-27</time>
+                <time title="更新于：2019-05-06 22:24:06" itemprop="dateModified" datetime="2019-05-06T22:24:06+08:00">2019-05-06</time>
               
             
           </span>
@@ -513,6 +513,7 @@ sdf_n = \frac{sdf_0 * w_0 + sdf_i * w_i}{w_i + w_0}, w_n = w_i + w_0 .</script><
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/ssv.png" alt=""></p>
 <p>可以看到利用稀疏采样，我们可以选到98%的真正有效chunk，接着对有效的chunk进行遍历求得TSDF值，花费时间仅仅为全部体素遍历的2%。</p>
 <p>对于有效chunk的选择仅仅应用在关键帧上，然后局部帧再被融合到对应的关键帧中。也就是，chunk的ID会被存储到对应的关键帧中，用于后面的de-integrated。对于颜色也是类似的，新的帧的颜色会给更多的权重。</p>
+<p>需要注意的是，由于全局优化，可能各个关键帧的位姿会随时改变。这时候我们会需要deintegrate，用来在TSDF模型上减去之前的位姿的影响，而使用reintegrate，将具有新位姿的keyframe融合到TSDF模型上。</p>
 <h3 id="网格提取"><a href="#网格提取" class="headerlink" title="网格提取"></a>网格提取</h3><p>对于网格提取可以分成多边形生成与法向提取两个部分。如何从TSDF场到一个三维网格模型，别的paper中很多又叫做raycasting，这篇文章中提到了一个方法，叫做<a href="https://www.nvidia.com/object/gpu_gems_home.html" target="_blank" rel="noopener">ncrementalmarching  cubes  algorithm</a>(这是一本书)。这些算法的道理都是表面两侧体素的TSDF值符号不同，因此会使用线性插值来得到表面。插值过程如下：</p>
 <script type="math/tex; mode=display">
 v = \frac{s_a \times v_b - s_b \times v_a}{s_a - s_b}</script><p>其中$s$为sdf值，而$v$代表了各个体素的坐标。你可能会奇怪，为什么sdf值和体素没有对应相乘，如果画一张图你就会理解：</p>
@@ -662,7 +663,7 @@ s_{i,j,k+1} - s_{i,j,k-1}
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">106</span>
+                    <span class="site-state-item-count">108</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -846,7 +847,9 @@ s_{i,j,k+1} - s_{i,j,k-1}
                     
                       
                     
-                    <span class="site-state-item-count">67</span>
+                      
+                    
+                    <span class="site-state-item-count">68</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
