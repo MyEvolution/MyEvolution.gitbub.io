@@ -117,7 +117,7 @@
 <meta property="og:description" content="踩过的坑系列是一些没什么技术含量却把人折磨的要死的过程。就做个记录，可能会有很多错误，不必当真。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/ros.png">
-<meta property="og:updated_time" content="2019-05-09T07:48:00.537Z">
+<meta property="og:updated_time" content="2019-05-09T09:08:54.027Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="踩过的坑——ROS安装">
 <meta name="twitter:description" content="踩过的坑系列是一些没什么技术含量却把人折磨的要死的过程。就做个记录，可能会有很多错误，不必当真。">
@@ -392,7 +392,7 @@
                 
               
 
-              <time title="创建于：2019-05-09 14:09:37 / 更新于：15:48:00" itemprop="dateCreated datePublished" datetime="2019-05-09T14:09:37+08:00">2019-05-09</time>
+              <time title="创建于：2019-05-09 14:09:37 / 更新于：17:08:54" itemprop="dateCreated datePublished" datetime="2019-05-09T14:09:37+08:00">2019-05-09</time>
             
 
             
@@ -502,10 +502,7 @@
 <p>然而，我在18.04的机器上安装之后（过程很曲折，理论上不需要这样，一直会出现包依赖的问题，最后用aptitude解决），和用得代码并不对应，我需要的是kinetic版本的，因此需要把系统换成ubuntu 16.04。对于系统的安装也有坑，有时间再记录。</p>
 <p>实际上安装ROS过程也不复杂，只要你的系统什么的都是对应的，理论上没有什么大问题：</p>
 <ol>
-<li>设置软件和更新，保证restricted，universe，multiverse前是打钩的。</li>
-</ol>
-<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/ros.png" alt=""></p>
-<ol>
+<li>设置软件和更新，保证restricted，universe，multiverse前是打钩的。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/ros.png" alt=""></li>
 <li>添加源：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c &apos;echo &quot;deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main&quot; &gt; /etc/apt/sources.list.d/ros-latest.list&apos;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
@@ -520,14 +517,14 @@
 </ol>
 <p>保证网络要好，如果对于外网访问很差可能需要使用阿里的镜像，这个设置请去查。安装时间应该会比较久。</p>
 <ol>
-<li>初始化ros：</li>
+<li>初始化ros：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rosdep init</span><br><span class="line">rosdep update</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rosdep init</span><br><span class="line">rosdep update</span><br></pre></td></tr></table></figure>
 <p>设置环境变量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;source /opt/ros/kinetic/setup.bash&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure></p>
 <ol>
-<li>测试安装成功：</li>
+<li>测试安装成功：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roscore</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">roscore</span><br></pre></td></tr></table></figure>
 <p>出现了started core service表示安装成功。</p>
 
       
