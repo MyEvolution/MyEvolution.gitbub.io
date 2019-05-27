@@ -120,7 +120,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/dehaze0.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/dehaze2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/dehaze3.png">
-<meta property="og:updated_time" content="2019-05-27T10:31:16.751Z">
+<meta property="og:updated_time" content="2019-05-27T10:50:54.122Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Single Image Haze Removal Using Dark Channel Prior">
 <meta name="twitter:description" content="学习数字图像处理的时候阅读了这一篇关于去雾的文章：Single Image Haze Removal Using Dark Channel Prior。这篇文章是大名鼎鼎的何凯明的第一篇文章，而且还获得了CVPR best paper award，非常令人佩服了。">
@@ -412,7 +412,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-05-27 18:31:16" itemprop="dateModified" datetime="2019-05-27T18:31:16+08:00">2019-05-27</time>
+                <time title="更新于：2019-05-27 18:50:54" itemprop="dateModified" datetime="2019-05-27T18:50:54+08:00">2019-05-27</time>
               
             
           </span>
@@ -483,7 +483,7 @@ E(\mathbf{t})=\mathbf{t}^{T} \mathbf{L} \mathbf{t}+\lambda(\mathbf{t}-\tilde{\ma
 <script type="math/tex; mode=display">
 \mathbf{J}(x) = \frac{\mathbf{I}(x) - \mathbf{A}(1 - t(x))}{t(x)}.</script><p>但是有时候如果求得的$t$过小，会使得颜色过曝,放大噪声，我们可以设定一个最小阈值$t_0$，进行下面的处理：</p>
 <script type="math/tex; mode=display">
-\mathbf{J}(\mathbf{x})=\frac{\mathbf{I}(\mathbf{x})-\mathbf{A}}{\max \left(t(\mathbf{x}), t_{0}\right)}+\mathbf{A}</script><h3 id="A的估计"><a href="#A的估计" class="headerlink" title="A的估计"></a>A的估计</h3><p>到目前为止，我们都假定总光强$\mathbf A$是已知的。实际上这个$A$是可以根据图片估计的，先前的算法会通过计算最亮的pixel来得到$\mathbf A$，但是实际上这个最亮的$\pixel$可能是一个白色的物体或者建筑，而不是天空反射的结果。在这里作者提出的方法是：首先根据暗通道图，选择最明亮的$0.1%$像素，这可以保证我们选到的区域是大片的亮色区域，比如天空，而不会选中一辆白色的小车等等。接下来在选中的这些位置里挑原图像素最亮的点作为$\mathbf A$的值。</p>
+\mathbf{J}(\mathbf{x})=\frac{\mathbf{I}(\mathbf{x})-\mathbf{A}}{\max \left(t(\mathbf{x}), t_{0}\right)}+\mathbf{A}</script><h3 id="A的估计"><a href="#A的估计" class="headerlink" title="A的估计"></a>A的估计</h3><p>到目前为止，我们都假定总光强$\mathbf A$是已知的。实际上这个$A$是可以根据图片估计的，先前的算法会通过计算最亮的pixel来得到$\mathbf A$，但是实际上这个最亮的像素可能是来自于一个白色的汽车或者建筑，而不是天空反射的结果。在这里作者提出的方法是：首先根据暗通道图，选择最明亮的$0.1%$像素，这可以保证我们选到的区域是大片的亮色区域，比如天空，而不会选中一辆白色的小车等等。接下来在选中的这些位置里挑原图像素最亮的点作为$\mathbf A$的值。</p>
 <p>下面是一些去雾算法的效果图。</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/dehaze3.png" alt=""></p>
 <p>这个算法的缺点是速度慢，难以满足实时的要求。</p>
