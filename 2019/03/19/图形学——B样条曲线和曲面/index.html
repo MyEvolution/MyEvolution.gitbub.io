@@ -23,6 +23,10 @@
 
 
 
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
 
 
 
@@ -1106,6 +1110,12 @@ R_{i,p;j,q}(u,v) = \frac{ \omega_{ij} N_{i,p}(u)N_{j,q}(v)}{\sum_{r=0}^m\sum_{s=
     
 
     
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
 	
     
 
@@ -1667,6 +1677,27 @@ R_{i,p;j,q}(u,v) = \frac{ \omega_{ij} N_{i,p}(u)N_{j,q}(v)}{\sum_{r=0}^m\sum_{s=
 
 
   
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
   
 
   
