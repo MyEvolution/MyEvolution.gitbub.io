@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/sr_sparse2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/sr_sparse1.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/sr_sparse0.png">
-<meta property="og:updated_time" content="2019-06-09T17:12:19.933Z">
+<meta property="og:updated_time" content="2019-06-09T17:20:48.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Image Super-Resolution as Sparse Representation of Raw Image Patches">
 <meta name="twitter:description" content="这次阅读一篇关于超分辨的论文。这篇文章的作者里有马毅老师，他是伯克利的老师，也是TBSI的老师，是非常有威望的一名学者。这篇文章在超分辨领域是比较经典的文章了。">
@@ -418,7 +418,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-06-10 01:12:19" itemprop="dateModified" datetime="2019-06-10T01:12:19+08:00">2019-06-10</time>
+                <time title="更新于：2019-06-10 01:20:48" itemprop="dateModified" datetime="2019-06-10T01:20:48+08:00">2019-06-10</time>
               
             
           </span>
@@ -522,7 +522,7 @@
 <script type="math/tex; mode=display">
 \tilde{D}=\left[\begin{array}{c}{F \boldsymbol{D}_{\ell}} \\ {\beta P \boldsymbol{D}_{h}}\end{array}\right] \text { and } \tilde{\boldsymbol{y}}=\left[\begin{array}{c}{F \boldsymbol{y}} \\ {\beta \boldsymbol{w}}\end{array}\right]</script><p>这里$\beta$是一个参数，用来调整兼容性与对应之间的tradeoff，可以简单设为1。利用上式求得$\boldsymbol \alpha^{*}$，那么高分辨率patch可以通过下式得到：</p>
 <script type="math/tex; mode=display">
-\boldsymbol{x}=\boldsymbol{D}_{\hbar} \boldsymbol{\alpha}^{*}.</script><h3 id="Enforcing-Global-Reconstruction-Constraint"><a href="#Enforcing-Global-Reconstruction-Constraint" class="headerlink" title="Enforcing Global Reconstruction Constraint"></a>Enforcing Global Reconstruction Constraint</h3><p>需要注意的是，在上面的推导中，我们不要求$|F \boldsymbol{D}_{\ell} \boldsymbol{\alpha}-F \boldsymbol{y}\right|_{2} = 0$，再加上noise的存在，使得最后得到的结果不一定会满足全局的约束，也就是从得到的高分辨率图片$X_0$经过模糊下采样之后，不一定能得到$Y$。为了使得结果满足全局一致，我们投影$X_0$到$D H \boldsymbol{X}=\boldsymbol{Y}$的解空间，计算：</p>
+\boldsymbol{x}=\boldsymbol{D}_{\hbar} \boldsymbol{\alpha}^{*}.</script><h3 id="Enforcing-Global-Reconstruction-Constraint"><a href="#Enforcing-Global-Reconstruction-Constraint" class="headerlink" title="Enforcing Global Reconstruction Constraint"></a>Enforcing Global Reconstruction Constraint</h3><p>需要注意的是，在上面的推导中，我们不要求$\left|F \boldsymbol{D}_{\ell} \boldsymbol{\alpha}-F \boldsymbol{y}\right|_{2} = 0$，再加上noise的存在，使得最后得到的结果不一定会满足全局的约束，也就是从得到的高分辨率图片$X_0$经过模糊下采样之后，不一定能得到$Y$。为了使得结果满足全局一致，我们投影$X_0$到$D H \boldsymbol{X}=\boldsymbol{Y}$的解空间，计算：</p>
 <script type="math/tex; mode=display">
 \boldsymbol{X}^{*}=\arg \min _{\boldsymbol{X}}\left\|\boldsymbol{X}-\boldsymbol{X}_{0}\right\| \quad \text { s.t. } \quad D H \boldsymbol{X}=\boldsymbol{Y}</script><p>可以通过back-projection方法迭代来解决上面的问题，更新等式如下：</p>
 <script type="math/tex; mode=display">
