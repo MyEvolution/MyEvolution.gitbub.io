@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv3.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv1.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv2.png">
-<meta property="og:updated_time" content="2019-03-10T09:02:02.630Z">
+<meta property="og:updated_time" content="2019-06-09T17:27:54.024Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Large-Scale and Drift-Free Surface Reconstruction Using Online Subvolume Registration">
 <meta name="twitter:description" content="这次周末再读一篇文章，希望能从中得到一些启发，来做好现在的相关的工作。这篇文章为Large-Scale and Drift-Free Surface ReconstructionUsing Online Subvolume Registration，是2015年CVPR的一篇文章。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-03-10 17:02:02" itemprop="dateModified" datetime="2019-03-10T17:02:02+08:00">2019-03-10</time>
+                <time title="更新于：2019-06-10 01:27:54" itemprop="dateModified" datetime="2019-06-10T01:27:54+08:00">2019-06-10</time>
               
             
           </span>
@@ -489,7 +489,7 @@
       
         <p>这次周末再读一篇文章，希望能从中得到一些启发，来做好现在的相关的工作。这篇文章为<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Fioraio_Large-Scale_and_Drift-Free_2015_CVPR_paper.pdf" target="_blank" rel="noopener">Large-Scale and Drift-Free Surface ReconstructionUsing Online Subvolume Registration</a>，是2015年CVPR的一篇文章。<br><a id="more"></a><br>关于TSDF，我们已经知道的很多了。在这篇文章中也是同样的。文章中，$\mathbf{u}$代表空间中的三维点，而$F(\mathbf{u})$代表该点的SDF值，$W(\mathbf{u})$表示的是SDF值的信心度量（可以理解为权重）。不同的地方是，文章中还定义了一个归一化梯度：</p>
 <script type="math/tex; mode=display">
-\hat{\nabla}F(\mathbf{u}) \triangleq \frac{\nabla F(\mathbf{u})}{\Vert \nabla F(\mathbf{u}) \Vert}</script><p>当$F$是常数时，也就是梯度为0,返回一个未定义值。</p>
+\hat{\nabla}F(\mathbf{u}) \triangleq \frac{\nabla F(\mathbf{u})}{\Vert \nabla F(\mathbf{u}) \Vert}</script><p>当$F$是常数时，返回一个未定义值。</p>
 <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>为了进行depth fusion，每个voxel都被投影到二维平面中，并且和传感器获得的深度值对比：</p>
 <script type="math/tex; mode=display">
 \Delta _z(\mathbf{u},t) = D_t(\pi (T^{-1}_t \cdot \mathbf{u})) - \zeta(T^{-1}_t\cdot \mathbf{u})</script><p>上式中，$\pi$是一个$\mathbb R^3 \rightarrow \mathbb R^2$的投影过程，也就是从三维到二维的转换，而$\zeta$提取了$z$坐标，也就是$\zeta(x,y,z) = z$。当$\Delta_z &gt; -\sigma$时候更新TSDF值，而$\sigma$指的是截断距离。新的TSDF$(F^{new},W^{new})$为：</p>
@@ -503,8 +503,7 @@ F^{new}(\mathbf{u}) = \frac{F(\mathbf{u})W(\mathbf{u})-\min\left(1,\frac{\Delta_
 W^{new}(\mathbf{u}) = W(\mathbf{u})-1</script><p>当处理的帧数量少于K帧时，不会发生腐蚀。当到达K帧时，队列也满了，将volumen从GPU拷贝到主机中，作为一个新的subvolume，然后腐蚀操作开始。其实我是真的不知道这样做有什么吊用。。。或者我理解有误？总之，这不是关注的重点。</p>
 <p>这一部分还包含了对有效Block的筛选，也是比较常规的做法，就不多说了。</p>
 <p>本文中$K=50$。</p>
-<h3 id="Subvolume注册"><a href="#Subvolume注册" class="headerlink" title="Subvolume注册"></a>Subvolume注册</h3><p>我比较想借鉴的是，如何将各个submap融合，因为每个submap在融合到global的情况下，需要进行optimize，会对每个submap求出位姿，或者说各个submap之间有相对的位姿，知道这个位姿后，如何对各个submap的TSDF进行transform？</p>
-<p>在本文中，每K帧形成一个新的subvolume$(F_j,W_j)$，被存储在主机上，下面会将各个subvolume的位姿表示为$V_j$。尽管每个subvolume的局部位姿都很小，但是将它们直接简单收集起来会产生较大的drift和misalignment。本篇文章中通过全局优化各个subvolume的位姿来解决这个问题，当得到一个新的subvolume时，会通过一个创新的volume混合方案来进行非刚性变换。一个比较显著的点是，这个优化过程不需要相机tracking模块，因此它可以使得操作实时进行，并且在把新的subvolume放入一个共享缓存区，允许位姿优化作为一个并行运行的过程。</p>
+<h3 id="Subvolume注册"><a href="#Subvolume注册" class="headerlink" title="Subvolume注册"></a>Subvolume注册</h3><p>在本文中，每K帧形成一个新的subvolume$(F_j,W_j)$，被存储在主机上，下面会将各个subvolume的位姿表示为$V_j$。尽管每个subvolume的局部位姿都很小，但是将它们直接简单收集起来会产生较大的drift和misalignment。本篇文章中通过全局优化各个subvolume的位姿来解决这个问题，当得到一个新的subvolume时，会通过一个创新的volume混合方案来进行非刚性变换。一个比较显著的点是，这个优化过程不需要相机tracking模块，因此它可以使得操作实时进行，并且在把新的subvolume放入一个共享缓存区，允许位姿优化作为一个并行运行的过程。</p>
 <p>提出的优化过程是受到了ICP算法的启发。优化需要的cost function是这样得到的：</p>
 <ol>
 <li>对于每个subvolume，提取出zero-level的点的集合，并且得到它们的法向量</li>
@@ -530,8 +529,7 @@ e_k^{ji} = \left(\mathbf p_i^{(j)} - V_j^{-1}\cdot V_k \cdot \mathbf q_k^{ji}\ri
 e^{h-1,h} = \Phi\log (Z_{h-1,h} \cdot V_h^{-1} \cdot V_{h-1})</script><p>上式中$\log$将$SE(3)$转换到$\mathcal{se}(3)$，而$\Phi$是一个$6\cdot 6$的刚性矩阵。按照经验将$\Phi$设置为单位矩阵。</p>
 <h3 id="融合Subvolume"><a href="#融合Subvolume" class="headerlink" title="融合Subvolume"></a>融合Subvolume</h3><p>对于融合Subvolume，文章中没有过多介绍。如何融到一个global volume中？</p>
 <script type="math/tex; mode=display">
-F_G(\mathbf u)=\frac{\sum_j F_j(V_j^{-1}\cdot \mathbf u)W_j(V_j^{-1}\cdot \mathbf u)}{\sum_{j}W_j(V_j^{-1}\cdot \mathbf u)}.</script><p>这个过程并没有太多的不同。而困扰我的，当TSDF旋转之后，原来的体素乘以transform矩阵得到的位置不是一个体素的中心位置，这时候的sdf距离会有误差，在文章中并没有过多提到。也许即时直接旋转也不会有太多的不同。</p>
-<p>文章中，如何融合global volume，是通过对一个全局的位置依次扫描，对每个位置$\mathbf u$进行上述的操作。这样的采样，如果subvolume分布比较广，会导致大量的无用计算。如下图：</p>
+F_G(\mathbf u)=\frac{\sum_j F_j(V_j^{-1}\cdot \mathbf u)W_j(V_j^{-1}\cdot \mathbf u)}{\sum_{j}W_j(V_j^{-1}\cdot \mathbf u)}.</script><p>这个过程并没有比较新奇的地方。文章中，如何融合global volume，是通过对一个全局的位置依次扫描，对每个位置$\mathbf u$进行上述的操作。这样的采样，如果subvolume分布比较广，会导致大量的无用计算。如下图：</p>
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/subv2.png" alt=""></p>
 <p>因此，它会根据有overlap的subvolume来进行：</p>
 <script type="math/tex; mode=display">
