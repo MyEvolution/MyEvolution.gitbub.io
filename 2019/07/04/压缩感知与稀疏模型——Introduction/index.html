@@ -122,7 +122,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compression_sjl.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pedestrian_detection.jpeg">
-<meta property="og:updated_time" content="2019-07-04T12:15:22.823Z">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/content_based_recommender_systems.png">
+<meta property="og:updated_time" content="2019-07-04T12:53:07.287Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="压缩感知与稀疏模型——Introduction">
 <meta name="twitter:description" content="暑期课程开始了，这个暑假选了大名鼎鼎的马毅老师的课：压缩感知与稀疏模型。不过马老师在深圳呆的时间只有一周，因此这个课对于压缩感知理论的介绍不会面面俱到，希望能建立一个框架出来，而对日后工作学习有所启发。">
@@ -397,7 +398,7 @@
                 
               
 
-              <time title="创建于：2019-07-04 14:43:59 / 更新于：20:15:22" itemprop="dateCreated datePublished" datetime="2019-07-04T14:43:59+08:00">2019-07-04</time>
+              <time title="创建于：2019-07-04 14:43:59 / 更新于：20:53:07" itemprop="dateCreated datePublished" datetime="2019-07-04T14:43:59+08:00">2019-07-04</time>
             
 
             
@@ -487,7 +488,9 @@
 <p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pedestrian_detection.jpeg" alt="Come from Gigacamera"></p>
 <p>在这类任务下，前提就变成了：</p>
 <script type="math/tex; mode=display">
-\text{New Premise2: Data } = \text{ Information + Irrelevant Data}</script><p>而对于其他的任务，比如电影推荐系统，这个系统的作用是希望根据用户看过的电影来向他们推荐未看过的电影。在这个任务中，没有哪个用户会看过所有的电影，也没有哪个电影是所有的用户都看过，因此我们的数据是不完整的。那么我们能根据不完整的数据库来推断完整的信息的重要原因，就是因为这些数据不是随机的，它们往往有很好的结构。有一类人，喜欢类似的电影，而有一类电影有着相似的风格。因此，在这个任务中，前提则是：</p>
+\text{New Premise2: Data } = \text{ Information + Irrelevant Data}</script><p>而对于其他的任务，比如电影推荐系统，这个系统的作用是希望根据用户看过的电影来向他们推荐未看过的电影。在这个任务中，没有哪个用户会看过所有的电影，也没有哪个电影是所有的用户都看过，因此我们的数据是不完整的。那么我们能根据不完整的数据库来推断完整的信息的重要原因，就是因为这些数据不是随机的，它们往往有很好的结构。有一类人，喜欢类似的电影，而有一类电影有着相似的风格。如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/content_based_recommender_systems.png" alt=""></p>
+<p>因此，在这个任务中，前提则是：</p>
 <script type="math/tex; mode=display">
 \text{New Premise3: Incomplete Data } \approx \text{ Complete Information}</script><p>因此可以看到的是，在大数据时代，我们往往需要从redundant，irrelevant或者incomplete数据中恢复特定的信息。这样的信息往往被编码成为特定的低纬结构或者仅仅依赖于巨大的数据中的一个小的子集，这个和之前的研究是有非常大的不同的。我们希望学习新的理论，能从低维中恢复高纬的信息，同样，从大量的高维信息中高效提取低纬信息也是同样重要的。这也是压缩感知与稀疏模型所希望做到的。</p>
 <h3 id="Dealing-High-Dimensional-Data"><a href="#Dealing-High-Dimensional-Data" class="headerlink" title="Dealing High-Dimensional Data"></a>Dealing High-Dimensional Data</h3><p>高纬度数据下的低纬度模型，一般的概念以及数据压缩，采样，稀疏性。</p>
