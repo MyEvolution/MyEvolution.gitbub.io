@@ -3,6 +3,33 @@
   
     
     <entry>
+      <title>压缩感知与稀疏模型——Introduction</title>
+      <link href="/2019/07/04/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Introduction/"/>
+      <url>/2019/07/04/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Introduction/</url>
+      
+        <content type="html"><![CDATA[<p>暑期课程开始了，这个暑假选了大名鼎鼎的马毅老师的课：压缩感知与稀疏模型。不过马老师在深圳呆的时间只有一周，因此这个课对于压缩感知理论的介绍不会面面俱到，希望能建立一个框架出来，而对日后工作学习有所启发。</p><a id="more"></a><p>这篇博客不会介绍什么具体的内容，而是一个简单介绍。什么是压缩感知与稀疏模型？实际上，在之前阅读的那篇<a href="https://wlsdzyzl.top/2019/06/09/Paper%E2%80%94%E2%80%94Image-Super-Resolution-as-Sparse-Representation-of-Raw-Image-Patches/" target="_blank" rel="noopener">Image Super-Resolution as Sparse Representation of Raw Image Patches</a>（这篇文章也是马毅老师的文章）就是一个稀疏模型很好的应用。简单来说，就是用低纬度的数据来分析高纬数据。从高纬到低纬就是压缩，而压缩之后的数据往往是稀疏的，而我们希望能够通过对稀疏模型的分析，来恢复或者分析高纬的数据。</p><p>现如今的我们对“大数据”一点也不陌生。因为如今数据充斥着每个世界，如今每一分钟youtube就会增加300小时的视频，每天有3亿张照片被上传到Facebook。当今世界的数据的维度与大小以及增长速度都是前所未有的。对于数据与信息的研究，在早期，由于设备比较昂贵而且分析数据耗时也长，科学家往往只采集足够的信息即可。因此，经典信号处理以及数据分析遵循下面的前提：</p><script type="math/tex; mode=display">\text{Classical Premise: Data } \approx \text{ Information}</script><p>而现如今，数据变得越来越庞大并且容易获取，相机分辨率越来越高。不同的数据分析任务也有着不同的新的前提。比如，对于人脸识别，对于人眼来说，一个高分辨率的人脸图像与一个低分辨率的人脸图像，就识别这个任务来说差别不大，如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compression_sjl.png" alt=""></p><p>尽管左边压缩后的图像看起来不清晰，我们还是很容易认识到这就是女神斯嘉丽。但是从数据的角度来说，一个1200×1800分辨率图片维度是120×180维度的100倍。因此，在这类任务下，前提就变成了：</p><script type="math/tex; mode=display">\text{New Premise1: Data } \gg \text{ Information}</script><p>下面是另一个例子，我们想从街道的照片中进行行人检测，而在这张图片中，真正是行人的只占了整张图片的一小部分，而其他的信息都是多余的，如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pedestrian_detection.jpeg" alt="Come from Gigacamera"></p><p>在这类任务下，前提就变成了：</p><script type="math/tex; mode=display">\text{New Premise2: Data } = \text{ Information + Irrelevant Data}</script><p>而对于其他的任务，比如电影推荐系统，这个系统的作用是希望根据用户看过的电影来向他们推荐未看过的电影。在这个任务中，没有哪个用户会看过所有的电影，也没有哪个电影是所有的用户都看过，因此我们的数据是不完整的。那么我们能根据不完整的数据库来推断完整的信息的重要原因，就是因为这些数据不是随机的，它们往往有很好的结构。有一类人，喜欢类似的电影，而有一类电影有着相似的风格。因此，在这个任务中，前提则是：</p><script type="math/tex; mode=display">\text{New Premise3: Incomplete Data } \approx \text{ Complete Information}</script><p>因此可以看到的是，在大数据时代，我们往往需要从redundant，irrelevant或者incomplete数据中恢复特定的信息。这样的信息往往被编码成为特定的低纬结构或者仅仅依赖于巨大的数据中的一个小的子集，这个和之前的研究是有非常大的不同的。我们希望学习新的理论，能从低维中恢复高纬的信息，同样，从大量的高维信息中高效提取低纬信息也是同样重要的。这也是压缩感知与稀疏模型所希望做到的。</p><h3 id="Dealing-High-Dimensional-Data"><a href="#Dealing-High-Dimensional-Data" class="headerlink" title="Dealing High-Dimensional Data"></a>Dealing High-Dimensional Data</h3><p>高纬度数据下的低纬度模型，一般的概念以及数据压缩，采样，稀疏性。</p><h3 id="A-Brief-History"><a href="#A-Brief-History" class="headerlink" title="A Brief History"></a>A Brief History</h3><p>Error correction： Boscovich and Laplace(1700’s)</p><p>Principal component analysis: Hotelings(1900’s)</p><p>Signal processing and compression: Benjamin Logan(1960’s)</p><p>Statistics: Stepwise regression of Efroymson in 1960 and Lasso of Tibishirani in 1996</p><p>Neural science: Field in 1987, Olshausen and Field in 1997</p><p>…</p><h3 id="The-Modern-Era"><a href="#The-Modern-Era" class="headerlink" title="The Modern Era"></a>The Modern Era</h3><p>现代稀疏模型的发展起源于2000年。Donoho, Candes, Tao… 在理论以及实际中都有很重大的影响，也涉及到各个方面的内容比如信号处理，统计学，优化，应用以及神经网络。</p><p>实际上在学习稀疏模型的时候也可以让我们对机器学习神经网络等等有更深的理解，它们中间有很大的渊源，如之前的主成分分析实际上也是属于稀疏模型算法。希望这门课能够对日后的学习工作有所启发，更重要的是学了这门课后能换一个角度去理解这个世界。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 压缩感知与稀疏模型 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> high-dimensional data analysis with low-dimensional models </tag>
+            
+            <tag> compressed sensing </tag>
+            
+            <tag> sparse model </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>Paper——Image Super-Resolution as Sparse Representation of Raw Image Patches</title>
       <link href="/2019/06/09/Paper%E2%80%94%E2%80%94Image-Super-Resolution-as-Sparse-Representation-of-Raw-Image-Patches/"/>
       <url>/2019/06/09/Paper%E2%80%94%E2%80%94Image-Super-Resolution-as-Sparse-Representation-of-Raw-Image-Patches/</url>
@@ -1028,11 +1055,11 @@
       
         <tags>
             
-            <tag> algorithm </tag>
-            
             <tag> SLAM </tag>
             
             <tag> icp </tag>
+            
+            <tag> algorithm </tag>
             
         </tags>
       
@@ -1055,9 +1082,9 @@
       
         <tags>
             
-            <tag> algorithm </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> algorithm </tag>
             
             <tag> ransac </tag>
             
@@ -1641,9 +1668,9 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> information theory </tag>
+            
+            <tag> code </tag>
             
             <tag> lossless coding </tag>
             
@@ -1668,13 +1695,13 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> LFD class </tag>
             
             <tag> neural network </tag>
             
             <tag> homework </tag>
+            
+            <tag> code </tag>
             
         </tags>
       
@@ -1751,9 +1778,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
         </tags>
       
@@ -1824,9 +1851,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
             <tag> sophus </tag>
             
@@ -2147,7 +2174,7 @@
       <link href="/2018/10/25/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94Transformation/"/>
       <url>/2018/10/25/%E5%9B%BE%E5%BD%A2%E5%AD%A6%E2%80%94%E2%80%94Transformation/</url>
       
-        <content type="html"><![CDATA[<p>上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。<br><a id="more"></a></p><p>所有的转换我们都是通过矩阵和向量完成的。</p><h3 id="缩放（Scale）"><a href="#缩放（Scale）" class="headerlink" title="缩放（Scale）"></a>缩放（Scale）</h3><script type="math/tex; mode=display">Scale(s_x,s_y,s_z) = \begin{pmatrix}s_x&0&0\\0&s_y&0\\0&0&s_z\end{pmatrix} \ Scale^{-1}(s_x,s_y,s_z) = \begin{pmatrix}s_x^{-1}&0&0\\0&s_y^{-1}&0\\0&0&s_z^{-1}\end{pmatrix}</script><p>上述中$s_x,s_y,s_z$分别为各个坐标轴的缩放倍数。实际的转换过程如下：</p><script type="math/tex; mode=display">\begin{pmatrix}s_x&0&0\\0&s_y&0\\0&0&s_z\end{pmatrix} \begin{pmatrix}x\\y\\z\end{pmatrix} = \begin{pmatrix}s_xx\\s_yy\\s_zz\end{pmatrix}</script><h3 id="错切（Shear）"><a href="#错切（Shear）" class="headerlink" title="错切（Shear）"></a>错切（Shear）</h3><p>错切可以将一个矩形转换成平行四边形。</p><script type="math/tex; mode=display">Shear(s_x,s_y) = \begin{pmatrix}s_x&a\\0&s_y\end{pmatrix} \ Shear^{-1}(s_x,s_y) = \begin{pmatrix}s_x&-a\\0&s_y\end{pmatrix}</script><p>上面式子主要完成的是对于y&gt;0的点前移，y&lt;0的点后移，而各点的y坐标不变。从而产生了错切的感觉。得到的结果：$y’=y,x’=x+ay$.</p><h3 id="旋转（Rotation）"><a href="#旋转（Rotation）" class="headerlink" title="旋转（Rotation）"></a>旋转（Rotation）</h3><p>2维空间的旋转变换次序是没有影响的，但是对于三维空间却可能得到不一样的结果。</p><h4 id="2D-rotation"><a href="#2D-rotation" class="headerlink" title="2D rotation"></a>2D rotation</h4><p>这里说的旋转是绕着原点旋转。</p><script type="math/tex; mode=display">\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}\cos \theta & - \sin \theta\\\sin \theta &\cos \theta\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}</script><p>有趣的是：$R^T R = I$</p><h4 id="3D-rotation"><a href="#3D-rotation" class="headerlink" title="3D rotation"></a>3D rotation</h4><p>3D的rotation相比于2D的要复杂很多。但是实际上我们可以这样去理解：二维的旋转，相当于绕着Z轴旋转，因为z坐标不会变。</p><p>因此可以得到绕各个坐标轴旋转的矩阵：</p><script type="math/tex; mode=display">R_z = \begin{pmatrix}\cos \theta & - \sin \theta & 0\\\sin \theta &\cos \theta & 0\\0&0&1\end{pmatrix}</script><p>同样的道理也就可以得到绕x轴与绕y轴的旋转：</p><script type="math/tex; mode=display">R_x = \begin{pmatrix}1&0&0\\0&\cos \theta & - \sin \theta \\0&\sin \theta &\cos \theta \\\end{pmatrix} \ R_y = \begin{pmatrix}\cos \theta & 0&- \sin \theta \\0&1&0\\\sin \theta &0 &\cos \theta\end{pmatrix}</script><p>同样的:$R^TR = I$.</p><p>如果我们仔细观察可以发现，3D中R的各个行（列）向量满足一个三维坐标系的要求：单位向量且正交。因此如果我们将旋转矩阵写成下面的形式：</p><script type="math/tex; mode=display">R = \begin{pmatrix}x_u & y_u & z_u\\x_v & y_v & z_v\\x_w & y_w & z_w\end{pmatrix}</script><p>则</p><script type="math/tex; mode=display">R_p = \begin{pmatrix}x_u & y_u & z_u\\x_v & y_v & z_v\\x_w & y_w & z_w\end{pmatrix}\begin{pmatrix}x_p\\y_p\\z_p\end{pmatrix} = \begin{pmatrix}\mathbf{u} \cdot \mathbf{p} \\\mathbf{v} \cdot \mathbf{p} \\\mathbf{z} \cdot \mathbf{p}\end{pmatrix}</script><p>上式最后一项正是$\mathbf{p}$在uvw坐标轴下的坐标值。因此旋转的本质实际上是将它映射到另一个坐标系当中了。</p><p>对于旋转矩阵如何求逆？因为旋转矩阵是正交矩阵，所有$R^{-1} = R^T$.</p><p>3D旋转是不可交换的。</p><p>但是上面的旋转矩阵相对来说比较简单，因为是绕着坐标轴旋转的。那么有没有办法绕着任意一个向量旋转$\theta$的公式？</p><h5 id="罗德里格旋转-Rodrigues-公式"><a href="#罗德里格旋转-Rodrigues-公式" class="headerlink" title="罗德里格旋转(Rodrigues)公式"></a>罗德里格旋转(Rodrigues)公式</h5><p>接下来这个公式就是用来解决上述问题的。假设向量（点）$b$绕着单位向量$\mathbf{a}$旋转$\theta$.</p><p>$\mathbf{b}=\mathbf{b}_{∥}+\mathbf{b}_{⊥}$，分布表示平行与垂直于$\mathbf{a}$的分量。很容易知道，$\mathbf{b}_{∥}$在旋转过程中是不变的。</p><p>$\mathbf{b}_{∥} = \mathbf{a} \cdot \mathbf{b} \mathbf{a}$</p><p>$\mathbf{b}_{⊥} = 1 -\mathbf{b}_{∥}$</p><p>然后我们要考虑到$\mathbf{b}_{⊥}$是如何旋转的。实际上它旋转的平面是垂直于$\mathbf{a}$与$\mathbf{b}$的，容易想到利用叉乘来构造：</p><p>$\mathbf{c} = \mathbf{a} \times \mathbf{b}$，而且由于叉乘的性质，$\mathbf{c}$的长度恰好等于$\mathbf{b}_{⊥}$.</p><p>现在旋转角度是$\theta$，则旋转后的向量在$\mathbf{b}_{⊥}$与$\mathbf{c}$方向上的投影分别是$\mathbf{b}_{⊥} \cos \theta$与$\mathbf{c} \sin \theta$.</p><p>旋转后的向量边上上述向量之和，并且希望写成旋转矩阵的形式（矩阵乘以向量）：</p><script type="math/tex; mode=display">\begin{align}b' &= \mathbf{b}_{⊥} \cos \theta +\mathbf{c} \sin \theta + \mathbf{b}_{∥}\\&= (\mathbf{b} -\mathbf{a} \cdot \mathbf{b} \mathbf{a} )\cos \theta +\mathbf{a} \times \mathbf{b} \sin \theta +\mathbf{a} \cdot \mathbf{b} \mathbf{a}\\&= \mathbf{a}\mathbf{a}^T \mathbf{b} + (I -\mathbf{a}\mathbf{a}^T)\mathbf{b} \cos \theta + A^* \sin \theta \mathbf{b} \end{align}</script><p>所以$R(\mathbf{a},\theta) =\mathbf{a}\mathbf{a}^T+ (I -\mathbf{a}\mathbf{a}^T)\cos \theta + A^* \sin \theta$.</p><p>上式是计算机图形学中很重要的一个基础公式。</p><h3 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h3><p>如果要回到原来的样子，可以对所有的转换求逆。但是要注意的是：$M = M_1M_2M_3,M^{-1} = M_3^{-1}M_2^{-1}M_1^{-1}$.</p><h3 id="齐次坐标转换（Homogeneous-Coordinates）"><a href="#齐次坐标转换（Homogeneous-Coordinates）" class="headerlink" title="齐次坐标转换（Homogeneous Coordinates）"></a>齐次坐标转换（Homogeneous Coordinates）</h3><p>不知道有没有人有这么一个疑问：为什么没有平移？？平移应该是最简单的转换，但是实际起来的实现却没有那么容易。首先做个尝试：</p><script type="math/tex; mode=display">\begin{pmatrix}x'\\y'\\z'\end{pmatrix} = \begin{pmatrix}?&?&?\\?&?&?\\?&?&?\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix}=\begin{pmatrix}x+5\\y\\z\end{pmatrix}</script><p>中间的矩阵怎么做？有人会说将第一行第一列写为$\frac 5 z$即可，但是这就失去了转换矩阵的意义。转换矩阵中不应该包含我们要转换的坐标的信息。</p><p>计算机图形学中，解决这个问题的方法就说用齐次坐标，先看一下下面的转换：</p><script type="math/tex; mode=display">\begin{pmatrix}x'\\y'\\z'\\w'\end{pmatrix} = \begin{pmatrix}1&0&0&5\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}\begin{pmatrix}x\\y\\z\\1\end{pmatrix}=\begin{pmatrix}x+5\\y\\z\\1\end{pmatrix}</script><p>通过加入一个其次坐标w而实现了平移。而加入这个量不会对上面提到的旋转等操作产生影响，而且他有很多的好处，因此被普遍用于图形相关的软件与硬件中。</p><h4 id="平移-Translate"><a href="#平移-Translate" class="headerlink" title="平移(Translate)"></a>平移(Translate)</h4><script type="math/tex; mode=display">\begin{pmatrix}x'\\y'\\z'\\w'\end{pmatrix} = \begin{pmatrix}1&0&0&T_x\\0&1&0&T_y\\0&0&1&T_z\\0&0&0&1\end{pmatrix}\begin{pmatrix}\mathbf{p}_x\\\mathbf{p}_y\\\mathbf{p}_z\\1\end{pmatrix}=\begin{pmatrix}\mathbf{p}_x+T_x\\\mathbf{p}_y+T_y\\\mathbf{p}_z+T_z\\1\end{pmatrix} = \mathbf{p}+T</script><p>主要旋转平移矩阵和平移旋转矩阵是不一样的，因为平移矩阵实际上需要的是最右侧的一个向量：</p><p>旋转平移矩阵：</p><script type="math/tex; mode=display">\begin{bmatrix}R_{3 \times 3}&T_{3 \times 1}\\0_{1 \times 3}&1\end{bmatrix}</script><p>平移旋转矩阵:</p><script type="math/tex; mode=display">\begin{bmatrix}R_{3 \times 3}&R_{3 \times 3}T_{3 \times 1}\\0_{1\times 3}&1\end{bmatrix}</script><p>仔细推导就可以得到上面的结果。</p><h3 id="法向转换（Normal-Transformation）"><a href="#法向转换（Normal-Transformation）" class="headerlink" title="法向转换（Normal Transformation）"></a>法向转换（Normal Transformation）</h3><p>法向的转换并不会按照平面各个点的转换进行。</p><p>假如原来的切线向量为$\mathbf{t}$,原来的法向向量为$\mathbf{n}$，转换矩阵为$M$，则切线向量是会依照原来的转换而改变的：$\mathbf{t}’ = M\mathbf{t}$.</p><p>假设转换完成后的法向向量为$\mathbf{n}’ = Q\mathbf{n}$.</p><p>当然不管什么时候，法向与切向都应该是垂直的：$\mathbf{n}’^T\mathbf{t’} = 0$</p><p>可以得到：</p><script type="math/tex; mode=display">\mathbf{n}^TQ^TM \mathbf{t} = 0.</script><p>因此我们希望$Q^TM = I$,所以得到：$Q = (M^{-1})^T$.</p><p>当然上面的解并不是唯一解，但是计算机图形学是工程学科，我们希望的是能够解决这个问题即可。</p><p>需要注意的是：$M$为3×3矩阵。因为法向和切向是向量，所以平移不会影响法向和切向。</p>]]></content>
+        <content type="html"><![CDATA[<p>上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。<br><a id="more"></a></p><p>所有的转换我们都是通过矩阵和向量完成的。</p><h3 id="缩放（Scale）"><a href="#缩放（Scale）" class="headerlink" title="缩放（Scale）"></a>缩放（Scale）</h3><script type="math/tex; mode=display">Scale(s_x,s_y,s_z) = \begin{pmatrix}s_x&0&0\\0&s_y&0\\0&0&s_z\end{pmatrix} \ Scale^{-1}(s_x,s_y,s_z) = \begin{pmatrix}s_x^{-1}&0&0\\0&s_y^{-1}&0\\0&0&s_z^{-1}\end{pmatrix}</script><p>上述中$s_x,s_y,s_z$分别为各个坐标轴的缩放倍数。实际的转换过程如下：</p><script type="math/tex; mode=display">\begin{pmatrix}s_x&0&0\\0&s_y&0\\0&0&s_z\end{pmatrix} \begin{pmatrix}x\\y\\z\end{pmatrix} = \begin{pmatrix}s_xx\\s_yy\\s_zz\end{pmatrix}</script><h3 id="错切（Shear）"><a href="#错切（Shear）" class="headerlink" title="错切（Shear）"></a>错切（Shear）</h3><p>错切可以将一个矩形转换成平行四边形。</p><script type="math/tex; mode=display">Shear(s_x,s_y) = \begin{pmatrix}s_x&a\\0&s_y\end{pmatrix} \ Shear^{-1}(s_x,s_y) = \begin{pmatrix}s_x&-a\\0&s_y\end{pmatrix}</script><p>上面式子主要完成的是对于y&gt;0的点前移，y&lt;0的点后移，而各点的y坐标不变。从而产生了错切的感觉。得到的结果：$y’=y,x’=x+ay$.</p><h3 id="旋转（Rotation）"><a href="#旋转（Rotation）" class="headerlink" title="旋转（Rotation）"></a>旋转（Rotation）</h3><p>2维空间的旋转变换次序是没有影响的，但是对于三维空间却可能得到不一样的结果。</p><h4 id="2D-rotation"><a href="#2D-rotation" class="headerlink" title="2D rotation"></a>2D rotation</h4><p>这里说的旋转是绕着原点旋转。</p><script type="math/tex; mode=display">\begin{bmatrix}x'\\y'\end{bmatrix} = \begin{bmatrix}\cos \theta & - \sin \theta\\\sin \theta &\cos \theta\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}</script><p>有趣的是：$R^T R = I$</p><h4 id="3D-rotation"><a href="#3D-rotation" class="headerlink" title="3D rotation"></a>3D rotation</h4><p>3D的rotation相比于2D的要复杂很多。但是实际上我们可以这样去理解：二维的旋转，相当于绕着Z轴旋转，因为z坐标不会变。</p><p>因此可以得到绕各个坐标轴旋转的矩阵：</p><script type="math/tex; mode=display">R_z = \begin{pmatrix}\cos \theta & - \sin \theta & 0\\\sin \theta &\cos \theta & 0\\0&0&1\end{pmatrix}</script><p>同样的道理也就可以得到绕x轴与绕y轴的旋转：</p><script type="math/tex; mode=display">R_x = \begin{pmatrix}1&0&0\\0&\cos \theta & - \sin \theta \\0&\sin \theta &\cos \theta \\\end{pmatrix} \ R_y = \begin{pmatrix}\cos \theta & 0&- \sin \theta \\0&1&0\\\sin \theta &0 &\cos \theta\end{pmatrix}</script><p>同样的:$R^TR = I$.</p><p>如果我们仔细观察可以发现，3D中R的各个行（列）向量满足一个三维坐标系的要求：单位向量且正交。因此如果我们将旋转矩阵写成下面的形式：</p><script type="math/tex; mode=display">R = \begin{pmatrix}x_u & y_u & z_u\\x_v & y_v & z_v\\x_w & y_w & z_w\end{pmatrix}</script><p>则</p><script type="math/tex; mode=display">R_p = \begin{pmatrix}x_u & y_u & z_u\\x_v & y_v & z_v\\x_w & y_w & z_w\end{pmatrix}\begin{pmatrix}x_p\\y_p\\z_p\end{pmatrix} = \begin{pmatrix}\mathbf{u} \cdot \mathbf{p} \\\mathbf{v} \cdot \mathbf{p} \\\mathbf{z} \cdot \mathbf{p}\end{pmatrix}</script><p>上式最后一项正是$\mathbf{p}$在uvw坐标轴下的坐标值。因此旋转的本质实际上是将它映射到另一个坐标系当中了。</p><p>对于旋转矩阵如何求逆？因为旋转矩阵是正交矩阵，所有$R^{-1} = R^T$.</p><p>3D旋转是不可交换的。</p><p>但是上面的旋转矩阵相对来说比较简单，因为是绕着坐标轴旋转的。那么有没有办法绕着任意一个向量旋转$\theta$的公式？</p><h5 id="罗德里格旋转-Rodrigues-公式"><a href="#罗德里格旋转-Rodrigues-公式" class="headerlink" title="罗德里格旋转(Rodrigues)公式"></a>罗德里格旋转(Rodrigues)公式</h5><p>接下来这个公式就是用来解决上述问题的。假设向量（点）$b$绕着单位向量$\mathbf{a}$旋转$\theta$.</p><p>$\mathbf{b}=\mathbf{b}_{∥}+\mathbf{b}_{⊥}$，分布表示平行与垂直于$\mathbf{a}$的分量。很容易知道，$\mathbf{b}_{∥}$在旋转过程中是不变的。</p><p>$\mathbf{b}_{∥} = \mathbf{a} \cdot \mathbf{b} \mathbf{a}$</p><p>$\mathbf{b}_{⊥} = 1 -\mathbf{b}_{∥}$</p><p>然后我们要考虑到$\mathbf{b}_{⊥}$是如何旋转的。实际上它旋转的平面是垂直于$\mathbf{a}$与$\mathbf{b}$的，容易想到利用叉乘来构造：</p><p>$\mathbf{c} = \mathbf{a} \times \mathbf{b}$，而且由于叉乘的性质，$\mathbf{c}$的长度恰好等于$\mathbf{b}_{⊥}$.</p><p>现在旋转角度是$\theta$，则旋转后的向量在$\mathbf{b}_{⊥}$与$\mathbf{c}$方向上的投影分别是$\mathbf{b}_{⊥} \cos \theta$与$\mathbf{c} \sin \theta$.</p><p>旋转后的向量边上上述向量之和，并且希望写成旋转矩阵的形式（矩阵乘以向量）：</p><script type="math/tex; mode=display">\begin{align}b' &= \mathbf{b}_{⊥} \cos \theta +\mathbf{c} \sin \theta + \mathbf{b}_{∥}\\&= (\mathbf{b} -\mathbf{a} \cdot \mathbf{b} \mathbf{a} )\cos \theta +\mathbf{a} \times \mathbf{b} \sin \theta +\mathbf{a} \cdot \mathbf{b} \mathbf{a}\\&= \mathbf{a}\mathbf{a}^T \mathbf{b} + (I -\mathbf{a}\mathbf{a}^T)\mathbf{b} \cos \theta + A^* \sin \theta \mathbf{b} \end{align}</script><p>所以$R(\mathbf{a},\theta) =\mathbf{a}\mathbf{a}^T+ (I -\mathbf{a}\mathbf{a}^T)\cos \theta + A^* \sin \theta$.</p><p>上式是计算机图形学中很重要的一个基础公式。</p><h3 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h3><p>如果要回到原来的样子，可以对所有的转换求逆。但是要注意的是：$M = M_1M_2M_3,M^{-1} = M_3^{-1}M_2^{-1}M_1^{-1}$.</p><h3 id="齐次坐标转换（Homogeneous-Coordinates）"><a href="#齐次坐标转换（Homogeneous-Coordinates）" class="headerlink" title="齐次坐标转换（Homogeneous Coordinates）"></a>齐次坐标转换（Homogeneous Coordinates）</h3><p>不知道有没有人有这么一个疑问：为什么没有平移？？平移应该是最简单的转换，但是实际起来的实现却没有那么容易。首先做个尝试：</p><script type="math/tex; mode=display">\begin{pmatrix}x'\\y'\\z'\end{pmatrix} = \begin{pmatrix}?&?&?\\?&?&?\\?&?&?\end{pmatrix}\begin{pmatrix}x\\y\\z\end{pmatrix}=\begin{pmatrix}x+5\\y\\z\end{pmatrix}</script><p>中间的矩阵怎么做？有人会说将第一行第一列写为$\frac 5 z$即可，但是这就失去了转换矩阵的意义。转换矩阵中不应该包含我们要转换的坐标的信息。</p><p>计算机图形学中，解决这个问题的方法就说用齐次坐标，先看一下下面的转换：</p><script type="math/tex; mode=display">\begin{pmatrix}x'\\y'\\z'\\w'\end{pmatrix} = \begin{pmatrix}1&0&0&5\\0&1&0&0\\0&0&1&0\\0&0&0&1\end{pmatrix}\begin{pmatrix}x\\y\\z\\1\end{pmatrix}=\begin{pmatrix}x+5\\y\\z\\1\end{pmatrix}</script><p>通过加入一个其次坐标w而实现了平移。而加入这个量不会对上面提到的旋转等操作产生影响，而且他有很多的好处，因此被普遍用于图形相关的软件与硬件中。</p><h4 id="平移-Translate"><a href="#平移-Translate" class="headerlink" title="平移(Translate)"></a>平移(Translate)</h4><script type="math/tex; mode=display">\begin{pmatrix}x'\\y'\\z'\\w'\end{pmatrix} = \begin{pmatrix}1&0&0&T_x\\0&1&0&T_y\\0&0&1&T_z\\0&0&0&1\end{pmatrix}\begin{pmatrix}\mathbf{p}_x\\\mathbf{p}_y\\\mathbf{p}_z\\1\end{pmatrix}=\begin{pmatrix}\mathbf{p}_x+T_x\\\mathbf{p}_y+T_y\\\mathbf{p}_z+T_z\\1\end{pmatrix} = \mathbf{p}+T</script><p>主要旋转平移矩阵和平移旋转矩阵是不一样的，因为平移矩阵实际上需要的是最右侧的一个向量：</p><p>旋转平移矩阵：</p><script type="math/tex; mode=display">\begin{bmatrix}R_{3 \times 3}&T_{3 \times 1}\\0_{1 \times 3}&1\end{bmatrix}</script><p>平移旋转矩阵:</p><script type="math/tex; mode=display">\begin{bmatrix}R_{3 \times 3}&R_{3 \times 3}T_{3 \times 1}\\0_{1\times 3}&1\end{bmatrix}</script><p>仔细推导就可以得到上面的结果。</p><h3 id="法向转换（Normal-Transformation）"><a href="#法向转换（Normal-Transformation）" class="headerlink" title="法向转换（Normal Transformation）"></a>法向转换（Normal Transformation）</h3><p>法向的转换并不会按照平面各个点的转换进行。</p><p>假如原来的切线向量为$\mathbf{t}$,原来的法向向量为$\mathbf{n}$，转换矩阵为$M$，则切线向量是会依照原来的转换而改变的：$\mathbf{t}’ = M\mathbf{t}$.</p><p>假设转换完成后的法向向量为$\mathbf{n}’ = Q\mathbf{n}$.</p><p>当然不管什么时候，法向与切向都应该是垂直的：$\mathbf{n}’^T\mathbf{t’} = 0$</p><p>可以得到：</p><script type="math/tex; mode=display">\mathbf{n}^TQ^TM \mathbf{t} = 0.</script><p>因此我们希望$Q^TM = I$,所以得到：$Q = (M^{-1})^T$.</p><p>需要注意的是：如果$M$为3×3旋转矩阵，那么由于旋转矩阵的性质：$R^{-1} = R^T$，因此可以得到$Q = M$，也就是对于法向来说旋转就只是简单旋转而已，而平移不会改变法向量，但是缩放可能会导致法向量的错误。</p>]]></content>
       
       
       <categories>
@@ -2213,9 +2240,9 @@
             
             <tag> LFD class </tag>
             
-            <tag> mathematics </tag>
-            
             <tag> exponential family </tag>
+            
+            <tag> mathematics </tag>
             
         </tags>
       
@@ -2869,9 +2896,9 @@
             
             <tag> algorithm </tag>
             
-            <tag> Matrix </tag>
-            
             <tag> code </tag>
+            
+            <tag> Matrix </tag>
             
         </tags>
       
@@ -2894,9 +2921,9 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> code </tag>
             
             <tag> visualization </tag>
             

@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-31T09:59:52.000Z">
+<meta property="og:updated_time" content="2019-06-21T03:06:14.545Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="图形学——Transformation">
 <meta name="twitter:description" content="上次博客最后一个主题矩阵，只说了句矩阵可以完成很多转换。而这次就主要来说明各种转换。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2018-10-31 17:59:52" itemprop="dateModified" datetime="2018-10-31T17:59:52+08:00">2018-10-31</time>
+                <time title="更新于：2019-06-21 11:06:14" itemprop="dateModified" datetime="2019-06-21T11:06:14+08:00">2019-06-21</time>
               
             
           </span>
@@ -698,8 +698,7 @@ R_{3 \times 3}&R_{3 \times 3}T_{3 \times 1}\\
 <p>可以得到：</p>
 <script type="math/tex; mode=display">
 \mathbf{n}^TQ^TM \mathbf{t} = 0.</script><p>因此我们希望$Q^TM = I$,所以得到：$Q = (M^{-1})^T$.</p>
-<p>当然上面的解并不是唯一解，但是计算机图形学是工程学科，我们希望的是能够解决这个问题即可。</p>
-<p>需要注意的是：$M$为3×3矩阵。因为法向和切向是向量，所以平移不会影响法向和切向。</p>
+<p>需要注意的是：如果$M$为3×3旋转矩阵，那么由于旋转矩阵的性质：$R^{-1} = R^T$，因此可以得到$Q = M$，也就是对于法向来说旋转就只是简单旋转而已，而平移不会改变法向量，但是缩放可能会导致法向量的错误。</p>
 
       
     </div>
@@ -822,7 +821,7 @@ R_{3 \times 3}&R_{3 \times 3}T_{3 \times 1}\\
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">116</span>
+                    <span class="site-state-item-count">117</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -861,7 +860,9 @@ R_{3 \times 3}&R_{3 \times 3}T_{3 \times 1}\\
                     
                       
                     
-                    <span class="site-state-item-count">13</span>
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1020,7 +1021,13 @@ R_{3 \times 3}&R_{3 \times 3}T_{3 \times 1}\\
                     
                       
                     
-                    <span class="site-state-item-count">73</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">76</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
