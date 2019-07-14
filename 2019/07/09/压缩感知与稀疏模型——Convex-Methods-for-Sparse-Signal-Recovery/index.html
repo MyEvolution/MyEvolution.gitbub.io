@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="第三节课的内容。这节课上课到半截困了睡着了，看着大家都很积极请教认真听讲，感觉很惭愧。周末不能熬太晚。这个博客就记录一下醒着时候听到的内容。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-09T14:42:49.722Z">
+<meta property="og:updated_time" content="2019-07-10T08:31:27.452Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="压缩感知与稀疏模型——Convex Methods for Sparse Signal Recovery">
 <meta name="twitter:description" content="第三节课的内容。这节课上课到半截困了睡着了，看着大家都很积极请教认真听讲，感觉很惭愧。周末不能熬太晚。这个博客就记录一下醒着时候听到的内容。">
@@ -394,12 +394,24 @@
                 
               
 
-              <time title="创建于：2019-07-09 21:38:26 / 更新于：22:42:49" itemprop="dateCreated datePublished" datetime="2019-07-09T21:38:26+08:00">2019-07-09</time>
+              <time title="创建于：2019-07-09 21:38:26" itemprop="dateCreated datePublished" datetime="2019-07-09T21:38:26+08:00">2019-07-09</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-07-10 16:31:27" itemprop="dateModified" datetime="2019-07-10T16:31:27+08:00">2019-07-10</time>
               
             
           </span>
@@ -476,13 +488,35 @@
 <p>而我们直到，对于普通的对比信息检索，时间复杂度为$O(n)$，当然，如果加上维度$D$，数据检索复杂度变成了$O(Dn)$，要知道这里的D很大，属于高纬度数据，甚至远大于数据的个数$n$，是一定不可以忽略的。</p>
 <p>有没有一种方法，能对数据降维，使得D变小？这样可以大大降低数据检索的复杂度。但是，对数据降维不能随机降，需要保矩，也就是对各个向量的相对关系需要进行保持，如下图：</p>
 <p><img src="" alt=""></p>
-<p>我们希望原来维度上两个向量差多少，降维之后他们的差异没有变化太多。</p>
+<p>我们希望原来维度上两个向量差多少，降维之后他们每一对向量之间的距离没有变化太多。</p>
 <h3 id="The-Johnson-Lindenstrauss-Lemma"><a href="#The-Johnson-Lindenstrauss-Lemma" class="headerlink" title="The Johnson-Lindenstrauss Lemma"></a>The Johnson-Lindenstrauss Lemma</h3><p>下面介绍一条定理，简称为Lemma定理。它是当代搜索引擎对高维数据Hashing的核心。首先，我们要知道对于高维如果要完全用低纬度保存所有的信息是不可能的，因此会有一定的错误率，但是我们在统计角度上可以证明当数量大的时候这个错误率趋于０即可。</p>
 <p><strong>Johnson-Lindenstrauss Lemma</strong>：假定向量$v_1,v_2,…,v_n \in \mathbb R ^D$，现在有随机矩阵$A \in \mathbb{R}^{m \times D}$，它的entries是按照高斯$N(0,\frac{1}{m})$独立的随机变量，那么对于任何$\varepsilon \in (0,1)$，至少有$1 - \frac{1}{n^2}$的概率使得下式成立：</p>
 <script type="math/tex; mode=display">
 \forall i \ne j, (1 - \varepsilon)\Vert v_i - v_j \Vert_2^2 \leq \Vert Av_i - Av_j \Vert_2^2 \leq (1+\varepsilon) \Vert v_i - v_j \Vert_2^2,</script><p>其中，$m &gt; 32\frac{\log n}{\varepsilon^2}$。</p>
-<p>可以看到的是这个结论很棒，因为矩阵是任意随机的，甚至不用优化去求得。而对于高纬度的向量，使用$A$矩阵降维到$m$维，因为$m$的限制，使得查找的复杂度从$O(Dn)$变成了$O(n\log n)$。在这里$D \gg m$，从而实现了加速的效果。</p>
-<p>下面对上述定理进行简单的证明。</p>
+<p>可以看到的是这个结论很棒，因为矩阵是任意随机的，甚至不用优化去求得。而对于高纬度的向量，使用$A$矩阵降维到$m$维，因为$m$的限制，使得查找的复杂度从$O(Dn)$变成了$O(n\log n)$，更惊喜的是实际上这个复杂度甚至和维度$D$无关了。在这里$D \gg m$，从而实现了加速的效果。</p>
+<p>下面对上述定理进行简单的证明。证明之前再说一下另外一个引理：</p>
+<p>$g = (g1,…,g_m)$是一个ｍ维度的随即向量，它的entries是独立高斯分布$N(0,\frac{1}{m})$，那么对于任何$t \in [0,1]$，有下面的结论：</p>
+<script type="math/tex; mode=display">
+\mathbb{P} \left[\lvert\Vert g\Vert_2^2 - 1 \rvert > t\right] \leq 2 \exp (-\frac{t^2m}{8})</script><p>设$g_{i,j} = A\frac{v_i - v_j}{\Vert v_i - v_j \Vert_2}$，对于任何的$v_i \ne v_j$，$g_{i,j}$的entries是符合独立高斯（$N(0,\frac{1}{m})$）分布的。应用Lemma定理可以得到：</p>
+<script type="math/tex; mode=display">
+\mathbb{P} \left[\lvert\Vert g_{i,j}\Vert_2^2 - 1\rvert > t \right] \leq 2 \exp (-\frac{t^2m}{8})</script><p>将所有概率简单加起来可以得到：</p>
+<script type="math/tex; mode=display">
+\mathbb{P} \left[\exists(i,j): \lvert\Vert g_{i,j}\Vert_2^2 - 1 \rvert > t \right] \leq \frac{n(n-1)}{2} \times 2 \exp (-\frac{t^2m}{8})</script><p>将$t = \varepsilon, m \ge 32 \frac{\log{n}}{\varepsilon ^2}$代入上式，可以得到：</p>
+<script type="math/tex; mode=display">
+\mathbb{P} \left[\exists(i,j): \lvert\Vert g_{i,j}\Vert_2^2 - 1 \rvert > t\right] \leq n(n-1)n^{-4} \leq n^{-2}</script><p>注意这里的$\lvert\Vert g_{i,j}\Vert_2^2 - 1 \rvert \leq t$也就等价于:</p>
+<script type="math/tex; mode=display">
+(1 - t)\Vert v_i - v_j \Vert_2^2 \leq \Vert Av_i - Av_j \Vert_2^2 \leq (1+t) \Vert v_i - v_j \Vert_2^2.</script><p>到这里证明也就结束了。</p>
+<h3 id="Covering-and-Packing-problem"><a href="#Covering-and-Packing-problem" class="headerlink" title="Covering and Packing problem"></a>Covering and Packing problem</h3><p>Covering问题：假如有每个站点有一定的影响力，求最小需要多少个站点，站点的影响力能将一个区域全部覆盖。</p>
+<p>Packing问题：各个站点影响力不重合的情况下，一个区域最多能装下几个站点。比如一个盒子能装多少个小球就是packing问题。</p>
+<p><img src="" alt=""></p>
+<h3 id="最小化rank"><a href="#最小化rank" class="headerlink" title="最小化rank"></a>最小化rank</h3><p>现在有问题：</p>
+<script type="math/tex; mode=display">
+\text{minimize } rank(A)\\
+\text{subject to } A + E = D</script><p>对于一般的L0范数，我们放松到L1范数，如下：</p>
+<script type="math/tex; mode=display">
+\Vert E \Vert_0 \rightarrow \#\{e_i \ne 0\} \rightarrow \Vert E\Vert_1 = \sum_{i}e_{i}</script><p>同样，我们可以发现一个最小化一个矩阵的秩实际上是特征值不为零的个数，因此可以有类似的放松：</p>
+<script type="math/tex; mode=display">
+rank(A) \rightarrow \#\{\sigma_i(A) \ne 0\}\rightarrow \Vert A\Vert_{\phi} = \sum_i \sigma_i(A)</script><p>上面是第三节课所听到的内容，遗漏了很多，只是做个记录。</p>
 
       
     </div>
@@ -529,6 +563,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/11/压缩感知与稀疏模型——Proximal-Gradient/" rel="prev" title="压缩感知与稀疏模型——Proximal Gradient">
+                压缩感知与稀疏模型——Proximal Gradient <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -603,7 +641,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">119</span>
+                    <span class="site-state-item-count">123</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -809,7 +847,13 @@
                     
                       
                     
-                    <span class="site-state-item-count">76</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">79</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -869,7 +913,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Johnson-Lindenstrauss-Lemma"><span class="nav-number">2.</span> <span class="nav-text">The Johnson-Lindenstrauss Lemma</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Johnson-Lindenstrauss-Lemma"><span class="nav-number">2.</span> <span class="nav-text">The Johnson-Lindenstrauss Lemma</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Covering-and-Packing-problem"><span class="nav-number">3.</span> <span class="nav-text">Covering and Packing problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最小化rank"><span class="nav-number">4.</span> <span class="nav-text">最小化rank</span></a></li></ol></div>
             
 
           </div>
