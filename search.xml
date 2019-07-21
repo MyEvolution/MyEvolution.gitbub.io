@@ -3,6 +3,35 @@
   
     
     <entry>
+      <title>压缩感知与稀疏模型——Augmented Lagrange Multipler(ALM)</title>
+      <link href="/2019/07/21/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Augmented-Lagrange-Multipler-ALM/"/>
+      <url>/2019/07/21/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Augmented-Lagrange-Multipler-ALM/</url>
+      
+        <content type="html"><![CDATA[<p>这个博客将介绍ALM，介绍一个用来解决一个等式限制的问题的框架。<br><a id="more"></a><br>考虑下面的问题：</p><script type="math/tex; mode=display">\begin{array}{ll}{\text { minimize } } & {g(\boldsymbol{x})} \\ {\text { subject to } } & {A x=y}\end{array}</script><p>这里的$g:\mathbb R^n \rightarrow \mathbb R$是一个凸函数，$A \in \mathbb R^{m\times n},y \in \text{range}(A)$。在之前的Lasso问题中，我们加入了噪声，然后用惩罚函数代替约束来解决。实际上用同样的方法是可以解决类似的问题：</p><script type="math/tex; mode=display">\text{minimize }g(\boldsymbol{x})+\frac{\mu}{2}\|\boldsymbol{y}-\boldsymbol{A} \boldsymbol{x}\|_{2}^{2}</script><p>只要$\mu$足够大，意味着有更大的权重放在对于cost函数的优化上，这样就可以得到足够好的结果来满足约束。但是这个算法的问题在于，之前我们优化这类函数的算法，PG还是APG，他们收敛率很大程度上是受梯度$\nabla(\mu f)=\mu A^{*}(A x-y)$在点与点之间能变化速率影响的，这个速率由Lipschitz常数来衡量：</p><script type="math/tex; mode=display">L_{\nabla \mu f}=\mu\|\boldsymbol{A}\|_{2}^{2}</script><p>因此就带来一个问题：$\mu$越大，那么上述问题就越难解决。但是想要解决等式限制问题，又必须要$\mu$足够大。这就意味着使用二次惩罚函数代替等式限制的方法是不够完美的。</p><p>Lagrange对偶可以将一个约束问题转化成无约束问题，而原目标函数的拉格朗日函数如下：</p><script type="math/tex; mode=display">\mathcal{L}(\boldsymbol{x}, \boldsymbol{\lambda}) \doteq g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>而原问题的最优解，是拉格朗日函数的鞍点（saddle point）：</p><script type="math/tex; mode=display">\sup _{\boldsymbol{\lambda} } \inf _{\boldsymbol{x} } \mathcal{L}(\boldsymbol{x}, \boldsymbol{\lambda})=\operatorname{supinf}_{\boldsymbol{\lambda} } g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>如果我们定义对偶函数如下：</p><script type="math/tex; mode=display">d(\boldsymbol{\lambda}) \doteq \inf _{\boldsymbol{x} } g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>那么找到最优解可以通过下面的式子：</p><script type="math/tex; mode=display">\begin{aligned} \boldsymbol{x}_{k+1} &=\arg \min _{\boldsymbol{x} } \mathcal{L}\left(\boldsymbol{x}, \boldsymbol{\lambda}_{k}\right) \\ \boldsymbol{\lambda}_{k+1} &=\boldsymbol{\lambda}_{k}+t_{k+1}\left(\boldsymbol{A} \boldsymbol{x}_{k+1}-\boldsymbol{y}\right) \end{aligned}</script><p>$\boldsymbol{A} \boldsymbol{x}_{k+1}-\boldsymbol{y}$是对偶问题$d(\lambda)$的一个次梯度，这个算法就是实际上是在最大化对偶问题，因此也叫dual ascent。这个算法的缺点在于，在一些问题上，它会失败。下面是一个例子：</p><script type="math/tex; mode=display">\inf _{\boldsymbol{x} }\|\boldsymbol{x}\|_{1}+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle=\left\{\begin{array}{ll}{-\infty} & {\left\|\boldsymbol{A}^{*} \boldsymbol{\lambda}\right\|_{\infty}>1} \\ {-\langle\boldsymbol{\lambda}, \boldsymbol{y}\rangle} & {\left\|\boldsymbol{A}^{*} \boldsymbol{\lambda}\right\|_{\infty} \leq 1}\end{array}\right.</script><p>可以看到的是传统的Lagrangian对于约束的惩罚是不够的，因此提出了Augmented Lagrangian：</p><script type="math/tex; mode=display">\mathcal{L}_{\mu}(\boldsymbol{x}, \boldsymbol{\lambda}) \doteq g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle+\frac{\mu}{2}\|\boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\|_{2}^{2}</script><p>上面的函数可以看做是下面约束问题的Lagrangian：</p><script type="math/tex; mode=display">\begin{array}{ll}{\text { minimize } } & {g(\boldsymbol{x})+\frac{\mu}{2}\|\boldsymbol{y}-\boldsymbol{A} \boldsymbol{x}\|_{2}^{2} } \\ {\text { subject to } } & {\boldsymbol{A} \boldsymbol{x}=\boldsymbol{y} }\end{array}.</script><p>由于惩罚项$|\boldsymbol{y}-\boldsymbol{A} \boldsymbol{x}|_{2}^{2}$对于可用集合中的$x$来说都为0，因此这个问题的最佳值与原问题的最佳值是一样的。而且通过Augmented Lagrangian，让对偶问题仅仅需要对$g$的一些弱假设就可以被证明是一定收敛的。为了实现它，我们对步长大小进行一个特殊的选择：$t_k = \mu$，得到下面的迭代策略：</p><script type="math/tex; mode=display">\begin{aligned} \boldsymbol{x}_{k+1} & \in \arg \min _{\boldsymbol{x} } \mathcal{L}_{\mu}\left(\boldsymbol{x}, \boldsymbol{\lambda}_{k}\right) \\ \boldsymbol{\lambda}_{k+1} &=\boldsymbol{\lambda}_{k}+\boldsymbol{\mu}\left(\boldsymbol{A} \boldsymbol{x}_{k+1}-\boldsymbol{y}\right) \end{aligned}</script><p>对于步骤$\boldsymbol{x}_{k+1}\in \arg \min _{\boldsymbol{x} }\mathcal{L}_{\mu}\left(\boldsymbol{x}, \boldsymbol{\lambda}_{k}\right)$，本身就是一个凸优化问题，可以使用PG算法来解决。注意，$t_{k+1}=\mu$是非常重要的，它避免了出现失败的情况。因此对于ALM算法，可以总结如下：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/alm1.png" alt=""></p><ol><li>ALM for Basis Pursuit<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/alm2.png" alt=""></li><li>ALM for Principal Component Pursuit<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/alm3.png" alt=""></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 压缩感知与稀疏模型 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> machine learning </tag>
+            
+            <tag> high-dimensional data analysis with low-dimensional models </tag>
+            
+            <tag> compressed sensing </tag>
+            
+            <tag> sparse model </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>踩过的坑——OpenNI读取多个xtion的输入</title>
       <link href="/2019/07/12/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94OpenNI%E8%AF%BB%E5%8F%96%E5%A4%9A%E4%B8%AAxtion%E7%9A%84%E8%BE%93%E5%85%A5/"/>
       <url>/2019/07/12/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94OpenNI%E8%AF%BB%E5%8F%96%E5%A4%9A%E4%B8%AAxtion%E7%9A%84%E8%BE%93%E5%85%A5/</url>
@@ -35,6 +64,24 @@
         <content type="html"><![CDATA[]]></content>
       
       
+      <categories>
+          
+          <category> 压缩感知与稀疏模型 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> high-dimensional data analysis with low-dimensional models </tag>
+            
+            <tag> compressed sensing </tag>
+            
+            <tag> sparse model </tag>
+            
+            <tag> dictionary learning </tag>
+            
+        </tags>
       
     </entry>
     
@@ -46,17 +93,6 @@
         <content type="html"><![CDATA[]]></content>
       
       
-      
-    </entry>
-    
-    <entry>
-      <title>压缩感知与稀疏模型——Proximal Gradient</title>
-      <link href="/2019/07/11/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Proximal-Gradient/"/>
-      <url>/2019/07/11/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Proximal-Gradient/</url>
-      
-        <content type="html"><![CDATA[<p>实际上这节课讲的内容也比较多，对应的是convex optimization，这里主要介绍一下lasso回归以及对应使用的Proximal Gradient Decent（PGD）。</p><a id="more"></a><h3 id="Lasso-Regression"><a href="#Lasso-Regression" class="headerlink" title="Lasso Regression"></a>Lasso Regression</h3><p>之前提到，对于$l^0$范数问题，用来求解最稀疏的解，我们可以将最小化$l^0$范数放松到最小化$l^1$范数。假如现在有下面的问题：</p><script type="math/tex; mode=display">\text{minimize }\Vert x \Vert_1\\\text{subject to } Ax = y.</script><p>这个问题的另外一个版本是考虑了高斯噪声：$y = Ax_0 + z$，根据拉格朗日乘数法构造下面的优化问题：</p><script type="math/tex; mode=display">\min_x \frac{1}{2} \Vert y - Ax \Vert ^2_2 + \lambda \Vert x\Vert_1</script><p>这就是著名的Lasso回归。</p><p>之前学习的优化方法大多数是对于$l^2$范数的优化，因为它处处可导。而$l^1$范数虽然也是凸函数，但是却不是平滑函数，在局部会出现不可导的情况。</p><h3 id="Proximal-Gradient-Methods"><a href="#Proximal-Gradient-Methods" class="headerlink" title="Proximal Gradient Methods"></a>Proximal Gradient Methods</h3><p>实际上，我们会遇到很多类似于lasso回归一样的优化问题，它们都有着下面的形式：</p><script type="math/tex; mode=display">F(x) = f(x) + g(x)</script><p>其中$f(x)$是一个平滑的凸函数，而$g(x)$是一个凸函数但是却不是平滑的。在上面提到的Lasso问题中：</p><script type="math/tex; mode=display">f(x) = \frac{1}{2} \Vert y - Ax \Vert ^2_2, g(x) = \lambda \Vert x\Vert_1.</script><p>我们希望能找到一种快速的方法来解决这样的优化问题。</p><p>首先，由于局部不可导，因此我们没法使用梯度下降，最容易想到的是使用subgradient（次梯度）。</p><p>使用次梯度下降：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \gamma_k g_k, g_k \in \partial F(x_k)</script><p>实际上是可以解决Lasso问题的，但是主要缺点是收敛得太慢了。一般来说，次梯度的收敛速率对于非平滑的目标函数是：</p><script type="math/tex; mode=display">F(x_k) - F(x_*) = O(\frac{1}{\sqrt k})</script><h4 id="convergence-rates-of-first-order-methods"><a href="#convergence-rates-of-first-order-methods" class="headerlink" title="convergence rates of first order methods"></a>convergence rates of first order methods</h4><p>这部分内容介绍一下一般梯度下降（使用一阶导数）的收敛速度是$O(\frac{1}{k})$。对于convex函数来说，一阶导数估计实际上提供的是一个下界。</p><p>我们知道梯度下降每次迭代规律为：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \gamma_k \nabla f(x_k)</script><p>而迭代后的代入$f$真实值，实际上是大于根据梯度估计的值的：</p><script type="math/tex; mode=display">f(x') \ge f(x) + \langle\nabla f(x),x'-x\rangle</script><p>梯度越大，步子就可以迈得更大一点，因为对于平滑函数来说，这意味着距离最低点还更远一点。引入新的概念：L-Lipschitz gradient，如果一个函数满足：</p><script type="math/tex; mode=display">\Vert \nabla f(x_1) - \nabla f(x_2)\Vert \leq L\Vert x_1 - x_2\Vert, \forall x_1,x_2 \in \mathbb R^n</script><p>$L&gt;0$,那么这个$L$被称为Lipschitz常量。有了这个条件，我们可以给线性下界补充一个二次上界。</p><p><strong>引理</strong>：<br>如果$f$是可导函数，而且$\nabla f$满足L-Lipschitz，那么对于任意$x,x’$有</p><script type="math/tex; mode=display">f(x') \leq  f(x) + \langle\nabla f(x),x'-x\rangle + \frac{L}{2}\Vert x' - x \Vert _2^2</script><p>证明上面的结论：</p><script type="math/tex; mode=display">\begin{aligned} f\left(\boldsymbol{x}^{\prime}\right) &=f\left.\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right)\right|_{t=1} \\ &=f(\boldsymbol{x})+\int_{t=0}^{1} \frac{d}{d t} f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right) d t \\ &=f(\boldsymbol{x})+\int_{t=0}^{1}\left\langle\nabla f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle d t \\ &=f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle \\ & \quad+\int_{t=0}^{1}\left\langle\nabla f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right)-\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle d t \\ & \leq f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2} \end{aligned}</script><p>所以我们可以得到：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}^{\prime}\right) \leq \hat{f}\left(\boldsymbol{x}^{\prime}, \boldsymbol{x}\right) \doteq f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2}</script><p>如果我们想要最小化这个上界，可以得到：</p><script type="math/tex; mode=display">\arg\min _{x'} \hat f(x',x) = x - \frac{1}{L} \nabla f(x).</script><p>这就是一个很简单的梯度下降迭代。而且可以保证，这样的迭代不会增加目标函数的值，因为$\hat f(x,x) = f(x)$：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}_{\star}^{\prime}\right) \leq \hat{f}\left(\boldsymbol{x}_{\star}^{\prime}, \boldsymbol{x}\right) \leq \hat{f}(\boldsymbol{x}, \boldsymbol{x})=f(\boldsymbol{x})</script><p>可以证明的是，使用这种迭代方法到最佳值的收敛速度是：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}_{k}\right)-f\left(\boldsymbol{x}_{\star}\right) \leq \frac{L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2}}{2 k}=O(1 / k)</script><p>这个收敛速度会比次梯度要快很多。</p><h4 id="From-gradient-to-proximal-gradient"><a href="#From-gradient-to-proximal-gradient" class="headerlink" title="From gradient to proximal gradient"></a>From gradient to proximal gradient</h4>]]></content>
-      
-      
       <categories>
           
           <category> 压缩感知与稀疏模型 </category>
@@ -66,15 +102,13 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> high-dimensional data analysis with low-dimensional models </tag>
             
             <tag> compressed sensing </tag>
             
             <tag> sparse model </tag>
             
-            <tag> lasso </tag>
+            <tag> optimization </tag>
             
         </tags>
       
@@ -895,9 +929,9 @@
             
             <tag> 3D reconstruction </tag>
             
-            <tag> SLAM </tag>
-            
             <tag> paper </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -947,9 +981,9 @@
             
             <tag> 3D reconstruction </tag>
             
-            <tag> SLAM </tag>
-            
             <tag> paper </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -974,9 +1008,9 @@
             
             <tag> 3D reconstruction </tag>
             
-            <tag> SLAM </tag>
-            
             <tag> paper </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -1910,9 +1944,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -1983,9 +2017,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> SLAM </tag>
             
             <tag> sophus </tag>
             
