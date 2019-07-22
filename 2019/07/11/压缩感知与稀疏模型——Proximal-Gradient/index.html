@@ -113,7 +113,7 @@
 
 
   <meta name="description" content="实际上这节课讲的内容也比较多，对应的是convex optimization，这里主要介绍一下lasso回归以及对应使用的Proximal Gradient Decent（PGD）。">
-<meta name="keywords" content="machine learning,high-dimensional data analysis with low-dimensional models,compressed sensing,sparse model,lasso">
+<meta name="keywords" content="machine learning,high-dimensional data analysis with low-dimensional models,compressed sensing,sparse model,convex optimization,lasso">
 <meta property="og:type" content="article">
 <meta property="og:title" content="压缩感知与稀疏模型——Proximal Gradient">
 <meta property="og:url" content="http://wlsdzyzl.com/2019/07/11/压缩感知与稀疏模型——Proximal-Gradient/index.html">
@@ -126,7 +126,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg4.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg5.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg6.png">
-<meta property="og:updated_time" content="2019-07-21T17:04:48.154Z">
+<meta property="og:updated_time" content="2019-07-22T14:11:15.065Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="压缩感知与稀疏模型——Proximal Gradient">
 <meta name="twitter:description" content="实际上这节课讲的内容也比较多，对应的是convex optimization，这里主要介绍一下lasso回归以及对应使用的Proximal Gradient Decent（PGD）。">
@@ -418,7 +418,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-07-22 01:04:48" itemprop="dateModified" datetime="2019-07-22T01:04:48+08:00">2019-07-22</time>
+                <time title="更新于：2019-07-22 22:11:15" itemprop="dateModified" datetime="2019-07-22T22:11:15+08:00">2019-07-22</time>
               
             
           </span>
@@ -606,7 +606,7 @@ t_{k}=\frac{1+\sqrt{1+4 t_{k-1}^{2} } }{2}, \quad \beta_{k}=\frac{t_{k-1}-1}{t_{
 <p>而对于Nesterov momentum来说，也可以按照类似的方法来得到它对应的迭代策略：</p>
 <script type="math/tex; mode=display">
 \boldsymbol{x}_{k+1}=\operatorname{prox}_{g}\left(\boldsymbol{p}_{k+1}-\frac{1}{L} \nabla f\left(\boldsymbol{p}_{k+1}\right)\right).</script><p>这样我们就得到了APG算法的迭代策略：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg4.png" alt=""></p>
-<p>APG算法有$O(frac{1}{k^2})$的收敛速率，比普通的梯度方法会好很多，更正式的定理为：</p>
+<p>APG算法有$O(\frac{1}{k^2})$的收敛速率，比普通的梯度方法会好很多，更正式的定理为：</p>
 <p>序列${x_k}$是通过APG策略对凸函数$F(x) = f(x) + g(x)$进行优化的迭代步骤，而且$f$的梯度是Lipschitz的，如果$F(x)$有最小值对应的$x_*$，那么对于任意的$k&gt;1$:</p>
 <script type="math/tex; mode=display">
 F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac{2 L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{(k+1)^{2} }</script><ol>
@@ -643,6 +643,8 @@ F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac
             <a href="/tags/compressed-sensing/" rel="tag"># compressed sensing</a>
           
             <a href="/tags/sparse-model/" rel="tag"># sparse model</a>
+          
+            <a href="/tags/convex-optimization/" rel="tag"># convex optimization</a>
           
             <a href="/tags/lasso/" rel="tag"># lasso</a>
           
@@ -744,7 +746,7 @@ F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">124</span>
+                    <span class="site-state-item-count">125</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -960,7 +962,11 @@ F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac
                     
                       
                     
-                    <span class="site-state-item-count">81</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">83</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

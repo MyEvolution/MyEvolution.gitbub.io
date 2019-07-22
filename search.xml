@@ -3,6 +3,41 @@
   
     
     <entry>
+      <title>压缩感知与稀疏模型——PGD,APG,ALM的实现</title>
+      <link href="/2019/07/22/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94PGD-APG-ALM%E7%9A%84%E5%AE%9E%E7%8E%B0/"/>
+      <url>/2019/07/22/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94PGD-APG-ALM%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
+      
+        <content type="html"><![CDATA[<p>这是一个对于之前介绍的proximal gradient descent，accelerated proximal gradient以及augmented Lagrange multipler算法的实现与对比。</p><a id="more"></a><p>具体的实现代码将会在文章末尾给出。实现的过程虽然说就是照着算法介绍打出来，但是还是有一些感悟的。</p><ol><li>学习率实际上是非常重要的。之前机器学习课程中，对于学习率只要设一个比较小的值就可以了，而在之前的课程中经过证明（说明），可以知道需要小于$\frac{1}{L}$。我们知道，对于cost function来说，想着重优化哪个term，就需要给它设定更大的权重（比如$\lambda$）。但是在梯度下降以及各个一阶方法中，这个权重重要性主要体现在各个term权重之间的对比，决定了梯度的方向，因此对于过大的权重，要对应较小的学习率（或者进行normalize），否则会让步子迈得太大，得不到更好的优化效果。</li><li>数学真的很神奇。经过理性分析证明，只需要多几行代码，就可以让收敛率大大提高，大大加速算法。这就是数学的魅力。</li></ol><p>这次由于是完成作业，因此使用了不是很熟练的matlab来实现。主要是用这3种算法来恢复稀疏向量，也就是BP（Basic Pursuit）问题。</p><h4 id="PGD"><a href="#PGD" class="headerlink" title="PGD:"></a>PGD:</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[x,difs]</span> = <span class="title">proximal_gradient</span> <span class="params">(x0,A, y,origin)</span></span></span><br><span class="line">L =<span class="built_in">max</span>( eig(A' * A));</span><br><span class="line"></span><br><span class="line">lambda = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">[m,n] = <span class="built_in">size</span>(A);</span><br><span class="line">x = x0;</span><br><span class="line">iteration_times = <span class="number">1000</span>;</span><br><span class="line"><span class="built_in">i</span> = <span class="number">1</span>;</span><br><span class="line">w = <span class="built_in">zeros</span>(n,<span class="number">1</span>);</span><br><span class="line">dif = norm(x - origin,<span class="number">2</span>);</span><br><span class="line">difs = [dif];</span><br><span class="line"><span class="keyword">while</span>(<span class="built_in">i</span>&lt;iteration_times)</span><br><span class="line">w = x - <span class="number">1</span>/L*A' *(A*x - y);</span><br><span class="line">x = soft(w,lambda/L);</span><br><span class="line">dif = norm(x - origin,<span class="number">2</span>);</span><br><span class="line">difs = [difs,dif];</span><br><span class="line"><span class="built_in">i</span>=<span class="built_in">i</span>+<span class="number">1</span>;</span><br><span class="line">endwhile</span><br><span class="line"></span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure><h4 id="APG"><a href="#APG" class="headerlink" title="APG:"></a>APG:</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[x,difs]</span> = <span class="title">accelerated_proximal_gradient</span> <span class="params">(x0,A, y,origin)</span></span></span><br><span class="line">L =<span class="built_in">max</span>( eig(A' * A));</span><br><span class="line">lambda = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">[m,n] = <span class="built_in">size</span>(A);</span><br><span class="line">x = x0;</span><br><span class="line">x_old = x;</span><br><span class="line">x_new = x;</span><br><span class="line">iteration_times = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">p = x;</span><br><span class="line">t = <span class="number">1</span>;</span><br><span class="line">t_old = t;</span><br><span class="line"><span class="built_in">beta</span> = t;</span><br><span class="line"><span class="built_in">i</span>=<span class="number">1</span>;</span><br><span class="line">dif = norm(x-origin , <span class="number">2</span>);</span><br><span class="line">difs = [dif];</span><br><span class="line"><span class="keyword">while</span>(<span class="built_in">i</span>&lt;iteration_times )</span><br><span class="line"></span><br><span class="line">t = (<span class="number">1</span> + <span class="built_in">sqrt</span>(<span class="number">1</span> + <span class="number">4</span> *t_old*t_old))/<span class="number">2</span>;</span><br><span class="line"><span class="built_in">beta</span> = (t_old<span class="number">-1</span>)/t;</span><br><span class="line">p = x + <span class="built_in">beta</span>* (x - x_old);</span><br><span class="line">w = p - <span class="number">1</span>/L* A' *(A*p - y);</span><br><span class="line"></span><br><span class="line">x_new = soft(w,lambda/L);</span><br><span class="line">x_old = x;</span><br><span class="line">x = x_new;</span><br><span class="line">t_old = t;</span><br><span class="line">dif = norm(x -origin,<span class="number">2</span>);</span><br><span class="line">difs = [difs,dif];</span><br><span class="line"><span class="built_in">i</span>=<span class="built_in">i</span>+<span class="number">1</span>;</span><br><span class="line">endwhile</span><br><span class="line"></span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure><h4 id="ALM"><a href="#ALM" class="headerlink" title="ALM:"></a>ALM:</h4><p>需要注意的是这里ALM迭代步骤中有一步是需要用APG(或者PGD)来优化得到最小值。由于这里构造的拉格朗日函数与之前的APG的目标函数还是有一点区别，因此需要重新写个APG函数。</p><script type="math/tex; mode=display">\mathcal{L}_{\mu}(\boldsymbol{x}, \boldsymbol{\lambda}) \doteq g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle+\frac{\mu}{2}\|\boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\|_{2}^{2}</script><h5 id="APG-Lagrange："><a href="#APG-Lagrange：" class="headerlink" title="APG_Lagrange："></a>APG_Lagrange：</h5><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[x]</span> = <span class="title">APG_Lagrange</span> <span class="params">(x0,A, y,mu,lambda,L)</span></span></span><br><span class="line"></span><br><span class="line">[m,n] = <span class="built_in">size</span>(A);</span><br><span class="line">x = x0;</span><br><span class="line">x_old = x;</span><br><span class="line">x_new = x;</span><br><span class="line">iteration_times = <span class="number">10</span>;</span><br><span class="line">p = x;</span><br><span class="line">t = <span class="number">1</span>;</span><br><span class="line">t_old = t;</span><br><span class="line"><span class="built_in">beta</span> = t;</span><br><span class="line"><span class="built_in">i</span>=<span class="number">1</span>;</span><br><span class="line">#dif = norm(x - origin,2);</span><br><span class="line">#difs = [dif]</span><br><span class="line"><span class="keyword">while</span>(<span class="built_in">i</span>&lt;iteration_times)</span><br><span class="line">t = (<span class="number">1</span> + <span class="built_in">sqrt</span>(<span class="number">1</span> + <span class="number">4</span> *t_old*t_old))/<span class="number">2</span>;</span><br><span class="line"><span class="built_in">beta</span> = (t_old<span class="number">-1</span>)/t;</span><br><span class="line">p = x + <span class="built_in">beta</span> *(x - x_old);</span><br><span class="line">w = p - <span class="number">1</span>/(L*mu) *(mu * A' *(A*p - y) + A' * lambda);</span><br><span class="line">x_new = soft(w,<span class="number">1</span>/(L*mu));</span><br><span class="line">x_old = x;</span><br><span class="line">x = x_new;</span><br><span class="line">#dif = norm(x - origin,2);</span><br><span class="line">#difs = [difs,dif];</span><br><span class="line">t_old = t; </span><br><span class="line"><span class="built_in">i</span>=<span class="built_in">i</span>+<span class="number">1</span>;</span><br><span class="line">endwhile</span><br><span class="line"></span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure><p>接下来是ALM，里面用到了上面的函数:<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[x,difs]</span> = <span class="title">augmented_lagrange_multipler</span> <span class="params">(x0,A, y,origin)</span></span></span><br><span class="line">L =<span class="built_in">max</span>( eig(A' * A));</span><br><span class="line"><span class="built_in">beta</span> = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">mu = <span class="number">0.5</span>;</span><br><span class="line">mu_max = <span class="number">1</span>;</span><br><span class="line">[m,n] = <span class="built_in">size</span>(A);</span><br><span class="line">lambda = <span class="built_in">ones</span>(m,<span class="number">1</span>);</span><br><span class="line">x = x0;</span><br><span class="line">iteration_times = <span class="number">1000</span>;</span><br><span class="line">dif = norm(x - origin,<span class="number">2</span>);</span><br><span class="line">difs = [dif];</span><br><span class="line"><span class="built_in">i</span> = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">while</span>( <span class="built_in">i</span>&lt;iteration_times )</span><br><span class="line">x = APG_Lagrange(x0,A,y,mu,lambda,L);</span><br><span class="line">lambda = lambda + mu *(A*x - y);</span><br><span class="line">mu = <span class="built_in">min</span>(<span class="built_in">beta</span>*mu,mu_max);</span><br><span class="line">dif = norm(x- origin,<span class="number">2</span>);</span><br><span class="line">difs = [difs,dif];</span><br><span class="line">x0 = x;</span><br><span class="line"><span class="built_in">i</span>=<span class="built_in">i</span>+<span class="number">1</span>;</span><br><span class="line">endwhile</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure></p><p>可以看到，每个函数主体都不长，而且还包含了我为了可视化因此记录下来每次迭代的error的代码。所以数学真的很神奇。</p><p>初次之外，还需要一些别的代码，其中generateXAY用来随机生成$x,A,y$，而soft函数是soft thresholding函数:<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[x,A,y]</span> = <span class="title">generateXAY</span> <span class="params">(n,r)</span></span></span><br><span class="line">m = <span class="number">0.5</span>*n;</span><br><span class="line">k = r*n</span><br><span class="line">A = <span class="built_in">randn</span>(m,n);</span><br><span class="line">x = <span class="built_in">zeros</span>(n,<span class="number">1</span>);</span><br><span class="line">x(randperm(n,k)) = <span class="built_in">rand</span>(k,<span class="number">1</span>);</span><br><span class="line">y = A*x;</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure></p><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="params">[ soft_thresh ]</span> = <span class="title">soft</span><span class="params">( b,lambda )</span></span></span><br><span class="line">    soft_thresh = <span class="built_in">sign</span>(b).*<span class="built_in">max</span>(<span class="built_in">abs</span>(b) - lambda,<span class="number">0</span>);</span><br><span class="line">endfunction</span><br></pre></td></tr></table></figure><p>以及main函数，包含了入口以及画图的程序:<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">n = <span class="number">800</span>;</span><br><span class="line">r = <span class="number">0.2</span>;</span><br><span class="line">[x,A,y] = generateXAY(n,r);</span><br><span class="line">x0 = <span class="built_in">rand</span>(n,<span class="number">1</span>);</span><br><span class="line">[x1,difs1] = proximal_gradient(x0,A,y,x);</span><br><span class="line">[x2,difs2] = accelerated_proximal_gradient(x0,A,y,x);</span><br><span class="line">[x3,difs3]= augmented_lagrange_multipler(x0,A,y,x);</span><br><span class="line"></span><br><span class="line">err0 = norm(x0 - x,<span class="number">2</span>)</span><br><span class="line">err1 = norm(x1 - x,<span class="number">2</span>)</span><br><span class="line">err2 = norm(x2 - x,<span class="number">2</span>)</span><br><span class="line">err3 = norm(x3 - x,<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">index = <span class="number">1</span>:<span class="number">1000</span>;</span><br><span class="line"><span class="built_in">plot</span>(index,difs1,index,difs2,index,difs3);</span><br><span class="line"></span><br><span class="line">title([<span class="string">"m="</span>,num2str(n*<span class="number">0.5</span>),<span class="string">" n="</span>,num2str(n),<span class="string">" k="</span>,num2str(r*n)])</span><br><span class="line">xlabel(<span class="string">"iteration no.k"</span>)</span><br><span class="line">ylabel(<span class="string">"l2 error"</span>)</span><br><span class="line"><span class="built_in">legend</span>(<span class="string">'PGD'</span>,<span class="string">'APG'</span>,<span class="string">'ALM'</span>)</span><br></pre></td></tr></table></figure></p><p>最后在$m=100,200,400，n=200,400,800$，以及$k=0.1n$的情况下进行了实验，画出了曲线对比图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compare1.png" alt=""><br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compare2.png" alt=""><br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compare3.png" alt=""><br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compare4.png" alt=""><br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compare5.png" alt=""><br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/compare6.png" alt=""></p><p>可以看到，对于越稀疏的矩阵，恢复效果越好，而当数据规模增大时，需要更多的迭代次数。</p><p>ALM的效果最好，而APG其次，最后是PGD，当然，由于ALM在迭代过程中已经调用了APG算法，因此它与APG迭代一样的次数的话是不公平的，但是总体表现来说还是ALM会更好一点，而且可以看出，收敛后，ALM的error比APG要低。我猜测这是因为ALM就是奔着恢复稀疏矩阵去的，使用了Lagrange构造对偶问题，对单纯的惩罚做法要更好。其他两个算法在有噪声的情况下会更适合，在没有噪声的时候，相比之下会更差一点。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 压缩感知与稀疏模型 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> machine learning </tag>
+            
+            <tag> code </tag>
+            
+            <tag> high-dimensional data analysis with low-dimensional models </tag>
+            
+            <tag> compressed sensing </tag>
+            
+            <tag> sparse model </tag>
+            
+            <tag> convex optimization </tag>
+            
+            <tag> matlab </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>压缩感知与稀疏模型——Augmented Lagrange Multipler(ALM)</title>
       <link href="/2019/07/21/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Augmented-Lagrange-Multipler-ALM/"/>
       <url>/2019/07/21/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Augmented-Lagrange-Multipler-ALM/</url>
@@ -26,6 +61,8 @@
             <tag> compressed sensing </tag>
             
             <tag> sparse model </tag>
+            
+            <tag> convex optimization </tag>
             
         </tags>
       
@@ -119,7 +156,7 @@
       <link href="/2019/07/11/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Proximal-Gradient/"/>
       <url>/2019/07/11/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94Proximal-Gradient/</url>
       
-        <content type="html"><![CDATA[<p>实际上这节课讲的内容也比较多，对应的是convex optimization，这里主要介绍一下lasso回归以及对应使用的Proximal Gradient Decent（PGD）。</p><a id="more"></a><h3 id="Lasso-Regression"><a href="#Lasso-Regression" class="headerlink" title="Lasso Regression"></a>Lasso Regression</h3><p>之前提到，对于$l^0$范数问题，用来求解最稀疏的解，我们可以将最小化$l^0$范数放松到最小化$l^1$范数。假如现在有下面的问题：</p><script type="math/tex; mode=display">\text{minimize }\Vert x \Vert_1\\\text{subject to } Ax = y.</script><p>这个问题是著名的BP(Basic Pursuit)问题，它的另外一个版本是考虑了高斯噪声：$y = Ax_0 + z$，将这个问题的限制用一个惩罚函数$f(x) = \frac {1}{2} \Vert y-Ax  \Vert_2^2$代替，可以得到下面的解决策略：</p><script type="math/tex; mode=display">\min_x \frac{1}{2} \Vert y - Ax \Vert ^2_2 + \lambda \Vert x\Vert_1</script><p>这就是著名的Lasso回归。</p><p>之前学习的优化方法大多数是对于$l^2$范数的优化，因为它处处可导。而$l^1$范数虽然也是凸函数，但是却不是平滑函数，在局部会出现不可导的情况。</p><p>除此之外，有着类似形式的问题还有低秩矩阵的恢复问题。我们希望恢复低秩矩阵$L_0$，能观察到的量为$Y = L_0 + S_0$。一个常用的方法是解决PCP（principal component pursuit）问题：</p><script type="math/tex; mode=display">\begin{array}{cl}{ {\operatorname{minimize} } }& {\|\boldsymbol{L}\|_ {*}+\lambda\|\boldsymbol{S}\|_{1} } \\ {\text { subject to } } & {\boldsymbol{L}+\boldsymbol{S}=\boldsymbol{Y} } \end{array}</script><p>如果数据中包含噪声，那么一个更稳定的版本为:</p><script type="math/tex; mode=display">\operatorname{minimize} \frac{1}{2}\|\boldsymbol{Y}-\boldsymbol{L}-\boldsymbol{S}\|_{F}^{2}+\lambda_{1}\|\boldsymbol{L}\|_{*}+\lambda_{2}\|\boldsymbol{S}\|_{1}</script><h3 id="Proximal-Gradient-Methods"><a href="#Proximal-Gradient-Methods" class="headerlink" title="Proximal Gradient Methods"></a>Proximal Gradient Methods</h3><p>实际上，我们会遇到很多类似于lasso回归一样的优化问题，它们都有着下面的形式：</p><script type="math/tex; mode=display">F(x) = f(x) + g(x)</script><p>其中$f(x)$是一个平滑的凸函数，而$g(x)$是一个凸函数但是却不是平滑的。在上面提到的Lasso问题中：</p><script type="math/tex; mode=display">f(x) = \frac{1}{2} \Vert y - Ax \Vert ^2_2, g(x) = \lambda \Vert x\Vert_1.</script><p>我们希望能找到一种快速的方法来解决这样的优化问题。</p><p>首先，由于局部不可导，因此我们没法使用梯度下降，最容易想到的是使用subgradient（次梯度）。</p><p>使用次梯度下降：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \gamma_k g_k, g_k \in \partial F(x_k)</script><p>实际上是可以解决Lasso问题的，但是主要缺点是收敛得太慢了。一般来说，次梯度的收敛速率对于非平滑的目标函数是：</p><script type="math/tex; mode=display">F(x_k) - F(x_*) = O(\frac{1}{\sqrt k})</script><h4 id="convergence-rates-of-first-order-methods"><a href="#convergence-rates-of-first-order-methods" class="headerlink" title="convergence rates of first order methods"></a>convergence rates of first order methods</h4><p>这部分内容介绍一下一般梯度下降（使用一阶导数）的收敛速度是$O(\frac{1}{k})$。对于convex函数来说，一阶导数估计实际上提供的是一个下界。</p><p>我们知道梯度下降每次迭代规律为：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \gamma_k \nabla f(x_k)</script><p>而迭代后的代入$f$真实值，实际上是大于根据梯度估计的值的：</p><script type="math/tex; mode=display">f(x') \ge f(x) + \langle\nabla f(x),x'-x\rangle</script><p>梯度越大，步子就可以迈得更大一点，因为对于平滑函数来说，这意味着距离最低点还更远一点。引入新的概念：L-Lipschitz gradient，如果一个函数满足：</p><script type="math/tex; mode=display">\Vert \nabla f(x_1) - \nabla f(x_2)\Vert \leq L\Vert x_1 - x_2\Vert, \forall x_1,x_2 \in \mathbb R^n</script><p>$L&gt;0$,那么这个$L$被称为Lipschitz常量。有了这个条件，我们可以给线性下界补充一个二次上界。</p><p><strong>引理</strong>：<br>如果$f$是可导函数，而且$\nabla f$满足L-Lipschitz，那么对于任意$x,x’$有</p><script type="math/tex; mode=display">f(x') \leq  f(x) + \langle\nabla f(x),x'-x\rangle + \frac{L}{2}\Vert x' - x \Vert _2^2</script><p>证明上面的结论：</p><script type="math/tex; mode=display">\begin{aligned} f\left(\boldsymbol{x}^{\prime}\right) &=f\left.\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right)\right|_{t=1} \\ &=f(\boldsymbol{x})+\int_{t=0}^{1} \frac{d}{d t} f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right) d t \\ &=f(\boldsymbol{x})+\int_{t=0}^{1}\left\langle\nabla f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle d t \\ &=f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle \\ & \quad+\int_{t=0}^{1}\left\langle\nabla f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right)-\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle d t \\ & \leq f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2} \end{aligned}</script><p>所以我们可以得到：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}^{\prime}\right) \leq \hat{f}\left(\boldsymbol{x}^{\prime}, \boldsymbol{x}\right) \doteq f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2}</script><p>如果我们想要最小化这个上界，可以得到：</p><script type="math/tex; mode=display">\arg\min _{x'} \hat f(x',x) = x - \frac{1}{L} \nabla f(x).</script><p>这就是一个很简单的梯度下降迭代。而且可以保证，这样的迭代不会增加目标函数的值，因为$\hat f(x,x) = f(x)$：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}_{\star}^{\prime}\right) \leq \hat{f}\left(\boldsymbol{x}_{\star}^{\prime}, \boldsymbol{x}\right) \leq \hat{f}(\boldsymbol{x}, \boldsymbol{x})=f(\boldsymbol{x})</script><p>可以证明的是，使用这种迭代方法到最佳值的收敛速度是：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}_{k}\right)-f\left(\boldsymbol{x}_{\star}\right) \leq \frac{L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{2 k}=O(1 / k)</script><p>这个收敛速度会比次梯度要快很多。</p><h4 id="From-gradient-to-proximal-gradient"><a href="#From-gradient-to-proximal-gradient" class="headerlink" title="From gradient to proximal gradient"></a>From gradient to proximal gradient</h4><p>实际上，我们可以从上面的梯度下降算法来获得一点启发，来设计一个算法优化lasso回归这类的问题：</p><script type="math/tex; mode=display">F(x) = f(x) + g(x).</script><p>因为原函数是不可导的，因此梯度下降算法不能直接使用。尽管如此，如果目标函数中平滑的那一项$f(x)$的导数$\nabla f$是Lipschitz，我们依然可以构造出一个$F$的简单上界：对平滑项$f$放大到上界，对于不可导项就什么也不做：</p><script type="math/tex; mode=display">\hat{F}\left(\boldsymbol{x}^{\prime}, \boldsymbol{x}\right)=f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2}+g\left(\boldsymbol{x}^{\prime}\right)</script><p>不断地最小化上式，可以得到类似于之前的梯度下降算法，这样的算法比次梯度下降有更好的收敛率。因此，我们要做的就是最小化$\hat F$:</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\arg \min _{\boldsymbol{x} } \hat{F}\left(\boldsymbol{x}, \boldsymbol{x}_{k}\right)</script><p>将$x_k$带入后补充全式，我们可以得到：</p><script type="math/tex; mode=display">\hat{F}\left(\boldsymbol{x}, \boldsymbol{x}_{k}\right)=\frac{L}{2}\left\|\boldsymbol{x}-\left(\boldsymbol{x}_{k}-\frac{1}{L} \nabla f\left(\boldsymbol{x}_{k}\right)\right)\right\|_{2}^{2}+g(\boldsymbol{x})+h\left(\boldsymbol{x}_{k}\right)</script><p>这里的$h(x_k)$只与$x_k$有关，因此每次迭代就变成了：</p><script type="math/tex; mode=display">\begin{aligned} \boldsymbol{x}_{k+1} &=\arg \min _{\boldsymbol{x} } \frac{L}{2}\left\|\boldsymbol{x}-\left(\boldsymbol{x}_{k}-\frac{1}{L} \nabla f\left(\boldsymbol{x}_{k}\right)\right)\right\|_{2}^{2}+g(\boldsymbol{x}) \\ &=\arg \min _{\boldsymbol{x} } g(\boldsymbol{x})+\frac{L}{2}\left\|\boldsymbol{x}-\boldsymbol{w}_{k}\right\|_{2}^{2} \end{aligned}</script><p>这里的$\boldsymbol{w}_{k}=\boldsymbol{x}_{k}-(1 / L) \nabla f\left(\boldsymbol{x}_{k}\right)$。也就是，我们希望让$g$尽量小，同时$x$又不要离$w_k$太远。由于二范数是凸函数，因此它总会有一个唯一最优解。</p><p>分析到这里，这个式子还是一个$F(x) = f(x) + g(x)$的形式，但是这里的$f(x)$是二次方（quadratic）的。这样形式在凸优化中经常会遇到，它有个特殊的名字——近端（Proximal Operator）：</p><script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{w}) \doteq \arg \min _{\boldsymbol{x} }\left\{g(\boldsymbol{x})+\frac{1}{2}\|\boldsymbol{x}-\boldsymbol{w}\|_{2}^{2}\right\}</script><p>因此迭代步骤可以写为：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\operatorname{prox}_{g / L}\left(\boldsymbol{w}_{k}\right).</script><p>比较幸运的是，一般我们遇到的凸函数，他们的近端都是有着固定的形式,或者可以很高效地被计算出来，下面将会举几个例子：</p><ol><li>$g(x) = I_D$，指示函数，也就是对于一个凸集$D$,如果$x\in D$，$I_D(x) = 0$，否则$I_D(x) = \infty$。那么:<script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{w})=\arg \min _{\boldsymbol{x} \in \mathcal{D} }\|\boldsymbol{x}-\boldsymbol{w}\|_{2}^{2}=\mathcal{P}_{\mathcal{D} }[\boldsymbol{w}]</script></li><li><p>$g(\boldsymbol{x})=\lambda|\boldsymbol{x}|_{1}$，$l^1$范数：</p><script type="math/tex; mode=display">\operatorname{prox}_{g}\left(u_{i}\right)=\operatorname{soft}\left(u_{i}, \lambda\right) \doteq \operatorname{sign}\left(u_{i}\right) \max \left(\left|u_{i}\right|-\lambda, 0\right)</script></li><li><p>$g(\boldsymbol{x})=\lambda|\boldsymbol{X}|_{*}$，矩阵核范数，那么：</p><script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{W})=\mathcal{S}(\boldsymbol{W}, \lambda) \doteq \boldsymbol{U} \operatorname{soft}(\boldsymbol{\Sigma}, \lambda) \boldsymbol{V}^{*}</script><p>$(\boldsymbol{U}, \boldsymbol{\Sigma}, \boldsymbol{V})$是$\mathbf W$的SVD分解。</p></li></ol><p>由以上这些，我们可以得到一个收敛速率为$O(\frac{1}{K})$的Proximal Gradient算法。更正式的定理如下：<br>$F(x) = f(x) + g(x)$，其中$f$是一个可导凸函数，并且导数符合Lipschitz，$g$是一个凸函数，考虑下面的迭代方式：</p><script type="math/tex; mode=display">\boldsymbol{w}_{k} \leftarrow \boldsymbol{x}_{k}-\frac{1}{L} \nabla f\left(\boldsymbol{x}_{k}\right), \quad \boldsymbol{x}_{k+1} \leftarrow \operatorname{prox}_{g / L}\left(\boldsymbol{w}_{k}\right).</script><p>假设$F(x)$在$x^*$有最小值，那么对于任何$k&gt;1$，都有：</p><script type="math/tex; mode=display">F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac{L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{2 k}</script><p>因此，我们得到近端梯度下降：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg1.png" alt=""></p><p>对于不同的目标函数，因为有着不同的近端形式，它们的近端梯度算法在具体形式上也略微有所不同，因此下面介绍几种针对不同问题的具体的近端梯度下降算法。</p><ol><li><strong>Proximal Gradient for the Lasso</strong><br>Lasso的$g$是$l^1$范数形式，而它的$L$可以是矩阵$A^TA$的最大特征值，s 可以提前计算得到的。有时候对于Lasso的PGD算法又被称为ISTA(iterative soft-thresholding algorithm)，具体算法流程如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg2.png" alt=""></li><li><strong>Proximal Gradient for Stable PCP</strong><br>观察之前不同形式的近端操作，可以看到对核范数$\Vert X\Vert_*$也是有y一个简单的近端形式的。因此我们可以用PGD来解决恢复低秩矩阵的问题，比如稳定主成分追踪（stable principal<br>component pursuit,PCP）:<script type="math/tex; mode=display">\min _{L, S}\|\boldsymbol{L}\|_{*}+\lambda\|\boldsymbol{S}\|_{1}+\frac{\mu}{2}\|\boldsymbol{Y}-\boldsymbol{L}-\boldsymbol{S}\|_{F}^{2}</script>上式中有两个不可导项：<script type="math/tex; mode=display">\|\boldsymbol{L}\|_{*}+\lambda\|\boldsymbol{S}\|_{1}</script>各自都有比较简单的近端形式。我们还需要知道下面的内容，假设$\boldsymbol{x}=\left[\boldsymbol{x}_{1} ; \boldsymbol{x}_{2}\right] \text {, } g(\boldsymbol{x})=g_{1}\left(\boldsymbol{x}_{1}\right)+g_{2}\left(\boldsymbol{x}_{2}\right)$，那么:<script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{w})=\left(\operatorname{prox}_{g_{1} }\left(\boldsymbol{w}_{1}\right), \operatorname{prox}_{g_{2} }\left(\boldsymbol{w}_{2}\right)\right)</script>对于该问题的具体优化算法如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg3.png" alt=""></li></ol><h4 id="Accelerate-Proximal-Gradient-APG"><a href="#Accelerate-Proximal-Gradient-APG" class="headerlink" title="Accelerate Proximal Gradient(APG)"></a>Accelerate Proximal Gradient(APG)</h4><p>之前的PG算法可以让收敛速度达到$O(\frac{1}{k})$，但是如果我们需要解决的问题有更特殊的结构，可以生成更高效快速的梯度算法。在1970～1980年这段日子里，有很多俄国的优化理论学者，再思考一个问题：对于优化一个平滑函数$f$，梯度方法是不是一阶方法里最佳的优化方法（这里局限于一阶方法，二阶方法有更快的收敛速度，但是我们也知道，二阶方法需要求海森矩阵，而高维情况下对海森矩阵的求解需要很大的代价）？</p><p>为了回答这个问题，首先需要一个计算模型。他们提出一个黑盒模型：模型中，算法会产生一个迭代序列$x_0,….,x_k$。对应于每个迭代，又会有对应的值$f(x_i)$以及梯度$\nabla f(x_i)$。通过这些来产生下一个迭代值，也就是：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\varphi_{k}\left(\boldsymbol{x}_{0}, \ldots, \boldsymbol{x}_{k}, f\left(\boldsymbol{x}_{0}\right), \ldots, f\left(\boldsymbol{x}_{k}\right), \nabla f\left(\boldsymbol{x}_{0}\right), \ldots, \nabla f\left(\boldsymbol{x}_{k}\right)\right)</script><p>从上述模型中，我们可以从最坏的角度来研究。首先，固定一类函数$\mathcal F$，然后观察这个算法在最差的函数下能做到什么样子（这里更像是最好的情况下，sup上界，inf为下界）：</p><script type="math/tex; mode=display">\sup _{f \in \mathcal{F}, \boldsymbol{x}_{0} }\left\{f\left(\boldsymbol{x}_{k}\right)-\inf _{\boldsymbol{x} } f(\boldsymbol{x})\right\}</script><p>对于我们感兴趣的一类函数，也就是可导凸函数并且满足Lipschitz条件:</p><script type="math/tex; mode=display">\mathcal{F}_{L, r} \doteq\left\{f : \mathfrak{B}(0, r) \rightarrow \mathbb{R} |\left\|\nabla f(\boldsymbol{x})-\nabla f\left(\boldsymbol{x}^{\prime}\right)\right\| \leq L\left\|\boldsymbol{x}-\boldsymbol{x}^{\prime}\right\| \forall \boldsymbol{x}, \boldsymbol{x}^{\prime} \in \mathfrak{B}(0, r)\right\}</script><p>仅仅使用梯度下降也就是$O(\frac 1 k)$的收敛速度，我们有：</p><script type="math/tex; mode=display">\sup _{f \in \mathcal{F}_{L, r}, \boldsymbol{x}_{0} }\left\{f\left(\boldsymbol{x}_{k}\right)-\inf _{\boldsymbol{x} } f(\boldsymbol{x})\right\} \leq \frac{C L r^{2} }{k}</script><p>而对于这类函数，可以证明的最好的下界是：</p><script type="math/tex; mode=display">\sup _{f \in \mathcal{F}_{L, r}, x_{0} }\left\{f\left(\boldsymbol{x}_{k}\right)-\inf _{\boldsymbol{x} } f(\boldsymbol{x})\right\} \geq \frac{c L r^{2} }{k^{2} }</script><p>可以看到这之间还是有一个gap的。因此更快的收敛速度还是有可能做到的。</p><p>首先考虑比较简单的迭代方式，依然使用梯度下降：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \alpha \nabla f(x_k),</script><p>这里的$\alpha$是学习率，对于梯度符合Lipschitz条件的函数，取$\alpha  = \frac{1}{L}$是一个很好的选择，而梯度$\nabla f(x_k)$是下降速度最快的方向。但是朝着当前最快的方向走并不一定就是最优的，因为梯度是局部的，因此梯度下降实际上是贪心算法，但是贪心算法不一定是最优的，另外一种保守的做法是参考之前迭代的方向，保留之前迭代的动量（momentum），被称为重量球方法：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\boldsymbol{x}_{k}-\alpha \nabla f\left(\boldsymbol{x}_{k}\right)+\beta\left(\boldsymbol{x}_{k}-\boldsymbol{x}_{k-1}\right)</script><p>重量球方法往往会带来更平滑的迭代策略以及更快的收敛。</p><p>1983年，Yuri Nesterov提出了达到收敛速度为$O(\frac{1}{k^2})$的算法。在算法中，他也使用到了动量这个步骤。它引入了一个新的辅助点（auxiliary point）$p_{k+1}$:</p><script type="math/tex; mode=display">\boldsymbol{p}_{k+1} \doteq \boldsymbol{x}_{k}+\beta_{k}\left(\boldsymbol{x}_{k}-\boldsymbol{x}_{k-1}\right)</script><p>而每一次迭代步骤就是：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\boldsymbol{p}_{k+1}-\alpha \nabla f\left(\boldsymbol{p}_{k+1}\right)</script><p>这里$\alpha =\frac{1}{L}$，而$\beta _k$的值要仔细选择，来达到最佳的收敛率：</p><script type="math/tex; mode=display">t_{k}=\frac{1+\sqrt{1+4 t_{k-1}^{2} } }{2}, \quad \beta_{k}=\frac{t_{k-1}-1}{t_{k} }</script><p>使用这种迭代策略，可以达到$O(\frac{1}{k^2})$的收敛率。</p><p>到目前位置，我们说的都是建立在平滑函数上的，而对于有非平滑函数项的目标函数，还需要做别的改进，也就是APG算法。</p><p>之前的PG算法，我们可以得到目标函数的一个上界：</p><script type="math/tex; mode=display">\begin{aligned} \hat{F}\left(\boldsymbol{x}, \boldsymbol{x}_{k}\right) & \doteq f\left(\boldsymbol{x}_{k}\right)+\left\langle\nabla f\left(\boldsymbol{x}_{k}\right), \boldsymbol{x}-\boldsymbol{x}_{k}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}-\boldsymbol{x}_{k}\right\|_{2}^{2}+g(\boldsymbol{x}) \\ & \doteq \frac{L}{2}\left\|\boldsymbol{x}-\boldsymbol{w}_{k}\right\|_{2}^{2}+g(\boldsymbol{x})+\text { terms that do not depend on } \boldsymbol{x}, \end{aligned}</script><p>每一次迭代，实际上是最小化这个上界。</p><p>而对于Nesterov momentum来说，也可以按照类似的方法来得到它对应的迭代策略：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\operatorname{prox}_{g}\left(\boldsymbol{p}_{k+1}-\frac{1}{L} \nabla f\left(\boldsymbol{p}_{k+1}\right)\right).</script><p>这样我们就得到了APG算法的迭代策略：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg4.png" alt=""></p><p>APG算法有$O(frac{1}{k^2})$的收敛速率，比普通的梯度方法会好很多，更正式的定理为：</p><p>序列${x_k}$是通过APG策略对凸函数$F(x) = f(x) + g(x)$进行优化的迭代步骤，而且$f$的梯度是Lipschitz的，如果$F(x)$有最小值对应的$x_*$，那么对于任意的$k&gt;1$:</p><script type="math/tex; mode=display">F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac{2 L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{(k+1)^{2} }</script><ol><li><p>APG for Basis Pursuit Denoising<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg5.png" alt=""></p></li><li><p>APG for Stable Principal Component Pursuit<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg6.png" alt=""></p></li></ol><p>对于收敛性的证明，这里都不多赘述了。</p>]]></content>
+        <content type="html"><![CDATA[<p>实际上这节课讲的内容也比较多，对应的是convex optimization，这里主要介绍一下lasso回归以及对应使用的Proximal Gradient Decent（PGD）。</p><a id="more"></a><h3 id="Lasso-Regression"><a href="#Lasso-Regression" class="headerlink" title="Lasso Regression"></a>Lasso Regression</h3><p>之前提到，对于$l^0$范数问题，用来求解最稀疏的解，我们可以将最小化$l^0$范数放松到最小化$l^1$范数。假如现在有下面的问题：</p><script type="math/tex; mode=display">\text{minimize }\Vert x \Vert_1\\\text{subject to } Ax = y.</script><p>这个问题是著名的BP(Basic Pursuit)问题，它的另外一个版本是考虑了高斯噪声：$y = Ax_0 + z$，将这个问题的限制用一个惩罚函数$f(x) = \frac {1}{2} \Vert y-Ax  \Vert_2^2$代替，可以得到下面的解决策略：</p><script type="math/tex; mode=display">\min_x \frac{1}{2} \Vert y - Ax \Vert ^2_2 + \lambda \Vert x\Vert_1</script><p>这就是著名的Lasso回归。</p><p>之前学习的优化方法大多数是对于$l^2$范数的优化，因为它处处可导。而$l^1$范数虽然也是凸函数，但是却不是平滑函数，在局部会出现不可导的情况。</p><p>除此之外，有着类似形式的问题还有低秩矩阵的恢复问题。我们希望恢复低秩矩阵$L_0$，能观察到的量为$Y = L_0 + S_0$。一个常用的方法是解决PCP（principal component pursuit）问题：</p><script type="math/tex; mode=display">\begin{array}{cl}{ {\operatorname{minimize} } }& {\|\boldsymbol{L}\|_ {*}+\lambda\|\boldsymbol{S}\|_{1} } \\ {\text { subject to } } & {\boldsymbol{L}+\boldsymbol{S}=\boldsymbol{Y} } \end{array}</script><p>如果数据中包含噪声，那么一个更稳定的版本为:</p><script type="math/tex; mode=display">\operatorname{minimize} \frac{1}{2}\|\boldsymbol{Y}-\boldsymbol{L}-\boldsymbol{S}\|_{F}^{2}+\lambda_{1}\|\boldsymbol{L}\|_{*}+\lambda_{2}\|\boldsymbol{S}\|_{1}</script><h3 id="Proximal-Gradient-Methods"><a href="#Proximal-Gradient-Methods" class="headerlink" title="Proximal Gradient Methods"></a>Proximal Gradient Methods</h3><p>实际上，我们会遇到很多类似于lasso回归一样的优化问题，它们都有着下面的形式：</p><script type="math/tex; mode=display">F(x) = f(x) + g(x)</script><p>其中$f(x)$是一个平滑的凸函数，而$g(x)$是一个凸函数但是却不是平滑的。在上面提到的Lasso问题中：</p><script type="math/tex; mode=display">f(x) = \frac{1}{2} \Vert y - Ax \Vert ^2_2, g(x) = \lambda \Vert x\Vert_1.</script><p>我们希望能找到一种快速的方法来解决这样的优化问题。</p><p>首先，由于局部不可导，因此我们没法使用梯度下降，最容易想到的是使用subgradient（次梯度）。</p><p>使用次梯度下降：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \gamma_k g_k, g_k \in \partial F(x_k)</script><p>实际上是可以解决Lasso问题的，但是主要缺点是收敛得太慢了。一般来说，次梯度的收敛速率对于非平滑的目标函数是：</p><script type="math/tex; mode=display">F(x_k) - F(x_*) = O(\frac{1}{\sqrt k})</script><h4 id="convergence-rates-of-first-order-methods"><a href="#convergence-rates-of-first-order-methods" class="headerlink" title="convergence rates of first order methods"></a>convergence rates of first order methods</h4><p>这部分内容介绍一下一般梯度下降（使用一阶导数）的收敛速度是$O(\frac{1}{k})$。对于convex函数来说，一阶导数估计实际上提供的是一个下界。</p><p>我们知道梯度下降每次迭代规律为：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \gamma_k \nabla f(x_k)</script><p>而迭代后的代入$f$真实值，实际上是大于根据梯度估计的值的：</p><script type="math/tex; mode=display">f(x') \ge f(x) + \langle\nabla f(x),x'-x\rangle</script><p>梯度越大，步子就可以迈得更大一点，因为对于平滑函数来说，这意味着距离最低点还更远一点。引入新的概念：L-Lipschitz gradient，如果一个函数满足：</p><script type="math/tex; mode=display">\Vert \nabla f(x_1) - \nabla f(x_2)\Vert \leq L\Vert x_1 - x_2\Vert, \forall x_1,x_2 \in \mathbb R^n</script><p>$L&gt;0$,那么这个$L$被称为Lipschitz常量。有了这个条件，我们可以给线性下界补充一个二次上界。</p><p><strong>引理</strong>：<br>如果$f$是可导函数，而且$\nabla f$满足L-Lipschitz，那么对于任意$x,x’$有</p><script type="math/tex; mode=display">f(x') \leq  f(x) + \langle\nabla f(x),x'-x\rangle + \frac{L}{2}\Vert x' - x \Vert _2^2</script><p>证明上面的结论：</p><script type="math/tex; mode=display">\begin{aligned} f\left(\boldsymbol{x}^{\prime}\right) &=f\left.\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right)\right|_{t=1} \\ &=f(\boldsymbol{x})+\int_{t=0}^{1} \frac{d}{d t} f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right) d t \\ &=f(\boldsymbol{x})+\int_{t=0}^{1}\left\langle\nabla f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle d t \\ &=f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle \\ & \quad+\int_{t=0}^{1}\left\langle\nabla f\left(\boldsymbol{x}+t\left(\boldsymbol{x}^{\prime}-\boldsymbol{x}\right)\right)-\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle d t \\ & \leq f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2} \end{aligned}</script><p>所以我们可以得到：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}^{\prime}\right) \leq \hat{f}\left(\boldsymbol{x}^{\prime}, \boldsymbol{x}\right) \doteq f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2}</script><p>如果我们想要最小化这个上界，可以得到：</p><script type="math/tex; mode=display">\arg\min _{x'} \hat f(x',x) = x - \frac{1}{L} \nabla f(x).</script><p>这就是一个很简单的梯度下降迭代。而且可以保证，这样的迭代不会增加目标函数的值，因为$\hat f(x,x) = f(x)$：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}_{\star}^{\prime}\right) \leq \hat{f}\left(\boldsymbol{x}_{\star}^{\prime}, \boldsymbol{x}\right) \leq \hat{f}(\boldsymbol{x}, \boldsymbol{x})=f(\boldsymbol{x})</script><p>可以证明的是，使用这种迭代方法到最佳值的收敛速度是：</p><script type="math/tex; mode=display">f\left(\boldsymbol{x}_{k}\right)-f\left(\boldsymbol{x}_{\star}\right) \leq \frac{L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{2 k}=O(1 / k)</script><p>这个收敛速度会比次梯度要快很多。</p><h4 id="From-gradient-to-proximal-gradient"><a href="#From-gradient-to-proximal-gradient" class="headerlink" title="From gradient to proximal gradient"></a>From gradient to proximal gradient</h4><p>实际上，我们可以从上面的梯度下降算法来获得一点启发，来设计一个算法优化lasso回归这类的问题：</p><script type="math/tex; mode=display">F(x) = f(x) + g(x).</script><p>因为原函数是不可导的，因此梯度下降算法不能直接使用。尽管如此，如果目标函数中平滑的那一项$f(x)$的导数$\nabla f$是Lipschitz，我们依然可以构造出一个$F$的简单上界：对平滑项$f$放大到上界，对于不可导项就什么也不做：</p><script type="math/tex; mode=display">\hat{F}\left(\boldsymbol{x}^{\prime}, \boldsymbol{x}\right)=f(\boldsymbol{x})+\left\langle\nabla f(\boldsymbol{x}), \boldsymbol{x}^{\prime}-\boldsymbol{x}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}^{\prime}-\boldsymbol{x}\right\|_{2}^{2}+g\left(\boldsymbol{x}^{\prime}\right)</script><p>不断地最小化上式，可以得到类似于之前的梯度下降算法，这样的算法比次梯度下降有更好的收敛率。因此，我们要做的就是最小化$\hat F$:</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\arg \min _{\boldsymbol{x} } \hat{F}\left(\boldsymbol{x}, \boldsymbol{x}_{k}\right)</script><p>将$x_k$带入后补充全式，我们可以得到：</p><script type="math/tex; mode=display">\hat{F}\left(\boldsymbol{x}, \boldsymbol{x}_{k}\right)=\frac{L}{2}\left\|\boldsymbol{x}-\left(\boldsymbol{x}_{k}-\frac{1}{L} \nabla f\left(\boldsymbol{x}_{k}\right)\right)\right\|_{2}^{2}+g(\boldsymbol{x})+h\left(\boldsymbol{x}_{k}\right)</script><p>这里的$h(x_k)$只与$x_k$有关，因此每次迭代就变成了：</p><script type="math/tex; mode=display">\begin{aligned} \boldsymbol{x}_{k+1} &=\arg \min _{\boldsymbol{x} } \frac{L}{2}\left\|\boldsymbol{x}-\left(\boldsymbol{x}_{k}-\frac{1}{L} \nabla f\left(\boldsymbol{x}_{k}\right)\right)\right\|_{2}^{2}+g(\boldsymbol{x}) \\ &=\arg \min _{\boldsymbol{x} } g(\boldsymbol{x})+\frac{L}{2}\left\|\boldsymbol{x}-\boldsymbol{w}_{k}\right\|_{2}^{2} \end{aligned}</script><p>这里的$\boldsymbol{w}_{k}=\boldsymbol{x}_{k}-(1 / L) \nabla f\left(\boldsymbol{x}_{k}\right)$。也就是，我们希望让$g$尽量小，同时$x$又不要离$w_k$太远。由于二范数是凸函数，因此它总会有一个唯一最优解。</p><p>分析到这里，这个式子还是一个$F(x) = f(x) + g(x)$的形式，但是这里的$f(x)$是二次方（quadratic）的。这样形式在凸优化中经常会遇到，它有个特殊的名字——近端（Proximal Operator）：</p><script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{w}) \doteq \arg \min _{\boldsymbol{x} }\left\{g(\boldsymbol{x})+\frac{1}{2}\|\boldsymbol{x}-\boldsymbol{w}\|_{2}^{2}\right\}</script><p>因此迭代步骤可以写为：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\operatorname{prox}_{g / L}\left(\boldsymbol{w}_{k}\right).</script><p>比较幸运的是，一般我们遇到的凸函数，他们的近端都是有着固定的形式,或者可以很高效地被计算出来，下面将会举几个例子：</p><ol><li>$g(x) = I_D$，指示函数，也就是对于一个凸集$D$,如果$x\in D$，$I_D(x) = 0$，否则$I_D(x) = \infty$。那么:<script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{w})=\arg \min _{\boldsymbol{x} \in \mathcal{D} }\|\boldsymbol{x}-\boldsymbol{w}\|_{2}^{2}=\mathcal{P}_{\mathcal{D} }[\boldsymbol{w}]</script></li><li><p>$g(\boldsymbol{x})=\lambda|\boldsymbol{x}|_{1}$，$l^1$范数：</p><script type="math/tex; mode=display">\operatorname{prox}_{g}\left(u_{i}\right)=\operatorname{soft}\left(u_{i}, \lambda\right) \doteq \operatorname{sign}\left(u_{i}\right) \max \left(\left|u_{i}\right|-\lambda, 0\right)</script></li><li><p>$g(\boldsymbol{x})=\lambda|\boldsymbol{X}|_{*}$，矩阵核范数，那么：</p><script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{W})=\mathcal{S}(\boldsymbol{W}, \lambda) \doteq \boldsymbol{U} \operatorname{soft}(\boldsymbol{\Sigma}, \lambda) \boldsymbol{V}^{*}</script><p>$(\boldsymbol{U}, \boldsymbol{\Sigma}, \boldsymbol{V})$是$\mathbf W$的SVD分解。</p></li></ol><p>由以上这些，我们可以得到一个收敛速率为$O(\frac{1}{K})$的Proximal Gradient算法。更正式的定理如下：<br>$F(x) = f(x) + g(x)$，其中$f$是一个可导凸函数，并且导数符合Lipschitz，$g$是一个凸函数，考虑下面的迭代方式：</p><script type="math/tex; mode=display">\boldsymbol{w}_{k} \leftarrow \boldsymbol{x}_{k}-\frac{1}{L} \nabla f\left(\boldsymbol{x}_{k}\right), \quad \boldsymbol{x}_{k+1} \leftarrow \operatorname{prox}_{g / L}\left(\boldsymbol{w}_{k}\right).</script><p>假设$F(x)$在$x^*$有最小值，那么对于任何$k&gt;1$，都有：</p><script type="math/tex; mode=display">F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac{L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{2 k}</script><p>因此，我们得到近端梯度下降：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg1.png" alt=""></p><p>对于不同的目标函数，因为有着不同的近端形式，它们的近端梯度算法在具体形式上也略微有所不同，因此下面介绍几种针对不同问题的具体的近端梯度下降算法。</p><ol><li><strong>Proximal Gradient for the Lasso</strong><br>Lasso的$g$是$l^1$范数形式，而它的$L$可以是矩阵$A^TA$的最大特征值，s 可以提前计算得到的。有时候对于Lasso的PGD算法又被称为ISTA(iterative soft-thresholding algorithm)，具体算法流程如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg2.png" alt=""></li><li><strong>Proximal Gradient for Stable PCP</strong><br>观察之前不同形式的近端操作，可以看到对核范数$\Vert X\Vert_*$也是有y一个简单的近端形式的。因此我们可以用PGD来解决恢复低秩矩阵的问题，比如稳定主成分追踪（stable principal<br>component pursuit,PCP）:<script type="math/tex; mode=display">\min _{L, S}\|\boldsymbol{L}\|_{*}+\lambda\|\boldsymbol{S}\|_{1}+\frac{\mu}{2}\|\boldsymbol{Y}-\boldsymbol{L}-\boldsymbol{S}\|_{F}^{2}</script>上式中有两个不可导项：<script type="math/tex; mode=display">\|\boldsymbol{L}\|_{*}+\lambda\|\boldsymbol{S}\|_{1}</script>各自都有比较简单的近端形式。我们还需要知道下面的内容，假设$\boldsymbol{x}=\left[\boldsymbol{x}_{1} ; \boldsymbol{x}_{2}\right] \text {, } g(\boldsymbol{x})=g_{1}\left(\boldsymbol{x}_{1}\right)+g_{2}\left(\boldsymbol{x}_{2}\right)$，那么:<script type="math/tex; mode=display">\operatorname{prox}_{g}(\boldsymbol{w})=\left(\operatorname{prox}_{g_{1} }\left(\boldsymbol{w}_{1}\right), \operatorname{prox}_{g_{2} }\left(\boldsymbol{w}_{2}\right)\right)</script>对于该问题的具体优化算法如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg3.png" alt=""></li></ol><h4 id="Accelerate-Proximal-Gradient-APG"><a href="#Accelerate-Proximal-Gradient-APG" class="headerlink" title="Accelerate Proximal Gradient(APG)"></a>Accelerate Proximal Gradient(APG)</h4><p>之前的PG算法可以让收敛速度达到$O(\frac{1}{k})$，但是如果我们需要解决的问题有更特殊的结构，可以生成更高效快速的梯度算法。在1970～1980年这段日子里，有很多俄国的优化理论学者，再思考一个问题：对于优化一个平滑函数$f$，梯度方法是不是一阶方法里最佳的优化方法（这里局限于一阶方法，二阶方法有更快的收敛速度，但是我们也知道，二阶方法需要求海森矩阵，而高维情况下对海森矩阵的求解需要很大的代价）？</p><p>为了回答这个问题，首先需要一个计算模型。他们提出一个黑盒模型：模型中，算法会产生一个迭代序列$x_0,….,x_k$。对应于每个迭代，又会有对应的值$f(x_i)$以及梯度$\nabla f(x_i)$。通过这些来产生下一个迭代值，也就是：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\varphi_{k}\left(\boldsymbol{x}_{0}, \ldots, \boldsymbol{x}_{k}, f\left(\boldsymbol{x}_{0}\right), \ldots, f\left(\boldsymbol{x}_{k}\right), \nabla f\left(\boldsymbol{x}_{0}\right), \ldots, \nabla f\left(\boldsymbol{x}_{k}\right)\right)</script><p>从上述模型中，我们可以从最坏的角度来研究。首先，固定一类函数$\mathcal F$，然后观察这个算法在最差的函数下能做到什么样子（这里更像是最好的情况下，sup上界，inf为下界）：</p><script type="math/tex; mode=display">\sup _{f \in \mathcal{F}, \boldsymbol{x}_{0} }\left\{f\left(\boldsymbol{x}_{k}\right)-\inf _{\boldsymbol{x} } f(\boldsymbol{x})\right\}</script><p>对于我们感兴趣的一类函数，也就是可导凸函数并且满足Lipschitz条件:</p><script type="math/tex; mode=display">\mathcal{F}_{L, r} \doteq\left\{f : \mathfrak{B}(0, r) \rightarrow \mathbb{R} |\left\|\nabla f(\boldsymbol{x})-\nabla f\left(\boldsymbol{x}^{\prime}\right)\right\| \leq L\left\|\boldsymbol{x}-\boldsymbol{x}^{\prime}\right\| \forall \boldsymbol{x}, \boldsymbol{x}^{\prime} \in \mathfrak{B}(0, r)\right\}</script><p>仅仅使用梯度下降也就是$O(\frac 1 k)$的收敛速度，我们有：</p><script type="math/tex; mode=display">\sup _{f \in \mathcal{F}_{L, r}, \boldsymbol{x}_{0} }\left\{f\left(\boldsymbol{x}_{k}\right)-\inf _{\boldsymbol{x} } f(\boldsymbol{x})\right\} \leq \frac{C L r^{2} }{k}</script><p>而对于这类函数，可以证明的最好的下界是：</p><script type="math/tex; mode=display">\sup _{f \in \mathcal{F}_{L, r}, x_{0} }\left\{f\left(\boldsymbol{x}_{k}\right)-\inf _{\boldsymbol{x} } f(\boldsymbol{x})\right\} \geq \frac{c L r^{2} }{k^{2} }</script><p>可以看到这之间还是有一个gap的。因此更快的收敛速度还是有可能做到的。</p><p>首先考虑比较简单的迭代方式，依然使用梯度下降：</p><script type="math/tex; mode=display">x_{k+1} = x_k - \alpha \nabla f(x_k),</script><p>这里的$\alpha$是学习率，对于梯度符合Lipschitz条件的函数，取$\alpha  = \frac{1}{L}$是一个很好的选择，而梯度$\nabla f(x_k)$是下降速度最快的方向。但是朝着当前最快的方向走并不一定就是最优的，因为梯度是局部的，因此梯度下降实际上是贪心算法，但是贪心算法不一定是最优的，另外一种保守的做法是参考之前迭代的方向，保留之前迭代的动量（momentum），被称为重量球方法：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\boldsymbol{x}_{k}-\alpha \nabla f\left(\boldsymbol{x}_{k}\right)+\beta\left(\boldsymbol{x}_{k}-\boldsymbol{x}_{k-1}\right)</script><p>重量球方法往往会带来更平滑的迭代策略以及更快的收敛。</p><p>1983年，Yuri Nesterov提出了达到收敛速度为$O(\frac{1}{k^2})$的算法。在算法中，他也使用到了动量这个步骤。它引入了一个新的辅助点（auxiliary point）$p_{k+1}$:</p><script type="math/tex; mode=display">\boldsymbol{p}_{k+1} \doteq \boldsymbol{x}_{k}+\beta_{k}\left(\boldsymbol{x}_{k}-\boldsymbol{x}_{k-1}\right)</script><p>而每一次迭代步骤就是：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\boldsymbol{p}_{k+1}-\alpha \nabla f\left(\boldsymbol{p}_{k+1}\right)</script><p>这里$\alpha =\frac{1}{L}$，而$\beta _k$的值要仔细选择，来达到最佳的收敛率：</p><script type="math/tex; mode=display">t_{k}=\frac{1+\sqrt{1+4 t_{k-1}^{2} } }{2}, \quad \beta_{k}=\frac{t_{k-1}-1}{t_{k} }</script><p>使用这种迭代策略，可以达到$O(\frac{1}{k^2})$的收敛率。</p><p>到目前位置，我们说的都是建立在平滑函数上的，而对于有非平滑函数项的目标函数，还需要做别的改进，也就是APG算法。</p><p>之前的PG算法，我们可以得到目标函数的一个上界：</p><script type="math/tex; mode=display">\begin{aligned} \hat{F}\left(\boldsymbol{x}, \boldsymbol{x}_{k}\right) & \doteq f\left(\boldsymbol{x}_{k}\right)+\left\langle\nabla f\left(\boldsymbol{x}_{k}\right), \boldsymbol{x}-\boldsymbol{x}_{k}\right\rangle+\frac{L}{2}\left\|\boldsymbol{x}-\boldsymbol{x}_{k}\right\|_{2}^{2}+g(\boldsymbol{x}) \\ & \doteq \frac{L}{2}\left\|\boldsymbol{x}-\boldsymbol{w}_{k}\right\|_{2}^{2}+g(\boldsymbol{x})+\text { terms that do not depend on } \boldsymbol{x}, \end{aligned}</script><p>每一次迭代，实际上是最小化这个上界。</p><p>而对于Nesterov momentum来说，也可以按照类似的方法来得到它对应的迭代策略：</p><script type="math/tex; mode=display">\boldsymbol{x}_{k+1}=\operatorname{prox}_{g}\left(\boldsymbol{p}_{k+1}-\frac{1}{L} \nabla f\left(\boldsymbol{p}_{k+1}\right)\right).</script><p>这样我们就得到了APG算法的迭代策略：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg4.png" alt=""></p><p>APG算法有$O(\frac{1}{k^2})$的收敛速率，比普通的梯度方法会好很多，更正式的定理为：</p><p>序列${x_k}$是通过APG策略对凸函数$F(x) = f(x) + g(x)$进行优化的迭代步骤，而且$f$的梯度是Lipschitz的，如果$F(x)$有最小值对应的$x_*$，那么对于任意的$k&gt;1$:</p><script type="math/tex; mode=display">F\left(\boldsymbol{x}_{k}\right)-F\left(\boldsymbol{x}_{\star}\right) \leq \frac{2 L\left\|\boldsymbol{x}_{0}-\boldsymbol{x}_{\star}\right\|_{2}^{2} }{(k+1)^{2} }</script><ol><li><p>APG for Basis Pursuit Denoising<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg5.png" alt=""></p></li><li><p>APG for Stable Principal Component Pursuit<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/pg6.png" alt=""></p></li></ol><p>对于收敛性的证明，这里都不多赘述了。</p>]]></content>
       
       
       <categories>
@@ -138,6 +175,8 @@
             <tag> compressed sensing </tag>
             
             <tag> sparse model </tag>
+            
+            <tag> convex optimization </tag>
             
             <tag> lasso </tag>
             
@@ -960,9 +999,9 @@
             
             <tag> 3D reconstruction </tag>
             
-            <tag> paper </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> paper </tag>
             
         </tags>
       
@@ -1012,9 +1051,9 @@
             
             <tag> 3D reconstruction </tag>
             
-            <tag> paper </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> paper </tag>
             
         </tags>
       
@@ -1039,9 +1078,9 @@
             
             <tag> 3D reconstruction </tag>
             
-            <tag> paper </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> paper </tag>
             
         </tags>
       
@@ -1252,11 +1291,11 @@
       
         <tags>
             
-            <tag> algorithm </tag>
-            
             <tag> SLAM </tag>
             
             <tag> icp </tag>
+            
+            <tag> algorithm </tag>
             
         </tags>
       
@@ -1279,9 +1318,9 @@
       
         <tags>
             
-            <tag> algorithm </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> algorithm </tag>
             
             <tag> ransac </tag>
             
@@ -1425,9 +1464,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1452,9 +1491,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> deep learning </tag>
             
@@ -1479,9 +1518,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1531,9 +1570,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -1645,9 +1684,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> ACE </tag>
             
@@ -1674,9 +1713,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> softmax regression </tag>
             
@@ -1751,9 +1790,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -1782,13 +1821,13 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
             
-            <tag> unsupervised learning </tag>
+            <tag> machine learning </tag>
             
             <tag> kernel </tag>
+            
+            <tag> unsupervised learning </tag>
             
         </tags>
       
@@ -1811,9 +1850,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1838,9 +1877,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1865,9 +1904,9 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> information theory </tag>
+            
+            <tag> code </tag>
             
             <tag> lossless coding </tag>
             
@@ -1892,13 +1931,13 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> homework </tag>
             
             <tag> neural network </tag>
             
-            <tag> homework </tag>
+            <tag> code </tag>
             
         </tags>
       
@@ -1921,9 +1960,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> deep learning </tag>
             
@@ -1975,9 +2014,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
         </tags>
       
@@ -2048,9 +2087,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
             <tag> sophus </tag>
             
@@ -2127,9 +2166,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -2156,9 +2195,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> deep learning </tag>
             
@@ -2306,9 +2345,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -2433,9 +2472,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -2462,9 +2501,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> regression </tag>
             
@@ -3093,9 +3132,9 @@
             
             <tag> algorithm </tag>
             
-            <tag> Matrix </tag>
-            
             <tag> code </tag>
+            
+            <tag> Matrix </tag>
             
         </tags>
       
@@ -3118,9 +3157,9 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> code </tag>
             
             <tag> visualization </tag>
             
