@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/alm1.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/alm2.png">
 <meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/alm3.png">
-<meta property="og:updated_time" content="2019-07-22T14:10:59.217Z">
+<meta property="og:updated_time" content="2019-07-23T03:27:41.176Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="压缩感知与稀疏模型——Augmented Lagrange Multipler(ALM)">
 <meta name="twitter:description" content="这个博客将介绍ALM，介绍一个用来解决一个等式限制的问题的框架。">
@@ -415,7 +415,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-07-22 22:10:59" itemprop="dateModified" datetime="2019-07-22T22:10:59+08:00">2019-07-22</time>
+                <time title="更新于：2019-07-23 11:27:41" itemprop="dateModified" datetime="2019-07-23T11:27:41+08:00">2019-07-23</time>
               
             
           </span>
@@ -498,7 +498,7 @@ L_{\nabla \mu f}=\mu\|\boldsymbol{A}\|_{2}^{2}</script><p>因此就带来一个�
 <script type="math/tex; mode=display">
 \mathcal{L}(\boldsymbol{x}, \boldsymbol{\lambda}) \doteq g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>而原问题的最优解，是拉格朗日函数的鞍点（saddle point）：</p>
 <script type="math/tex; mode=display">
-\sup _{\boldsymbol{\lambda} } \inf _{\boldsymbol{x} } \mathcal{L}(\boldsymbol{x}, \boldsymbol{\lambda})=\operatorname{supinf}_{\boldsymbol{\lambda} } g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>如果我们定义对偶函数如下：</p>
+\sup _{\boldsymbol{\lambda} } \inf _{\boldsymbol{x} } \mathcal{L}(\boldsymbol{x}, \boldsymbol{\lambda})=\text{sup inf}_{\boldsymbol{\lambda} } g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>如果我们定义对偶函数如下：</p>
 <script type="math/tex; mode=display">
 d(\boldsymbol{\lambda}) \doteq \inf _{\boldsymbol{x} } g(\boldsymbol{x})+\langle\boldsymbol{\lambda}, \boldsymbol{A} \boldsymbol{x}-\boldsymbol{y}\rangle</script><p>那么找到最优解可以通过下面的式子：</p>
 <script type="math/tex; mode=display">
