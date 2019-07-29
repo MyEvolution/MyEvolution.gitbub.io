@@ -3,6 +3,31 @@
   
     
     <entry>
+      <title>CPP——记录（一）</title>
+      <link href="/2019/07/29/CPP%E2%80%94%E2%80%94%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/"/>
+      <url>/2019/07/29/CPP%E2%80%94%E2%80%94%E8%AE%B0%E5%BD%95%EF%BC%88%E4%B8%80%EF%BC%89/</url>
+      
+        <content type="html"><![CDATA[<p>我自己用过不少语言，cpp，java，python，html，ccs，javascript都接触过，系统学过java，cpp，也用过cpp，python和java编写过一些项目。但是呢，语言学过了都会忘记，但是过去写的代码不是毫无帮助，再次上手会非常容易。记录，就是记录一下最近用到的，之前学过但是忘记了的东西。</p><a id="more"></a><h3 id="类内静态变量初始化"><a href="#类内静态变量初始化" class="headerlink" title="类内静态变量初始化"></a>类内静态变量初始化</h3><p>类内静态变量是不能在声明时候初始化的，如果是常量则可以。如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">10</span>;</span><br><span class="line">    <span class="comment">//static int b = 10;error</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> C::a = <span class="number">10</span>;</span><br></pre></td></tr></table></figure></p><p>类内静态变量声明时候是没有分配内存的，只有在外部初始化以后，才会进行内存的分配。</p><h3 id="使用类内函数建立线程"><a href="#使用类内函数建立线程" class="headerlink" title="使用类内函数建立线程"></a>使用类内函数建立线程</h3><p>想要使用类的成员函数进行多线程，直接绑定是绑定不上的。下面的做法是错误的：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//other code</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">useFunc</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">std</span>::thread t = <span class="built_in">std</span>::thread(C::func,<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">C obj;</span><br><span class="line"><span class="built_in">std</span>::thread t = <span class="built_in">std</span>::thread(C::func,obj);</span><br></pre></td></tr></table></figure></p><p>实际上是很容易理解的，因为成员函数就算是没有参数，实际上也是有一个参数的，就是变量本身。因此可以想想在建立thread的时候要像参数一样将变量传进去。但是用上面的方法仙人是不行的，因为我们不能像<code>func(this)</code>一样调用成员函数。如何将成员函数伪装成一个普通的函数？我们可以使用C++11中的bind：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//other code</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">useFunc</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">std</span>::thread t = <span class="built_in">std</span>::thread( <span class="built_in">std</span>::bind(&amp;C::func,<span class="keyword">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">C obj;</span><br><span class="line"><span class="keyword">auto</span> func = <span class="built_in">std</span>::bind(&amp;C::func,&amp;obj);</span><br><span class="line">func();<span class="comment">// = obj.func()</span></span><br><span class="line"><span class="built_in">std</span>::thread t = <span class="built_in">std</span>::thread(func);</span><br></pre></td></tr></table></figure></p><p>可以看到，<code>std::bind</code>可以将成员函数包装成普通函数，也就可以传入到thread中了。而且，即使是在类内其他成员函数，也是一样可以这样调用的。</p><h3 id="vector的坑"><a href="#vector的坑" class="headerlink" title="vector的坑"></a>vector的坑</h3><p>实际上，<code>std::vector</code>会动态分配内存，不是一个秘密，应该初学stl的都会明白。最近遇到了一个bug，内存泄露，一直找不到原因，后来发现是<code>std::vector</code>动态分配内存的原因。</p><p>首先，<code>std::vector</code>中内存是连续的，这意味着，在动态分配内存过程中，<code>std::vector</code>会把旧的内容拷贝到新的内存中去。这时候原先的引用，指针，就会失效。比如下面的例子：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; <span class="built_in">array</span>(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">int</span> &amp;d = <span class="built_in">array</span>[<span class="number">0</span>];</span><br><span class="line">d = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>;i!=<span class="number">10</span>;++i)</span><br><span class="line"><span class="built_in">array</span>.push_back(i);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"d = "</span> &lt;&lt;d &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure></p><p>你觉得会输出什么？实际上输出什么是未定义的。当push_back调用时候，array会更换新的地址。这时候原来的引用就失效了。因此引用<code>std::vector</code>的内容要格外小心，如果有最大容量的话最好reserve一下。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 程序设计语言 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> cpp </tag>
+            
+            <tag> code </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>压缩感知与稀疏模型——PGD,APG,ALM的实现</title>
       <link href="/2019/07/22/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94PGD-APG-ALM%E7%9A%84%E5%AE%9E%E7%8E%B0/"/>
       <url>/2019/07/22/%E5%8E%8B%E7%BC%A9%E6%84%9F%E7%9F%A5%E4%B8%8E%E7%A8%80%E7%96%8F%E6%A8%A1%E5%9E%8B%E2%80%94%E2%80%94PGD-APG-ALM%E7%9A%84%E5%AE%9E%E7%8E%B0/</url>
@@ -19,9 +44,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> code </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> high-dimensional data analysis with low-dimensional models </tag>
             
@@ -1291,11 +1316,11 @@
       
         <tags>
             
+            <tag> algorithm </tag>
+            
             <tag> SLAM </tag>
             
             <tag> icp </tag>
-            
-            <tag> algorithm </tag>
             
         </tags>
       
@@ -1318,9 +1343,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> algorithm </tag>
+            
+            <tag> SLAM </tag>
             
             <tag> ransac </tag>
             
@@ -1464,9 +1489,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1491,9 +1516,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -1518,9 +1543,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1570,9 +1595,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -1684,9 +1709,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> ACE </tag>
             
@@ -1713,9 +1738,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> softmax regression </tag>
             
@@ -1790,9 +1815,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -1821,13 +1846,13 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
             
-            <tag> kernel </tag>
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
+            
+            <tag> kernel </tag>
             
         </tags>
       
@@ -1850,9 +1875,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1877,9 +1902,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -1904,9 +1929,9 @@
       
         <tags>
             
-            <tag> information theory </tag>
-            
             <tag> code </tag>
+            
+            <tag> information theory </tag>
             
             <tag> lossless coding </tag>
             
@@ -1931,13 +1956,13 @@
       
         <tags>
             
-            <tag> LFD class </tag>
+            <tag> code </tag>
             
-            <tag> homework </tag>
+            <tag> LFD class </tag>
             
             <tag> neural network </tag>
             
-            <tag> code </tag>
+            <tag> homework </tag>
             
         </tags>
       
@@ -1960,9 +1985,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -2014,9 +2039,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -2087,9 +2112,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> SLAM </tag>
             
             <tag> sophus </tag>
             
@@ -2166,9 +2191,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2195,9 +2220,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -2345,9 +2370,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2472,9 +2497,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2501,9 +2526,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> regression </tag>
             
@@ -3130,9 +3155,9 @@
       
         <tags>
             
-            <tag> algorithm </tag>
-            
             <tag> code </tag>
+            
+            <tag> algorithm </tag>
             
             <tag> Matrix </tag>
             
@@ -3157,9 +3182,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> code </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> visualization </tag>
             
