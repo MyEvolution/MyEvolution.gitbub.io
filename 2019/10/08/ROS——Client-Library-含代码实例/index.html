@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="为了更好的使用ROS编程，ROS提供了Client Library，也就是一个编程库，可以用来建立node，发布消息，调用服务等等。其中有cpp版本的roscpp，python版本的rospy，还有lisp版本的roslisp，但是显然我们用的最多的是cpp与python版本。这里会编写一些简单的通信实例，以得到更好的学习效果。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-08T12:53:12.010Z">
+<meta property="og:updated_time" content="2019-10-21T07:04:03.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ROS——Client Library(含代码实例)">
 <meta name="twitter:description" content="为了更好的使用ROS编程，ROS提供了Client Library，也就是一个编程库，可以用来建立node，发布消息，调用服务等等。其中有cpp版本的roscpp，python版本的rospy，还有lisp版本的roslisp，但是显然我们用的最多的是cpp与python版本。这里会编写一些简单的通信实例，以得到更好的学习效果。">
@@ -394,12 +394,24 @@
                 
               
 
-              <time title="创建于：2019-10-08 11:20:23 / 更新于：20:53:12" itemprop="dateCreated datePublished" datetime="2019-10-08T11:20:23+08:00">2019-10-08</time>
+              <time title="创建于：2019-10-08 11:20:23" itemprop="dateCreated datePublished" datetime="2019-10-08T11:20:23+08:00">2019-10-08</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-10-21 15:04:03" itemprop="dateModified" datetime="2019-10-21T15:04:03+08:00">2019-10-21</time>
               
             
           </span>
@@ -498,7 +510,25 @@
 <p>这时候如果你是ubuntu，可能发现执行不成功，因为我们编写的python脚本没有可执行的权限，需要使用下面的命令增加权限：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x pyscript.py</span><br></pre></td></tr></table></figure></p>
 <p>接下来应该就正常了。</p>
 <h3 id="Service-1"><a href="#Service-1" class="headerlink" title="Service"></a>Service</h3><p>对于Service来说，基本上也是一致的。除了编译后会生成多个需要引入的包，为了方便我们使用*来全部引入，下面就只贴出代码，其他的不过多介绍了。<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># content of pyserver.py</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> service_demo_py.srv <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">handle_function</span><span class="params">(req)</span>:</span></span><br><span class="line">    rospy.loginfo(<span class="string">"name: %s, age: %d"</span>,req.name,req.age)</span><br><span class="line">    <span class="keyword">return</span> GreetingResponse(<span class="string">"Hi, "</span>+req.name)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">server</span><span class="params">()</span>:</span></span><br><span class="line">    rospy.init_node(<span class="string">"pyservice"</span>)</span><br><span class="line">    srv = rospy.Service(<span class="string">"greeting"</span>,Greeting,handle_function)</span><br><span class="line">    rospy.spin()</span><br><span class="line"><span class="keyword">if</span> __name__ ==<span class="string">"__main__"</span>:</span><br><span class="line">    server()</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># content of pyclient.py</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> rospy</span><br><span class="line"><span class="keyword">from</span> service_demo_py.srv <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">client</span><span class="params">()</span>:</span></span><br><span class="line">    rospy.init_node(<span class="string">"pyclient"</span>)</span><br><span class="line">    <span class="comment">#rospy.wait_for_service("greeting")</span></span><br><span class="line">    name = <span class="string">'wlsdzyzl'</span></span><br><span class="line">    age = <span class="number">23</span></span><br><span class="line">    req = GreetingRequest(name,age)</span><br><span class="line">    cl = rospy.ServiceProxy(<span class="string">"greeting"</span>,Greeting)</span><br><span class="line">    resp= cl(req)</span><br><span class="line">    rospy.loginfo(resp.feedback)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    client()</span><br></pre></td></tr></table></figure>
+<pre><code class="lang-py"># content of pyclient.py
+#!/usr/bin/env python
+
+import rospy
+from service_demo_py.srv import *
+
+def client():
+    rospy.init_node(&quot;pyclient&quot;)
+    #rospy.wait_for_service(&quot;greeting&quot;)
+    name = &#39;wlsdzyzl&#39;
+    age = 23
+    req = GreetingRequest(name,age)
+    cl = rospy.ServiceProxy(&quot;greeting&quot;,Greeting)
+    resp= cl(req)
+    rospy.loginfo(resp.feedback)
+if __name__ == &quot;__main__&quot;:
+    client()
+</code></pre>
+
       
     </div>
 
@@ -540,6 +570,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/21/踩过的坑——记录一次开机黑屏/" rel="prev" title="踩过的坑——记录一次开机黑屏">
+                踩过的坑——记录一次开机黑屏 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -614,7 +648,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">130</span>
+                    <span class="site-state-item-count">131</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -838,7 +872,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">84</span>
+                      
+                    
+                    <span class="site-state-item-count">85</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
