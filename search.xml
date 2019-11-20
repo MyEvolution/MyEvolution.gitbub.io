@@ -3,6 +3,29 @@
   
     
     <entry>
+      <title>踩过的坑——ROS多机通信与节点重命名</title>
+      <link href="/2019/11/20/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94ROS%E5%A4%9A%E6%9C%BA%E9%80%9A%E4%BF%A1%E4%B8%8E%E8%8A%82%E7%82%B9%E9%87%8D%E5%91%BD%E5%90%8D/"/>
+      <url>/2019/11/20/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94ROS%E5%A4%9A%E6%9C%BA%E9%80%9A%E4%BF%A1%E4%B8%8E%E8%8A%82%E7%82%B9%E9%87%8D%E5%91%BD%E5%90%8D/</url>
+      
+        <content type="html"><![CDATA[<p>项目需要拓展到多相机协同重建，需要借助C/S模型通信。而使用ROS是非常好的选择。最近借助之前学得ros的知识，代码部分拓展得差不多了，再拓展到多个机器的过程中，出现了通信与节点名字冲突的问题，解决方法也不难，就在这里记录一下。</p><a id="more"></a><h3 id="多机通信"><a href="#多机通信" class="headerlink" title="多机通信"></a>多机通信</h3><p>分布式的架构是ROS的灵魂。实际上，ros把通信这里的东西封装得相当方便了。现在多机通信的情况是这样：一台主机运行Master，其他的结点运行在不同的机器上，这些结点一台是服务器，有的是客户端。但是他们有一个共同点，就是需要向Master注册。</p><p>首先，各个机器要和Master所在的机器ping通，这个是必要的。理论上互相ping通，ros就可将它们连接运行起来。在我这里，Master和一个客户端A运行在ip为10.8.5.230的机器上，而另外一个客户端和服务器运行在192.168.0.110上。需要做的是：在192.168.0.110机器终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export ROS_MASTER_URI=http://10.8.5.230:11311</span><br></pre></td></tr></table></figure></p><p>这个意图很明显，就是指定MASTER的IP和运行端口。但是这时启动服务器会发现，在Master终端下出现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Couldn&apos;t find an AF_INET address for [XXX]</span><br></pre></td></tr></table></figure></p><p>这导致虽然服务器可以连接到Master，但是在客户端A发的消息却送不到服务器上。因为没有找到一个AF_INET address。这个地址有什么用我也不清楚，因为目前的我只重视问题怎么解决，而不在乎背后的原理，因此就不多了解了。后来发现，多机通信还要在各个结点的机器上指定ROS_IP:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname -I</span><br></pre></td></tr></table></figure></p><p>得到IP后，再通过下面的指令分别指定本机的ROS_IP：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export ROS_IP=192.168.0.110</span><br><span class="line">export ROS_IP=10.8.5.230</span><br></pre></td></tr></table></figure></p><p>之后就可以成功连接并运行成功了。</p><h3 id="节点名称冲突"><a href="#节点名称冲突" class="headerlink" title="节点名称冲突"></a>节点名称冲突</h3><p>在运行过程中，由于客户端的程序是一样的，因此它们启动结点默认名称是一样的，而在一个命名空间下，不能有相同名称的结点。这就导致了我在运行第一个客户端时，打开了第二个客户端，然后第一个客户端就出现问题，节点名称被占用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ WARN] [....]: Shutdown request received.</span><br><span class="line">[ WARN] [....]: Reason given for shutdown: [new node registered with the same name]</span><br></pre></td></tr></table></figure></p><p>因此在启动结点时，需要重新设置结点名称。比如现在启动的命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosrun flashfusion client</span><br></pre></td></tr></table></figure></p><p>将结点名称指定为fuck：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosrun flashfusion client __name:=fuck</span><br></pre></td></tr></table></figure></p><p>这样就不会产生冲突了。</p><p>也不难猜到，另外的方法，就是命名空间，并且使用roslaunch来发布更方便。不过既然问题解决了，现在就先不了解了，之后整理代码有需求再来详细研究。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 踩过的坑 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ros </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>踩过的坑——vnc+SSH tunnel远程控制内网机器</title>
       <link href="/2019/11/10/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94vnc-SSH-tunnel%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%86%85%E7%BD%91%E6%9C%BA%E5%99%A8/"/>
       <url>/2019/11/10/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94vnc-SSH-tunnel%E8%BF%9C%E7%A8%8B%E6%8E%A7%E5%88%B6%E5%86%85%E7%BD%91%E6%9C%BA%E5%99%A8/</url>
@@ -1152,11 +1175,11 @@
     </entry>
     
     <entry>
-      <title>Paper——Real-time 3D Reconstruction at Scale using Voxel Hashing</title>
-      <link href="/2019/03/04/Paper%E2%80%94%E2%80%94Real-time-3D-Reconstruction-at-Scale-using-Voxel-Hashing/"/>
-      <url>/2019/03/04/Paper%E2%80%94%E2%80%94Real-time-3D-Reconstruction-at-Scale-using-Voxel-Hashing/</url>
+      <title>Paper——Survey of Large Scale Reconstruction</title>
+      <link href="/2019/03/04/Paper%E2%80%94%E2%80%94Survey-of-Large-Scale-Reconstruction/"/>
+      <url>/2019/03/04/Paper%E2%80%94%E2%80%94Survey-of-Large-Scale-Reconstruction/</url>
       
-        <content type="html"><![CDATA[<p>之前的两篇文章都使用了voxel hashing的策略，而实际上为了减少存储，一般不会将空间所有的voxel都记录下来，而是使用voxel hashing或者octree的方法。而这篇文章（<a href="http://www.graphics.stanford.edu/~niessner/papers/2013/4hashing/niessner2013hashing.pdf" target="_blank" rel="noopener">Real-time 3D Reconstruction at Scale using Voxel Hashing</a>）是最早使用voxel hashing的。它的引用量达到了390。鉴于不是深度学习等热门领域，实际上这个成绩已经相当不错了。<br><a id="more"></a><br>当然，这篇文章中使用的还是TSDF，对于TSDF我就不多介绍了。在之前的表示中，会存储每个voxel的TSDF值。但是既然使用了截断SDF值，意味着不在截断范围内的体素组成的空间是free space，也就是没有必要的部分，对表面的重建不会有太大的帮助。因此可以设计一个新的数据结构来开发有效体素的稀疏性。实际上在之前图形学领域中，已经有hashing算法提出用来进行2D/3D渲染阶段以及，在基于GPU的hashing中也提出了成熟的方法，极大减少了hash冲突的数量。</p><p>这篇文章提出的系统目标是建立一个实时系统，探索一种空间hashing的方案，来实现可伸缩（scalable）体积的重建。对于三维重建来说非常重要的是，因为要重建的目标几何形状是未知的，并且可能随着时间不断变化（指的是随着时间变化获取信息在增加，或者由于优化改变了之前的重建结果），所以提出的数据结构应该可以动态分配和更新，同时还要在不知道任何重建表面的先验信息的情况下最小化潜在的hash冲突。</p><p>这篇文章提出的数据结构有下面几个优点：</p><ul><li>可以高效压缩TSDF，并且不降低分辨率，不适用分层的数据结构</li><li>可以高效地融合新的TSDF到哈希表中</li><li>无需重新组织结构就可以删除和收集无用的voxel block</li><li>在主机和GPU之间轻量级的voxel block双向流，允许无限制的重建</li><li>可以使用标准的raycasting或者多边形操作高效提取等值面(isosurface)，用来进行渲染以及相机位姿估计</li></ul><h3 id="System-Pipeline"><a href="#System-Pipeline" class="headerlink" title="System Pipeline"></a>System Pipeline</h3><p>这个系统的Pipeline非常简单，如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hashing.png" alt=""></p><p>这个系统最关键的部分是空间哈希的策略。将voxels组织成块（例如8×8×8），每个体素包含一个TSDF值，一个weight以及一个额外的颜色值（可选）。这个哈希表是unstructured，也就是不是根据空间位置顺序分配的，可能离得很近的block在哈希表的实际位置中距离很远。我们也不会按照空间位置来查找对应的block，而是根据一个能够极大减少冲突的hash映射。</p><p>当有新的深度图进来时，使用ICP算法对位姿进行估计（使用的是point-plane的ICP，来保证位姿估计是frame to model而不是frame to frame，从而减少了飘逸的情况），接着开始进行integration。首先根据相机视锥，对所有的voxel进行block的分配，然后对每一个voxel进行TSDF的计算。然后我们进行垃圾收集，找出所有voxel都在表面截断范围外的block，在hash表中删除。这个步骤保证了hash表的稀疏性。</p><p>在integration之后，根据进行raycast，从而得到表面。</p><h3 id="Data-Structure"><a href="#Data-Structure" class="headerlink" title="Data Structure"></a>Data Structure</h3><p>想象将无穷的空间分割均匀分割成一个个block，每个block又分成N（8×8×8）个voxel。voxel的结构如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Voxel</span>&#123;</span></span><br><span class="line">    <span class="keyword">float</span> sdf;</span><br><span class="line">    uchar colorRGB[<span class="number">3</span>];</span><br><span class="line">    uchar weight;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>hash表与一般的hash表区别不大，也就是根据世界坐标位置$(x,y,z)$通过哈希函数得到一个映射，找到block，从而找到voxel。hash函数如下：</p><script type="math/tex; mode=display">H(x,y,z) = (x\cdot p_1 \oplus y\cdot p_2 \oplus z \cdot p_3)mod n</script><p>为了减少冲突，$p_1,p_2,p_3$是大质数（73856093, 19349669, 83492791），n是hash表的大小。除了存储一个指针指向voxel block，每个哈希entry也包含了世界坐标，一个偏移量，用来存储冲突发生时，相对于计算的位置的偏移量。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">HashEntry</span>&#123;</span></span><br><span class="line">    <span class="keyword">short</span> position[<span class="number">3</span>];<span class="comment">//the coordinate of </span></span><br><span class="line">    <span class="keyword">short</span> offset;<span class="comment">//offset of the next hash entry that suppose to be in the same bucket</span></span><br><span class="line">    <span class="keyword">int</span> pointer;<span class="comment">//pointer to voxel block</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>整个哈希表结构如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hashing1.png" alt=""></p><p>为了解决冲突，作者将hash entry指针指向一个bucket。bucket大小固定，通过顺序遍历bucket来找到对应的hash entry（比较position）。当bucket满了的时候，寻找临近的bucket来找到是否有空闲的位置，而这个bucket相对于原来的偏移量就是offset，被存储在链表上一个entry中。这是hash表的一个比较通用的实现方式。</p><p>下图为哈希表插入以及删除的一个过程：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hashing2.png" alt=""></p><p>值得注意的是，为了实行链表这个操作，每个bucket最后一个entry只能放链表的表头，也就是本身就该分配到这个bucket的元素才能插入该bucket的最后一个位置。</p><p>在查找操作中，找到对应的bucket，然后遍历，如果到了结尾依然找不到，就顺着链表继续找，直到查找成功，或者遇到一个空位置，说明查找失败。</p><p>需要注意的是，在垃圾收集过程中，我们会用到遍历block中的voxel时候设定的weight最大值，或者sdf最小值。如果weight最大值小于0，或者最小sdf绝对值大于1（或者某个值），那么就将这个block看做invalid，最后被删除掉。</p><p>对于本篇文章的其他内容，基本算是老生常谈了。动态的truncation，用来补偿远距离深度的不确定性，根据ICP估计位姿，根据raycast，tri-linear interpolation来计算出表面。以及一些GPU和host的双向流，这目前还不是我关注的重点。</p><p>实际上，如果不用GPU，本篇文章的hashing scheme思想还是比较简单的。而现在这样的idea越来越少了，目前的reconstruction系统需要结合IMU，纹理贴图等等，变得越来越复杂庞大了。</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="online"><a href="#online" class="headerlink" title="online"></a>online</h2><h3 id="Towards-ScalableFusion-Feasibility-Analysis-of-a-Mesh-Based-3D-Reconstruction"><a href="#Towards-ScalableFusion-Feasibility-Analysis-of-a-Mesh-Based-3D-Reconstruction" class="headerlink" title="Towards ScalableFusion: Feasibility Analysis of a Mesh Based 3D Reconstruction"></a>Towards ScalableFusion: Feasibility Analysis of a Mesh Based 3D Reconstruction</h3><h2 id="offline"><a href="#offline" class="headerlink" title="offline"></a>offline</h2><h3 id="Matterport3D-Chang2017"><a href="#Matterport3D-Chang2017" class="headerlink" title="Matterport3D[Chang2017]"></a>Matterport3D[Chang2017]</h3><h3 id="Wijmans2017"><a href="#Wijmans2017" class="headerlink" title="[Wijmans2017]"></a>[Wijmans2017]</h3>]]></content>
       
       
       <categories>
@@ -1177,11 +1200,11 @@
     </entry>
     
     <entry>
-      <title>Paper——Survey of Large Scale Reconstruction</title>
-      <link href="/2019/03/04/Paper%E2%80%94%E2%80%94Survey-of-Large-Scale-Reconstruction/"/>
-      <url>/2019/03/04/Paper%E2%80%94%E2%80%94Survey-of-Large-Scale-Reconstruction/</url>
+      <title>Paper——Real-time 3D Reconstruction at Scale using Voxel Hashing</title>
+      <link href="/2019/03/04/Paper%E2%80%94%E2%80%94Real-time-3D-Reconstruction-at-Scale-using-Voxel-Hashing/"/>
+      <url>/2019/03/04/Paper%E2%80%94%E2%80%94Real-time-3D-Reconstruction-at-Scale-using-Voxel-Hashing/</url>
       
-        <content type="html"><![CDATA[<h2 id="online"><a href="#online" class="headerlink" title="online"></a>online</h2><h3 id="Towards-ScalableFusion-Feasibility-Analysis-of-a-Mesh-Based-3D-Reconstruction"><a href="#Towards-ScalableFusion-Feasibility-Analysis-of-a-Mesh-Based-3D-Reconstruction" class="headerlink" title="Towards ScalableFusion: Feasibility Analysis of a Mesh Based 3D Reconstruction"></a>Towards ScalableFusion: Feasibility Analysis of a Mesh Based 3D Reconstruction</h3><h2 id="offline"><a href="#offline" class="headerlink" title="offline"></a>offline</h2><h3 id="Matterport3D-Chang2017"><a href="#Matterport3D-Chang2017" class="headerlink" title="Matterport3D[Chang2017]"></a>Matterport3D[Chang2017]</h3><h3 id="Wijmans2017"><a href="#Wijmans2017" class="headerlink" title="[Wijmans2017]"></a>[Wijmans2017]</h3>]]></content>
+        <content type="html"><![CDATA[<p>之前的两篇文章都使用了voxel hashing的策略，而实际上为了减少存储，一般不会将空间所有的voxel都记录下来，而是使用voxel hashing或者octree的方法。而这篇文章（<a href="http://www.graphics.stanford.edu/~niessner/papers/2013/4hashing/niessner2013hashing.pdf" target="_blank" rel="noopener">Real-time 3D Reconstruction at Scale using Voxel Hashing</a>）是最早使用voxel hashing的。它的引用量达到了390。鉴于不是深度学习等热门领域，实际上这个成绩已经相当不错了。<br><a id="more"></a><br>当然，这篇文章中使用的还是TSDF，对于TSDF我就不多介绍了。在之前的表示中，会存储每个voxel的TSDF值。但是既然使用了截断SDF值，意味着不在截断范围内的体素组成的空间是free space，也就是没有必要的部分，对表面的重建不会有太大的帮助。因此可以设计一个新的数据结构来开发有效体素的稀疏性。实际上在之前图形学领域中，已经有hashing算法提出用来进行2D/3D渲染阶段以及，在基于GPU的hashing中也提出了成熟的方法，极大减少了hash冲突的数量。</p><p>这篇文章提出的系统目标是建立一个实时系统，探索一种空间hashing的方案，来实现可伸缩（scalable）体积的重建。对于三维重建来说非常重要的是，因为要重建的目标几何形状是未知的，并且可能随着时间不断变化（指的是随着时间变化获取信息在增加，或者由于优化改变了之前的重建结果），所以提出的数据结构应该可以动态分配和更新，同时还要在不知道任何重建表面的先验信息的情况下最小化潜在的hash冲突。</p><p>这篇文章提出的数据结构有下面几个优点：</p><ul><li>可以高效压缩TSDF，并且不降低分辨率，不适用分层的数据结构</li><li>可以高效地融合新的TSDF到哈希表中</li><li>无需重新组织结构就可以删除和收集无用的voxel block</li><li>在主机和GPU之间轻量级的voxel block双向流，允许无限制的重建</li><li>可以使用标准的raycasting或者多边形操作高效提取等值面(isosurface)，用来进行渲染以及相机位姿估计</li></ul><h3 id="System-Pipeline"><a href="#System-Pipeline" class="headerlink" title="System Pipeline"></a>System Pipeline</h3><p>这个系统的Pipeline非常简单，如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hashing.png" alt=""></p><p>这个系统最关键的部分是空间哈希的策略。将voxels组织成块（例如8×8×8），每个体素包含一个TSDF值，一个weight以及一个额外的颜色值（可选）。这个哈希表是unstructured，也就是不是根据空间位置顺序分配的，可能离得很近的block在哈希表的实际位置中距离很远。我们也不会按照空间位置来查找对应的block，而是根据一个能够极大减少冲突的hash映射。</p><p>当有新的深度图进来时，使用ICP算法对位姿进行估计（使用的是point-plane的ICP，来保证位姿估计是frame to model而不是frame to frame，从而减少了飘逸的情况），接着开始进行integration。首先根据相机视锥，对所有的voxel进行block的分配，然后对每一个voxel进行TSDF的计算。然后我们进行垃圾收集，找出所有voxel都在表面截断范围外的block，在hash表中删除。这个步骤保证了hash表的稀疏性。</p><p>在integration之后，根据进行raycast，从而得到表面。</p><h3 id="Data-Structure"><a href="#Data-Structure" class="headerlink" title="Data Structure"></a>Data Structure</h3><p>想象将无穷的空间分割均匀分割成一个个block，每个block又分成N（8×8×8）个voxel。voxel的结构如下：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Voxel</span>&#123;</span></span><br><span class="line">    <span class="keyword">float</span> sdf;</span><br><span class="line">    uchar colorRGB[<span class="number">3</span>];</span><br><span class="line">    uchar weight;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p><p>hash表与一般的hash表区别不大，也就是根据世界坐标位置$(x,y,z)$通过哈希函数得到一个映射，找到block，从而找到voxel。hash函数如下：</p><script type="math/tex; mode=display">H(x,y,z) = (x\cdot p_1 \oplus y\cdot p_2 \oplus z \cdot p_3)mod n</script><p>为了减少冲突，$p_1,p_2,p_3$是大质数（73856093, 19349669, 83492791），n是hash表的大小。除了存储一个指针指向voxel block，每个哈希entry也包含了世界坐标，一个偏移量，用来存储冲突发生时，相对于计算的位置的偏移量。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">HashEntry</span>&#123;</span></span><br><span class="line">    <span class="keyword">short</span> position[<span class="number">3</span>];<span class="comment">//the coordinate of </span></span><br><span class="line">    <span class="keyword">short</span> offset;<span class="comment">//offset of the next hash entry that suppose to be in the same bucket</span></span><br><span class="line">    <span class="keyword">int</span> pointer;<span class="comment">//pointer to voxel block</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p>整个哈希表结构如下图：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hashing1.png" alt=""></p><p>为了解决冲突，作者将hash entry指针指向一个bucket。bucket大小固定，通过顺序遍历bucket来找到对应的hash entry（比较position）。当bucket满了的时候，寻找临近的bucket来找到是否有空闲的位置，而这个bucket相对于原来的偏移量就是offset，被存储在链表上一个entry中。这是hash表的一个比较通用的实现方式。</p><p>下图为哈希表插入以及删除的一个过程：</p><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/hashing2.png" alt=""></p><p>值得注意的是，为了实行链表这个操作，每个bucket最后一个entry只能放链表的表头，也就是本身就该分配到这个bucket的元素才能插入该bucket的最后一个位置。</p><p>在查找操作中，找到对应的bucket，然后遍历，如果到了结尾依然找不到，就顺着链表继续找，直到查找成功，或者遇到一个空位置，说明查找失败。</p><p>需要注意的是，在垃圾收集过程中，我们会用到遍历block中的voxel时候设定的weight最大值，或者sdf最小值。如果weight最大值小于0，或者最小sdf绝对值大于1（或者某个值），那么就将这个block看做invalid，最后被删除掉。</p><p>对于本篇文章的其他内容，基本算是老生常谈了。动态的truncation，用来补偿远距离深度的不确定性，根据ICP估计位姿，根据raycast，tri-linear interpolation来计算出表面。以及一些GPU和host的双向流，这目前还不是我关注的重点。</p><p>实际上，如果不用GPU，本篇文章的hashing scheme思想还是比较简单的。而现在这样的idea越来越少了，目前的reconstruction系统需要结合IMU，纹理贴图等等，变得越来越复杂庞大了。</p>]]></content>
       
       
       <categories>
@@ -1633,9 +1656,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1660,9 +1683,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> deep learning </tag>
             
@@ -1687,9 +1710,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1739,9 +1762,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -1853,9 +1876,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> ACE </tag>
             
@@ -1882,9 +1905,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> softmax regression </tag>
             
@@ -1959,9 +1982,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -1990,9 +2013,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -2019,9 +2042,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -2046,9 +2069,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -2104,9 +2127,9 @@
             
             <tag> LFD class </tag>
             
-            <tag> neural network </tag>
-            
             <tag> homework </tag>
+            
+            <tag> neural network </tag>
             
         </tags>
       
@@ -2129,9 +2152,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> deep learning </tag>
             
@@ -2183,9 +2206,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> SLAM </tag>
             
         </tags>
       
@@ -2256,9 +2279,9 @@
       
         <tags>
             
-            <tag> SLAM </tag>
-            
             <tag> mathematics </tag>
+            
+            <tag> SLAM </tag>
             
             <tag> sophus </tag>
             
@@ -2335,9 +2358,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -2364,9 +2387,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> deep learning </tag>
             
@@ -2514,9 +2537,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
             
@@ -2641,13 +2664,13 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
             
-            <tag> exponential family </tag>
+            <tag> machine learning </tag>
             
             <tag> mathematics </tag>
+            
+            <tag> exponential family </tag>
             
         </tags>
       
@@ -2670,9 +2693,9 @@
       
         <tags>
             
-            <tag> machine learning </tag>
-            
             <tag> LFD class </tag>
+            
+            <tag> machine learning </tag>
             
             <tag> regression </tag>
             
@@ -3299,11 +3322,11 @@
       
         <tags>
             
-            <tag> code </tag>
-            
             <tag> algorithm </tag>
             
             <tag> Matrix </tag>
+            
+            <tag> code </tag>
             
         </tags>
       

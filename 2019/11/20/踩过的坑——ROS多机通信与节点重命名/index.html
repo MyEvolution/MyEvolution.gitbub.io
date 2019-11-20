@@ -112,23 +112,25 @@
 
 
 
-  <meta name="description" content="Everything is choice.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="wlsdzyzl">
-<meta property="og:url" content="http://wlsdzyzl.com/archives/2018/09/index.html">
+  <meta name="description" content="项目需要拓展到多相机协同重建，需要借助C/S模型通信。而使用ROS是非常好的选择。最近借助之前学得ros的知识，代码部分拓展得差不多了，再拓展到多个机器的过程中，出现了通信与节点名字冲突的问题，解决方法也不难，就在这里记录一下。">
+<meta name="keywords" content="ros">
+<meta property="og:type" content="article">
+<meta property="og:title" content="踩过的坑——ROS多机通信与节点重命名">
+<meta property="og:url" content="http://wlsdzyzl.com/2019/11/20/踩过的坑——ROS多机通信与节点重命名/index.html">
 <meta property="og:site_name" content="wlsdzyzl">
-<meta property="og:description" content="Everything is choice.">
+<meta property="og:description" content="项目需要拓展到多相机协同重建，需要借助C/S模型通信。而使用ROS是非常好的选择。最近借助之前学得ros的知识，代码部分拓展得差不多了，再拓展到多个机器的过程中，出现了通信与节点名字冲突的问题，解决方法也不难，就在这里记录一下。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-20T13:00:08.934Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wlsdzyzl">
-<meta name="twitter:description" content="Everything is choice.">
+<meta name="twitter:title" content="踩过的坑——ROS多机通信与节点重命名">
+<meta name="twitter:description" content="项目需要拓展到多相机协同重建，需要借助C/S模型通信。而使用ROS是非常好的选择。最近借助之前学得ros的知识，代码部分拓展得差不多了，再拓展到多个机器的过程中，出现了通信与节点名字冲突的问题，解决方法也不难，就在这里记录一下。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://wlsdzyzl.com/archives/2018/09/">
+  <link rel="canonical" href="http://wlsdzyzl.com/2019/11/20/踩过的坑——ROS多机通信与节点重命名/">
 
 
 
@@ -138,7 +140,7 @@
   };
 </script>
 
-  <title>归档 | wlsdzyzl</title>
+  <title>踩过的坑——ROS多机通信与节点重命名 | wlsdzyzl</title>
   
 
 
@@ -187,7 +189,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -260,7 +262,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
     <a href="/archives/" rel="section">
       <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
   </li>
@@ -330,316 +332,227 @@
           
             
 
-    
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
-
           
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/11/20/踩过的坑——ROS多机通信与节点重命名/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
-         
+          <h1 class="post-title" itemprop="name headline">踩过的坑——ROS多机通信与节点重命名
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-11-20 20:23:13 / 更新于：21:00:08" itemprop="dateCreated datePublished" datetime="2019-11-20T20:23:13+08:00">2019-11-20</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
           
-        非常好! 目前共计 133 篇日志。 继续努力。
-      </span>
-      
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/踩过的坑/" itemprop="url" rel="index"><span itemprop="name">踩过的坑</span></a></span>
 
-      
-
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/11/20/踩过的坑——ROS多机通信与节点重命名/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/11/20/踩过的坑——ROS多机通信与节点重命名/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
 
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
+             <span id="/2019/11/20/踩过的坑——ROS多机通信与节点重命名/" class="leancloud_visitors" data-flag-title="踩过的坑——ROS多机通信与节点重命名">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/28/机器学习——Validation/" itemprop="url">
-              
-                <span itemprop="name">机器学习——Validation</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-28T20:35:19+08:00" content="2018-09-28">
-          09-28
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/28/机器学习——Regularization/" itemprop="url">
-              
-                <span itemprop="name">机器学习——Regularization</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-28T20:34:57+08:00" content="2018-09-28">
-          09-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/22/机器学习——Overfitting/" itemprop="url">
-              
-                <span itemprop="name">机器学习——Overfitting</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-22T14:19:54+08:00" content="2018-09-22">
-          09-22
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/05/机器学习——（基石）作业3/" itemprop="url">
-              
-                <span itemprop="name">机器学习——（基石）作业3</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-05T21:33:40+08:00" content="2018-09-05">
-          09-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+      
+        <p>项目需要拓展到多相机协同重建，需要借助C/S模型通信。而使用ROS是非常好的选择。最近借助之前学得ros的知识，代码部分拓展得差不多了，再拓展到多个机器的过程中，出现了通信与节点名字冲突的问题，解决方法也不难，就在这里记录一下。</p>
+<a id="more"></a>
+<h3 id="多机通信"><a href="#多机通信" class="headerlink" title="多机通信"></a>多机通信</h3><p>分布式的架构是ROS的灵魂。实际上，ros把通信这里的东西封装得相当方便了。现在多机通信的情况是这样：一台主机运行Master，其他的结点运行在不同的机器上，这些结点一台是服务器，有的是客户端。但是他们有一个共同点，就是需要向Master注册。</p>
+<p>首先，各个机器要和Master所在的机器ping通，这个是必要的。理论上互相ping通，ros就可将它们连接运行起来。在我这里，Master和一个客户端A运行在ip为10.8.5.230的机器上，而另外一个客户端和服务器运行在192.168.0.110上。需要做的是：在192.168.0.110机器终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export ROS_MASTER_URI=http://10.8.5.230:11311</span><br></pre></td></tr></table></figure></p>
+<p>这个意图很明显，就是指定MASTER的IP和运行端口。但是这时启动服务器会发现，在Master终端下出现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Couldn&apos;t find an AF_INET address for [XXX]</span><br></pre></td></tr></table></figure></p>
+<p>这导致虽然服务器可以连接到Master，但是在客户端A发的消息却送不到服务器上。因为没有找到一个AF_INET address。这个地址有什么用我也不清楚，因为目前的我只重视问题怎么解决，而不在乎背后的原理，因此就不多了解了。后来发现，多机通信还要在各个结点的机器上指定ROS_IP:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname -I</span><br></pre></td></tr></table></figure></p>
+<p>得到IP后，再通过下面的指令分别指定本机的ROS_IP：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export ROS_IP=192.168.0.110</span><br><span class="line">export ROS_IP=10.8.5.230</span><br></pre></td></tr></table></figure></p>
+<p>之后就可以成功连接并运行成功了。</p>
+<h3 id="节点名称冲突"><a href="#节点名称冲突" class="headerlink" title="节点名称冲突"></a>节点名称冲突</h3><p>在运行过程中，由于客户端的程序是一样的，因此它们启动结点默认名称是一样的，而在一个命名空间下，不能有相同名称的结点。这就导致了我在运行第一个客户端时，打开了第二个客户端，然后第一个客户端就出现问题，节点名称被占用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ WARN] [....]: Shutdown request received.</span><br><span class="line">[ WARN] [....]: Reason given for shutdown: [new node registered with the same name]</span><br></pre></td></tr></table></figure></p>
+<p>因此在启动结点时，需要重新设置结点名称。比如现在启动的命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosrun flashfusion client</span><br></pre></td></tr></table></figure></p>
+<p>将结点名称指定为fuck：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rosrun flashfusion client __name:=fuck</span><br></pre></td></tr></table></figure></p>
+<p>这样就不会产生冲突了。</p>
+<p>也不难猜到，另外的方法，就是命名空间，并且使用roslaunch来发布更方便。不过既然问题解决了，现在就先不了解了，之后整理代码有需求再来详细研究。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/05/机器学习——Nonlinear-Transformation/" itemprop="url">
-              
-                <span itemprop="name">机器学习——Nonlinear Transformation</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-05T18:01:45+08:00" content="2018-09-05">
-          09-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/03/机器学习——Multiclass/" itemprop="url">
-              
-                <span itemprop="name">机器学习——Multiclass（OVA and OVO）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-03T22:20:13+08:00" content="2018-09-03">
-          09-03
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/09/01/机器学习——linear-model-for-classification/" itemprop="url">
-              
-                <span itemprop="name">机器学习——linear model for classification</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2018-09-01T21:42:33+08:00" content="2018-09-01">
-          09-01
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ros/" rel="tag"># ros</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/10/踩过的坑——vnc-SSH-tunnel远程控制内网机器/" rel="next" title="踩过的坑——vnc+SSH tunnel远程控制内网机器">
+                <i class="fa fa-chevron-left"></i> 踩过的坑——vnc+SSH tunnel远程控制内网机器
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
 
         </div>
         
@@ -660,8 +573,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -961,6 +883,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多机通信"><span class="nav-number">1.</span> <span class="nav-text">多机通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#节点名称冲突"><span class="nav-number">2.</span> <span class="nav-text">节点名称冲突</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -1097,6 +1035,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
 
   
 
@@ -1476,43 +1418,42 @@
   
   <script>
     
-    function showTime(Counter) {
-      var entries = [];
+    function addCount(Counter) {
       var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
 
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url: { "$in": entries } }) })
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
         .done(function ({ results }) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.url;
-            var time = item.time;
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
           }
         })
-        .fail(function ({ responseJSON }) {
-          console.log("LeanCloud Counter Error: " + responseJSON.code + " " + responseJSON.error);
-        });
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
     }
     
 
@@ -1532,9 +1473,7 @@
             });
           };
           
-          if ($('.post-title-link').length >= 1) {
-            showTime(Counter);
-          }
+          addCount(Counter);
           
         })
     });
