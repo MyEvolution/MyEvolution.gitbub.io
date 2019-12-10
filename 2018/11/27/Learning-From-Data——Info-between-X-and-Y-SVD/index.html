@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导到SVD的，因此就这么叫吧。">
+<meta name="keywords" content="machine learning,LFD class,mathematics,SVD,ACE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning From Data——Info between X and Y&#x2F;SVD">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导到SVD的，因此就这么叫吧。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-08T09:03:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Learning From Data——Info between X and Y&#x2F;SVD">
+<meta name="twitter:description" content="上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导到SVD的，因此就这么叫吧。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Learning From Data——Info between X and Y/SVD | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Learning From Data——Info between X and Y/SVD
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2018-11-27 14:11:20" itemprop="dateCreated datePublished" datetime="2018-11-27T14:11:20+08:00">2018-11-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2018-12-08 17:03:38" itemprop="dateModified" datetime="2018-12-08T17:03:38+08:00">2018-12-08</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/数据学习课程/" itemprop="url" rel="index"><span itemprop="name">数据学习课程</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/" class="leancloud_visitors" data-flag-title="Learning From Data——Info between X and Y/SVD">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一周的数据学习，没有课件，老师直接开始从头推了一些神奇的东西出来。所以我也很难给这篇的内容起一个题目，因为是从Ｘ与Ｙ之间的信息推导到SVD的，因此就这么叫吧。<br><a id="more"></a></p>
+<h2 id="info-shared-Between-X-Y"><a href="#info-shared-Between-X-Y" class="headerlink" title="info shared Between X, Y"></a>info shared Between X, Y</h2><p>假如现在有两个离散变量，Ｘ与Ｙ他们是一一对应的。在之前的机器学习问题中，我们知道Ｘ是输入数据，Ｙ是标签。现在忘掉之前的学习算法，从信息的角度来看，我们希望做的，是提取Ｘ与Ｙ之间的公共信息，而这部分才是它们有某种关系的真正原因。因此现在我们的目标变成，从Ｘ与Ｙ的联合分布提取Ｘ与Ｙ之前的公共信息，。</p>
+<p>那么首先遇到的问题：我们是如何提取Ｘ和Ｙ的各自的信息的？我们的做法是利用一个函数，就像linear regression等学习算法一样，也就是：</p>
+<script type="math/tex; mode=display">
+ X \rightarrow f(X) \rightarrow \mathbb{R}\\
+ Y \rightarrow g(Y) \rightarrow \mathbb{R}\\</script><p>衡量它们之间的共同信息，我们使用一个比较熟悉的名词：相关系数。我们要做的就是找到合适的$f,g$函数，让它们的共同信息最大，也就是相关系数达到最大（HGR Maximal Correlation）：</p>
+<script type="math/tex; mode=display">
+\max \rho_{XY} = \max \mathbb{E}_{p_{XY}} [f(x)g(y) ]</script><p>当然我们还有一些限制条件，才能让相关系数为上值。在概率论中我们知道，相关系数的求法：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\rho_{XY} &= \frac{Cov(X,Y)}{\sqrt{Var (X) Var (Y)}}\\
+&= \frac{\mathbb{E}[XY ] - \mathbb{E}[X ] \mathbb{E}[Y ]}{ \sqrt{\mathbb{E}[X^2 ] - \mathbb{E}^2[X ]}}
+\end{aligned}</script><p>所以可以看到的是，我们应该让</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[f(x) ] = \mathbb{E}[g(x) ] = 0,\\
+\mathbb{E}[f^2(x) ] = \mathbb{E}[g^2(x) ] = 1</script><p>这时候，$0\leq\rho_{XY}\leq 1$.当$\rho_{XY} = 0$时，说明二者独立（要注意，这并不意味着E(XY) = 0说明Ｘ，Ｙ独立，实际上相关系数为0才能证明二者独立，只不过我们这里加上了限制，使得$\rho_{XY} = \mathbb{E}[f(x)g(x) ]$）。</p>
+<p>现在，用数学语言来描述这个问题：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+\max \mathbb{E}_{p_{XY}} [f(x)g(y) ]& = \sum_{x,y}p_{XY}(x,y)f(x)g(y)\\
+s.t. &\sum_{x}p_X(x)f(x) = \sum_y p_Y(y)g(y) = 0\\ 
+& \sum_{x}p_X(x)f^2(x) = \sum_y p_Y(y)g^2(y) = 1
+\end{align}</script><p>为了方便后面的计算，我们要对原式进行一些转换：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+(1)&= \sum_{x,y} \frac{p_{XY}(x,y)}{\sqrt{p_X(x)p_Y(y)}} [\underbrace{\sqrt{p_X(x)}\cdot f(x)}_{\phi(x)} \underbrace{\sqrt{p_Y(y)}\cdot g(y)}_{\psi(y)}]\\
+&= \sum_{x,y}  \frac{p_{XY}(x,y)}{\sqrt{p_X(x)p_Y(y)}} \phi(x) \psi(y) = \Psi^TB\Phi 
+\end{aligned}</script><p>上式中：</p>
+<script type="math/tex; mode=display">
+\Phi = \begin{bmatrix}
+\phi(x_1),\phi(x_2),...,\phi(x_{|X|})
+\end{bmatrix}^T_{|X|\times 1},\\
+\Psi = \begin{bmatrix}
+\psi(y_1),\psi(y_2),...,\psi(y_{|Y|})
+\end{bmatrix}^T_{|Y|\times 1},\\
+B_{y,x} =  \frac{p_{XY}(x,y)}{\sqrt{p_X(x)p_Y(y)}},B_{|Y| \times |X|}.</script><p>经过上面的转换，我们可以得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+(2): &\sum_{x} \sqrt{p_X{x}} \phi(x) = 0 \rightarrow \sqrt{P_X}^T \Phi = 0;\\
+&\sum_{y} \sqrt{p_Y{y}} \psi(y) = 0 \rightarrow \sqrt{P_Y}^T \Psi = 0;
+\end{aligned}</script><script type="math/tex; mode=display">
+(3): \Vert \Phi \Vert^2 = \Vert \Psi \Vert ^2 = 1</script><p>这时候我们的问题变成了：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\max \Psi^T B \Phi,s.t. &\langle\sqrt{P_X},\Phi\rangle = \langle\sqrt{P_Y},\Psi\rangle = 0;\\
+&\Vert \Phi \Vert^2 = \Vert \Psi \Vert^2 = 1.
+\end{aligned}</script><p>而实际上，上面问题的解正是Ｂ矩阵的最大的奇异向量。</p>
+<h2 id="SVD"><a href="#SVD" class="headerlink" title="SVD"></a>SVD</h2><p>接下来，想提一下，什么是奇异值分解(Singular Value Decomposition)：</p>
+<script type="math/tex; mode=display">
+B = [u　][\Sigma][　v^T],</script><p>其中$u,v$的列向量为Ｂ的左右奇异向量。</p>
+<p>而实际上，$\sqrt{P_X},\sqrt{P_Y}$正是Ｂ矩阵对应的最大的奇异向量。但是显然，我们是不能让它们作为$\Phi,\Psi$的值的，因为这个不满足约束(2):</p>
+<script type="math/tex; mode=display">
+\langle\sqrt{P_X},\Phi\rangle = \langle\sqrt{P_X},\sqrt{P_X}\rangle = 1 \ne 0;\\
+\langle\sqrt{P_Y},\Psi\rangle = \langle\sqrt{P_Y},\sqrt{P_Y}\rangle =1 \ne 0.</script><p>不过，好的消息是，实际上$\Phi,\Psi$正是第二大的奇异向量。可以看出来，不同奇异向量是互相正交的，这个和上次说的PCA非常像。实际上，PCA和SVD是有千丝万缕的关系的。</p>
+<p>从上面的分析，我们可以直接得到：</p>
+<script type="math/tex; mode=display">
+f(x) = \frac{1}{\sqrt{p_X(x)}} \phi^*(x);\\
+g(y) = \frac{1}{\sqrt{p_Y(y)}} \psi^*(y)</script><p>那么接下来一个问题，如何直接从data中计算出来f,g？</p>
+<p>想要解决上面的问题，首先考虑，如何计算Ｂ的奇异向量。有人说，matlab, openCV. 这里介绍一个简单的算法：Power Iteration.</p>
+<p>首先，我们要知道的是，实际上求奇异值分解，也就是在做PCA(求特征向量和特征值)：</p>
+<script type="math/tex; mode=display">
+B^TB = v \Sigma^T u^T u \Sigma v^T = v \Sigma^2 v^T,\\
+BB^T = u \Sigma v^T v \Sigma^T u^T =  u \Sigma^2 u^T</script><p>这里提下特征向量分解(EVD)：$X = v D v^T $, 其中$v$为$X$的特征向量组成的矩阵，而$D$为对角矩阵，对角元素为$X$的特征值，$X$为实对称矩阵。</p>
+<p>所以可以不难得到，Ｂ的奇异向量，也就是$B^TB$与$BB^T$的特征向量，分别对应右侧的和左侧的奇异向量。</p>
+<p>因此我们的问题变成了，如何求eigen vector？</p>
+<h3 id="Power-Iteration"><a href="#Power-Iteration" class="headerlink" title="Power Iteration"></a>Power Iteration</h3><p>给定一个实对称矩阵Ｍ，假设$M = U \Sigma U^T$, 则假设它的特征向量为$\upsilon_1,\upsilon_2,…,\upsilon_n$，对应的特征值$\lambda_1,…,\lambda_n $.</p>
+<ol>
+<li>初始化得到一个向量$\mu_0$，则$\mu_0 = \alpha_1 \upsilon_1+…+\alpha_n \upsilon_n$.</li>
+<li>$\mu_1 = \frac{M\mu_0}{\Vert M\mu_0 \Vert}$</li>
+<li>迭代执行３，得到$\mu_n$</li>
+</ol>
+<p>最后这个算法收敛于最大的特征向量（前提是最大的特征值严格大于其他的特征值，并且初始向量在最大特征向量的方向上分量不为0，这两个条件都比较好满足）。</p>
+<p>这个算法不难理解：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_k &=\frac{M \mu_{k-1}}{\Vert M \mu_{k-1} \Vert} \\
+&= \frac{M \frac{M\mu_{k-2}}{\Vert M \mu_{k-2}\Vert} }{ \Vert M \frac{M\mu_{k-2}}{\Vert M \mu_{k-2}\Vert}  \Vert  }\\
+&= \frac{M^2 \mu_{k-2}} {\Vert M^2 \mu_{k-2} \Vert}\\
+&= \frac{M^k \mu_0}{\Vert  M^k \mu_0\Vert}  \\
+&= \frac{M^k (\alpha_1 \upsilon_1+...+\alpha_n \upsilon_n)}{\Vert  M^k \mu_0\Vert}\\
+&= \frac{\alpha_1 \lambda_1^k \upsilon_1+...+\alpha_n \lambda_n^k \upsilon_n}{\Vert  M^k \mu_0\Vert}\\
+&= \frac{\alpha_1 \lambda_1^k (\upsilon_1+\frac{\alpha_2}{\alpha_1}\cdot \frac{\lambda_2^k}{\lambda_1^k} \upsilon_2+...+ \frac{\alpha_n}{\alpha_1}\cdot \frac{\lambda_n^k}{\lambda_1^k} \upsilon_n  )}{\Vert  M^k \mu_0\Vert}
+\end{aligned}</script><p>上式中$k \rightarrow \infty ,\frac{\lambda_i^k}{\lambda_1^k} \rightarrow 0,i\ne 1$，所以可以得到：</p>
+<script type="math/tex; mode=display">
+M^k \mu_0 \rightarrow \alpha_1 \lambda_1^k \upsilon_1.</script><p>所以：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_k &= \frac{M^k \mu_0}{\Vert  M^k \mu_0\Vert} \\
+&\rightarrow  \frac{\alpha_1 \lambda_1^k \upsilon_1}{\Vert\alpha_1 \lambda_1^k \upsilon_1 \Vert}\\
+&= \frac{ \alpha_1 \lambda_1^k \upsilon_1}{\Vert \alpha_1 \lambda_1^k \Vert} \\
+&= \upsilon_1
+\end{aligned}</script><p>上面通过power iteration,　我们就得到了最大的特征向量。使用Gram Schmidt procedure，可以求得其他的特征向量。比较容易理解，找到一个已求向量垂直的向量进行Power Iteration，就可以求得第二大特征向量，特征向量从大到小依次被求出。</p>
+<p>现在我们考虑，如何得到Ｂ矩阵的第二大奇异向量。</p>
+<ol>
+<li>选择$\Phi^{(0)}$</li>
+<li>$\Psi^{(0)} = B\Phi^{(0)}$, $\Phi^{(1)} = B^T \Psi^{(0)}$</li>
+<li>迭代第二步</li>
+</ol>
+<p>实际上第二步做的就是:</p>
+<script type="math/tex; mode=display">\Phi^{(1)} = B^TB \Phi^{(0)}, \Psi^{(1)} = BB^T \Psi^{(0)}</script><p>也就是一直在利用Power Iteration迭代求解$B^TB$与$BB^T$的特征向量.</p>
+<p>但是这个如果对初始的值不加以限制，求得的应该是第一大特征向量。如果$\Phi^{(0)} \perp \sqrt{P_X}$，则我们得到了第二大特征向量。</p>
+<p>那么如何直接从数据求得f,g呢？终于到了终极问题。</p>
+<p>上面有这么一个计算:$B\Phi$，实际上拆开的话，每一行就是ｙ固定之后的$p(x,y)$与$\Phi$相乘，我们记做$B \Phi (y)$:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+B \Phi(y) &= \sum_{x} B(y,x)\phi(x)\\
+&= \sum_x \frac{p_{XY}(x,y)}{\sqrt{p_X(x)p_Y(y)}} \cdot [\sqrt{p_X(x) f(x)}]\\
+&=\frac{1}{\sqrt{p_Y{y}}} \sum_x p_{XY}(x,y)f(x)\\
+&= \sqrt{p_Y(y)} \sum_x \frac{p_{XY}(x,y)}{p_{Y}(y)}f(x)\\
+&= \sqrt{p_Y(y)} \mathbb{E}[f(x)\vert Y = y] 
+\end{aligned}</script><p>从上面的推导中，我们得到：$g(y) = \mathbb{E}[f(X)\vert Y=y ]$.</p>
+<p>所以从原来的$ \Psi^{(0)} = B\Phi^{(0)} \rightarrow g^{(0)} = \mathbb{E}[f^{(1)}(x) \vert Y=y]$</p>
+<h2 id="ACE算法"><a href="#ACE算法" class="headerlink" title="ACE算法"></a>ACE算法</h2><ol>
+<li>选择<script type="math/tex">f^{(0)}(x), s.t. \mathbb{E}[f^{(0)}(X) ] = 0</script>(注意，这里<script type="math/tex">\mathbb{E}[f^{(0)}(X) ] = P_Xf_X(X) = \sqrt{P_X} \sqrt{P_X}f_X(X) = \sqrt{P_X}\Phi  = 0</script>，也就暗含了$\Phi\perp \sqrt{P_X}$)</li>
+<li><ul>
+<li>$g^{(0)}(y) = \mathbb{E}[f^{(0)}(x)\vert Y=y]$</li>
+<li>$f^{(1)}(x) = \mathbb{E}[g^{(0)}(y)\vert X = x]$</li>
+</ul>
+</li>
+<li>迭代２</li>
+</ol>
+<p>最后ｆ，ｇ都会收敛到最佳的结果。</p>
+<p>这个算法被称为ACE（Alternative Conditional Expectation）算法，当然在实际过程中，我们可以每一步都进行normalize. 而第二步中，条件的ｘ和ｙ的值，有时候是随机选择，在数据量小的时候可以对所有的ｘ和ｙ都进行计算。</p>
+<p>还有一点，如何计算$\mathbb{E}[f^{(i)}(x) \vert Y=y]$?</p>
+<p>其实很简单：首先从$\{(x_1,y_1),…,(x_n,y_n)\}$中提取出来$\{(x_1,y_1),…,(x_k,y_k)\}$,使得$y_1 = … = y_k = y$,然后：</p>
+<script type="math/tex; mode=display">
+\mathbb{E} = \frac{1}{k}\sum_{i=1}^kf^{(i)}(x_k)</script>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
+          
+            <a href="/tags/LFD-class/" rel="tag"># LFD class</a>
+          
+            <a href="/tags/mathematics/" rel="tag"># mathematics</a>
+          
+            <a href="/tags/SVD/" rel="tag"># SVD</a>
+          
+            <a href="/tags/ACE/" rel="tag"># ACE</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/20/Learning-From-Data——Kernel-PCA/" rel="next" title="Learning From Data——Kernel PCA">
+                <i class="fa fa-chevron-left"></i> Learning From Data——Kernel PCA
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/27/信息论——信道及其容量（一）/" rel="prev" title="信息论——信道及其容量（一）">
+                信息论——信道及其容量（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#info-shared-Between-X-Y"><span class="nav-number">1.</span> <span class="nav-text">info shared Between X, Y</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVD"><span class="nav-number">2.</span> <span class="nav-text">SVD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Power-Iteration"><span class="nav-number">2.1.</span> <span class="nav-text">Power Iteration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ACE算法"><span class="nav-number">3.</span> <span class="nav-text">ACE算法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'UzkbpHfUYMuhaYHh5SkSGaFl-gzGzoHsz',
+        appKey: '03u0lWMV4JIHq7RpijUw3SaQ',
+        placeholder: 'Say something...',
+        avatar:'gg',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz",
+                'X-LC-Key': "Bbykl7fj9cXMbn8Q3NccAl0s",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

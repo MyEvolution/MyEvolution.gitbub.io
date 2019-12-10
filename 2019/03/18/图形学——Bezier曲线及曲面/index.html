@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在图形学中，经常设计一个场景，然后通过渲染方程产生具有真实感的图像，因此需要引入几何造型（geometric modeling）技术来设计场景。如何在计算机中表示模型？这里我们介绍Bezier曲线和曲面。Bezier曲线曲面是非常重要的图形学理论，由法国工程师Bezier最初提出。">
+<meta name="keywords" content="computer graphics">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图形学——Bezier曲线及曲面">
+<meta property="og:url" content="http://wlsdzyzl.com/2019/03/18/图形学——Bezier曲线及曲面/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="在图形学中，经常设计一个场景，然后通过渲染方程产生具有真实感的图像，因此需要引入几何造型（geometric modeling）技术来设计场景。如何在计算机中表示模型？这里我们介绍Bezier曲线和曲面。Bezier曲线曲面是非常重要的图形学理论，由法国工程师Bezier最初提出。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier6.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier.gif">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier5.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier4.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier3.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier2.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier1.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier7.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier8.jpg">
+<meta property="og:updated_time" content="2019-03-24T06:40:29.052Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图形学——Bezier曲线及曲面">
+<meta name="twitter:description" content="在图形学中，经常设计一个场景，然后通过渲染方程产生具有真实感的图像，因此需要引入几何造型（geometric modeling）技术来设计场景。如何在计算机中表示模型？这里我们介绍Bezier曲线和曲面。Bezier曲线曲面是非常重要的图形学理论，由法国工程师Bezier最初提出。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier6.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2019/03/18/图形学——Bezier曲线及曲面/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>图形学——Bezier曲线及曲面 | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/03/18/图形学——Bezier曲线及曲面/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">图形学——Bezier曲线及曲面
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-03-18 14:23:39" itemprop="dateCreated datePublished" datetime="2019-03-18T14:23:39+08:00">2019-03-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-03-24 14:40:29" itemprop="dateModified" datetime="2019-03-24T14:40:29+08:00">2019-03-24</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/图形学/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/18/图形学——Bezier曲线及曲面/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/18/图形学——Bezier曲线及曲面/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/03/18/图形学——Bezier曲线及曲面/" class="leancloud_visitors" data-flag-title="图形学——Bezier曲线及曲面">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在图形学中，经常设计一个场景，然后通过渲染方程产生具有真实感的图像，因此需要引入几何造型（geometric modeling）技术来设计场景。如何在计算机中表示模型？这里我们介绍Bezier曲线和曲面。Bezier曲线曲面是非常重要的图形学理论，由法国工程师Bezier最初提出。<br><a id="more"></a></p>
+<h2 id="怎么表示曲线"><a href="#怎么表示曲线" class="headerlink" title="怎么表示曲线"></a>怎么表示曲线</h2><p>物体表示方式主要有三种：</p>
+<ul>
+<li>显式表示： $y=f(x)$</li>
+<li>隐式表示： $f(x,y)=0$</li>
+<li>参数表示： 图形学中最常用的。一个曲线的参数形式是通过一个自变量（参数）$t$来表示曲线点的每一个空间变量。在三维空间中：<script type="math/tex; mode=display">
+x = x(t)\\
+y = y(t)\\
+z = z(t)\\
+P(t) = [x(t),y(t),z(t) ]^T</script></li>
+</ul>
+<p>参数形式的表示可以通过可视化点的轨迹随着$t$的变化来实现。我们可以将导数：</p>
+<script type="math/tex; mode=display">
+\frac{dP(t)}{dt} = [\frac{dx(t)}{dt},\frac{dy(t)}{dt},\frac{dz(t)}{dt} ]^T</script><p>看作为绘制的速度，导数为曲线切线方向。</p>
+<p>参数曲线并不唯一。我们应当找出以$t$的多项式函数表达的参数形式。三阶多项式参数曲线具有如下形式：</p>
+<script type="math/tex; mode=display">
+P(t) = at^3 + bt^2 + ct + d</script><p>被称为Ferguson曲线。Ferguson曲线并不直观，给定各个参数，依然很难想象曲线的形状。</p>
+<p>Bezier提出来利用几个向量来确定一个曲线，类似于先用直线勾勒出轮廓，然后根据这些向量生成曲线，如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier6.jpg" alt=""></p>
+<script type="math/tex; mode=display">
+V(t) = \sum_{i=0}^n f_{i,n}(t)A_i\\
+f_{i,n} = \left \{\begin{matrix}
+1 & i=0\\
+\frac{(-t)^i}{(i-1)!}\frac{d^{i-1}}{dt^{i-1}}\left( \frac{(1-t)^{n-1} - 1}{t}\right)
+\end{matrix}\right.</script><p>这个曲线定义很复杂，Bezier也解释不了为何这么定义。直到1972年Forrest才用数学解释了它的本质，他指出Bezier曲线可以借助于Bernstein多项式被定义到点集上。</p>
+<p>Forrest说明，给定控制顶点$P_0,P_1,…,P_n$，则Bezier曲线可以被定义为：</p>
+<script type="math/tex; mode=display">
+P(t) = \sum_{i=0}^nP_iB_{i,n}(t),t \in [0,1 ]</script><p>其中，$B_{i,n}(t)$是第$i$个$n$阶Bernstein多项式：</p>
+<script type="math/tex; mode=display">
+B_{i,n}(t) = C_n^it^i(1-t)^{n-i} = \frac{n!}{i!(n-i)!}t^i(1-t)^{n-i},i=0,1,...,n</script><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier.gif" alt=""></p>
+<h3 id="Bernstein多项式的性质"><a href="#Bernstein多项式的性质" class="headerlink" title="Bernstein多项式的性质"></a>Bernstein多项式的性质</h3><ul>
+<li>非负性<script type="math/tex; mode=display">
+B_{i,n}=\left\{\begin{matrix}
+=0 & t=0,1\\
+>0 & t\in{0,1}
+\end{matrix}\right. ,n = 1,...,n-1.</script>对于端点($n = 0,n-1$时)：<script type="math/tex; mode=display">
+B_{i,n}(0) = \left\{\begin{matrix}
+=1&i=0\\
+=0&otherwise
+\end{matrix}\right.\\
+B_{i,n}(1) = \left\{\begin{matrix}
+=1&i=n\\
+=0&otherwise
+\end{matrix}\right.</script></li>
+<li>归一性<script type="math/tex; mode=display">
+\sum_{i=0}^n B_{i,n}(t) = 1,t \in [0,1]</script>因为：<script type="math/tex; mode=display">
+\sum_{i=0}^n B_{i,n}(t) = \sum_{i=0}^n C_n^it^i(1-t)^{n-i} = [(1-t)+t]^n = 1</script></li>
+<li>对称性<script type="math/tex; mode=display">
+B_{i,n}(1-t) = B_{n-i,n}(t)</script>证明：<script type="math/tex; mode=display">
+B_{n-i,n}(t) = C_n^{n-i}t^{n-i}(1-t)^{i} = C_n^i(1-t)^{i}t^{n-i} = B_{i,n}(1-t)</script></li>
+<li>递归性<script type="math/tex; mode=display">
+B_{i,n}(t) = (1-t)B_{i,n-1}(t)+tB_{i-1,n-1}(t),i=0,1,...,n</script>这表明$n$阶的Berstein多项式可以表示为$n-1$阶的组合，这就有了递归的条件。</li>
+<li><p>导数</p>
+<script type="math/tex; mode=display">
+B'_{i,n}(t) = n [ B_{i-1,n-1}(t) - B_{i,n-1}(t)],i = 0,1,...,n</script><p>根据导数我们可以求得极值：$B_{i,n}(t)$在$[0,1]$之间有唯一的局部极大值：$x = \frac{i}{n}$。</p>
+</li>
+<li><p>升阶公式</p>
+<script type="math/tex; mode=display">
+(1 - t)B_{i,n}(t) = (1 - \frac{i}{n+1})B_{i,n+1}(t)\\
+tB_{i,n}(t) = \frac{i+1}{n+1}B_{i+1,n+1}(t)\\
+B_{i,n}(t) = (1 - \frac{i}{n+1})B_{i,n+1}(t) + \frac{i+1}{n+1}B_{i+1,n+1}(t)</script><p>升阶公式很神奇。$n$只得是点的个数，这意味着同样的曲线可以对应更多的点（更多条边的控制多边形）。实际上点越多，就越接近曲线的形状，这是一个定理的一个例子：任何一条曲线可以用无穷多个线段来近似。</p>
+</li>
+<li>积分<script type="math/tex; mode=display">
+\int _0^1B_{t,n}(t)dt = \frac{1}{n+1}</script></li>
+</ul>
+<h3 id="Bezier曲线性质"><a href="#Bezier曲线性质" class="headerlink" title="Bezier曲线性质"></a>Bezier曲线性质</h3><ul>
+<li>k阶导数的差分形式<script type="math/tex; mode=display">
+P^{k}(t) = \frac{n!}{(n-k)!} \sum_{i=0}^{n-k}\nabla^k P_i B_{i,n-k}(t),t \in [0,1 ]</script>高阶前向差分向量可以通过低阶前向差分向量递归定义：<script type="math/tex; mode=display">
+\nabla^0P_i = P_i\\
+\nabla^kP_i = \nabla^{k-1}P_{i+1} - \nabla^{k-1}P_i</script></li>
+<li>端点性质<ul>
+<li>端点位置：根据Bernstein多项式的端点位置性质，可以得到：<script type="math/tex; mode=display">
+P(0) = P_0,P(1) = P_1</script>因此得到的曲线的其实位置和控制多边形的起点和终点重合。</li>
+<li>切向量：因为$P’(t) = n\sum_{i=0}^{n-1} P_i[B_{i-1,n-1}(t) - B_{i,n-1}(t)]$，所以得到：<script type="math/tex; mode=display">
+P'(0) = n(P_1 - P_0),P'(1)= n(P_n - P_{n-1}),</script>这意味着起点和终点处曲线的切向量方向与控制多边形的第一条和最后一条边的方向一致。</li>
+<li>二阶导数：<script type="math/tex; mode=display">
+P^{"}(t) = n(n-1)\sum_{i=0}^{n-2}(P_{i+2} - 2P_{i+1}+P_i)B_{i,n-2}(t)</script>可以得到：<script type="math/tex; mode=display">
+P^{"}(0) = n(n-1)(P_2 - 2P_1 + P_0)\\
+P^{"}(1) = n(n-1)(P_n - 2P_{n-1}+P_{n-2})</script>由曲率公式可得：<script type="math/tex; mode=display">
+k(0) = \frac{n-1}{n} \cdot \frac{\vert (P_1 - P_0) \times (P_2 - P_1)\vert}{\vert P_1 - P_0 \vert^3}\\
+k(n) = \frac{n-1}{n} \cdot \frac{\vert (P_{n-1} - P_{n-2}) \times (P_n - P_{n-1})\vert}{\vert P_n - P_{n-1} \vert^3}\\</script></li>
+</ul>
+</li>
+<li>对称<br>控制顶点为$P_i^{*} = P_{n-i}$的曲线保留了曲线$P(t)$的形状，但方向相反。<script type="math/tex; mode=display">
+C^*(t) = \sum_{i=0}^n P_i^{ *}B_{i,n}(t) = \sum_{i=0}^nP_iB_{i,n}(1-t)</script></li>
+<li>凸包性质<br>因为$\sum_{i=0}^n B_{i,n}(t) = 1, 0 \leq B_{i,n}(t)\leq 1$，因此曲线$P(t)$在所有控制点的凸包内部。如下图：</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier5.jpg" alt=""></p>
+<ul>
+<li>几何不变形<br>几何性质不会随着坐标系变化而改变。Bezier曲线的位置和形状依赖于控制顶点$P_i$，而不是坐标系。</li>
+</ul>
+<h3 id="de-Casteljau算法"><a href="#de-Casteljau算法" class="headerlink" title="de Casteljau算法"></a>de Casteljau算法</h3><p>我们当然可以通过计算Bezier曲线的值来得到，不过有一个更简单的算法来在计算机上画Bezier曲线。</p>
+<p>首先注意到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(t) &= \sum_{i=0}^nP_iB_{i,n}(t)\\
+    &= \sum_{i=0}^n P_i[(1-t)B_{i,n-1} + tB_{i-1,n-1}(t)]\\
+    &= \sum_{i=0}^n[(1-t)P_i + tP_{i+1}]B_{i,n-1}(t) 
+\end{aligned}</script><p>将上式的最后一步继续递归替换，直到$B_{i,0}$，由此(具体过程没有推算，上一步也不清楚为何)我们最终可以得到Bezier曲线上一点的值为：</p>
+<script type="math/tex; mode=display">
+P(t) = P_0^n</script><p>定义$P_0^n$有递推公式如下：</p>
+<script type="math/tex; mode=display">
+P_i^k = \left\{
+    \begin{matrix}
+    P_i & k=0\\
+    (1-t)P_i^{k-1} + tP_{i+1}^{k-1} & k=1,2,...,n;i = 0,1,...,n-k
+    \end{matrix}
+    \right.</script><p>当$n=3$时，递推过程如下图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier4.jpg" alt=""></p>
+<p>当我们需要知道某个$t$对应点的位置的时，最终需要知道的是$P_0^n$。需要注意，这里不是$P_0$的$n$次方，它的值是根据$t$计算出来的。</p>
+<h3 id="几何连续性"><a href="#几何连续性" class="headerlink" title="几何连续性"></a>几何连续性</h3><p>在CAD应用中，通常不鼓励通过高阶Bezier曲线来表达曲线，而使用光滑链接的低阶Bezier曲线。但是在Bezier曲线上，传统概念上的连续性不适用于图形学中几何的连续性。<br>比如两个点$V_0,V_1$分别定义下面的方程：</p>
+<script type="math/tex; mode=display">
+\Phi(t) = \left\{
+    \begin{matrix}
+V_0 + \frac{V_1 - V_0}{3}t & 0\leq t \leq 1\\
+V_0 + \frac{V_1 - V_0}{3} + (t-1)\frac{2(V_1 - V_0)}{3} & 1 \leq t \leq 2  
+\end{matrix}
+\right.</script><script type="math/tex; mode=display">
+\Phi(1^-) = \frac{1}{3}(V_1 - V_0), \Phi(1 ^+) = \frac{2}{3}(V_1 - V_0)</script><p>上面的曲线实际是一条直线，但是却有两边导数不一致的情况。因此定义了几何连续性。</p>
+<p>现在有两个分别由控制点$P_i$和$Q_j$定义的Bezier曲线。两个曲线共享端点，且：</p>
+<script type="math/tex; mode=display">
+a_i = P_i - P_{i-1},b_j = Q_j - Q_{j-1}</script><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier3.jpg" alt=""></p>
+<p>则：</p>
+<ul>
+<li>$G^0$连续：$P_n = Q_0$</li>
+<li>$G_1$连续：$Q_0 - Q_1 = \alpha (P_n -P_{n-1})$，也就是$P_{n-1},P_{n},Q_0,Q_1$共线</li>
+<li>$G_2$连续（曲率连续）：<script type="math/tex; mode=display">
+Q_2 = \left(\alpha^2 + 2 \alpha + \frac{\beta}{n-1} + 1\right)P_n - \left(2\alpha^2 + 2 \alpha + \frac{\beta}{n-1}\right)P_{n-1}+\alpha ^2 + P_{n-2}\\
+Q^{"}(0) = \alpha^2 P^{"}(1) + \beta P'(1)</script><h3 id="升阶与降阶"><a href="#升阶与降阶" class="headerlink" title="升阶与降阶"></a>升阶与降阶</h3></li>
+</ul>
+<p>前面在介绍Bernstein多项式的时候提到过升阶，对于Bezier曲线来说，升阶意味着通过增加控制点的方式来增加Bezier曲线的阶数，但保持曲线的形状和方向不变。</p>
+<p>注意:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(t) &= \sum_{i=0}^n P_iB_{i,n}(t) = \sum_{i=0}^n P_i ((1-t)+t)B_{i,n}(t)\\
+&= \sum_{i=0}^{n+1}\left(\frac{n+1-i}{n+1}P_i+\frac{i}{n+1}P_{i-1}\right)B_{i,n+1}(t)
+\end{aligned}</script><p>可以得到升阶公式:</p>
+<script type="math/tex; mode=display">
+P_i^* = \frac{i}{n+1}P_{i-1}+\left(1-\frac{i}{n+1}\right),i=0,1,...,n+1</script><p>如果$P_i$是$P_i^*$升阶的结果，可以得到：</p>
+<script type="math/tex; mode=display">
+P_i^{\times} = \frac{nP_i - iP_{i-1}^{\times}}{n-i}; i = 0,1,...,n-1\\
+P_{i-1}^* = \frac{nP_i - (n-i)P_i^*}{i}; i = n,n-1,...,1</script><p>上面得到的也就是降阶的方法。我们有两种降阶方案:</p>
+<ul>
+<li>Forrest：<script type="math/tex; mode=display">
+\hat = \left\{\begin{matrix}
+P_i^{\times} & i=0,1,...,\left [\frac{n-1}{2}\right ]\\
+P_i^* & i = \left [\frac{n-1}{2}\right ]+1,...,n-1
+\end{matrix}\right.</script></li>
+<li>Farin：<script type="math/tex; mode=display">
+\hat P_i = (1 - \frac{i}{n-1})P_i^{\times} + \frac{i}{n-1} P_i^*</script></li>
+</ul>
+<p>可以看到的是Farin是将Forrest的两个结果合起来。降阶除了直接升阶上去的，一般来说会有损失。</p>
+<h2 id="Bezier曲面"><a href="#Bezier曲面" class="headerlink" title="Bezier曲面"></a>Bezier曲面</h2><p>除了Bezier曲线还有Bezier曲面，曲面和曲线基本类似，但是形式更复杂，而且有两种，一个是矩形域，一个是三角域。</p>
+<h3 id="矩形域Bezier曲面"><a href="#矩形域Bezier曲面" class="headerlink" title="矩形域Bezier曲面"></a>矩形域Bezier曲面</h3><p>矩形Bezier曲面实际上本质依然是Bezier曲线。假设$P_{ij}(i=0,1,…,n;j =0,1,…,m)$是$(n+1)\times(m+1)$的控制点集合，$n\times m$阶矩形域Bezier曲面可以通过张量积的形式定义：</p>
+<script type="math/tex; mode=display">
+P(u,v) = \sum_{i=0}^n\sum_{j=0}^m P_{i,j}B_{i,n}(u)B_{j,m}(v) , u,v \in [0,1 ]</script><p>其中$B_{i,n},B_{j,m}$是Bernstein多项式。因此可以看到的是它是曲线的组合。</p>
+<h3 id="性质"><a href="#性质" class="headerlink" title="性质"></a>性质</h3><ul>
+<li>端点：控制网格的四个顶点是Bezier曲面的顶点：<script type="math/tex; mode=display">
+P(0,0) = P_{00},P(0,1) = P_{0n}, P(1,0)=P_{m0}, P(1,1) = P_{mn}</script></li>
+</ul>
+<p>以下三角形制定了四个角处的切平面：</p>
+<script type="math/tex; mode=display">
+P_{00}P_{10}P_{01}, P_{0n}P_{0,n-1}P_{1n}, P_{m0}P_{m-1,0}P_{m1}, P_{mn}P_{m-1,n}P_{m,n-1}</script><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier2.jpg" alt=""></p>
+<ul>
+<li>几何不变性</li>
+<li>对称性</li>
+<li>凸包</li>
+</ul>
+<ul>
+<li>几何连续性</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier1.jpg" alt=""></p>
+<p>给定两个$n\times m$阶控制点为$P_{ij},Q_{ij}$的Bezier曲面：</p>
+<script type="math/tex; mode=display">
+P(u,v) = \sum_{i=0}^n\sum_{j=0}^m P_{ij} B_{i,m}(u)B_{j,n}(v)\\
+Q(u,v) = \sum_{i=0}^n\sum_{j=0}^m Q_{ij} B_{i,m}(u)B_{j,n}(v)</script><p>$G^0$连续：$P(1,v) = Q_0,v) or P(u,1) = Q(u,0)$，也就是公用一条边。</p>
+<p>$G^1$连续：$Q_u(0,v) = \alpha (v) P_u(1,v) + \beta (v)P_v(1,v)$，也就是公用边两侧附近在一个平面上。</p>
+<h3 id="de-Casteljau算法-1"><a href="#de-Casteljau算法-1" class="headerlink" title="de Casteljau算法"></a>de Casteljau算法</h3><p>与Bezier曲线一样，$P(u,v) = P_{i,j}^{n,m}$。</p>
+<p>P_{i,j}^{k,l}通过以下递归公式定义：</p>
+<script type="math/tex; mode=display">
+P_{i,j}^{k,l} = \left \{ \begin{matrix}
+P_{ij}& k = l = 0\\
+(1 - u)P_{ij}^{k-1,0} + uP_{i+1,j}^{k-1,0} & k = 1,...,n;l=0\\
+(1-v)P_{0,j}^{n,j-1} + v P_{0,j+1}^{n,j-1} & k = n;l=1,...,m
+\end{matrix}\right.</script><p>或者：</p>
+<script type="math/tex; mode=display">
+P_{i,j}^{k,l} = \left \{ \begin{matrix}
+P_{ij}& k = l = 0\\
+(1 - v)P_{ij}^{0,l-1} + vP_{i,j+1}^{0,l-1} & k = 0;l=1,...,m\\
+(1-u)P_{i,0}^{k-1,m} + u P_{0,j+1}^{k-1,m} & k =1,..., n;l=1,...,m
+\end{matrix}\right.</script><p>对于de Casteljau算法的解释：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(u,v) &= \sum_{i=0}^n\sum_{j=0}^m P_{ij}B_{i,n}(u)B_{j,m}(v)\\
+&= \sum_{i=0}^n\left(\sum_{j=0}^m P_{ij}B_{i,n}(u)\right)B_{j,m}(v)
+\end{aligned}</script><p>括号内部得到的是Bezier曲线。而曲面的de Casteljau算法也就是先计算一个维度上的曲线，计算到$0$开始计算另一个维度，直到递归至P_{i,j}^{0,0}。</p>
+<h3 id="三角域Bezier曲面"><a href="#三角域Bezier曲面" class="headerlink" title="三角域Bezier曲面"></a>三角域Bezier曲面</h3><p>三角域Bezier曲面定义在三角域，而不是方形域，使用重心坐标（barycentric coordinate）来定义三角域曲面。</p>
+<ul>
+<li>Bernstein基函数<script type="math/tex; mode=display">
+B_{i,j,k}(u,v,w) = \frac{n!}{i!j!k!}u^iv^jw^k; u,v,w \in [0,1]</script>其中:<script type="math/tex; mode=display">
+u+v+w = 1,i+j+k = n;i,k,j\ge 0.</script>有$\frac{1}{2}(n+1)(n+2)$个n阶基函数。</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier7.jpg" alt=""></p>
+<ul>
+<li>非负性和归一性：<script type="math/tex; mode=display">
+B_{i,j,k}^n(u,v,w) \ge 0, \sum_{i+j+k=n}B_{i,j,k}^n(u,v,w) - 1</script></li>
+<li><p>递归：</p>
+<script type="math/tex; mode=display">
+B_{i,j,k}^n(u,v,w) = uB_{i-1,j,k}^{n-1}(u,v,w) + vB_{i,j-1,k}^{n-1}(u,v,w) + wB_{i,j,k-1}^{n-1}(u,v,w)</script></li>
+<li><p>三角域曲面定义：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+P(u,v,w) &= \sum_{i+k+j = n}P_{i,j,k}B_{i,j,k}^n(u,v,w)\\
+&= \sum_{i=0}^n\sum_{j=0}^{n-i}P_{i,j,k}B_{i,j,k}^n(u,v,w)
+\end{aligned}\\
+u+v+w = 1;u,v,w\ge 0</script></li>
+<li>de Casteljau算法<script type="math/tex; mode=display">
+P_{i,j,k} = uP_{i+1,j,k} + vP_{i,j+1,k} + w P_{i,j,k+1}</script></li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/bezier8.jpg" alt=""></p>
+<p>上面的算法看的不明白，不过实际上三角域的de Casteljau算法非常简单。每三个点根据重心坐标算一个新的点，不断递归。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/computer-graphics/" rel="tag"># computer graphics</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/15/图形学——空间数据结构/" rel="next" title="图形学——空间数据结构">
+                <i class="fa fa-chevron-left"></i> 图形学——空间数据结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/19/图形学——B样条曲线和曲面/" rel="prev" title="图形学——B样条曲线和曲面">
+                图形学——B样条曲线和曲面 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么表示曲线"><span class="nav-number">1.</span> <span class="nav-text">怎么表示曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bernstein多项式的性质"><span class="nav-number">1.1.</span> <span class="nav-text">Bernstein多项式的性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bezier曲线性质"><span class="nav-number">1.2.</span> <span class="nav-text">Bezier曲线性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#de-Casteljau算法"><span class="nav-number">1.3.</span> <span class="nav-text">de Casteljau算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#几何连续性"><span class="nav-number">1.4.</span> <span class="nav-text">几何连续性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#升阶与降阶"><span class="nav-number">1.5.</span> <span class="nav-text">升阶与降阶</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bezier曲面"><span class="nav-number">2.</span> <span class="nav-text">Bezier曲面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#矩形域Bezier曲面"><span class="nav-number">2.1.</span> <span class="nav-text">矩形域Bezier曲面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性质"><span class="nav-number">2.2.</span> <span class="nav-text">性质</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#de-Casteljau算法-1"><span class="nav-number">2.3.</span> <span class="nav-text">de Casteljau算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三角域Bezier曲面"><span class="nav-number">2.4.</span> <span class="nav-text">三角域Bezier曲面</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'UzkbpHfUYMuhaYHh5SkSGaFl-gzGzoHsz',
+        appKey: '03u0lWMV4JIHq7RpijUw3SaQ',
+        placeholder: 'Say something...',
+        avatar:'gg',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz",
+                'X-LC-Key': "Bbykl7fj9cXMbn8Q3NccAl0s",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

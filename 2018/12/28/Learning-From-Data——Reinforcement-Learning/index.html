@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这周数据学习的内容是关于强化学习（Reinforcement Learning）的。不过课上睡着了，而且由于信息论时间太赶一直没有空看这节课的内容。">
+<meta name="keywords" content="machine learning,LFD class,reinforcement learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Learning From Data——Reinforcement Learning">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/12/28/Learning-From-Data——Reinforcement-Learning/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="这周数据学习的内容是关于强化学习（Reinforcement Learning）的。不过课上睡着了，而且由于信息论时间太赶一直没有空看这节课的内容。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf3.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf4.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf5.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf6.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf7.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf8.png">
+<meta property="og:updated_time" content="2019-01-02T08:39:36.637Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Learning From Data——Reinforcement Learning">
+<meta name="twitter:description" content="这周数据学习的内容是关于强化学习（Reinforcement Learning）的。不过课上睡着了，而且由于信息论时间太赶一直没有空看这节课的内容。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf1.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2018/12/28/Learning-From-Data——Reinforcement-Learning/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Learning From Data——Reinforcement Learning | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/12/28/Learning-From-Data——Reinforcement-Learning/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Learning From Data——Reinforcement Learning
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2018-12-28 20:05:58" itemprop="dateCreated datePublished" datetime="2018-12-28T20:05:58+08:00">2018-12-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-01-02 16:39:36" itemprop="dateModified" datetime="2019-01-02T16:39:36+08:00">2019-01-02</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/数据学习课程/" itemprop="url" rel="index"><span itemprop="name">数据学习课程</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/12/28/Learning-From-Data——Reinforcement-Learning/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/12/28/Learning-From-Data——Reinforcement-Learning/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/12/28/Learning-From-Data——Reinforcement-Learning/" class="leancloud_visitors" data-flag-title="Learning From Data——Reinforcement Learning">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这周数据学习的内容是关于强化学习（Reinforcement Learning）的。不过课上睡着了，而且由于信息论时间太赶一直没有空看这节课的内容。<br><a id="more"></a><br>强化学习现在是非常流行的一个机器学习方法，当然它和其他的算法不一样，你用了这个就是这个，而强化学习更像是一种学习方式，也就是一直在线学习。AlphaGo赢了围棋冠军，OpenAI赢了Dota冠军，以及自动驾驶汽车飞机等都有它的身影。</p>
+<h2 id="什么是强化学习？"><a href="#什么是强化学习？" class="headerlink" title="什么是强化学习？"></a>什么是强化学习？</h2><p>强化学习有点像是玩游戏的过程，实际上强化学习应用最多的地方也正是游戏。他属于无监督学习，但是又是根据奖励来决定下一个动作，怎么知道奖励？就是走到头。有点类似于有“长远的眼光”。这个长远的眼光可以说是经验，是通过一次次训练得到的，类似于你的人生可以来无数回，你会怎么做这件事。可能经过多次碰壁以后，我终于活成了一个成功人士。每次人生）训练周期）称为episode。</p>
+<p>首先要知道对于序列决策问题，我们很难找到明确的监督策略来决定结果的好坏。在强化学习中，学习的过程是通过代理完成的。强化学习定义了一个奖励函数（reward function）和environment，而代理（agent）要做的就是最大化累计的奖励。如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf1.png" alt=""></p>
+<h3 id="Markov-Decision-Process"><a href="#Markov-Decision-Process" class="headerlink" title="Markov Decision Process"></a>Markov Decision Process</h3><p>我们首先学习一下马尔可夫决策过程。一个马尔可夫决策过程可以看作是一个五元组：$(S,A,\{P_{sn}\},\gamma,R)$，其中：</p>
+<ul>
+<li>$S$是一个状态集合（环境）</li>
+<li>$A$是一个动作集合</li>
+<li>$P_{sa}$是状态转移概率</li>
+<li>$R$:$S\times A \rightarrow \mathbb{R}$，是一个奖励函数</li>
+<li>$\gamma \in [0,1)$，为折扣因子（discount factor）</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf2.png" alt=""></p>
+<p>这幅图中,$S=\{S_0,S_1,S_2\};A=\{a_0,a_1\};R(s_1,a_0)=5,R(s_2,a_1) = -1$，而它的$P_{sa}$如下表：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">$S_0$</th>
+<th style="text-align:center">$S_1$</th>
+<th style="text-align:center">$S_2$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$S_0,a_0$</td>
+<td style="text-align:center">0.5</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.5</td>
+</tr>
+<tr>
+<td style="text-align:center">$S_0,a_1$</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:center">$S_1,a_0$</td>
+<td style="text-align:center">0.7</td>
+<td style="text-align:center">0.1</td>
+<td style="text-align:center">0.2</td>
+</tr>
+<tr>
+<td style="text-align:center">$S_1,a_1$</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.95</td>
+<td style="text-align:center">0.05</td>
+</tr>
+<tr>
+<td style="text-align:center">$S_2,a_0$</td>
+<td style="text-align:center">0.4</td>
+<td style="text-align:center">0.6</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">$S_2,a_1$</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.3</td>
+<td style="text-align:center">0.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>现在考虑一个状态序列$S_0,S_1,…$以及对应的采取的动作$a_0,a_1,…,$</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf3.png" alt=""></p>
+<p>则这个序列的总共的奖励为：</p>
+<script type="math/tex; mode=display">
+R(s_0,a_0) + \gamma R(s_1,a_1)+\gamma^2 R(s_2,a_2)+...</script><p>我们把问题想得简单一点，假设这个reward只和状态有关，则总的奖励为：</p>
+<script type="math/tex; mode=display">
+R(s_0)+\gamma R(s_1) + \gamma^2 R(s_2)+...</script><p>未来第$t$步的奖励会被打$\gamma ^t$的折扣。这说明离当前这个状态越远权重越小，这意味着我们把下一步的奖励看得最重要，接下来是下下一步的奖励，依次减少。</p>
+<h3 id="Policy-amp-Value-functions"><a href="#Policy-amp-Value-functions" class="headerlink" title="Policy &amp; Value functions"></a>Policy &amp; Value functions</h3><p>强化学习的目标就是：选择action，使得总的奖励期望最大：</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[R(s_0)+\gamma R(s_1) + \gamma^2 R(s_2)+...]</script><ul>
+<li>一个策略（policy）是任意一个函数$\pi$:$S \rightarrow A$.</li>
+<li>而该策略$\pi$对应的值函数（value function）为在从状态$s$开始，根据$\pi$来执行动作的条件下，总的奖励的期望值，也就是：<script type="math/tex; mode=display">
+V^\pi(s) = \mathbb{E}[R(s_0)+\gamma R(s_1) +\gamma^2 R(s_2) +...\vert s_0 = s,\pi]</script></li>
+</ul>
+<p>给定$\pi$，值函数（value function）满足Bellman等式：</p>
+<script type="math/tex; mode=display">
+V^\pi(s)=R(s)+\gamma\sum_{s' \in S}P_{s\pi(s)}(s')V^\pi(s')</script><p>所以，这实际上是一个递归的过程，本次状态的值函数，是由下一个可能的状态值决定的。而下一个可能的状态值又和你的策略相关。为了方便理解，我们再定义一个函数，为动作-值函数Q。它接受两个输入：当前的状态$s$和当前状态采取的动作$a$：</p>
+<script type="math/tex; mode=display">
+Q(s,a) = R(s)+\gamma\sum_{s' \in S}P_{sa}(s')V^\pi(s')</script><p>我们可以维护这一张关于Q值的表，这就是传说中的Q-learning。</p>
+<h3 id="Optimal-value-and-policy"><a href="#Optimal-value-and-policy" class="headerlink" title="Optimal value and policy"></a>Optimal value and policy</h3><p>我们定义最优的值函数为：</p>
+<script type="math/tex; mode=display">
+V^* (s) = \max_{\pi}V^\pi(s) = R(s)+\max_{a \in A}\gamma\sum_{s' \in S}P_{sa}(s')V^*(s')</script><p>最优的策略$\pi^*:S\rightarrow A$为实现了最优值函数的策略：</p>
+<script type="math/tex; mode=display">
+\pi^*(s) = \arg\max_{a \in A}\sum_{s'\in S}P_{sa}(s')V^ *(s')</script><p>对于每一个状态$s$以及每一个策略$\pi$,</p>
+<script type="math/tex; mode=display">
+V^*(s) = V^{\pi *} \ge V^\pi(s)</script><p>可以看到的是Q-learning是在维护一张表，而我们这里提到的和Q-learning非常相似，不过policy选的是最佳的动作，可以说Q-learning是实现这个目标学习的一种方法。</p>
+<h3 id="求解有限状态MDP下的最佳的value或者policy"><a href="#求解有限状态MDP下的最佳的value或者policy" class="headerlink" title="求解有限状态MDP下的最佳的value或者policy"></a>求解有限状态MDP下的最佳的value或者policy</h3><p>实际上，我们可以看到只要解决了value和policy中一个，我们就能得到最佳的结果，因为实际上最佳策略也就是实现了最佳值的策略而已。因此这个解决过程就有两个方法。前提是，状态集合是有限的。</p>
+<h4 id="value-iteration"><a href="#value-iteration" class="headerlink" title="value iteration"></a>value iteration</h4><p>假设MDP有有限的状态集合和动作空间，则值迭代如下：</p>
+<blockquote>
+<p>1.For each state $s$ , initialize $V (s) := 0$</p>
+<p>2.Repeat until convergence {</p>
+<p>Update </p>
+<script type="math/tex; mode=display">V (s) := R(s) + \max_{a\in A} \gamma \sum_{s' \in S} P_{sa} (s')V(s')</script><p>for every state s</p>
+<p>}</p>
+</blockquote>
+<p>在这里有两个办法来更新$V(s)$：</p>
+<ul>
+<li>同步更新（Synchronous update）:<blockquote>
+<p>Set $V_0(s):= V(s)$ for all states $s \in S$</p>
+<p>For each $s \in S$:</p>
+<script type="math/tex; mode=display">V(s):= R(s) + \max_{a \in A} \gamma \sum_{s' \in S} P_{sa}(s') V_0(s')</script></blockquote>
+</li>
+<li>非同步更新（Asynchronous update）：<blockquote>
+<p>For each $s \in S$:</p>
+<script type="math/tex; mode=display">V(s):= R(s) + \max_{a \in A} \gamma \sum_{s' \in S} P_{sa}(s') V(s')</script></blockquote>
+</li>
+</ul>
+<h4 id="policy-iteration"><a href="#policy-iteration" class="headerlink" title="policy iteration"></a>policy iteration</h4><blockquote>
+<p>1.Initialize $\pi$ randomly</p>
+<p>2.Repeat until convergence{</p>
+<p>   a. Let $V:=V^\pi$</p>
+<p>   b. For each state $s$,</p>
+<script type="math/tex; mode=display">\pi(s):= \arg\max_{a \in A}\sum_{s' \in S}P_{sa} V(s')</script><p>}</p>
+</blockquote>
+<p>其中步骤a可以通过求解Bellman等式来完成（一个$\vert S\vert$集合的线性方程组）。</p>
+<h3 id="Discussion"><a href="#Discussion" class="headerlink" title="Discussion"></a>Discussion</h3><p>值迭代和策略迭代都可以最终收敛到最佳的$\pi^*$和$V^*$.</p>
+<ul>
+<li>策略迭代对于小的MDP更加高效，可以更快速地收敛</li>
+<li>值迭代对于更大的状态空间来说更实用</li>
+</ul>
+<h2 id="Learning-a-model-for-finite-state-MDP"><a href="#Learning-a-model-for-finite-state-MDP" class="headerlink" title="Learning a model for finite-state MDP"></a>Learning a model for finite-state MDP</h2><p>如果奖励函数$R(s)$和转移概率$P_{sa}$是未知的。如何从数据中估计他们？</p>
+<h3 id="Experience-from-MDP"><a href="#Experience-from-MDP" class="headerlink" title="Experience from MDP"></a>Experience from MDP</h3><p>给定政策$\pi$如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">$S$</th>
+<th style="text-align:center">$\pi(s)$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$s_0$</td>
+<td style="text-align:center">$a_0$</td>
+</tr>
+<tr>
+<td style="text-align:center">$s_1$</td>
+<td style="text-align:center">$a_1$</td>
+</tr>
+<tr>
+<td style="text-align:center">$s_2$</td>
+<td style="text-align:center">$a_0$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在这个环境下重复地执行策略$\pi$:</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf4.png" alt=""></p>
+<h3 id="Estimate-model-from-experience"><a href="#Estimate-model-from-experience" class="headerlink" title="Estimate model from experience"></a>Estimate model from experience</h3><h4 id="Estimate-P-sa"><a href="#Estimate-P-sa" class="headerlink" title="Estimate $P_{sa}$"></a>Estimate $P_{sa}$</h4><p>对状态转移概率的最大似然估计为：</p>
+<script type="math/tex; mode=display">
+P_{sa}(s') = P(s'|s,a)=\frac{\#\{s \rightarrow a \rightarrow s'\}}{\#\{s \rightarrow a \rightarrow \cdot\}}</script><p>如果$\#\{s \rightarrow a \rightarrow \cdot\}=0$，那么设$P_{sa}(s’) = \frac{1}{\vert S\vert}$.</p>
+<h4 id="Estimate-R-s"><a href="#Estimate-R-s" class="headerlink" title="Estimate $R(s)$"></a>Estimate $R(s)$</h4><p>我们定义$R(s)^{(t)}$为第t次试验中状态s的瞬时奖励，则：</p>
+<script type="math/tex; mode=display">
+R(s) = \mathbb{E}[R(s)^{(t)}] = \frac{1}{m}\sum_{t=1}^mR(s)^{(t)}</script><h3 id="Algorithm-MDP-model-learning"><a href="#Algorithm-MDP-model-learning" class="headerlink" title="Algorithm: MDP model learning"></a>Algorithm: MDP model learning</h3><blockquote>
+<p>1.Initialize $\pi$ randomly , $V (s) := 0$ for all $s$</p>
+<p>2.Repeat until convergence {</p>
+<p>a.Execute $\pi$ for $m$ trails</p>
+<p>b.Update $P_{sa}$ and $R$ using the accumulated experience</p>
+<p>c.$V:=$ValueIteration$(P_{sa},R,V)$</p>
+<p>d.Update $\pi$ greedily with respect to $V$:</p>
+<script type="math/tex; mode=display">
+\pi(s)= \arg\max_{a\in A}\sum_{s'\in S}P_{sa}(s')V(s')</script></blockquote>
+<p><strong>ValueIteration($P_{sa},R,V_0$)</strong></p>
+<blockquote>
+<p>1.Initialize $V = V_0$</p>
+<p>2.Repeat until convergence{</p>
+<p>Update </p>
+<script type="math/tex; mode=display">
+V(s):=R(s)+\max_{a\in A}\gamma\sum_{s'\in S}P_{sa}(s')V(s')</script><p>for every state s</p>
+<p>}</p>
+</blockquote>
+<h2 id="Continuous-state-MDPs"><a href="#Continuous-state-MDPs" class="headerlink" title="Continuous state MDPs"></a>Continuous state MDPs</h2><p>最后我们提一下连续的MDP，一个MDP的状态集合可能是无穷大的：</p>
+<ul>
+<li>A car’s state:$(x,y,\theta,\dot x,\dot y,\dot \theta)$</li>
+<li>A helicopter’s state:$(x,y,z,\phi,\theta,\psi,\dot x,\dot y,\dot z,\dot \phi,\dot \theta,\dot \psi)$</li>
+</ul>
+<p>下面看一个有趣的例子：1D 倒立摆（Inverted Pendulum），目标是平衡车上的栏杆，如图：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf5.png" alt=""></p>
+<ul>
+<li>状态代表：$(x,\theta,\dot x, \dot\theta)$</li>
+<li>动作：作用在车上的力$F$</li>
+<li>奖励：每次这个栏杆是直立的时候+1</li>
+</ul>
+<p>由于维度的“诅咒”，一般来说离散化只能在一维两维的情况下保持不错的效果。</p>
+<p>如何直接估计$V$而不用离散化？</p>
+<p>主要的想法：</p>
+<ul>
+<li>获取MDP的模型或模拟器，可用于产生经验元组:$\langle s,a,s’,r \rangle$</li>
+<li>现在有来自状态空间S的样本$s^{(1)},…,s^{(m)}$，使用模型来估计他们的最佳期望奖励总和，也就是：<script type="math/tex; mode=display">
+y^{(1)} \approx V(s^{(1)}),y^{(2)} \approx V(s^{(2)}),...</script></li>
+<li>使用监督学习从$\left(s^{(1)},y^{(1)}\right),\left(s^{(2)},y^{(2)}\right),…$来近似$V$,让其作为一个状态$s$的函数，例如：<script type="math/tex; mode=display">
+V(s)=\theta^T\phi(s)</script><h3 id="Obtaining-a-simulator"><a href="#Obtaining-a-simulator" class="headerlink" title="Obtaining a simulator"></a>Obtaining a simulator</h3>模拟器是一个黑盒子，在给定状态$s_t$和动作$a_t$的情况下来产生下一个状态$s_{t+1}$。</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf6.png" alt=""></p>
+<p>一般来说有下面几种策略：</p>
+<ul>
+<li>使用物理法则，也就是倒立摆的运动方程：<script type="math/tex; mode=display">
+(M+m)\ddot{x}+b\dot{x} +ml\ddot \theta \cos(theta) - ml\dot \theta ^2\sin(\theta) = F\\
+(l+ml^2)\ddot\theta+mgl\sin(\theta) = -ml\ddot x\cos(\theta)</script></li>
+<li>使用现成的仿真软件</li>
+<li>游戏模拟器<h3 id="Obtaining-a-model"><a href="#Obtaining-a-model" class="headerlink" title="Obtaining a model"></a>Obtaining a model</h3>在MDP中我们重复地执行动作，执行m次试验，每个试验进行了T次。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf7.png" alt=""></li>
+</ul>
+<p>通过选择$\theta^*$来学习一个预测模型$s_{t+1}=h_\theta\left(\begin{bmatrix}s_t\\a_t\end{bmatrix}\right)$，而：</p>
+<script type="math/tex; mode=display">
+\theta^* = \arg\min_\theta\sum_{i=0}^m\sum_{t=0}^{T-1}\left\Vert
+s_{t+1}^{(i)} - h_\theta \left(\begin{bmatrix}s_t\\a_t\end{bmatrix}\right)
+\right\Vert^2</script><p>比较流行的预测模型有：</p>
+<ul>
+<li>线性模型：$h_\theta = As_t+Ba_t$</li>
+<li>带有特征映射的线性模型：$h_\theta = A\phi_s(s_t) + B\phi_a(a_t)$</li>
+<li>神经网络</li>
+</ul>
+<p>应用模型：</p>
+<ul>
+<li>决策模型（Deterministic Model）：$s_{t+1} = h_\theta \left(\begin{bmatrix}s_t\\a_t\end{bmatrix}\right)$</li>
+<li>随机模型（Stochastic Model）：$s_{t+1} = h_\theta \left(\begin{bmatrix}s_t\\a_t\end{bmatrix}\right)+\epsilon _t,\epsilon_t\sim \mathcal N (0,\Sigma)$</li>
+</ul>
+<h3 id="Value-function-approximation"><a href="#Value-function-approximation" class="headerlink" title="Value function approximation"></a>Value function approximation</h3><p>如何直接近似$V$而不使用离散化？</p>
+<p>主要的想法：</p>
+<ul>
+<li>获得一个MDP的模型或者模拟器</li>
+</ul>
+<ul>
+<li>现在有来自状态空间S的样本$s^{(1)},…,s^{(m)}$，使用模型来估计他们的最佳期望奖励总和，也就是：<script type="math/tex; mode=display">
+y^{(1)} \approx V(s^{(1)}),y^{(2)} \approx V(s^{(2)}),...</script></li>
+<li>使用监督学习从$\left(s^{(1)},y^{(1)}\right),\left(s^{(2)},y^{(2)}\right),…$来近似$V$,让其作为一个状态$s$的函数，例如：<script type="math/tex; mode=display">
+V(s)=\theta^T\phi(s)</script></li>
+</ul>
+<p>对于有限状态的MDP中，值函数的更新如下：</p>
+<script type="math/tex; mode=display">
+V(s) := R(s)+\gamma \max_{a \in A}\sum_{s' \in S}P_{sa}(s')V(s')</script><p>而对于连续状态的值函数如下：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+V(s) &:= R(s)+\gamma \max_{a \in A}\int_{s'}P_{sa}(s')V(s')ds'\\
+&:=R(s)+\gamma\max_{a\in A}\mathbb{E}_{s'\sim P_{sa}}[V(s')]
+\end{aligned}</script><p>对于每个状态，我们使用有限的样本（来自$P_{sa}$）计算$y^{(i)}$来估计$R(s)+\gamma\max_{a\in A}\mathbb{E}_{s’\sim P_{sa}}[V(s’)]$.</p>
+<h4 id="Algorithm-Fitted-value-iteration-Stochastic-Model"><a href="#Algorithm-Fitted-value-iteration-Stochastic-Model" class="headerlink" title="Algorithm: Fitted value iteration(Stochastic Model)"></a>Algorithm: Fitted value iteration(Stochastic Model)</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/rf8.png" alt=""></p>
+<h3 id="Computing-the-optimal-policy"><a href="#Computing-the-optimal-policy" class="headerlink" title="Computing the optimal policy"></a>Computing the optimal policy</h3><p>在得到值函数的估计之后，对应的策略为：</p>
+<script type="math/tex; mode=display">
+\pi (s) = \arg\max_{a}\mathbb{E}_{s'\sim P_{sa}}[V(s')]</script><p>根据经验来估计最优策略：</p>
+<blockquote>
+<p>For each action $a$:</p>
+<ol>
+<li>Sample $s’_1,…,s’_k \sim P_{s,a}$ using a model</li>
+<li>Compute $Q(a) = \frac 1 k \sum_{j=1}^k R(s)+\gamma V(s’_j)$,$\pi(s) = \arg\max_aQ(a)$</li>
+</ol>
+</blockquote>
+<p>除了线性回归，其他的学习算法也可以用来估计$V(s)$.</p>
+<p>参考：<br><a href="http://cs229.stanford.edu/notes/cs229-notes12.pdf" target="_blank" rel="noopener">Reinforcement Learning and Control</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/machine-learning/" rel="tag"># machine learning</a>
+          
+            <a href="/tags/LFD-class/" rel="tag"># LFD class</a>
+          
+            <a href="/tags/reinforcement-learning/" rel="tag"># reinforcement learning</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/数学——Unbiased-Estimation/" rel="next" title="数学——Unbiased Estimation">
+                <i class="fa fa-chevron-left"></i> 数学——Unbiased Estimation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/01/Learning-From-Data——Introduction-of-Deep-Learning/" rel="prev" title="Learning From Data——Introduction of Deep Learning">
+                Learning From Data——Introduction of Deep Learning <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是强化学习？"><span class="nav-number">1.</span> <span class="nav-text">什么是强化学习？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Markov-Decision-Process"><span class="nav-number">1.1.</span> <span class="nav-text">Markov Decision Process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Policy-amp-Value-functions"><span class="nav-number">1.2.</span> <span class="nav-text">Policy &amp; Value functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Optimal-value-and-policy"><span class="nav-number">1.3.</span> <span class="nav-text">Optimal value and policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#求解有限状态MDP下的最佳的value或者policy"><span class="nav-number">1.4.</span> <span class="nav-text">求解有限状态MDP下的最佳的value或者policy</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#value-iteration"><span class="nav-number">1.4.1.</span> <span class="nav-text">value iteration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#policy-iteration"><span class="nav-number">1.4.2.</span> <span class="nav-text">policy iteration</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Discussion"><span class="nav-number">1.5.</span> <span class="nav-text">Discussion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-a-model-for-finite-state-MDP"><span class="nav-number">2.</span> <span class="nav-text">Learning a model for finite-state MDP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Experience-from-MDP"><span class="nav-number">2.1.</span> <span class="nav-text">Experience from MDP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Estimate-model-from-experience"><span class="nav-number">2.2.</span> <span class="nav-text">Estimate model from experience</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Estimate-P-sa"><span class="nav-number">2.2.1.</span> <span class="nav-text">Estimate $P_{sa}$</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Estimate-R-s"><span class="nav-number">2.2.2.</span> <span class="nav-text">Estimate $R(s)$</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Algorithm-MDP-model-learning"><span class="nav-number">2.3.</span> <span class="nav-text">Algorithm: MDP model learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Continuous-state-MDPs"><span class="nav-number">3.</span> <span class="nav-text">Continuous state MDPs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Obtaining-a-simulator"><span class="nav-number">3.1.</span> <span class="nav-text">Obtaining a simulator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Obtaining-a-model"><span class="nav-number">3.2.</span> <span class="nav-text">Obtaining a model</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Value-function-approximation"><span class="nav-number">3.3.</span> <span class="nav-text">Value function approximation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Algorithm-Fitted-value-iteration-Stochastic-Model"><span class="nav-number">3.3.1.</span> <span class="nav-text">Algorithm: Fitted value iteration(Stochastic Model)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Computing-the-optimal-policy"><span class="nav-number">3.4.</span> <span class="nav-text">Computing the optimal policy</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'UzkbpHfUYMuhaYHh5SkSGaFl-gzGzoHsz',
+        appKey: '03u0lWMV4JIHq7RpijUw3SaQ',
+        placeholder: 'Say something...',
+        avatar:'gg',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz",
+                'X-LC-Key': "Bbykl7fj9cXMbn8Q3NccAl0s",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

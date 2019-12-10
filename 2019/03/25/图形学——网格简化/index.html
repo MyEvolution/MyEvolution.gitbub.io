@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。">
+<meta name="keywords" content="computer graphics,mesh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图形学——网格简化">
+<meta property="og:url" content="http://wlsdzyzl.com/2019/03/25/图形学——网格简化/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s1.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s2.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s3.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s6.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s5.jpg">
+<meta property="og:updated_time" content="2019-03-28T05:50:21.220Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图形学——网格简化">
+<meta name="twitter:description" content="上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2019/03/25/图形学——网格简化/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>图形学——网格简化 | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2019/03/25/图形学——网格简化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">图形学——网格简化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2019-03-25 21:50:29" itemprop="dateCreated datePublished" datetime="2019-03-25T21:50:29+08:00">2019-03-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-03-28 13:50:21" itemprop="dateModified" datetime="2019-03-28T13:50:21+08:00">2019-03-28</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/图形学/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/03/25/图形学——网格简化/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments：</span> <span class="post-comments-count valine-comment-count" data-xid="/2019/03/25/图形学——网格简化/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2019/03/25/图形学——网格简化/" class="leancloud_visitors" data-flag-title="图形学——网格简化">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇博客讲了网格的相关内容，也提到了一些网格简化的算法。但是实际上网格简化是网格中很大的一个块，因此这次单独拿出一篇文章来介绍简化的相关内容。<br><a id="more"></a></p>
+<p>话说到前面，网格简化有很多方法，这里介绍的多种方法，我也不是都明白，以后有机会的话会对其进行各个算法复现。对于一些复杂的算法，可能需要查阅相关论文才能明白其中的数学道理，在本文也会给出一些复杂的简化算法的论文链接。</p>
+<p>网格简化更宽泛，具体的细节一般为层次细节简化（LOD：Level of Details）。它主要用于简化采样密集的多面体网格，以及三维场景的存储，传输和绘制。它主要目标是在不影响画面视觉效果的条件下，通过逐次简化景物的表面细节来减少场景的几何复杂度，从而提高绘制算法的效率。</p>
+<p>在层次细节简化时候，我们会对一个原始的多面体模型建立几个不同逼近程度的几何模型。从近处观察物体，采用精细模型，从远处观察物体，采用较为粗糙的模型，当视点连续变化时，在两个不同层次的模型间会有明显的跳跃，为了追求完美应该要一个平滑的过渡，因此还需要几何形状过渡。</p>
+<p>因此层次细节简化技术的研究主要集中在：</p>
+<ol>
+<li>建立不同层次细节的模型。对任意给定的复杂多边形网格$M$，由精细到粗糙建立一系列模型序列：$M_0,M_1,…,M_n, M_0 = M$。</li>
+<li>建立相邻层次的多边形网格$M_i,M_{i+1}$的几何形状过渡：$\Phi: M_i \rightarrow M_{i+1}$。</li>
+</ol>
+<p>层次细节简化第一步说到底就是不同程度的网格简化。下面介绍几个简化的基本操作，和上篇文章相似。</p>
+<ul>
+<li>顶点删除操作L删除网格中的一个顶点，对它的相邻三角形形成的空洞做三角剖分</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s1.jpg" alt=""></p>
+<ul>
+<li>边压缩操作：网格上一条边压缩为一个顶点，与该边相邻的两个三角形退化为边</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s2.jpg" alt=""></p>
+<ul>
+<li>面片收缩操作：网格上的一个面片收缩为一个顶点，该三角形本身退化为点，其相邻的三个三角形都退化为边</li>
+</ul>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s3.jpg" alt=""></p>
+<p>下面会介绍几个具体的算法，他们策略不同，但是最后都是上面3种操作的组合。</p>
+<h3 id="基于长方体滤波的多面体简化"><a href="#基于长方体滤波的多面体简化" class="headerlink" title="基于长方体滤波的多面体简化"></a>基于长方体滤波的多面体简化</h3><p>基于长方体滤波的多面体简化是最简单的一种简化方法，它的思想是，将多个聚集在一起的顶点聚合为一个顶点，这个操作实际上是采样的一种。具体步骤如下：</p>
+<ul>
+<li>给定一个多面体$M$，记$K$为其拓扑，假设$M$已三角化。算法首先建立$M$的长方体包围盒，并将该包围盒所包围的空间均匀剖分成一系列的小长方体子空间，然后将各个子空间中的顶点聚合为一个代表顶点，如果子空间中无顶点则不考虑。一般来说聚合的这个顶点位于子空间的中心，子空间也是被均匀分割的。这些代表顶点为原多面体所示景物的重新采样。基于原多面体的拓扑结构和这些采样点可以重新产生多面体，所得多面体即为保持一定层次细节的模型。剖分的子空间越小，得到的层次模型就越逼近原多面体。</li>
+</ul>
+<p>在二维空间中，长方体滤波的示意如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s6.png" alt=""></p>
+<p>长方体滤波的主要缺点是会导致一些重要的高频细节的丢失。</p>
+<p><strong>下面两个算法是利用顶点删除技术的代表。顶点删除技术比较难的部分在于，删除哪些顶点？随机采样不能得到很好的效果。在网格中，近似平面的顶点可以删除，而对于尖锐部分的顶点删除后会使得模型大大折扣。因此下面介绍两个局部判别准则，用来决定删除哪些顶点比较合适。</strong></p>
+<h3 id="基于相邻面片和边界的局部平坦性原则"><a href="#基于相邻面片和边界的局部平坦性原则" class="headerlink" title="基于相邻面片和边界的局部平坦性原则"></a>基于相邻面片和边界的局部平坦性原则</h3><p>由Schroeder提出。该判别分两种情况：</p>
+<ul>
+<li>对于网格内部顶点$V$，记其周围相邻面片集为$S$，则该点的平坦性标准由下述的距离来描述：<script type="math/tex; mode=display">
+d = \vert\mathbf N \cdot(v - C) \vert</script>其中$N$为向量$\frac{\sum_{f\in S}\mathbf n (f)A(f)}{\sum_{f\in S} A(f)}$的单位向量，$C = \frac{\sum_{f\in S}c(f)A(f)}{A(f)}$,这里$A(f),c(f),\mathbf{n}(f)$分别为三角面片的面积，中心和法向量。<br>这种度量方式某种程度上反映了该顶点的突出程度。</li>
+<li>对于边界顶点$v$，记与它相邻的两个边界顶点为$v_1,v_2$，则其平坦性标准定义为$v$到$v_1v_2$连线的距离。</li>
+</ul>
+<h3 id="采用等距面来限定简化模型顶点的变化范围"><a href="#采用等距面来限定简化模型顶点的变化范围" class="headerlink" title="采用等距面来限定简化模型顶点的变化范围"></a>采用等距面来限定简化模型顶点的变化范围</h3><p>由Cohen提出，这个算法相对于上述会更复杂一点。</p>
+<p>首先介绍一个概念，叫包络（envelope）。多边形网格表面$P$可以看作一张分片线性参数曲面：</p>
+<script type="math/tex; mode=display">
+r(u,v) = (r_x(u,v),r_y(u,v),r_z(u,v))</script><p>其单位法向量为：</p>
+<script type="math/tex; mode=display">
+\mathbf n(u,v) = (n_x(u,v), n_y(u,v),n_z(u,v)).</script><p>对于给定的$\epsilon &gt; 0$，$P$的三维$\epsilon$等距面定义为：</p>
+<script type="math/tex; mode=display">
+r^{\epsilon}(u,v) = r(u,v) + \epsilon \mathbf{n}(u,v)</script><p>近似定义原始多边形网格$P$沿正负发现的$\epsilon$等距面$P(+\epsilon),P(- \epsilon)$。$\epsilon$等距面$P(+\epsilon)$和$P(-\epsilon)$上对应顶点$v_i^+,v_i^-$及其法向量可表示为：</p>
+<script type="math/tex; mode=display">
+v_i^+ = v_i + \epsilon\mathbf{n}_i, v_i^- = v_i - \epsilon \mathbf{n}_i, \mathbf{n}_i^+ = \mathbf{n}_i^- = \mathbf{n}</script><p>上述方法产生的$P_{\pm \epsilon}$可能出现自交的现象。</p>
+<p>我们用解析法计算$\epsilon$。现在来考察$P$上任意三角形$\triangle v_1v_2v_3$：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s4.jpg" alt=""></p>
+<p>对$P$上每个与三角形$\triangle v_1v_2v_3$不相邻的三角面片$\triangle_j$，判断$\triangle_j$是否与$\triangle v_1v_2v_3$的基本柱体相交。可计算得到$q_j$到$\triangle v_1v_2v_3$的距离$\sigma_j$。</p>
+<p>这两个等距面构成了表面的包络。Cohen顶点删除的过程如下：</p>
+<ul>
+<li>利用贪婪搜索策略，将原表面$P$的所有顶点列入带处理的顶点队列。</li>
+<li>对当前待处理顶点队列中的一顶点，算法尝试从$P$上删除该顶点及该顶点直接相邻的三角面片，并试图用某种类型的三角剖分法来填补顶点删除后在表面$P$上形成的空洞。</li>
+<li>若空洞位于$P$的包络内且能成功地被填补，则从当前队列中删除该顶点，简化表面$P$模型并重构原来与该顶点相连接的各顶点的拓扑关系，否则，该顶点从当前的待处理队列中退出，表面$P$保持不变。上述过程知道待处理顶点队列变空为止。</li>
+</ul>
+<p>这个算法的相关论文为：<a href="http://gamma.cs.unc.edu/ENVELOPES/ENVELOPES.pdf" target="_blank" rel="noopener">envelopes</a>。</p>
+<h3 id="Hoppe-渐进的网格简化技术"><a href="#Hoppe-渐进的网格简化技术" class="headerlink" title="Hoppe-渐进的网格简化技术"></a>Hoppe-渐进的网格简化技术</h3><p>由Hoppe提出。这个算法比较难以理解，定义了很多新的东西去讲解这个算法。在渐进网格算法中，任一网格$\hat M$可表示为一粗网格以及$n$个逐步细化网格$M^i(i=1,…,n)$的变换，且有$\hat M = M^n$。一张网格可以定义为一个二元组：$(K,V)$。其中$K$是一个单纯复形（simplicical complex），它表示了$M$的顶点，边和面的邻接关系。</p>
+<p>$V = {v_i \in R^3\vert i=1,…,m}$是$M$的顶点位置向量集，它定义了网格$M$在$R^3$中的形状。而单纯复形$K$由顶点集以及称之为单形的非空子集组成：</p>
+<p>0-单形$\{i\} \in K$，即为顶点，1-单形$\{i,j\} \in K$是一条边，2-单形$\{i,j,k\}\in K$为一个面。需要注意的是单纯复形$K$并不包含$V$的所有成员，只包含了构造网格$M$所需要的所有面，边和顶点的子集。为了在结构上刻画单纯复形，我们引进<strong>拓扑实现</strong>(topological realization)$\vert K\vert$的概念。</p>
+<p>若将顶点$\{i\}(i=1,2,…,m)$看成为$R^m$中的基向量$e_{i} = \{0,…,0,i,0,…,0\}$，则定义在$R^m$中的集合$\vert K \vert$为$K$的拓扑实现：</p>
+<script type="math/tex; mode=display">
+\vert K \vert = \bigcup_{s \ in K}\vert s\vert</script><p>其中$s$为$K$的一个单形，$\vert s \vert$为s在$R^m$空间中的顶点的凸包。</p>
+<p>我们记$\phi_v = \phi_{\vert K\vert}$，称为$\triangle v_1v_2v_3$在$R^3$中的<strong>几何实现</strong>（geometric realization）。若$\phi_v(\vert K\vert)$不自交，则$\phi_v$为1-1映射。此时，$\phi_v$为一嵌入映射，即对$\forall p \in \phi_v(\vert K \vert)$，存在唯一$m$维向量$b \in \vert K\vert$，使得$p = \phi_v(b)$。我们称$b$为$p$关于单纯复形的重心坐标向量。实际上，$b$可表示为：</p>
+<script type="math/tex; mode=display">
+b = \sum_{i=1}^mb_ie_i</script><p>容易知道，当$M$为一三角网格时，$\phi_v(\vert K\vert)$上任一点的重心坐标向量$b$中至多只有三个分量非零。</p>
+<p>有了上述定义，Hoppe采用<strong>显示能量函数</strong>$E(M)$来度量简化网格与原始网格的逼近度：</p>
+<script type="math/tex; mode=display">
+E(M) = E_{dist}(M) + E_{spring} (M) + E_{scalar}(M) + E_{disc}(M).</script><p>上式中，$E(M)$为$M$的距离度量，定义为点集$X = \{x_1,…,x_n\}$到网格$M$的距离平方：</p>
+<script type="math/tex; mode=display">
+E_{dist}(M) = \sum_{i=1}^n d^2(x_i,\phi_v(\vert K \vert))</script><p>$E_{spring}$为$M$的弹性能量，这相当于在$M$的每条边上均匀放置一条弹性系数为$k$的弹簧，即：</p>
+<script type="math/tex; mode=display">
+E_{spring} (M) = \sum_{(i,j) \in K}k\Vert v_i,v_j \Vert^2</script><p>$E_{scalar}(M)$度量M的标量属性的精度，而$E_{disc}(M)$则度量了$M$上视觉不连续的特征线（如边界线，侧影轮廓线等）的几何精度。</p>
+<p>Hoppe利用边收缩变换来逐步迭代计算上述能量的优化过程。下面是一个边收缩变换的例子：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/wlsdzyzl_hexo/mesh_s5.jpg" alt=""></p>
+<p>因此，初始网格$\hat M = M^n$可经过$n$组的边收缩变形后简化为$M^0$：</p>
+<script type="math/tex; mode=display">
+\hat M = M^n\rightarrow ... \rightarrow M^0</script><p>边收缩变换的逆变换被称为顶点分裂变换，也就是将顶点分裂成一条边。</p>
+<p>这个简化技术的过程我不是很清楚，而老师上课的时候说的也不清楚，很多符号之前并没有定义。我去查找了这篇文章，把链接放在这里，如果想要详细了解请戳：<a href="http://hhoppe.com/pm.pdf" target="_blank" rel="noopener">Progress Meshes</a></p>
+<h3 id="基于二次误差度量的简化技术"><a href="#基于二次误差度量的简化技术" class="headerlink" title="基于二次误差度量的简化技术"></a>基于二次误差度量的简化技术</h3><p>Hoppe的边收缩操作可推广为一般的顶点合并变换来描述$(v_1,v_2)\rightarrow v$。而Garland和Heckbert引进了二次误差度量来刻画每一个顶点移动后引起的误差，对表面上的每一个顶点$v_a$均有许多三角面片与之相邻，记$plane(v_a)$为这些三角形所在平面所构成的集合，即：</p>
+<script type="math/tex; mode=display">
+plane(v_a) = \left\{(a,b,c,d)\vert ax+by+cz+d = 0,(a^2 +b^2 +c^2 =1) \text{is the coefficients of the adjacent plane of v_a} \right\}</script><p>我们采用如下的二次函数来度量$v_a$移动$v$时产生的误差:</p>
+<script type="math/tex; mode=display">
+\Delta(v_a \rightarrow v) = \sum_{p \in plane(v_a)}(pv^T)^2</script><p>其中$v = (x,y,z,1)$为齐次坐标，展开上式可以得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\Delta(v_a \rightarrow v) &= \sum_{p \in plane(v_a)}(pv^T)^2\\
+v \left(\sum_{p \in plane(v_a) K_p}\right)v^T = vQ(v_a)v^T
+\end{aligned}</script><p>式中：</p>
+<script type="math/tex; mode=display">
+K_p = p^Tp \begin{bmatrix}
+a^2 & ab &ac & ad\\
+ab & b^2 &bc & bd\\
+ac & bc & c^2 & cd\\
+ad& bd & cd & d^2
+\end{bmatrix},\\
+Q(v_a) = \sum_{p \in plane(v_a)} K_p</script><p>这样，每一顶点$v_a$，在预处理时，可以用上述方法计算矩阵$Q(v_a)$，从而计算移动误差。而合并顶点每次需要移动两个顶点，因此需要考虑同时移动后形成的误差。而Garland和Heckbert简单地采用加法来刻画多点移动形成的误差，对于$(v_1,v_2) \rightarrow v$，其误差为：</p>
+<script type="math/tex; mode=display">
+\Delta (v) = \Delta (v_1 \rightarrow v) + \Delta (v_2 \rightarrow v) = v(Q(v_1) + Q(v_2))v^T = vQv^T。</script><p>因此应该选取$v$使得误差达到最小。一般想法是采取优化方法如梯度下降等等，但是在这个式子里，一般$v$的值是有解析解的，正如线性回归一样，我们可以得到唯一解，或者伪逆技术(pseudo-inverse)求出解。如果伪逆技术失败，简单选取$v$为$v_1,v_2$或者$\frac{v_1 + v_2}{2}$。</p>
+<p>二次误差度量简化算法的论文是：<a href="https://www.ri.cmu.edu/pub_files/pub2/garland_michael_1997_1/garland_michael_1997_1.pdf" target="_blank" rel="noopener">Surface Simplification Using Quadric Error Metrics</a>。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/computer-graphics/" rel="tag"># computer graphics</a>
+          
+            <a href="/tags/mesh/" rel="tag"># mesh</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/24/图形学——网格/" rel="next" title="图形学——网格">
+                <i class="fa fa-chevron-left"></i> 图形学——网格
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/27/图形学——纹理/" rel="prev" title="图形学——纹理">
+                图形学——纹理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基于长方体滤波的多面体简化"><span class="nav-number">1.</span> <span class="nav-text">基于长方体滤波的多面体简化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于相邻面片和边界的局部平坦性原则"><span class="nav-number">2.</span> <span class="nav-text">基于相邻面片和边界的局部平坦性原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#采用等距面来限定简化模型顶点的变化范围"><span class="nav-number">3.</span> <span class="nav-text">采用等距面来限定简化模型顶点的变化范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hoppe-渐进的网格简化技术"><span class="nav-number">4.</span> <span class="nav-text">Hoppe-渐进的网格简化技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于二次误差度量的简化技术"><span class="nav-number">5.</span> <span class="nav-text">基于二次误差度量的简化技术</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'UzkbpHfUYMuhaYHh5SkSGaFl-gzGzoHsz',
+        appKey: '03u0lWMV4JIHq7RpijUw3SaQ',
+        placeholder: 'Say something...',
+        avatar:'gg',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz",
+                'X-LC-Key': "Bbykl7fj9cXMbn8Q3NccAl0s",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

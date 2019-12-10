@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.5.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.5.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.5.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.5.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.5.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这次来介绍信道以及信道的容量。">
+<meta name="keywords" content="information theory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息论——信道及其容量（一）">
+<meta property="og:url" content="http://wlsdzyzl.com/2018/11/27/信息论——信道及其容量（一）/index.html">
+<meta property="og:site_name" content="wlsdzyzl">
+<meta property="og:description" content="这次来介绍信道以及信道的容量。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/7RSY%7B%29157M%7EC%7BH0%298%403KF9V.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/9LI8H%7DB%281P%5B_KI%409%5BRCI7%242.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int5.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int3.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int4.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0794.PNG">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int6.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0008it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0009it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0009it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0011it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it1.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it3.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it2.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0013it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it4.png">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0014it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0005it.jpg">
+<meta property="og:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0006it.jpg">
+<meta property="og:updated_time" content="2019-01-11T08:52:57.756Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="信息论——信道及其容量（一）">
+<meta name="twitter:description" content="这次来介绍信道以及信道的容量。">
+<meta name="twitter:image" content="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/7RSY%7B%29157M%7EC%7BH0%298%403KF9V.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://wlsdzyzl.com/2018/11/27/信息论——信道及其容量（一）/">
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>信息论——信道及其容量（一） | wlsdzyzl</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">wlsdzyzl</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">無聊時的自娛自樂</p>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-photos">
+    <a href="/photos/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-photo"></i> <br>相册</a>
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://wlsdzyzl.com/2018/11/27/信息论——信道及其容量（一）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wlsdzyzl">
+      <meta itemprop="description" content="Everything is choice.">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="wlsdzyzl">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">信息论——信道及其容量（一）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建于：2018-11-27 14:17:16" itemprop="dateCreated datePublished" datetime="2018-11-27T14:17:16+08:00">2018-11-27</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="更新于：2019-01-11 16:52:57" itemprop="dateModified" datetime="2019-01-11T16:52:57+08:00">2019-01-11</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/信息论/" itemprop="url" rel="index"><span itemprop="name">信息论</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/11/27/信息论——信道及其容量（一）/#comments" itemprop="discussionUrl">
+                  <span class="post-meta-item-text">Comments：</span> <span class="post-comments-count valine-comment-count" data-xid="/2018/11/27/信息论——信道及其容量（一）/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/11/27/信息论——信道及其容量（一）/" class="leancloud_visitors" data-flag-title="信息论——信道及其容量（一）">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Views：</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这次来介绍信道以及信道的容量。<br><a id="more"></a></p>
+<h2 id="信道容量的定义以及性质"><a href="#信道容量的定义以及性质" class="headerlink" title="信道容量的定义以及性质"></a>信道容量的定义以及性质</h2><h3 id="通信是什么"><a href="#通信是什么" class="headerlink" title="通信是什么?"></a>通信是什么?</h3><p>物理实体A的作用引发了物理实体B的状态变化，如果A与B的变化存在一致性，我们称AB通信成功。从信息角度来看，也就是比特流端到端的无差错复制。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/7RSY%7B%29157M%7EC%7BH0%298%403KF9V.png" alt=""></p>
+<h3 id="信道的分类"><a href="#信道的分类" class="headerlink" title="信道的分类"></a>信道的分类</h3><h4 id="按照输入输出的形式以及时间取值来划分"><a href="#按照输入输出的形式以及时间取值来划分" class="headerlink" title="按照输入输出的形式以及时间取值来划分"></a>按照输入输出的形式以及时间取值来划分</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">取值</th>
+<th style="text-align:center">时间</th>
+<th style="text-align:center">信道分类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">离散</td>
+<td style="text-align:center">离散</td>
+<td style="text-align:center">离散信道，数字信道</td>
+</tr>
+<tr>
+<td style="text-align:center">连续</td>
+<td style="text-align:center">离散</td>
+<td style="text-align:center">连续信道</td>
+</tr>
+<tr>
+<td style="text-align:center">连续</td>
+<td style="text-align:center">连续</td>
+<td style="text-align:center">模拟信道</td>
+</tr>
+<tr>
+<td style="text-align:center">离散</td>
+<td style="text-align:center">连续</td>
+<td style="text-align:center">——</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="按照信道随机过程的特点分类"><a href="#按照信道随机过程的特点分类" class="headerlink" title="按照信道随机过程的特点分类"></a>按照信道随机过程的特点分类</h4><p>离散信道可以表示为n阶转移概率矩阵</p>
+<script type="math/tex; mode=display">
+Q_{t_1t_2...t_n} = \left \{ q(y_{t_1t_2...t_n} | x_{t_1t_2...t_n}) \right\}</script><ul>
+<li>无记忆信道<script type="math/tex; mode=display">
+q(y_{t_1t_2...t_n} | x_{t_1t_2...t_n}) = \prod_{i=1}^nq(y_i|x_i)</script></li>
+</ul>
+<p>无记忆信道不代表输出的符号不相关，这个和输入有关。</p>
+<ul>
+<li>平稳信道：<script type="math/tex; mode=display">
+q(y_i|x_i) = q(y|x)</script></li>
+</ul>
+<h3 id="DMC-Discrete-Memoryless-Channel"><a href="#DMC-Discrete-Memoryless-Channel" class="headerlink" title="DMC(Discrete Memoryless Channel)"></a>DMC(Discrete Memoryless Channel)</h3><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/9LI8H%7DB%281P%5B_KI%409%5BRCI7%242.png" alt=""></p>
+<p>我们知道：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+I(X^n;Y^n) = H(Y^n) - H(Y^n|X^n)
+\end{align}</script><p>接下来分析$ H(Y^n),H(Y^n|X^n)$:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+H(Y^n)&= H(Y_1) +H(Y_2|Y_1) +...+ H(Y_n|Y_1...Y_{n-1})\\
+&\leq \sum_{i=1}^n H(Y_i)
+\end{aligned}</script><script type="math/tex; mode=display">
+\begin{aligned}
+H(Y^n|X^n)&= -\mathbb{E}_{XY}\log q(y^n|x^n) \\
+&= -\mathbb{E}_{XY}\log \prod_{i=1}^nq(y_1|x_1)\\
+&= - \mathbb{E}_{XY}\sum_{i=1}^n\log q(y_i|x_i)\\
+&= -\sum_{i=1}^n \mathbb{E}_{XY}\log q(y_i|x_i)\\
+&= \sum_{i=1}^n H(Y_i|X_i)
+\end{aligned}</script><p>将结果带入(1)，我们可以得到：</p>
+<script type="math/tex; mode=display">
+I(X^n;Y^n) \leq \sum_{i=1}^nI(X_i;Y_i)</script><p>这让我们想到，对一个序列的输入输出互信息，我们可以试图通过处理单个时刻的输入，然后让等号取得，也就得到序列输入输出互信息的最大值。</p>
+<p>为了让上面的等号取得，实际是比较简单，也就是当$Y_i$之间互相独立。下面我们来研究如何让单字母互信息得到最大值。</p>
+<h3 id="信道容量定义"><a href="#信道容量定义" class="headerlink" title="信道容量定义"></a>信道容量定义</h3><p>对于离散无记忆信道，信道容量为：</p>
+<script type="math/tex; mode=display">
+C = \max_{p(x)}I(X;Y) = \max_{p(x)}I(p,Q)</script><p>当一个信道确定时，$Q$也就确定了，因此我们要做的就是调整输入字母的分布，让这个信道输入输出互信息得到最大，也就得到了信道的容量。之前介绍互信息的时候介绍了$I(p;Q)$这种形式，就是为了方便信道的解释。</p>
+<h2 id="离散无记忆信道的容量"><a href="#离散无记忆信道的容量" class="headerlink" title="离散无记忆信道的容量"></a>离散无记忆信道的容量</h2><p>现在来看一看最简单的信道：离散无记忆信道的容量应如何计算。这一小节主要通过举几个例子，然后再得到普遍的结论。</p>
+<h4 id="无噪声二元信道"><a href="#无噪声二元信道" class="headerlink" title="无噪声二元信道"></a>无噪声二元信道</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int1.png" alt=""></p>
+<p>输入X，输出Y。由于传输误差错，所以每次传输都传递了1 bit的无差错信息。所以直观来说信道容量为1 bit.</p>
+<p>利用信道容量的定义来计算，则：</p>
+<script type="math/tex; mode=display">
+C=\max I(X;Y) = \max(H(X) - H(X|Y)) = \max H(X) = 1\\
+p(X) = (0.5,0.5)</script><p>如果字符个数变成m个，则这个信道容量变为：$\log m$.</p>
+<h4 id="输出不重叠的噪声信道"><a href="#输出不重叠的噪声信道" class="headerlink" title="输出不重叠的噪声信道"></a>输出不重叠的噪声信道</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int2.png" alt=""></p>
+<p>观察上图，我们发现这个信道有下面几个特点：</p>
+<ol>
+<li>信道存在噪声，输出不确定</li>
+<li>但是不确定性不影响正确估计输入</li>
+<li>信道实际是无差错的</li>
+<li>X到Y是一对多映射<script type="math/tex; mode=display">
+C = \max I(X;Y) = \max(H(X)-H(X|Y)) = \max(H(X))=1\\
+p(X) = (0.5,0.5)</script></li>
+</ol>
+<p>因此可以看到即时有噪声，我们依然可以得到无差错的信道传输。</p>
+<h4 id="混乱打字机"><a href="#混乱打字机" class="headerlink" title="混乱打字机"></a>混乱打字机</h4><p>混乱打字机把每个字母以0.5的概率映射为其自身或者下一个字母。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int5.png" alt=""></p>
+<p>则：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+C &= \max I(X;Y)\\
+&= \max(H(Y) - H(Y|X))\\
+&= \max(H(Y)-1)\\
+&= \log 26 - 1 = \log 13
+\end{aligned}</script><p>我们只是在互信息求得这个，但是我们不一定能找到一个实际的概率控制得到这个容量。而实际上，这个容量是可以达到的。</p>
+<p>我们要求输入端只能输入$A,C,E…$这些字母，它们均匀分布，而其他字符出现的概率为0，从而混乱打字机信道退化成了一个输出不重叠噪声信道，这称为无重叠约化。通过这个方法，我们实现了$\log13$的容量。实际上香农告诉我们，任何一种混乱的信道，都可以看作是混乱打字机信道。</p>
+<h4 id="BSC-Binary-Symmetric-Channel"><a href="#BSC-Binary-Symmetric-Channel" class="headerlink" title="BSC(Binary Symmetric Channel)"></a>BSC(Binary Symmetric Channel)</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int3.png" alt=""></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+C &= \max_{p(x)} I(X;Y)\\
+&=\max( H(Y) - H(Y|X))\\
+&=\max(H(Y) - H(p))\\
+&=1-H(p)
+\end{aligned}</script><p>我们必须证明这个容量可以取到,也就是一个上确界，这样得到信道的容量才有意义。为了让$H(Y)$最大，那么$p(Y)=(0.5,0.5)$,可以简单的发现这时候$p(X) = (0.5,0.5)$.也就是我们可以通过调制信源的输入概率分布得到这个最大的容量 因此$C_{BSC} = 1 - H(p)$</p>
+<h4 id="EC-删除信道"><a href="#EC-删除信道" class="headerlink" title="EC(删除信道)"></a>EC(删除信道)</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int4.png" alt=""></p>
+<script type="math/tex; mode=display">
+C = \max_{p(x)}I(X;Y)</script><script type="math/tex; mode=display">
+\begin{aligned}
+I(X;Y) &= H(Y) - H(Y|X)\\
+&=H(Y) - H(p)\\
+&\leq \log 3 - H(p)
+\end{aligned}</script><p>这时候我们就遇到问题了，我们不能通过调制信源的输入概率分布使得$p(Y)=(\frac{1}{3},\frac{1}{3},\frac 1 3)$，因此上面得到的不是信道容量。因此重新计算这个容量,假设$p(X) = (\pi,1-\pi)$：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+I(X;Y) &= H(Y) - H(p)\\
+&= H((\pi(1-p),p,(1-\pi)(1-p))) - H(p)\\
+&= (1-p)H(\pi) + H(p) - H(p)\\
+&= (1-p)H(\pi)
+\end{aligned}</script><p>上式中用到了熵的可加性。这时候我们可以取到$H(\pi)=1$，因此得到$C = 1-p$.</p>
+<h3 id="离散无记忆对称信道容量"><a href="#离散无记忆对称信道容量" class="headerlink" title="离散无记忆对称信道容量"></a>离散无记忆对称信道容量</h3><p>实际上，上面的几个信道有很多都属于离散无记忆对称信道。他们的特点是概率转移矩阵$Q$为对称矩阵，使得$H(Y|X)$可以由信道性质确定，大大简化了我们要思考的问题。</p>
+<p>离散无记忆对称信道的定义：<br>若信道的概率转移矩阵的行互为置换，列互为置换，则该信道对称，如果行互为置换，各列之和相等，则该信道弱对称。</p>
+<p>强对称：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+\frac 1 2&\frac 1 3& \frac 1 6\\
+\frac 1 6&\frac 1 2&\frac 1 3\\
+\frac 1 3&\frac 1 6&\frac 1 2
+\end{bmatrix}</script><p>弱对称：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+\frac 1 3 & \frac 1 6 &\frac 1 2\\
+\frac 1 3 & \frac 1 2 & \frac 1 6
+\end{bmatrix}</script><p>不管是强对称还是弱对称，他们都有一个好处，那就是$H(Y|X)$不会随着信源的概率分布而改变，是一个常数。</p>
+<p>弱对称信道Q的容量为：$C=\log \vert Y\vert - H(Q的行向量对应的分布)$,容量在输入为等概分布时候取得。</p>
+<p>而EC不是一个对称信道：</p>
+<script type="math/tex; mode=display">
+Q = \begin{bmatrix}
+1-p & p & 0\\
+0 & p & 1-p 
+\end{bmatrix}</script><h3 id="一般离散无记忆信道的容量"><a href="#一般离散无记忆信道的容量" class="headerlink" title="一般离散无记忆信道的容量"></a>一般离散无记忆信道的容量</h3><p>由于$I(p,Q)$是$p$的上凸函数，因此求信道容量实际上可以表述为一个约束的极值问题：</p>
+<script type="math/tex; mode=display">
+\max _{p} I(p,Q)\\
+s.t. \sum_{x}p(x)=1;p(x)\ge 0</script><h4 id="kkt-condition"><a href="#kkt-condition" class="headerlink" title="kkt condition"></a>kkt condition</h4><p>设$f(x)$为定义在Ｎ维无穷凸集$S$,<br>$S=\{x = (x_1,x_2,…,x_N):x_i \ge 0,i=1,…,N\}$上的可微上凸函数，设$x^* = {x_1^*,…,x_N^*} \in S$，则$f(x)$在$x = x^*$达到$S$上的极大值的充要条件为：</p>
+<script type="math/tex; mode=display">
+\frac{\partial f(x)}{\partial x_n}\lvert_{x = x^*} = 0,x_n^* > 0\\
+\frac{\partial f(x)}{\partial x_n}\lvert_{x = x^*} \leq 0,
+x_n^* = 0</script><p>我们称$x^*(x^*=(x_1^*,…,x_N^*),x_n^* &gt; 0)$为$S$的内点，而$\exists x_n^* = 0$时，$x^*$为$S$的边界点。</p>
+<p>用图像来看的话会更容易理解：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0794.PNG" alt=""></p>
+<p>上图为：</p>
+<script type="math/tex; mode=display">\min f(x,y)=ax^2-b\log y,0< x <100,0< y <100</script><p>实际上的kkt条件比这个更严谨，可以参考：<a href="https://wlsdzyzl.top/2018/12/07/数学%E2%80%94%E2%80%94KKT-condition/" target="_blank" rel="noopener">kkt condition</a></p>
+<p>由于它是一个凸函数下的充要条件，因此只要我们找到了一个点符合KKT条件，我们就可以称他为全局极值。</p>
+<p>由KKT条件可以得到下面的关于信道容量的定理：</p>
+<p>对于信道矩阵为$Q$的离散无记忆信道，其输入分布$p^*$能使互信息$I(p,Q)$取得最大值的充要条件是：</p>
+<script type="math/tex; mode=display">
+I(X=x_k;Y) = C,p^*(x_k) > 0\\
+I(X=x_k;Y) \leq C,p^*(x_k)=0\\
+k \in {1,2,...,K}</script><p>其中$I(X=x_k;Y) = \sum_{j=1}^J q(y_j|x_k) \log \frac{q(y_j|x_k)}{p(y_j)}$,表示的是信源字母$x_k$传送的平均互信息。</p>
+<p>当然我们拿到一个信道以后，不一定一定要通过这样的方法来求得信道容量，很多时候我们可以联系物理猜到最好的哪个情况。如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/int6.png" alt=""></p>
+<p>我们可以很容易看出来1是最差的情况，因为它可能映射到三种结果，而0,２一样好，因此我们猜测：$p(x_1) = 0,p(x_2)=p(x_0)=0.5$，计算得到：</p>
+<script type="math/tex; mode=display">
+I(X=x_0;Y) = I(X=x_2;Y)=0.75, I(X=x_1;Y) = 0.0251<0.75</script><p>符合kkt条件，因此它的容量就是0.75.</p>
+<h2 id="信道的组合"><a href="#信道的组合" class="headerlink" title="信道的组合"></a>信道的组合</h2><p>现在我们尝试将信道组合起来。</p>
+<h3 id="级联的独立信道"><a href="#级联的独立信道" class="headerlink" title="级联的独立信道"></a>级联的独立信道</h3><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0008it.jpg" alt=""></p>
+<p>如上图，我们可以得到：</p>
+<ul>
+<li>由数据处理定理可以得到：$I(Y;Z) \ge I(X;Z)$</li>
+<li>随着串联信道数目的增多，整个信道容量趋近于0</li>
+<li>将级联信道的$Q_i$乘起来，得到整个级联信道的Q，可求解级联信道的容量</li>
+<li>Vision：从统计的角度来看，数据处理不会带来信息增益，反而会损失信息<h3 id="输入并联信道"><a href="#输入并联信道" class="headerlink" title="输入并联信道"></a>输入并联信道</h3></li>
+</ul>
+<p>这个信道的特点是，输入相同的X，输出不同的$Y_1,Y_2,…,$构成随机矢量Y。也就是我们将输入X同时送到N个信道中，如图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0009it.jpg" alt=""></p>
+<ul>
+<li>输入并联信道的容量大于任何一个单独的信道，小于$\max H(X)$.</li>
+<li>N个二元对称信道输入并联之后的信道容量，一般来说$N$越大，$C_N$越大，越接近于$H(X)$。</li>
+<li>Vision:通信中的分集，就是典型的输入并联信道（我并不懂通信）</li>
+</ul>
+<h3 id="并用信道"><a href="#并用信道" class="headerlink" title="并用信道"></a>并用信道</h3><p>并用信道的图和并联信道非常像，不过它的输入不是相同的$X$了，而是将$X$费解成了$X_1,X_2,…,X_N$。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0009it.jpg" alt=""></p>
+<ul>
+<li>多输入，多输出。$X$和$Y$是由比侧独立的N个信道传输</li>
+<li>并用信道的容量：$C = \sum_{n=1}^N C_n$</li>
+<li>Vision:通信中的复用，就是典型的并用信道</li>
+</ul>
+<p>虽然并用信道的容量结论很简单，但是在实际中的操作没那么容易。我们不能简单的将信源随意划分，而是让这个划分符合各个信道容量的噪声特性，以达到最好的传输效果。</p>
+<h3 id="和信道"><a href="#和信道" class="headerlink" title="和信道"></a>和信道</h3><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0011it.jpg" alt=""></p>
+<p>和信道和并联信道并用信道不同的是，虽然它有多个信道，但是它并不是同时使用多个，而是每次只使用一个。</p>
+<ul>
+<li>随机应用$N$个信道中的一个，构成一个输入输出信道。</li>
+<li>和信道的容量：$C = \log \sum_{n=1}^N 2^{C_n}$，信道的使用概率$p_n(C) = 2^{C_n - C}$</li>
+<li>Vision: 新型通信技术——机会通信<br>要注意这个结论有点反直觉。我们可能会想，如果某个信道的容量大，一直使用它不就行了吗？但是这样并不会得到最大的信道容量。</li>
+</ul>
+<p>举个例子，如果一个信道的转移矩阵为$Q$:</p>
+<script type="math/tex; mode=display">
+Q = \begin{bmatrix}
+1 - \epsilon_1&\epsilon_1&0&0\\
+\epsilon_1&1 - \epsilon_1 & 0 & 0 \\
+0&0&\epsilon_2 &1 - \epsilon_2\\
+0&0&1-\epsilon_2&\epsilon_2
+\end{bmatrix}</script><p>那么这个信道的容量为多大？</p>
+<p>如果仔细观察，可以发现这个信道实际上是一个和信道。</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it1.png" alt=""></p>
+<script type="math/tex; mode=display">
+C = \log(2^{C_1} + 2^{C_2})</script><p>如果：<br>$\epsilon_1 = 0,C_1 = 1;\epsilon_2 = 0,C_2 = 0$;</p>
+<p>可以发现，这两个信道一个容量为0,另一个为1,而它们的和信道容量为$\log3&gt;1$。这是因为在选择使用哪个信道的时候，也包含了一定的信息。</p>
+<h2 id="连续信道的容量"><a href="#连续信道的容量" class="headerlink" title="连续信道的容量"></a>连续信道的容量</h2><p><strong>连续信道</strong>时间依旧离散，取值是连续的。这就引发了一个问题：连续随机变量互信息非负但是不一定有限，如果输入输出相等，则此时互信息是无穷的。<br>这样，互信息最大值为信道容量的定义就失去了意义。</p>
+<h3 id="容量费用函数"><a href="#容量费用函数" class="headerlink" title="容量费用函数"></a>容量费用函数</h3><p>首先说明一下，连续信道输入连续，输出连续，而信道特性不能再用一个概率转移矩阵来表示，而是一个概率密度函数。所以我们用三元组$\{X,q(y|x),Y\}$来表示一个连续信道。</p>
+<p><strong>费用函数</strong>: 设对于连续无记忆信道$\{X,q(y|x),Y\}$，有一个函数$b(.)$，对于每一个输入序列$X = x_1x_2…x_n$，$b(x)&gt;0$。称$b$为$X$的费用。设随机矢量$X = X_1X_2…X_n$的联合分布为$p(x)$，则平均费用为：</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[b(X)] \triangleq \sum_{x}p(x)b(x)</script><p>在费用约束的前提下，求输入输出互信息的最大值，得到<strong>容量费用函数</strong>：<br>设连续信道的$N$维联合输入输出分别为$X,Y$，则其容量－费用函数定义为：</p>
+<script type="math/tex; mode=display">
+C(\beta) = \lim_{N\rightarrow \infty} \frac{1}{N} \max_{p(x)}\{I(X;Y):\mathbb{E}[b(X)]\leq N \beta \}</script><h3 id="连续无记忆加性噪声信道的容量"><a href="#连续无记忆加性噪声信道的容量" class="headerlink" title="连续无记忆加性噪声信道的容量"></a>连续无记忆加性噪声信道的容量</h3><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it3.png" alt=""></p>
+<p>这里我们来看一个最简单的连续信道的容量费用函数。这个信道为加性噪声信道。也就输入$X$加上某个$Z$得到$Y$。</p>
+<p>在这种情况下：<script type="math/tex">q(y|x) = P_Z(y-x) = P_Z(z).</script></p>
+<p>我们希望求得的是：</p>
+<script type="math/tex; mode=display">
+C(P_S) = \max_{p(x):\mathbb{E}_X[X^2] \leq P_S} I(X;Y) = \max_{p(x):\mathbb{E}_X[X^2] \leq P_S} [h(Y) - h(Z)].</script><p>（这里的$\mathbb{E}_X[X^2]$实际上是物理意义上均值为0的X的功率，因此这个约束是功率的约束）<br>之所以能得到上面的结论，因为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+h(Y|X) &= -\iint_{XY}P_X(x)q(y|x) \log q(y|x) dxdy\\
+&=-\iint_{XZ}P_X(x)P_Z(z) \log P_Z(z) dxdz\\
+&= -\int_z P(z) \log P(z)dz \\
+&= h(Z)
+\end{aligned}</script><p>因此在这个情况下：$h(Y|X) = h(Z)$</p>
+<h4 id="高斯噪声"><a href="#高斯噪声" class="headerlink" title="高斯噪声"></a>高斯噪声</h4><p>现在我们假设这个噪声为高斯噪声。</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it2.png" alt=""></p>
+<p>则：</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[Y^2] = \mathbb{E}[(X+Z)^2] = \mathbb{E}[X^2]+\mathbb{E}[Z^2] = P_S+P_Z</script><p>如果回顾<a href="https://wlsdzyzl.top/2018/11/01/%E4%BF%A1%E6%81%AF%E8%AE%BA%E2%80%94%E2%80%94%E8%BF%9E%E7%BB%AD%E9%9A%8F%E6%9C%BA%E5%8F%98%E9%87%8F%E7%9A%84%E7%86%B5%E5%92%8C%E4%BA%92%E4%BF%A1%E6%81%AF/" target="_blank" rel="noopener">连续随机变量的熵和互信息</a>，我们可以得到：</p>
+<script type="math/tex; mode=display">
+\max_{p(x):\mathbb{E}[x^2]\leq P_S}h(Y) = \frac 1 2 \log 2\pi e(P_S+P_Z)</script><p>而$h(Z) = \frac 1 2 \log 2 \pi e P_Z$<br>而这时候，我们可以得到：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+C(P_S) &= \max(h(Y) - h(Z)) = \frac 1 2 \log \frac{P_S+P_Z}{P_Z} \\
+&=\frac 1 2 \log(1+\frac{P_S}{P_Z})
+\end{aligned}</script><p>上式中，$\frac{P_S}{P_Z}$也就是常说的信噪比。可以看到，如果想要增加容量，我们可以想方设法提高信源功率，或者减少噪声。这是一个非常重要的公式，拓展到模拟信道的情况上，我们就可以得到著名的香农公式。</p>
+<p>实际上，对于高斯分布的输入，高斯噪声具有最大的破坏力。即，在同样的功率约束条件下，加性高斯噪声使得信道的容量最小。</p>
+<p>对于无记忆加性噪声信道，若输入信号$X$具有高斯分布，加性噪声的功率为$P_N$，则当噪声具有高斯分布的时候，输入输出的互信息达到最小。</p>
+<p>这一点并不难理解，因为噪声带来的影响在最终是要被去除的，而高斯情况下熵最大，去除的越多，留下的越少，所以使得信道容量最小。</p>
+<h4 id="一般的无记忆加性噪声信道容量"><a href="#一般的无记忆加性噪声信道容量" class="headerlink" title="一般的无记忆加性噪声信道容量"></a>一般的无记忆加性噪声信道容量</h4><p>现在我们来看看一般的无记忆加性噪声的信道容量。</p>
+<p>首先，我们必须明确，如果噪声是任意分布的，我们无法获得信道容量的解析解，但是我们可以给出其上界和下界。</p>
+<ul>
+<li>下界：<script type="math/tex; mode=display">
+\begin{aligned}
+C(P_S) &= \max_{P(X)} \{I(X;Y):\mathbb{E}[X^2] = P_S\}\\
+&\ge I(X_G;Y)\ge I(X_G;Y_G) = \frac 1 2 \log(1 + \frac{P_S}{P_Z})
+\end{aligned}</script></li>
+</ul>
+<p>因为上面我们已经得到了。高斯噪声的破坏力是最大的。</p>
+<ul>
+<li>上界：<script type="math/tex; mode=display">
+\mathbb{E}[Z^2] = P_N,\mathbb{E}[X^2] = P_S,\mathbb{E}[Y^2] = P_S+P_N\\
+h(Y)\leq \frac{1}{2}\log [2\pi e (P_s +P_N)]\\
+C(P_S) \leq h(Y) - h(Z) = \frac 1 2 \log[2\pi e \frac{P_S+P_N}{P_e}]\\</script>上式中：<script type="math/tex; mode=display">
+P_e \triangleq \frac 1 {2\pi e} \exp[2h(Z)]</script></li>
+</ul>
+<p>说实话，我并不知道这个定义是从何而来。而且$P_e$中还包含着$h(Z)$，又怎么能说是个上界呢？</p>
+<h3 id="并联连续高斯信道"><a href="#并联连续高斯信道" class="headerlink" title="并联连续高斯信道"></a>并联连续高斯信道</h3><p>输入$X_n,P_{S_n}$，信道噪声$Z_n,P_{N_n}$.</p>
+<p>在总功率限定的情况下，求信道容量-费用函数：</p>
+<script type="math/tex; mode=display">
+C(P_S) = \sup_{P(X)}\{I(X;Y):\sum_{n=1}^N P_{S_n} = P_S\}</script><p>（这里的sup指的是Supremum，上确界）。</p>
+<p>现在我们面临一个优化问题：</p>
+<script type="math/tex; mode=display">
+\max I(X^n;Y^n) = \sum_i \frac{1}{2} \log (1+\frac{P_{S_i}}{P_{N_i}})</script><p>s.t. $\sum_{i=1}^n P_{S_i} = P_S,P_{S_i} \ge 0$</p>
+<p>这个优化问题解决如下：</p>
+<script type="math/tex; mode=display">
+\frac{\partial }{\partial P_{S_i}} \left[\sum_{i=1}^n \frac{1}{2} \log(1+\frac{P_{S_i}}{P_{N_i}})  - \lambda (\sum_{i=1}^n P_{S_i} - P_S)\right] = 0\\
+\frac{1}{2} \frac{P_{N_i}}{P_{S_i}+P_{N_i}} \frac{1}{P_{N_i}} - \lambda = 0, \text{for }1 \leq i \leq n\\
+P_{S_i} + P_{N_i} = \frac{1}{2\lambda_i}, \lambda = \frac{n}{2(P_S+P_N)}\\
+P_{S_i} = \frac{P_S+P_N}{n} - P_{N_i},</script><p>要注意，这里我们将信道个数总数写成了$n$，而$P_N$表示的是噪声功率。</p>
+<p>有时候，我们发现，求得的$P_{S_i}$，也就是给该信道分配的功率是小于0的，这时候应该怎么办？</p>
+<h4 id="注水功率"><a href="#注水功率" class="headerlink" title="注水功率"></a>注水功率</h4><p>下面介绍一个很形象的概念，叫注水功率。如下图：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0013it.jpg" alt=""><br>可以看到的是，有的时候水是无法覆盖住某些地方的。这说明的是这个信道的噪声太大了，所以我们应该将其弃用。然后再重新计算这个功率的分配，直到没有负值。</p>
+<h2 id="模拟信道容量"><a href="#模拟信道容量" class="headerlink" title="模拟信道容量"></a>模拟信道容量</h2><p><strong>模拟信道</strong>在时间和取值上都是连续的信道。是自然界最自然的一种信道，如电磁波，光纤，电缆等传播。</p>
+<p>然而实际中模拟信道在数学上的研究是难以进行的。我们只研究最简单的一类模拟信道：AWGN信道。</p>
+<h3 id="AWGN信道"><a href="#AWGN信道" class="headerlink" title="AWGN信道"></a>AWGN信道</h3><p>AWGN（Additive White Gaussian Noise）信道有下面几个特点：</p>
+<ul>
+<li>带宽有限：$W$</li>
+<li>加性噪声：$y(t) = x(t) + z(t)$</li>
+<li>白色噪声：平稳遍历随机过程，功率谱密度均匀分布于整个频域，即功率谱密度（单位带宽噪声功率）为一常数</li>
+<li>高斯噪声：平稳遍历随机过程，瞬时值的概率密度函数服从高斯分布</li>
+</ul>
+<p>这个信道描述如下：</p>
+<p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/it4.png" alt=""></p>
+<p>输入信号：$x(t)$</p>
+<ul>
+<li>带宽有限：输入信号带宽限制在$[-W,W]内$</li>
+<li>时间有限：T</li>
+</ul>
+<p>输出信号：$y(t)$</p>
+<p>噪声信号：$z(t)$</p>
+<ul>
+<li>加性白色高斯噪声</li>
+<li>零均值</li>
+<li>双边功率谱密度：$N(f) = \left \{ \begin{matrix}<br>\frac{N_0}{2} &amp; \vert f\vert \leq W\\<br>0&amp;\vert f\vert &gt; W<br>\end{matrix}<br>\right .<br>$</li>
+</ul>
+<p>信道费用：输入信号的功率</p>
+<h4 id="信号的正交分解"><a href="#信号的正交分解" class="headerlink" title="信号的正交分解"></a>信号的正交分解</h4><ul>
+<li>由于信道频带受限，信号时长受限，所以仅需要$N = 2WT$个采样点就可以表示</li>
+<li>因此信道在时间上可以被离散化为$2WT$个点，在每个点上取值连续</li>
+<li>这样变成了并联的连续信道<br>实际上，上面的采样就是著名的<strong>奈奎斯特</strong>采样。</li>
+</ul>
+<p>之前我们说明了并联的连续信道的容量求法，但是前提是各个信道是独立的。现在我们必须要明白，经过采样的这$N = 2WT$个信道是否互相独立？</p>
+<p>答案是独立的。为了验证他们的独立性，我们只需要验证它们不相关即可，因为在高斯分布下，不相关就意味着独立。证明如下：<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0014it.jpg" alt=""><br>(额，这里也不是很懂。对于信号处理和通信方面的知识已经忘的差不多了)</p>
+<p>对于$N$个信道，两两独立，每个噪声功率为$\frac{N_0}{2}$.</p>
+<p>所以利用时域上采样定理将信号变成离散序列后，模拟信道可看成加性白色高斯噪声无记忆连续信道，相当于$N$个高斯加性信道的并联信道。这时候我们可以用注水功率来分配这个功率。</p>
+<p>并联信道总容量费用函数$C_T(P_S) = \frac{1}{2} \sum_{n=1}^{2WT} \log (1+ \frac{P_{S_n}}{P_{N_n}})$</p>
+<p>噪声约束：$P_{N_n} = \frac{N_0}{2} \rightarrow P_N = NP_{N_n} = 2WT\frac{N_0}{2} = WTN_0$</p>
+<p>功率约束：（类似于注水功率分配）</p>
+<script type="math/tex; mode=display">
+P_{S_n} = \frac{P_ST+P_N}{N} - P_{N_n} = \frac{P_ST+2WT\frac{N_0}{2}}{2WT}-\frac{N_0}{2} = \frac{P_S}{2W}</script><p>这时候，我们就得到了香农公式，AWGN信道的容量为：</p>
+<script type="math/tex; mode=display">
+C = W \log (1+\frac{P_S}{N_0W})</script><p>上式中，各个量的单位为$C-bps,W-Hz$或者$s^{-1}$,$P_S-Watt,N_0-Watt/Hz$</p>
+<h4 id="Vision-提升容量的各种手段"><a href="#Vision-提升容量的各种手段" class="headerlink" title="Vision:提升容量的各种手段"></a>Vision:提升容量的各种手段</h4><ul>
+<li><p>增加带宽</p>
+<script type="math/tex; mode=display">
+\lim_{W\rightarrow \infty}C(P_S) = \lim_{W\rightarrow \infty} \frac{P_S}{N_0}\log\left(1+\frac{P_S}{N_0W}\right)^{\frac{N_0W}{P_S}} = \frac{P_S}{N_0} \log e \approx 1.44\frac{P_S}{N_0}</script></li>
+<li><p>增加带宽</p>
+<script type="math/tex; mode=display">
+\lim_{P_S \rightarrow \infty} C(P_S) \approx \ln\left(\frac{P_S}{N_0W} \right)</script></li>
+</ul>
+<p>因此，对于同样容量的传输要求，可以采用两种方式：减少带宽，发送较大功率的信号，或者增加带宽，用较小功率的信号传输。</p>
+<p>可以看到的是，我们可以不断增加带宽来增加信道容量，不过这个性价比会越来越低，因为这是一个log函数。</p>
+<h4 id="Vision-信息与热力学的联系"><a href="#Vision-信息与热力学的联系" class="headerlink" title="Vision:信息与热力学的联系"></a>Vision:信息与热力学的联系</h4><p><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0005it.jpg" alt=""></p>
+<p>这里有一个有意思的信息论角度对阿波罗登月的证伪，大家图一个乐，里面有很多假设和实际不符。<br><img src="https://evolution-video.oss-cn-beijing.aliyuncs.com/images/IMG_0006it.jpg" alt=""></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/information-theory/" rel="tag"># information theory</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/27/Learning-From-Data——Info-between-X-and-Y-SVD/" rel="next" title="Learning From Data——Info between X and Y/SVD">
+                <i class="fa fa-chevron-left"></i> Learning From Data——Info between X and Y/SVD
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/28/数学——EVD与SVD/" rel="prev" title="数学——EVD与SVD">
+                数学——EVD与SVD <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.png" alt="wlsdzyzl">
+            
+              <p class="site-author-name" itemprop="name">wlsdzyzl</p>
+              <p class="site-description motion-element" itemprop="description">Everything is choice.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">134</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">15</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/MyEvolution" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:wlsdzyzl@gmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/3786707393" target="_blank" title="Weibo"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://instagram.com/wlsdzyzl" target="_blank" title="Instagram"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#信道容量的定义以及性质"><span class="nav-number">1.</span> <span class="nav-text">信道容量的定义以及性质</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通信是什么"><span class="nav-number">1.1.</span> <span class="nav-text">通信是什么?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信道的分类"><span class="nav-number">1.2.</span> <span class="nav-text">信道的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#按照输入输出的形式以及时间取值来划分"><span class="nav-number">1.2.1.</span> <span class="nav-text">按照输入输出的形式以及时间取值来划分</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#按照信道随机过程的特点分类"><span class="nav-number">1.2.2.</span> <span class="nav-text">按照信道随机过程的特点分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DMC-Discrete-Memoryless-Channel"><span class="nav-number">1.3.</span> <span class="nav-text">DMC(Discrete Memoryless Channel)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信道容量定义"><span class="nav-number">1.4.</span> <span class="nav-text">信道容量定义</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#离散无记忆信道的容量"><span class="nav-number">2.</span> <span class="nav-text">离散无记忆信道的容量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#无噪声二元信道"><span class="nav-number">2.0.1.</span> <span class="nav-text">无噪声二元信道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出不重叠的噪声信道"><span class="nav-number">2.0.2.</span> <span class="nav-text">输出不重叠的噪声信道</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#混乱打字机"><span class="nav-number">2.0.3.</span> <span class="nav-text">混乱打字机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BSC-Binary-Symmetric-Channel"><span class="nav-number">2.0.4.</span> <span class="nav-text">BSC(Binary Symmetric Channel)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EC-删除信道"><span class="nav-number">2.0.5.</span> <span class="nav-text">EC(删除信道)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#离散无记忆对称信道容量"><span class="nav-number">2.1.</span> <span class="nav-text">离散无记忆对称信道容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一般离散无记忆信道的容量"><span class="nav-number">2.2.</span> <span class="nav-text">一般离散无记忆信道的容量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#kkt-condition"><span class="nav-number">2.2.1.</span> <span class="nav-text">kkt condition</span></a></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#信道的组合"><span class="nav-number">3.</span> <span class="nav-text">信道的组合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#级联的独立信道"><span class="nav-number">3.1.</span> <span class="nav-text">级联的独立信道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入并联信道"><span class="nav-number">3.2.</span> <span class="nav-text">输入并联信道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并用信道"><span class="nav-number">3.3.</span> <span class="nav-text">并用信道</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#和信道"><span class="nav-number">3.4.</span> <span class="nav-text">和信道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连续信道的容量"><span class="nav-number">4.</span> <span class="nav-text">连续信道的容量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#容量费用函数"><span class="nav-number">4.1.</span> <span class="nav-text">容量费用函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续无记忆加性噪声信道的容量"><span class="nav-number">4.2.</span> <span class="nav-text">连续无记忆加性噪声信道的容量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#高斯噪声"><span class="nav-number">4.2.1.</span> <span class="nav-text">高斯噪声</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一般的无记忆加性噪声信道容量"><span class="nav-number">4.2.2.</span> <span class="nav-text">一般的无记忆加性噪声信道容量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#并联连续高斯信道"><span class="nav-number">4.3.</span> <span class="nav-text">并联连续高斯信道</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注水功率"><span class="nav-number">4.3.1.</span> <span class="nav-text">注水功率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模拟信道容量"><span class="nav-number">5.</span> <span class="nav-text">模拟信道容量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AWGN信道"><span class="nav-number">5.1.</span> <span class="nav-text">AWGN信道</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#信号的正交分解"><span class="nav-number">5.1.1.</span> <span class="nav-text">信号的正交分解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vision-提升容量的各种手段"><span class="nav-number">5.1.2.</span> <span class="nav-text">Vision:提升容量的各种手段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vision-信息与热力学的联系"><span class="nav-number">5.1.3.</span> <span class="nav-text">Vision:信息与热力学的联系</span></a></li></ol></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-wlsdzyzl"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wlsdzyzl</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.5.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.5.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.5.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.5.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+  
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+  
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(function (item) {
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'UzkbpHfUYMuhaYHh5SkSGaFl-gzGzoHsz',
+        appKey: '03u0lWMV4JIHq7RpijUw3SaQ',
+        placeholder: 'Say something...',
+        avatar:'gg',
+        meta:guest,
+        pageSize:'10' || 10,
+        visitor: false
+    });
+  </script>
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function ({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', `/classes/Counter/${counter.objectId}`, JSON.stringify({ time: { "__op":"Increment", "amount":1 } }))
+            
+            .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(counter.time + 1);
+            })
+            
+            .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+            })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1}))
+                .done(function () {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function () {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+      .fail(function ({ responseJSON }) {
+        console.log('LeanCloud Counter Error:' + responseJSON.code + " " + responseJSON.error);
+      });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz")
+        .done(function ({ api_server }) {
+          var Counter = function (method, url, data) {
+            return $.ajax({
+              method: method,
+              url: `https://${api_server}/1.1${url}`,
+              headers: {
+                'X-LC-Id': "zwcH4M3evuaAMepqgDAJcOGE-gzGzoHsz",
+                'X-LC-Key': "Bbykl7fj9cXMbn8Q3NccAl0s",
+                'Content-Type': 'application/json',
+              },
+              data: data,
+            });
+          };
+          
+          addCount(Counter);
+          
+        })
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/mathjax@2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    
+  
+
+
+  
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
