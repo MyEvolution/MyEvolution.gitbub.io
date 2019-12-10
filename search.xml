@@ -3,6 +3,31 @@
   
     
     <entry>
+      <title>Paper——Real-Time Visual Odometry from Dense RGB-D Images</title>
+      <link href="/2019/12/10/Paper%E2%80%94%E2%80%94Real-Time-Visual-Odometry-from-Dense-RGB-D-Images/"/>
+      <url>/2019/12/10/Paper%E2%80%94%E2%80%94Real-Time-Visual-Odometry-from-Dense-RGB-D-Images/</url>
+      
+        <content type="html"><![CDATA[<p>这次带来的一篇文章是一个视觉里程计，针对RGBD的dense Visual Odometry：<a href="https://www.google.com/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=2ahUKEwjRgJfJ4armAhWHvZ4KHbPYAVIQFjAAegQIBRAC&amp;url=https%3A%2F%2Fvision.cs.tum.edu%2F_media%2Fspezial%2Fbib%2Fsteinbruecker_sturm_cremers_iccv11.pdf" target="_blank" rel="noopener"></a>，是一个非常经典的算法，现在依然被广泛使用着。</p><a id="more"></a><p>之前SLAM的文章中介绍了视觉里程计的作用，它用来估计两帧之间的位姿，来给后面的优化提供很好的初始值，这样才能使得优化结果走向最优。对于不同的相机类型有不同的方法，今天看的适用于RGBD-SLAM。</p><p>先定义一下文章中使用的符号，也是对一些基本知识的复习：</p><script type="math/tex; mode=display">\begin{aligned}&I_{RGB} : \Omega \times \mathbb R_+ \rightarrow [0,1]^3 , (x,t) \rightarrow I _{RGB}(x,t)\\&h: \Omega \times \mathbb R_+ \rightarrow \mathbb R_+,  (x,t) \rightarrow h(x,t)\\\end{aligned}</script><p>上面的式子可以大概明白作者的意思：$\Omega$是二维平面，也就是相机的成像平面，$t$是时刻属于正实数$\mathbb R_+$，$I_{RGB}$指的是RGB颜色的信息，也就是$t$时刻捕获的色彩图（$[0,1]^3$指的是一个三维向量，向量的元素范围为0-1，这也是常用的表示颜色的方法，通过乘上scale就可以得到对应的RGB值），$h$指的是捕获的深度图，$x$很明显指的是像素坐标了，是一个二维的点。</p><p>通过针孔相机模型，可以得到表面，也就是空间点：</p><script type="math/tex; mode=display"></script>]]></content>
+      
+      
+      <categories>
+          
+          <category> 论文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> paper </tag>
+            
+            <tag> mathmetics </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>踩过的坑——ROS多机通信与节点重命名</title>
       <link href="/2019/11/20/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94ROS%E5%A4%9A%E6%9C%BA%E9%80%9A%E4%BF%A1%E4%B8%8E%E8%8A%82%E7%82%B9%E9%87%8D%E5%91%BD%E5%90%8D/"/>
       <url>/2019/11/20/%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91%E2%80%94%E2%80%94ROS%E5%A4%9A%E6%9C%BA%E9%80%9A%E4%BF%A1%E4%B8%8E%E8%8A%82%E7%82%B9%E9%87%8D%E5%91%BD%E5%90%8D/</url>
@@ -1656,9 +1681,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1683,9 +1708,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -1710,9 +1735,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> reinforcement learning </tag>
             
@@ -1762,9 +1787,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -1876,9 +1901,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> ACE </tag>
             
@@ -1905,9 +1930,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> softmax regression </tag>
             
@@ -1982,9 +2007,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2013,9 +2038,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -2042,9 +2067,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -2069,9 +2094,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> unsupervised learning </tag>
             
@@ -2127,9 +2152,9 @@
             
             <tag> LFD class </tag>
             
-            <tag> homework </tag>
-            
             <tag> neural network </tag>
+            
+            <tag> homework </tag>
             
         </tags>
       
@@ -2152,9 +2177,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -2206,9 +2231,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
         </tags>
       
@@ -2279,9 +2304,9 @@
       
         <tags>
             
-            <tag> mathematics </tag>
-            
             <tag> SLAM </tag>
+            
+            <tag> mathematics </tag>
             
             <tag> sophus </tag>
             
@@ -2358,9 +2383,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2387,9 +2412,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> deep learning </tag>
             
@@ -2537,9 +2562,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2664,9 +2689,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> mathematics </tag>
             
@@ -2693,9 +2718,9 @@
       
         <tags>
             
-            <tag> LFD class </tag>
-            
             <tag> machine learning </tag>
+            
+            <tag> LFD class </tag>
             
             <tag> regression </tag>
             
@@ -3322,11 +3347,11 @@
       
         <tags>
             
+            <tag> code </tag>
+            
             <tag> algorithm </tag>
             
             <tag> Matrix </tag>
-            
-            <tag> code </tag>
             
         </tags>
       
