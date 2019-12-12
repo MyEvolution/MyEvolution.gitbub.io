@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这次带来的一篇文章是一个视觉里程计，针对RGBD的dense Visual Odometry：Real-Time Visual Odometry from Dense RGB-D Images，是一个非常经典的算法，现在依然被广泛使用着。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-11T09:05:03.725Z">
+<meta property="og:updated_time" content="2019-12-12T13:10:50.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Real-Time Visual Odometry from Dense RGB-D Images">
 <meta name="twitter:description" content="这次带来的一篇文章是一个视觉里程计，针对RGBD的dense Visual Odometry：Real-Time Visual Odometry from Dense RGB-D Images，是一个非常经典的算法，现在依然被广泛使用着。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-12-11 17:05:03" itemprop="dateModified" datetime="2019-12-11T17:05:03+08:00">2019-12-11</time>
+                <time title="更新于：2019-12-12 21:10:50" itemprop="dateModified" datetime="2019-12-12T21:10:50+08:00">2019-12-12</time>
               
             
           </span>
@@ -531,7 +531,8 @@ E_{l}(\xi)=\int_{\Omega}\left(\frac{\partial I}{\partial t}+\nabla I \cdot \frac
 <script type="math/tex; mode=display">
 E_{l}(\xi)=\int_{\Omega}\left(\frac{\partial I}{\partial t}+\left.\underbrace{\left(\nabla I \cdot \frac{\mathrm{d} \pi}{\mathrm{d} G} \cdot \frac{\mathrm{d} G}{\mathrm{d} g} \cdot M_{g}\right)}_{=: C\left(x, t_{0}\right)}\right|_{\left(x, t_{0}\right)} \xi\right)^{2} \mathrm{d} x</script><p>对于每个pixel，都有一个6维的约束$C(x,t_{0})$，也就是求解$6 \times 6$的正规方程。到了这里，原来的问题已经转换成一个最小二乘问题了，也就很容易求解得到了。</p>
 <p>实际上，我们最终希望得到的是关于$\xi$，很巧妙的方法是通过对时间求导而推出来的。</p>
-
+<script type="math/tex; mode=display">
+\frac{\mathrm{d}G}{\mathrm{d}g} = ?</script>
       
     </div>
 

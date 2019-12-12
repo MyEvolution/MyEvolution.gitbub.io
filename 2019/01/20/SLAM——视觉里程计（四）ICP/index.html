@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="3D到3D之间的位姿匹配，我们要用到的方法就是ICP算法了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-22T04:49:46.593Z">
+<meta property="og:updated_time" content="2019-12-12T13:53:07.821Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SLAM——视觉里程计（四）ICP">
 <meta name="twitter:description" content="3D到3D之间的位姿匹配，我们要用到的方法就是ICP算法了。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-01-22 12:49:46" itemprop="dateModified" datetime="2019-01-22T12:49:46+08:00">2019-01-22</time>
+                <time title="更新于：2019-12-12 21:53:07" itemprop="dateModified" datetime="2019-12-12T21:53:07+08:00">2019-12-12</time>
               
             
           </span>
@@ -491,7 +491,7 @@
 \xi^*=\underset{\xi}{\arg\min}\frac{1}{2}\sum_{i=1}^{n}||P_i-K\exp(\xi^{\hat{}})P_i^{'}||_2^2</script><p>为了使用非线性优化，与之前的BA问题一样，我们需要找到误差对优化变量的雅科比矩阵。在这个题目中，这个问题变得很简单，我们已经知道：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
-\frac{\partial (TP)}{\partial \delta \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
+\frac{\partial (TP)}{\partial \xi} &= \lim_{\delta \xi \rightarrow 0} \frac{\begin{bmatrix}
 \delta \phi^{\hat{}}(RP+t) + \delta P\\
 0
 \end{bmatrix}}{\delta \xi}\\
