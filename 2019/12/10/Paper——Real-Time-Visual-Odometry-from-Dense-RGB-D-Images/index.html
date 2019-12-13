@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="这次带来的一篇文章是一个视觉里程计，针对RGBD的dense Visual Odometry：Real-Time Visual Odometry from Dense RGB-D Images，是一个非常经典的算法，现在依然被广泛使用着。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-12T13:10:50.816Z">
+<meta property="og:updated_time" content="2019-12-13T09:33:07.264Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Paper——Real-Time Visual Odometry from Dense RGB-D Images">
 <meta name="twitter:description" content="这次带来的一篇文章是一个视觉里程计，针对RGBD的dense Visual Odometry：Real-Time Visual Odometry from Dense RGB-D Images，是一个非常经典的算法，现在依然被广泛使用着。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-12-12 21:10:50" itemprop="dateModified" datetime="2019-12-12T21:10:50+08:00">2019-12-12</time>
+                <time title="更新于：2019-12-13 17:33:07" itemprop="dateModified" datetime="2019-12-13T17:33:07+08:00">2019-12-13</time>
               
             
           </span>
@@ -494,7 +494,7 @@
 \end{aligned}</script><p>上面的式子可以大概明白作者的意思：$\Omega$是二维平面，也就是相机的成像平面，$t$是时刻属于正实数$\mathbb R_+$，$I_{RGB}$指的是RGB颜色的信息，也就是$t$时刻捕获的色彩图（$[0,1]^3$指的是一个三维向量，向量的元素范围为0-1，这也是常用的表示颜色的方法，通过乘上scale就可以得到对应的RGB值），$h$指的是捕获的深度图，$x$很明显指的是像素坐标了，是一个二维的点。</p>
 <p>通过针孔相机模型，可以得到表面，也就是空间点：</p>
 <script type="math/tex; mode=display">
-\begin{array}{l}{S: \Omega \rightarrow \mathbb{R}^{3}, \quad x \mapsto S(x)} \\ {S(x)=\left(\frac{\left(x+o_{x}\right) \cdot h(x)}{f_{x}} \quad, \quad \frac{\left(y+o_{y}\right) \cdot h(x)}{f_{y}} \quad, \quad h(x)\right)^{\top}}\end{array}</script><p>这里的$o_x, o_y$对应的就是相机参数中的$c_x,c_y$。</p>
+\begin{array}{l}{S: \Omega \rightarrow \mathbb{R}^{3}, \quad x \mapsto S(x)} \\ {S(x)=\left(\frac{\left(x+o_{x}\right) \cdot h(x)}{f_{x}} \quad, \quad \frac{\left(y+o_{y}\right) \cdot h(x)}{f_{y}} \quad, \quad h(x)\right)^{\top}}\end{array}</script><p>这里的$o_x, o_y$对应的就是相机参数中的$-c_x,-c_y$。</p>
 <p>接下来介绍的是刚体运动到李群李代数，之前的文章也有详细的说明，这里简单提一下：<br>一个刚体运动$g$（$4\times 4矩阵$）属于李群SE(3)，也就对应到一个李代数se(3)的6维向量$\xi=\left(\omega_{1} \omega_{2} \omega_{3} v_{1} v_{2} v_{3}\right)^{\top} \in \mathbb{R}^{6}$，它对应一个反对称矩阵：</p>
 <script type="math/tex; mode=display">
 \widehat{\xi}=\left(\begin{array}{cccc}{0} & {-\omega_{3}} & {\omega_{2}} & {v_{1}} \\ {\omega_{3}} & {0} & {-\omega_{1}} & {v_{2}} \\ {-\omega_{2}} & {\omega_{1}} & {0} & {v_{3}} \\ {0} & {0} & {0} & {0}\end{array}\right)</script><p>李群李代数的意义在于求Rotation以及Transformation的导数，之前我们通过对于矩阵对$t$求导来引出李群李代数，从而得到微分方程：</p>
@@ -531,8 +531,47 @@ E_{l}(\xi)=\int_{\Omega}\left(\frac{\partial I}{\partial t}+\nabla I \cdot \frac
 <script type="math/tex; mode=display">
 E_{l}(\xi)=\int_{\Omega}\left(\frac{\partial I}{\partial t}+\left.\underbrace{\left(\nabla I \cdot \frac{\mathrm{d} \pi}{\mathrm{d} G} \cdot \frac{\mathrm{d} G}{\mathrm{d} g} \cdot M_{g}\right)}_{=: C\left(x, t_{0}\right)}\right|_{\left(x, t_{0}\right)} \xi\right)^{2} \mathrm{d} x</script><p>对于每个pixel，都有一个6维的约束$C(x,t_{0})$，也就是求解$6 \times 6$的正规方程。到了这里，原来的问题已经转换成一个最小二乘问题了，也就很容易求解得到了。</p>
 <p>实际上，我们最终希望得到的是关于$\xi$，很巧妙的方法是通过对时间求导而推出来的。</p>
+<h2 id="矩阵求导"><a href="#矩阵求导" class="headerlink" title="矩阵求导"></a>矩阵求导</h2><p>这篇文章看起来很简单，但是实际上如果你要真正一步步自己推导，还是有点难度的。首先，对于上式中的$\nabla I$，因为它是对像素点位置的泰勒展开，因此实际上是一个二元函数的展开：</p>
 <script type="math/tex; mode=display">
-\frac{\mathrm{d}G}{\mathrm{d}g} = ?</script>
+\begin{aligned}
+f(x+\Delta x,y + \Delta y) &= f(x,y) + \Delta x \frac{\partial f(x,y)}{\partial x} + \Delta y \frac{\partial f(x,y)}{\partial y}\\
+& = f(x,y) + [\Delta x, \Delta y] \cdot \left[\frac{\partial f(x,y)}{\partial y},\frac{\partial f(x,y)}{\partial y}\right]^{\top}
+\end{aligned}</script><p>因此，</p>
+<script type="math/tex; mode=display">
+\nabla I = [I_{dx},I_{dy}]</script><p>也就是图片的导数，可以使用sobel滤波器得到。</p>
+<p>第二点，就是后面的导数：<br>$\frac{d\pi}{dG}$导数结果是$2\times 3$的矩阵：</p>
+<script type="math/tex; mode=display">
+\begin{bmatrix}
+\pi^\top \\
+1
+\end{bmatrix} = \frac{1}{G_2} \begin{bmatrix}
+f_x&0&c_x\\
+0&f_y&c_y\\
+0&0&1
+\end{bmatrix} \cdot \begin{bmatrix}
+G_0\\
+G_1\\
+G_2\\
+\end{bmatrix}</script><p>因此得到：</p>
+<script type="math/tex; mode=display">
+\frac{d\pi}{dG} = \begin{bmatrix}
+\frac{f_x}{G_2}&0&-\frac{f_x G_0}{G^2_2}\\
+0&\frac{f_y}{G_2}&-\frac{f_y G_1}{G^2_2}
+\end{bmatrix}</script><p>第三个，是$\frac{dG}{dg}$，由于$g$是$4 \times 4$矩阵，因此这个求出来很吓人，是$3\times 4 \times 4$的张量。但是$g$的自由度实际上是12，也就有了后面简化为12维度的说话，因为$\hat \xi g$也是只有12个有效的元素。最后$\xi$的大小是$6\times 1$，因此，$M_g$的维度为$12 \times 6$,最后$\hat xi$之前矩阵维度为$(1 \times 2)\cdot (2 \times 3) \cdot (3\times 12) \cdot (12 \times 6) = (1 \times 6)$。</p>
+<p>这里给出最后的$C(x,t_{0})$:<br>定义$c_0,c_1,c_2$</p>
+<script type="math/tex; mode=display">
+c_0 = \frac{I_{dx} f_x}{G_2}\\
+c_1 = \frac{I_{dy} f_y}{G_2}\\
+c_2 = -(c_0  G_0 + c_1  G_1 )\frac{1}{G_2}</script><p>则：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&C(x,t_{0})(0) = -G_2c_1 + G_1c_2\\
+&C(x,t_{0})(1) = G_2c_0 - G_0c_2\\
+&C(x,t_{0})(2) = -G_1 c_0 + G_0 c_1\\
+&C(x,t_{0})(3) = c_0\\
+&C(x,t_{0})(4) = c_1\\
+&C(x,t_{0})(5) = c_2\\
+\end{aligned}</script>
       
     </div>
 
@@ -944,7 +983,7 @@ E_{l}(\xi)=\int_{\Omega}\left(\frac{\partial I}{\partial t}+\left.\underbrace{\l
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem"><span class="nav-number">1.</span> <span class="nav-text">Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Maximize-Photoconsistency"><span class="nav-number">2.1.</span> <span class="nav-text">Maximize Photoconsistency</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linearization-of-Energy"><span class="nav-number">2.2.</span> <span class="nav-text">Linearization of Energy</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Problem"><span class="nav-number">1.</span> <span class="nav-text">Problem</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Solution"><span class="nav-number">2.</span> <span class="nav-text">Solution</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Maximize-Photoconsistency"><span class="nav-number">2.1.</span> <span class="nav-text">Maximize Photoconsistency</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linearization-of-Energy"><span class="nav-number">2.2.</span> <span class="nav-text">Linearization of Energy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩阵求导"><span class="nav-number">3.</span> <span class="nav-text">矩阵求导</span></a></li></ol></div>
             
 
           </div>
