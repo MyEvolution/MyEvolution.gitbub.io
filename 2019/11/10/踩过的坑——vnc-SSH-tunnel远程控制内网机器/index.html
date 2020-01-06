@@ -120,7 +120,7 @@
 <meta property="og:site_name" content="wlsdzyzl">
 <meta property="og:description" content="最近出了个幺蛾子：teamviewer疑似被黑客攻击（已经证明是谣言了）。因此直到现在实验室的teamviewer端口依然被封禁。所以就需要使用新的方法，好在宿舍能够学习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-11T04:51:10.227Z">
+<meta property="og:updated_time" content="2020-01-06T07:03:25.428Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="踩过的坑——vnc+SSH tunnel远程控制内网机器">
 <meta name="twitter:description" content="最近出了个幺蛾子：teamviewer疑似被黑客攻击（已经证明是谣言了）。因此直到现在实验室的teamviewer端口依然被封禁。所以就需要使用新的方法，好在宿舍能够学习。">
@@ -411,7 +411,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="更新于：2019-11-11 12:51:10" itemprop="dateModified" datetime="2019-11-11T12:51:10+08:00">2019-11-11</time>
+                <time title="更新于：2020-01-06 15:03:25" itemprop="dateModified" datetime="2020-01-06T15:03:25+08:00">2020-01-06</time>
               
             
           </span>
@@ -496,8 +496,8 @@
 <h2 id="ssh-tunnel"><a href="#ssh-tunnel" class="headerlink" title="ssh tunnel"></a>ssh tunnel</h2><h3 id="L"><a href="#L" class="headerlink" title="-L"></a>-L</h3><p>现在情况是，我可以ssh到服务器，服务器可以访问我的主机，需要的是在我的电脑上选择端口8888，然后通过服务器让它与实验室电脑的5901相连。这样我访问本地的8888端口，就可以转发到vnc服务了。</p>
 <p>这个需求是正向连接，也叫本地转发。也就是通过本地的端口映射到别的机子上的端口。命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -L local_port:client_ip:client_port username@sshserver_ip</span><br></pre></td></tr></table></figure></p>
 <p>上述中，本地电脑称为local，需要连接的电脑为client，ssh中转的服务器被称为sshserver。我们需要能ssh到sshserver上。</p>
-<h3 id="R"><a href="#R" class="headerlink" title="-R"></a>-R</h3><p>另一种情况是反向连接。适用于不同的情况，例如，现在机子B是服务器，可以SSH到A，（A不能SSH到B），B可以访问C，想要A访问C，就需要在B上进行配置。命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -R A_ip:A_port:C_ip:C_port username@A_ip</span><br></pre></td></tr></table></figure></p>
-<p>这样就让A的消息通过B转发到C了，但是我们是用B进行配置的，所以相对于B来说，不是本地转发了。</p>
+<h3 id="R"><a href="#R" class="headerlink" title="-R"></a>-R</h3><p>另一种情况是反向连接，也叫远程转发。适用于不同的情况，例如，现在机子B是服务器，可以SSH到A，（A不能SSH到B），B可以访问C，想要A访问C，就需要在B上进行配置。命令如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -R A_ip:A_port:C_ip:C_port username@A_ip</span><br></pre></td></tr></table></figure></p>
+<p>这样就让A的消息通过B转发到C了。</p>
 <p>SSH tunnel还有很多其他用法，等需要的时候再去查怎么做吧。</p>
 
       
@@ -937,7 +937,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright"> &copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright"> &copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-wlsdzyzl"></i>
   </span>
